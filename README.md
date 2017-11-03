@@ -1,14 +1,35 @@
+[![Build][build-badge]][build-url]
+[![Issues][issues-badge]][issues-url]
+[![Gitter][gitter-badge]][gitter-url]
 
-# Contributing
+Azure PCS Simulation Web UI
+============================
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
+...
 
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+Prerequisites
+=============
+## Setup Node
+1. Install [node.js](https://nodejs.org/)
+2. For development, you can use your preferred editor
+   - [Visual Studio Code](https://code.visualstudio.com/)
+   - [Atom](https://atom.io/)
+   - [Sublime Text](https://www.sublimetext.com/)
+   -  or other preferred editor
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+Contributing to the solution
+==============================
+Please follow our [contribution guildelines](docs/CONTRIBUTING.md) and the code style conventions.
+
+References
+==========
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+You can find a guide to using it [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+
+[build-badge]: https://img.shields.io/travis/Azure/pcs-simulation-webui.svg
+[build-url]: https://travis-ci.org/Azure/pcs-simulation-webui
+[issues-badge]: https://img.shields.io/github/issues/azure/pcs-simulation-webui.svg
+[issues-url]: https://github.com/Azure/pcs-simulation-webui/issues/new
+[gitter-badge]: https://img.shields.io/gitter/room/azure/iot-solutions.js.svg
+[gitter-url]: https://gitter.im/azure/iot-solutions
