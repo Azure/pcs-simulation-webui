@@ -5,9 +5,9 @@ import { createEpicMiddleware } from 'redux-observable';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import rootEpic from './epics';
-import rootReducer from './reducers';
-import { startTimer } from './actions';
+import rootEpic from 'epics';
+import rootReducer from 'reducers';
+import { startTimer } from 'actions';
 
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';

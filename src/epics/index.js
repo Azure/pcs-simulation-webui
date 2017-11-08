@@ -1,6 +1,6 @@
 import Rx from 'rxjs';
 import { combineEpics } from 'redux-observable';
-import * as actions from '../actions';
+import * as actions from 'actions';
 
 const resetTimer = action$ => {
   return action$

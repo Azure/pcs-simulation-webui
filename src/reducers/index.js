@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { TIMER_TICK } from '../actions';
+import { TIMER_TICK } from 'actions';
 
 const initialState = {
   seconds: 0

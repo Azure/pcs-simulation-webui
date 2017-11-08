@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { routeEvent } from './actions';
+import { routeEvent } from 'actions';
 
 import './App.css';
 
