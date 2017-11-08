@@ -5,7 +5,7 @@ const initialState = {
   seconds: 0
 };
 
-function timer(state = initialState, action ) {
+function timer(state = initialState, action) {
   switch (action.type) {
     case TIMER_TICK:
       return { seconds: action.seconds };
