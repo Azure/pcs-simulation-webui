@@ -9,15 +9,15 @@ import rootEpic from 'epics';
 import rootReducer from 'reducers';
 import { startTimer } from 'actions';
 
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import App from 'components/app/app';
+import registerServiceWorker from 'registerServiceWorker';
 
 import './index.css';
 
 // Initialize the redux-observable epics
 const epicMiddleware = createEpicMiddleware(rootEpic);
 
-// Initialize the redux store
+// Initialize the redux store with middleware
 const store = createStore(
   rootReducer,
   applyMiddleware(epicMiddleware)
@@ -25,6 +25,7 @@ const store = createStore(
 
 store.dispatch(startTimer());
 
+// Create the React app
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

@@ -3,8 +3,9 @@ import { Link, Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { routeEvent } from 'actions';
 
-import './App.css';
+import './app.css';
 
+/** The primary app component */
 class App extends Component {
 
   componentDidMount() {
@@ -34,6 +35,6 @@ class App extends Component {
 // Connect the react router to the component to get access to the history
 const AppWithRouter = withRouter(App);
 
+// Connect the component to the redux store
 const mapStateToProps = ({ timer }) => ({ timer: timer.seconds });
-
 export default connect(mapStateToProps)(AppWithRouter);
