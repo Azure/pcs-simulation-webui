@@ -1,23 +1,20 @@
-_dev/
-.vs/
-.vscode/
+# Customize gitignore
+
 .idea/
-
-*_.sh
 *.crt
-*.pfx
 *.key
-*._gistcs
-*.tgz
-*.tar
-*.exe
-*.bck
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
+*_.sh
+*.pfx
+*._gistcs		
+*.tgz		
+*.tar		
+*.exe		
+*.bck		
+*.suo		
+*.user		
+*.userosscache		
+*.sln.docstates		
 *.userprefs
-
 
 # Create-React-App build output
 build/**
