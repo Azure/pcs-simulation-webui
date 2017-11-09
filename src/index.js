@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft. All rights reserved.
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
