@@ -7,7 +7,7 @@
 :: scripts\docker\run testing : Starts the testing version
 
 :: Note: use lowercase names for the Docker images
-SET DOCKER_IMAGE=azureiotpcs/simulation-webui
+SET DOCKER_IMAGE=azureiotpcs/device-simulation-webui
 SET STABLE_VERSION=millennium
 
 IF "%1"=="" goto :STABLE

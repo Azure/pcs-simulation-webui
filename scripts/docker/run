@@ -8,7 +8,7 @@ set -e
 # ./scripts/docker/run testing : Starts the testing version
 
 # Note: use lowercase names for the Docker images
-DOCKER_IMAGE="azureiotpcs/simulation-webui"
+DOCKER_IMAGE="azureiotpcs/device-simulation-webui"
 STABLE_VERSION="millennium"
 
 if [ "$1" == "testing" ]; then
