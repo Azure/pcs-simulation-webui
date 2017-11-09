@@ -1,4 +1,7 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+# Copyright (c) Microsoft. All rights reserved.
+# Note: Windows Bash doesn't support shebang extra params
+set -e
 
 # Sometimes when creating bash scripts in Windows, bash scripts will not have
 # the +x flag carried over to Linux/MacOS. This script should help setting the
