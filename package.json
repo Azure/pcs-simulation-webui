@@ -1,6 +1,4 @@
 {
-  "name": "pcs-simulation-webui",
-  "version": "0.1.0",
   "copyright" : "Copyright (c) Microsoft. All rights reserved.",
   "license" : "MIT",
   "private": true,
