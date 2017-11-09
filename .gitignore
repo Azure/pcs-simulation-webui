@@ -1,7 +1,20 @@
 # Customize gitignore
 
+.idea/
 *.crt
 *.key
+*_.sh
+*.pfx
+*._gistcs		
+*.tgz		
+*.tar		
+*.exe		
+*.bck		
+*.suo		
+*.user		
+*.userosscache		
+*.sln.docstates		
+*.userprefs
 
 # Create-React-App build output
 build/**

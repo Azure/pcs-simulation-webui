@@ -2,7 +2,7 @@
 [![Issues][issues-badge]][issues-url]
 [![Gitter][gitter-badge]][gitter-url]
 
-Azure PCS Simulation Web UI
+Azure Device Simulation Web UI
 ============================
 
 ...

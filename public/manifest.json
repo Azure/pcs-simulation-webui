@@ -1,6 +1,6 @@
 {
-  "short_name": "PCS Simulation Web UI",
-  "name": "PCS Simulation Web UI",
+  "short_name": "Device Simulation Web UI",
+  "name": "Device Simulation Web UI",
   "icons": [
     {
       "src": "favicon.ico",
