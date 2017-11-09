@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft. All rights reserved.
+
 FROM alpine:3.6
 
 MAINTAINER Devis Lucato (https://github.com/dluc)

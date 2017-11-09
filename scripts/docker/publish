@@ -1,4 +1,5 @@
 #!/usr/bin/env bash -e
+# Copyright (c) Microsoft. All rights reserved.
 
 # Note: use lowercase names for the Docker images
 DOCKER_IMAGE="azureiotpcs/simulation-webui"

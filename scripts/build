@@ -1,4 +1,5 @@
 #!/usr/bin/env bash -e
+# Copyright (c) Microsoft. All rights reserved.
 
 APP_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )/"
 source "$APP_HOME/scripts/.functions.sh"
