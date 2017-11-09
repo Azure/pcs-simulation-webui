@@ -8,8 +8,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import rootEpic from 'epics';
-// Copyright (c) Microsoft. All rights reserved.
-
 import rootReducer from 'reducers';
 import { startTimer } from 'actions';
 
