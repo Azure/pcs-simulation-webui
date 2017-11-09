@@ -19,7 +19,7 @@ class App extends Component {
     const time = this.props.timer || 0;
     const min = Math.floor(time / 60);
     const remainder = time % 60;
-    const seconds = remainder; //`${remainder}`.padStart(2, '0');
+    const seconds = `${remainder}`.padStart(2, '0');
     return (
       <div className="app">
         PCS Simulation App - Time since last navigation: {`${min}:${seconds}`}
