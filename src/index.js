@@ -6,10 +6,12 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import rootEpic from 'epics';
+// Copyright (c) Microsoft. All rights reserved.
+
 import rootReducer from 'reducers';
 import { startTimer } from 'actions';
 
-import App from 'components/app/app';
+import AppContainer from 'containers/appContainer';
 import registerServiceWorker from 'registerServiceWorker';
 
 import './index.css';
@@ -29,7 +31,7 @@ store.dispatch(startTimer());
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <AppContainer />
     </BrowserRouter>
   </Provider>, 
   document.getElementById('root')

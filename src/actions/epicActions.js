@@ -1,3 +1,4 @@
+// Copyright (c) Microsoft. All rights reserved.
 // Epic actions trigger redux-observable epics
 
 // Action types

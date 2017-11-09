@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft. All rights reserved.
+
 import { TIMER_TICK } from 'actions';
 
 const initialState = {

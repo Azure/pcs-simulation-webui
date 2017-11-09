@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft. All rights reserved.
+
 import Rx from 'rxjs';
 import * as actions from 'actions';
 

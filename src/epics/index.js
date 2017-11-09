@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft. All rights reserved.
+
 import { combineEpics } from 'redux-observable';
 
 // Epics
