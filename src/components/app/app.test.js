@@ -8,7 +8,7 @@ import App from './app';
 it('renders without crashing', () => {
   const div = document.createElement('div');
   const fakeProps = {
-    history: { listen: _ => _, },
+    history: { listen: _ => _ },
     dispatch: _ => _,
     timer: 0
   };
