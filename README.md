@@ -2,8 +2,8 @@
 [![Issues][issues-badge]][issues-url]
 [![Gitter][gitter-badge]][gitter-url]
 
-Azure Device Simulation Web UI
-============================
+Azure IoT Device Simulation Web UI
+==================================
 
 ...
 
@@ -18,7 +18,7 @@ Prerequisites
    -  or other preferred editor
 
 Contributing to the solution
-==============================
+============================
 Please follow our [contribution guildelines](docs/CONTRIBUTING.md) and the code style conventions.
 
 References

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright (c) Microsoft. All rights reserved.
 
 COL_NO="\033[0m" # no color
 COL_ERR="\033[1;31m" # light red
