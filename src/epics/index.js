@@ -3,10 +3,9 @@
 import { combineEpics } from 'redux-observable';
 
 // Epics
-import { resetTimer, detectRouteChange } from "./routeEpics";
+import { detectRouteChange } from "./routeEpics";
 
 const rootEpic = combineEpics(
-  resetTimer,
   detectRouteChange
 );
 

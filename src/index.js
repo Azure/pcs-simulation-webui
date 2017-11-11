@@ -5,14 +5,15 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import rootEpic from 'epics';
 import rootReducer from 'reducers';
-import { startTimer } from 'actions';
 
 import AppContainer from 'containers/appContainer';
 import registerServiceWorker from 'registerServiceWorker';
+
+import './polyfills';
 
 import './index.css';
 
@@ -25,14 +26,12 @@ const store = createStore(
   applyMiddleware(epicMiddleware)
 );
 
-store.dispatch(startTimer());
-
 // Create the React app
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router>
       <AppContainer />
-    </BrowserRouter>
+    </Router>
   </Provider>, 
   document.getElementById('root')
 );

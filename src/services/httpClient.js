@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 /**
  * A class of static methods for creating ajax requests
  */
-class Http {
+class HttpClient {
 
   /**
    * Constructs a GET ajax request
@@ -13,7 +13,7 @@ class Http {
    * @param {string} url The url path to the make the request to
    */
   static get(url, options = {}) {
-    return Http.ajax(url, { ...options, method: 'GET' });
+    return HttpClient.ajax(url, { ...options, method: 'GET' });
   }
 
   /**
@@ -22,7 +22,7 @@ class Http {
    * @param {string} url The url path to the make the request to
    */
   static post(url, options = {}) {
-    return Http.ajax(url, { ...options, method: 'POST' });
+    return HttpClient.ajax(url, { ...options, method: 'POST' });
   }
 
   /**
@@ -31,7 +31,7 @@ class Http {
    * @param {string} url The url path to the make the request to
    */
   static put(url, options = {}) {
-    return Http.ajax(url, { ...options, method: 'PUT' });
+    return HttpClient.ajax(url, { ...options, method: 'PUT' });
   }
 
   /**
@@ -40,7 +40,7 @@ class Http {
    * @param {string} url The url path to the make the request to
    */
   static patch(url, options = {}) {
-    return Http.ajax(url, { ...options, method: 'PATCH' });
+    return HttpClient.ajax(url, { ...options, method: 'PATCH' });
   }
 
   /**
@@ -49,7 +49,7 @@ class Http {
    * @param {string} url The url path to the make the request to
    */
   static delete(url, options = {}) {
-    return Http.ajax(url, { ...options, method: 'DELETE' });
+    return HttpClient.ajax(url, { ...options, method: 'DELETE' });
   }
 
   /**
@@ -66,4 +66,4 @@ class Http {
 
 }
 
-export default Http;
+export default HttpClient;

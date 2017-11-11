@@ -4,11 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import App from 'components/app/app';
 
-// Connect the App component with the router
-const AppWithRouter = withRouter(App);
-
-// Connect the App component to the redux store
-const mapStateToProps = ({ timer }) => ({ timer: timer.seconds });
-const AppContainer = connect(mapStateToProps)(AppWithRouter);
+// Wrap with the router and connect (to access dispatch)
+const AppContainer = withRouter(connect()(App));
 
 export default AppContainer;

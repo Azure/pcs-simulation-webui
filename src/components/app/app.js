@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
+
 import { routeEvent } from 'actions';
+import Header from './header/header';
+import Navigation from './navigation/navigation';
 
 import './app.css';
 
@@ -11,27 +14,26 @@ class App extends Component {
 
   componentDidMount() {
     const { history, dispatch } = this.props;
-    // Inject the route change event into the epic action stream
+    // Initialize listener to inject the route change event into the epic action stream
     history.listen(({ pathname }) => dispatch(routeEvent(pathname)));
   }
 
   render() {
-    const time = this.props.timer || 0;
-    const min = Math.floor(time / 60);
-    const remainder = time % 60;
-    const seconds = `${remainder}`.padStart(2, '0');
     return (
       <div className="app">
-        PCS Simulation App - Time since last navigation: {`${min}:${seconds}`}
-        <br />
-        <Link to="/info">Navigate</Link>
-        <br />
-        <Route path="/info" render={() => (
-          <Link to="/">Back</Link>
-        )} />
+        <Navigation />
+        <div className="app-view-container">
+          <Header />
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to="/simulation" push={true} />} />
+            <Route path="/simulation" render={() => <span>Simulation coming soon!</span>} />
+            <Route render={() => <span>404 Page Not Found</span>} />
+          </Switch>
+        </div>
       </div>
     );
   }
+  
 }
 
 export default App;

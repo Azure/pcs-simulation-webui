@@ -12,8 +12,7 @@ if (!String.prototype.padStart) {
     padString = String(padString || ' ');
     if (this.length > targetLength) {
       return String(this);
-    }
-    else {
+    } else {
       targetLength = targetLength - this.length;
       if (targetLength > padString.length) {
         padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed

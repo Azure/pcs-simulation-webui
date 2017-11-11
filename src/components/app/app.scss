@@ -1,8 +1,21 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-.app { 
-  margin: 20px;
-  padding: 20px;
-  background-color: rgb(83, 83, 83);
-  color: #fff;
+@import './styles/themes';
+@import './styles/mixins';
+
+.app {
+  height: 100%;
+  display: flex;
+  
+  @include themify($themes) {
+    background-color: themed('bgColor');
+  }
+
+  .app-view-container {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
+  }
 }

@@ -3,9 +3,9 @@
 // Redux actions trigger updates to the redux store
 
 // Action types
-export const TIMER_TICK = 'TIMER_TICK';
+export const PLACEHOLDER = 'PLACEHOLDER';
 
 // Actions
-export function tickTimer(seconds) {
-  return { type: TIMER_TICK, seconds };
+export function placeholder() {
+  return { type: PLACEHOLDER };
 }

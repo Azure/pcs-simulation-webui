@@ -1,0 +1,72 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import './styles/mixins';
+@import './styles/themes';
+
+$headerHeight: 48px;
+$svgSize: 16px;
+$imgSize: 30px;
+
+.app-header {
+  display: flex;
+  flex-flow: row nowrap;
+
+  @include rem-fallback(height, $headerHeight);
+  @include themify($themes) {
+    border-bottom: 1px solid themed('headerBorderColor');
+  }
+
+  .breadcrumbs { flex-grow: 1 }
+
+  .label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include rem-fallback(line-height, $headerHeight);
+    @include rem-fallback(padding-right, 24px);
+    @include themify($themes) {
+      color: themed('navItemColor');
+    }
+  }
+
+  .items-container {
+    display: flex;
+    align-items: center;
+
+    @include themify($themes) {
+      border-left: 1px solid themed('headerBorderColor');
+    }
+
+    .item-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      @include rem-fallback(height, $headerHeight);
+      @include rem-fallback(width, $headerHeight);
+
+      svg {
+        @include rem-fallback(height, $svgSize);
+        @include rem-fallback(width, $svgSize);
+        @include themify($themes) {
+          fill: themed('navItemColor');
+        }
+      }
+
+      img {
+        @include rem-fallback(height, $imgSize);
+        @include rem-fallback(width, $imgSize);
+      }
+
+      @include themify($themes) {
+        &:hover {
+          background-color: themed('navHoverBgColor');
+  
+          svg { fill: themed('bright'); }
+        }
+      }
+    }
+  }
+}
