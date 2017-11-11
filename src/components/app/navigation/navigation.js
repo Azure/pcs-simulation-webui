@@ -8,7 +8,7 @@ import svgs from 'utilities/svgs';
 
 import './navigation.css';
 
-/** The left nav tab configurations */
+/** The navigation tab configurations */
 const navLinks = [
   { key: 0, to: '/simulation', svg: svgs.contoso, label: 'Simulation' }
 ];

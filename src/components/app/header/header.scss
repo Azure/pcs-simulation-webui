@@ -50,9 +50,6 @@ $imgSize: 30px;
       svg {
         @include rem-fallback(height, $svgSize);
         @include rem-fallback(width, $svgSize);
-        @include themify($themes) {
-          fill: themed('navItemColor');
-        }
       }
 
       img {
@@ -61,6 +58,8 @@ $imgSize: 30px;
       }
 
       @include themify($themes) {
+        svg { fill: themed('navItemColor'); }
+        
         &:hover {
           background-color: themed('navHoverBgColor');
   

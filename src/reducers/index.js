@@ -6,9 +6,7 @@ import { combineReducers } from 'redux';
 // REPLACE with reducer imports
 
 // Added to prevent errors until a real reducer is added
-const placeholder = (state = {}, action) => {
-  return {};
-};
+const placeholder = (state = {}, action) => state;
 
 const rootReducer = combineReducers({ 
   placeholder 
