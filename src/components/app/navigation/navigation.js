@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import ReactSVG from 'react-svg';
+import { Svg } from 'components/shared';
 
 import svgs from 'utilities/svgs';
 
@@ -19,9 +19,7 @@ const navLinks = [
  * @param {ReactSVGProps} props see https://www.npmjs.com/package/react-svg
  */
 const NavIcon = (props) => (
-  <div className="nav-item-icon">
-    <ReactSVG {...props} />
-  </div>
+  <Svg {...props} className="nav-item-icon" />
 );
 
 /** A presentational component navigation tab links */

@@ -16,7 +16,7 @@ $imgSize: 30px;
     border-bottom: 1px solid themed('headerBorderColor');
   }
 
-  .breadcrumbs { flex-grow: 1 }
+  .breadcrumbs { flex-grow: 1; }
 
   .label {
     white-space: nowrap;
@@ -39,22 +39,18 @@ $imgSize: 30px;
     }
 
     .item-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       cursor: pointer;
 
-      @include rem-fallback(height, $headerHeight);
-      @include rem-fallback(width, $headerHeight);
+      @include square-px-rem($headerHeight);
 
-      svg {
-        @include rem-fallback(height, $svgSize);
-        @include rem-fallback(width, $svgSize);
-      }
+      svg { @include square-px-rem($svgSize); }
 
-      img {
-        @include rem-fallback(height, $imgSize);
-        @include rem-fallback(width, $imgSize);
+      &.profile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img { @include square-px-rem($imgSize); }
       }
 
       @include themify($themes) {

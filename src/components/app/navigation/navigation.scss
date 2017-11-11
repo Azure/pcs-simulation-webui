@@ -7,6 +7,7 @@
 $navItemHeight: 48px;
 $leftNavExpandedWidth: 220px;
 $svgSize: 16px;
+$companySvgSize: 20px;
 
 .app-nav {
   flex-shrink: 0;
@@ -31,27 +32,17 @@ $svgSize: 16px;
     &.hamburger { @include rem-fallback(margin-bottom, 16px); }
 
     .nav-item-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      @include rem-fallback(height, $navItemHeight);
-      @include rem-fallback(width, $navItemHeight);
+      @include square-px-rem($navItemHeight);
 
       svg {
-        @include rem-fallback(height, $svgSize);
-        @include rem-fallback(width, $svgSize);
+        @include square-px-rem($svgSize);
         @include themify($themes) {
           fill: themed('navItemColor');
         }
       }
     }
 
-    $companySvgSize: 20px;
-    &.company .nav-item-icon svg {
-      @include rem-fallback(height, $companySvgSize);
-      @include rem-fallback(width, $companySvgSize);
-    }
+    &.company .nav-item-icon svg { @include square-px-rem($companySvgSize); }
 
     .nav-item-text { 
       display: none;

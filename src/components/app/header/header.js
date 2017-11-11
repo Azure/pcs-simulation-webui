@@ -1,24 +1,22 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
-import ReactSVG from 'react-svg';
 import svgs from 'utilities/svgs';
+import { Svg } from 'components/shared';
 
 import ProfileImagePath from '../../../assets/images/profile.png';
 
 import './header.css';
 
 /** The hader component for the top of the page */
-const Header = () => {
+const Header = (props) => {
   return (
     <div className="app-header">
-      <div className="breadcrumbs"></div>
+      <div className="breadcrumbs">{props.breadcrumbs || ''}</div>
       <div className="label">Azure Device Simulation</div>
       <div className="items-container">
-        <div className="item-icon">
-          <ReactSVG path={svgs.settings} />
-        </div>
-        <div className="item-icon">
+        <Svg path={svgs.settings} className="item-icon" />
+        <div className="item-icon profile">
           <img src={ProfileImagePath} alt="Generic profile" />
         </div>
       </div>
