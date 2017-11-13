@@ -10,7 +10,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import rootEpic from 'epics';
 import rootReducer from 'reducers';
 
-import AppContainer from 'containers/appContainer';
+import AppContainer from 'components/app/appContainer';
 import registerServiceWorker from 'registerServiceWorker';
 
 import './polyfills';

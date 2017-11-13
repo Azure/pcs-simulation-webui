@@ -1,0 +1,139 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.form-section {
+  @include rem-fallback(padding-top, 32px);
+  
+  .section-header {
+    @include rem-fallback(margin-bottom, 12px);
+
+    @include themify($themes) {
+      color: themed('bright');
+    }
+  }
+
+  .section-desc {
+    @include rem-font-size(14px);
+    @include rem-fallback(margin-bottom, 16px);
+  }
+}
+
+.form-group {
+  @include rem-font-size(14px);
+
+  .form-group-label {
+    display: block;
+    @include rem-fallback(margin-bottom, 12px);
+
+    @include themify($themes) {
+      color: themed('bright');
+    }
+  }
+
+  + .form-group { @include rem-fallback(margin-top, 16px); }
+}
+
+.form-actions-container {
+  @include rem-fallback(margin-top, 48px);
+  @include rem-fallback(padding-top, 48px);
+
+  @include themify($themes) {
+    border-top: 1px solid themed('headerBorderColor');
+  }
+}
+
+$btnHeight: 28px;
+$btnIconSize: 14px;
+.btn {
+  display: flex;
+  flex-flow: row nowrap;
+  flex-shrink: 0;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  @include rem-fallback(padding, 0px, $btnHeight);
+
+  .btn-icon {
+    @include rem-fallback(height, $btnHeight);
+    @include rem-fallback(width, $btnIconSize);
+    
+    svg { @include square-px-rem($btnIconSize); }
+
+    + .btn-text { 
+      @include rem-fallback(padding-left, 5px); 
+    }
+  }
+
+  .btn-text { 
+    @include rem-fallback(line-height, $btnHeight);
+    @include rem-fallback(padding-right, (($btnHeight - $btnIconSize) / 2));
+    @include rem-font-size(14px);
+  }
+
+  @include themify($themes) {
+    color: themed('bright');
+
+    .btn-icon svg { fill: themed('bright'); }
+
+    &:hover {
+      color: themed('navHoverBgColor');
+      background-color: themed('navItemColor');
+
+      .btn-icon svg { fill: themed('navHoverBgColor'); }
+    }
+  }
+}
+
+.btn-toolbar {
+  display: flex;
+  flex-flow: row wrap;
+
+  .btn + .btn {
+    @include rem-fallback(margin-left, 20px);
+  }
+}
+
+.duration-control-container {
+  display: flex;
+  flex-flow: row wrap;
+
+  .form-group {
+
+    + .form-group { 
+      margin: 0;
+      @include rem-fallback(margin-left, 5px);
+    }
+
+    input[type=text] {
+      width: 1.2em;
+      text-align: center;
+    }
+  }
+
+  @include themify($themes) {
+    .form-group .form-group-label { color: themed('navItemColor'); }
+  }
+}
+
+input[type=text],
+input[type=number],
+textarea {
+  font-size: inherit;
+  background: transparent;
+  @include rem-fallback(padding, 3px);
+  
+  @include themify($themes) {
+    color: themed('navItemColor');
+    border: 1px solid themed('headerBorderColor');
+  }
+}
+
+textarea {
+  resize: none;
+  min-height: 1em;
+  @include rem-fallback(height, 100px);
+  @include rem-fallback(width, 380px);
+}

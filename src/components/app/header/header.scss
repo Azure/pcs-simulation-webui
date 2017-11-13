@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import './styles/mixins';
-@import './styles/themes';
+@import 'styles/themes';
+@import 'styles/mixins';
 
 $headerHeight: 48px;
 $svgSize: 16px;
@@ -10,11 +10,9 @@ $imgSize: 30px;
 .app-header {
   display: flex;
   flex-flow: row nowrap;
+  flex-shrink: 0;
 
   @include rem-fallback(height, $headerHeight);
-  @include themify($themes) {
-    border-bottom: 1px solid themed('headerBorderColor');
-  }
 
   .breadcrumbs { flex-grow: 1; }
 
@@ -25,17 +23,16 @@ $imgSize: 30px;
 
     @include rem-fallback(line-height, $headerHeight);
     @include rem-fallback(padding-right, 24px);
-    @include themify($themes) {
-      color: themed('navItemColor');
-    }
   }
 
   .items-container {
     display: flex;
     align-items: center;
 
-    @include themify($themes) {
-      border-left: 1px solid themed('headerBorderColor');
+    button {
+      border: 0;
+      padding: 0;
+      background-color: transparent;
     }
 
     .item-icon {
@@ -52,8 +49,19 @@ $imgSize: 30px;
 
         img { @include square-px-rem($imgSize); }
       }
+    }
+  }
+  
+  // Apply theme properties
+  @include themify($themes) {
+    border-bottom: 1px solid themed('headerBorderColor');
 
-      @include themify($themes) {
+    .label { color: themed('navItemColor'); }
+
+    .items-container {
+      border-left: 1px solid themed('headerBorderColor');
+
+      .item-icon {
         svg { fill: themed('navItemColor'); }
         
         &:hover {

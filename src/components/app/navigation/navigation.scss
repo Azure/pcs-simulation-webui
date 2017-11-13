@@ -1,21 +1,19 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import './styles/mixins';
-@import './styles/variables';
-@import './styles/themes';
+@import 'styles/variables';
+@import 'styles/themes';
+@import 'styles/mixins';
 
 $navItemHeight: 48px;
 $leftNavExpandedWidth: 220px;
 $svgSize: 16px;
-$companySvgSize: 20px;
+$companySvgSize: 23px;
 
 .app-nav {
+  display: flex;
+  flex-flow: column nowrap;
   flex-shrink: 0;
-
-  @include themify($themes) {
-    background-color: themed('navBgColor');
-    color: themed('bright');
-  }
+  overflow: hidden;
 
   .nav-item {
     display: flex;
@@ -23,61 +21,73 @@ $companySvgSize: 20px;
     flex-shrink: 0;
     align-items: center;
     text-decoration: none;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
 
     @include rem-fallback(height, $navItemHeight);
-    @include themify($themes) {
-      color: themed('bright');
-    }
 
     &.hamburger { @include rem-fallback(margin-bottom, 16px); }
 
     .nav-item-icon {
       @include square-px-rem($navItemHeight);
 
-      svg {
-        @include square-px-rem($svgSize);
-        @include themify($themes) {
-          fill: themed('navItemColor');
-        }
-      }
+      svg { @include square-px-rem($svgSize); }
     }
 
     &.company .nav-item-icon svg { @include square-px-rem($companySvgSize); }
 
     .nav-item-text { 
       display: none;
-      flex-grow: 1; 
-      line-height: $navItemHeight;
+      flex-grow: 1;
+      flex-shrink: 0;
+
+      @include rem-fallback(line-height, $navItemHeight);
     }
   }
 
-  a.nav-item,
-  .nav-item.hamburger {
+  a.nav-item {
     cursor: pointer;
 
     &.active,
     &:active,
     &:focus,
     &:hover { font-family: $fontSelawikSemibold; }
+  }
 
-    @include themify($themes) {
+  // Don't include the hamburger style with the a.nav-item to prevent the svg 
+  // from popping when the font family changes
+  .nav-item.hamburger { cursor: pointer; }
+
+  &.expanded {
+    width: $leftNavExpandedWidth;
+
+    .nav-item .nav-item-text { display: block }
+  }
+
+  // Apply theme properties
+  @include themify($themes) {
+    background-color: themed('navBgColor');
+    color: themed('bright');
+
+    .nav-item {
+      color: themed('bright');
+
+      .nav-item-icon svg { fill: themed('navItemColor');}
+    }
+
+    a.nav-item,
+    .nav-item.hamburger {
       color: themed('navItemColor');
 
       &.active,
-      &:active,
-      &:focus,
       &:hover {
         color: themed('bright');
         background-color: themed('navHoverBgColor');
-  
+
         .nav-item-icon svg { fill: themed('bright'); }
       }
     }
-  }
-
-  &.expanded {
-    @include rem-fallback(width, $leftNavExpandedWidth);
-
-    .nav-item .nav-item-text { display: block }
   }
 }

@@ -4,12 +4,22 @@ import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
 import { routeEvent } from 'actions';
+
+// App Components
 import Header from './header/header';
 import Navigation from './navigation/navigation';
+import Main from './main/main';
+import PageContainer from './pageContainer/pageContainer';
+
+// Page Components
+import  { 
+  Simulation,
+  PageNotFound
+} from 'components/pages';
 
 import './app.css';
 
-/** The primary app component */
+/** The base component for the app */
 class App extends Component {
 
   componentDidMount() {
@@ -22,14 +32,16 @@ class App extends Component {
     return (
       <div className="app">
         <Navigation />
-        <div className="app-view-container">
+        <Main>
           <Header />
-          <Switch>
-            <Route exact path="/" render={() => <Redirect to="/simulation" push={true} />} />
-            <Route path="/simulation" render={() => <span>Simulation coming soon!</span>} />
-            <Route render={() => <span>404 Page Not Found</span>} />
-          </Switch>
-        </div>
+          <PageContainer>
+            <Switch>
+              <Route exact path="/" render={() => <Redirect to="/simulation" push={true} />} />
+              <Route exact path="/simulation" component={Simulation} />
+              <Route component={PageNotFound} />
+            </Switch>
+          </PageContainer>
+        </Main>
       </div>
     );
   }

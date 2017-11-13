@@ -4,4 +4,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
+
+  // The ReactSVG component adds two layers of divs before the injected SVG, 
+  // here we force the divs to properly center the Svgs
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
 }

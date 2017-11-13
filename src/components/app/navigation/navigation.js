@@ -33,7 +33,7 @@ const TabLink = (props) => (
 /** The navigation component for the left navigation */
 class Navigation extends Component {
 
-  toggleExpanded = () => {
+  toggleExpanded = (event) => {
     this.setState({ collapsed: !(this.state || {}).collapsed });
   }
 
@@ -45,9 +45,9 @@ class Navigation extends Component {
           <NavIcon path={svgs.contoso} />
           <div className="nav-item-text">Company</div>
         </div>
-        <div className="nav-item hamburger" onClick={this.toggleExpanded}>
+        <button className="nav-item hamburger" onClick={this.toggleExpanded}>
           <NavIcon path={svgs.hamburger} />
-        </div>
+        </button>
         { navLinks.map(navProps => <TabLink {...navProps} />) }
       </nav>
     );
