@@ -99,6 +99,7 @@ export class DurationControl extends Component {
     this.setState(this.convertMsToUnits(this.props.value));
   }
 
+  // TODO: Update the props to accept h, m, seconds, or value
   componentWillReceiveProps(nextProps) {
     this.setState(this.convertMsToUnits(nextProps.value));
   }
@@ -115,7 +116,12 @@ export class DurationControl extends Component {
   }
 
   convertUnitsToMs({ hours, minutes, seconds }) {
-    return 1000*(60*(60*int(hours) + int(minutes)) + int(seconds));
+    return 1000*(60*(60*hours + minutes) + seconds);
+  }
+
+  createValueObject(units) {
+    const ms = this.convertUnitsToMs(units);
+    return { ...units, ms };
   }
 
   liftChange(value) {
@@ -125,20 +131,20 @@ export class DurationControl extends Component {
 
   onChangeHours = ({ target }) => {
     const { value } = target;
-    const ms = this.convertUnitsToMs({ ...this.state, hours: value });
-    this.liftChange(ms);
+    const newValue = this.createValueObject({ ...this.state, hours: int(value) });
+    this.liftChange(newValue);
   }
 
   onChangeMinutes = ({ target }) => {
     const { value } = target;
-    const ms = this.convertUnitsToMs({ ...this.state, minutes: value });
-    this.liftChange(ms);
+    const newValue = this.createValueObject({ ...this.state, minutes: int(value) });
+    this.liftChange(newValue);
   }
 
   onChangeSeconds = ({ target }) => {
     const { value } = target;
-    const ms = this.convertUnitsToMs({ ...this.state, seconds: value });
-    this.liftChange(ms);
+    const newValue = this.createValueObject({ ...this.state, seconds: int(value) });
+    this.liftChange(newValue);
   }
 
   format(value) {

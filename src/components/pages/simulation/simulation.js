@@ -32,7 +32,7 @@ export class Simulation extends Component {
     super(props);
 
     this.state = { 
-      duration: 0, // In milliseconds
+      duration: {},
       radioTest: undefined
     };
   }
@@ -83,7 +83,7 @@ export class Simulation extends Component {
             <SectionHeader>Number inputs</SectionHeader>
             <FormGroup>
               <FormLabel>Duration</FormLabel>
-              <FormControl type="duration" name="duration" value={this.state.duration} onChange={this.onChange} />
+              <FormControl type="duration" name="duration" value={this.state.duration.ms} onChange={this.onChange} />
             </FormGroup>
           </FormSection>
           <FormSection>
@@ -91,7 +91,7 @@ export class Simulation extends Component {
             <SectionDesc>Time to test out some radio input elements</SectionDesc>
             <Radio {...radioProps('radioTest', 'radioOne')}>
               <FormLabel>Test label</FormLabel>
-              <FormControl type="duration" name="duration" value={this.state.duration} onChange={this.onChange} />
+              <FormControl type="duration" name="duration" value={this.state.duration.ms} onChange={this.onChange} />
             </Radio>
             <Radio {...radioProps('radioTest', 'radioTwo')}>
               Some value
