@@ -165,7 +165,7 @@ input[type=number],
 textarea {
   font-size: inherit;
   background: transparent;
-  @include rem-fallback(padding, 3px);
+  @include rem-fallback(padding, 3px, 4px);
   @include rem-fallback(width, 300px); // Default input width
   
   @include themify($themes) {
