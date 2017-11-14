@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import svgs from 'utilities/svgs';
+import { svgs } from 'utilities';
 import { 
   FormSection,
   SectionHeader,
@@ -12,7 +12,8 @@ import {
   FormControl,
   FormActions,
   Btn,
-  BtnToolbar
+  BtnToolbar,
+  Radio
 } from 'components/shared';
 
 import './simulation.css';
@@ -21,7 +22,27 @@ const Header = (props) => (
   <div className="page-header">{props.children}</div>
 );
 
+/** 
+ * TODO: Add the real component. Currently being used as a test bed for the 
+ * shared controls .
+ */
 export class Simulation extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = { 
+      duration: 0, // In milliseconds
+      radioTest: undefined
+    };
+  }
+
+  onChange = ({ target }) => {
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    console.log({ [name]: value });
+    this.setState({ [name]: value });
+  }
 
   apply = (event) => {
     alert("Attempting to submit the form");
@@ -29,6 +50,15 @@ export class Simulation extends Component {
   };
 
   render () {
+    const radioProps = (name, value) => {
+      return {
+        name,
+        value,
+        checked: this.state[name] === value,
+        onChange: this.onChange
+      };
+    };
+
     return (
       <div className="simulation-container">
         <Header>Simulation setup</Header>
@@ -42,7 +72,8 @@ export class Simulation extends Component {
             </FormGroup>
           </FormSection>
           <FormSection>
-            <SectionHeader>More test inputs</SectionHeader>
+            <SectionHeader>Other text inputs</SectionHeader>
+            <SectionDesc>Some textarea stuff is in this description</SectionDesc>
             <FormGroup>
               <FormLabel>Textarea</FormLabel>
               <FormControl type="textarea" placeholder="Placeholder" />
@@ -52,13 +83,27 @@ export class Simulation extends Component {
             <SectionHeader>Number inputs</SectionHeader>
             <FormGroup>
               <FormLabel>Duration</FormLabel>
-              <FormControl type="duration" value="98765" />
+              <FormControl type="duration" name="duration" value={this.state.duration} onChange={this.onChange} />
             </FormGroup>
+          </FormSection>
+          <FormSection>
+            <SectionHeader>Radio inputs</SectionHeader>
+            <SectionDesc>Time to test out some radio input elements</SectionDesc>
+            <Radio {...radioProps('radioTest', 'radioOne')}>
+              <FormLabel>Test label</FormLabel>
+              <FormControl type="duration" name="duration" value={this.state.duration} onChange={this.onChange} />
+            </Radio>
+            <Radio {...radioProps('radioTest', 'radioTwo')}>
+              Some value
+            </Radio>
+            <Radio {...radioProps('radioTest', 'radioThree')}>
+              <FormControl type="text" placeholder="Placeholder" />
+            </Radio>
           </FormSection>
           <FormActions>
             <BtnToolbar>
-              <Btn type="reset">Reset</Btn>
-              <Btn svg={svgs.hamburger} type="submit">Apply</Btn>
+              <Btn svg={svgs.x} type="reset">Reset</Btn>
+              <Btn svg={svgs.startSimulation} type="submit" className="apply-btn">Apply</Btn>
             </BtnToolbar>
           </FormActions>
         </form>

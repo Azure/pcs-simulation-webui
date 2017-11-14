@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
-import svgs from 'utilities/svgs';
+import { svgs } from 'utilities';
 import { Svg } from 'components/shared';
 
 import ProfileImagePath from '../../../assets/images/profile.png';

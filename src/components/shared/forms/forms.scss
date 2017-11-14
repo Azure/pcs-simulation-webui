@@ -91,6 +91,7 @@ $btnIconSize: 14px;
   display: flex;
   flex-flow: row wrap;
 
+  // TODO: Use some flexbox properties to avoid strange staggering when wrapped
   .btn + .btn {
     @include rem-fallback(margin-left, 20px);
   }
@@ -102,10 +103,7 @@ $btnIconSize: 14px;
 
   .form-group {
 
-    + .form-group { 
-      margin: 0;
-      @include rem-fallback(margin-left, 5px);
-    }
+    .form-group-label { text-transform: uppercase; }
 
     input[type=text] {
       width: 1.2em;
@@ -113,8 +111,52 @@ $btnIconSize: 14px;
     }
   }
 
+  .duration-colon-icon {
+    align-self: flex-end;
+    @include rem-fallback(height, 24px);
+    @include rem-fallback(width, 10px);
+
+    svg {
+      @include rem-fallback(height, 16px);
+      @include rem-fallback(width, 2px);
+    }
+  }
+
   @include themify($themes) {
     .form-group .form-group-label { color: themed('navItemColor'); }
+
+    .duration-colon-icon svg { fill: themed('scrollbarThumbColor'); }
+  }
+}
+
+.radio-container {
+  display: flex;
+  flex-flow: row nowrap;
+  
+  + .radio-container { @include rem-fallback(margin-top, 12px); }
+
+  .input-container {
+    @include rem-fallback(margin-left, 16px);
+  }
+
+  .input-contents {
+    display: flex;
+    flex-flow: column nowrap;
+    flex-grow: 1;
+    @include rem-fallback(margin-left, 10px);
+
+    > .form-group-label {
+      @include rem-font-size(14px);
+      // If there is div content after the label, adding some padding above it
+      + div { @include rem-fallback(margin-top, 12px); }
+
+      @include themify($themes) {
+        color: themed('bright');
+      }
+    }
+
+    > input[type=text],
+    > input[type=number] { @include rem-font-size(14px); }
   }
 }
 
@@ -124,6 +166,7 @@ textarea {
   font-size: inherit;
   background: transparent;
   @include rem-fallback(padding, 3px);
+  @include rem-fallback(width, 300px); // Default input width
   
   @include themify($themes) {
     color: themed('navItemColor');

@@ -4,13 +4,13 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Svg } from 'components/shared';
 
-import svgs from 'utilities/svgs';
+import { svgs } from 'utilities';
 
 import './navigation.css';
 
 /** The navigation tab configurations */
 const navLinks = [
-  { key: 0, to: '/simulation', svg: svgs.contoso, label: 'Simulation' }
+  { key: 0, to: '/simulation', svg: svgs.simulationLogo, label: 'Simulation' }
 ];
 
 /** 

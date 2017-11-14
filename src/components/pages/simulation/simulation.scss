@@ -16,5 +16,18 @@
   // Apply theme properties
   @include themify($themes) {
     color: themed('navItemColor');
+
+    .apply-btn {
+      // The start simulation svg uses stroke rather than fill
+      svg {
+        fill: transparent;
+        stroke: themed('bright'); 
+      }
+
+      &:hover svg {
+        fill: transparent;
+        stroke: themed('navHoverBgColor');
+      }
+    }
   }
 }
