@@ -4,7 +4,7 @@ import React from 'react';
 import { svgs } from 'utilities';
 import { Svg } from 'components/shared';
 
-import ProfileImagePath from '../../../assets/images/profile.png';
+import ProfileImagePath from 'assets/images/profile.png';
 
 import './header.css';
 

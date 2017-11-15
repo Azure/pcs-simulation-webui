@@ -3,7 +3,7 @@
 import { combineReducers } from 'redux';
 
 // Reducers
-// REPLACE with reducer imports
+// TODO: Replace with reducer imports
 
 // Added to prevent errors until a real reducer is added
 const placeholder = (state = {}, action) => state;

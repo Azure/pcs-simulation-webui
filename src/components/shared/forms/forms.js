@@ -7,7 +7,7 @@ import { svgs, isFunc } from 'utilities';
 
 import './forms.css';
 
-// TODO: Move each component to it's own file
+// TODO: Move each component to its own file
 
 let idCounter = 0;
 
