@@ -13,11 +13,11 @@ const Header = (props) => (
 );
 
 const options = [
-  { value: 'Chiller', label: 'Chiller', className: 'custom-option' },
-  { value: 'Custom', label: 'Custom', className: 'custom-option' },
-  { value: 'Elevator', label: 'Elevator', className: 'custom-option' },
-  { value: 'JSON', label: 'JSON', className: 'custom-option' },
-  { value: 'Truck', label: 'Truck', className: 'custom-option' }
+  { value: 'Chiller', label: 'Chiller' },
+  { value: 'Custom', label: 'Custom' },
+  { value: 'Elevator', label: 'Elevator' },
+  { value: 'JSON', label: 'JSON' },
+  { value: 'Truck', label: 'Truck' }
 ]
 
 /**

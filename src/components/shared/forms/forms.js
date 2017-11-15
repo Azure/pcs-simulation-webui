@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import { Svg } from '../svg/svg';
 import { svgs, isFunc } from 'utilities';
-import PcsSelect from '../pcsSelect/pcsSelect';
+import { IotSelect } from '../iotSelect/iotSelect';
 
 import './forms.css';
 
@@ -58,7 +58,7 @@ export const FormControl = (props) => {
     case 'duration':
       return <DurationControl {...controlProps} />;
     case 'select':
-      return <PcsSelect {...controlProps} />;
+      return <IotSelect {...controlProps} />;
     default:
       return null; // Unknown form control
   }
