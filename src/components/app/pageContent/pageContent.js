@@ -2,13 +2,13 @@
 
 import React from 'react';
 
-import './pageContainer.css';
+import './pageContent.css';
 
 /** A presentational component containing the content for a page */
-const PageContainer = (props) => (
-  <div className={`page-container ${props.className || ''}`}>
+const PageContent = (props) => (
+  <div className={`page-content-container ${props.className || ''}`}>
     {props.children}
   </div>
 );
 
-export default PageContainer;
+export default PageContent;

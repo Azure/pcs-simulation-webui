@@ -45,8 +45,12 @@ export const FormLabel = (props) => {
 };
 
 export const FormControl = (props) => {
-  const { type, formGroupId, ...rest } = props;
-  const controlProps = {...rest, id: rest.id || formGroupId };
+  const { type, formGroupId, className, ...rest } = props;
+  const controlProps = {
+    ...rest, 
+    id: rest.id || formGroupId,
+    className: joinClasses('form-control', className)
+  };
   switch(type) {
     case 'text':
       return <input type="text" {...controlProps} />;
@@ -105,7 +109,7 @@ export class DurationControl extends Component {
   }
 
   convertMsToUnits(ms) {
-    // Max duration of 99h, 59m, 59 seconds
+    // Max duration of 99h, 59m, 59s
     const clippedMs = Math.min(ms || 0, 359999000);
     let acc = clippedMs / 1000;
     const seconds = Math.floor(acc % 60);
@@ -129,21 +133,9 @@ export class DurationControl extends Component {
     if (isFunc(onChange)) onChange({ target: { name, value } });
   }
 
-  onChangeHours = ({ target }) => {
-    const { value } = target;
-    const newValue = this.createValueObject({ ...this.state, hours: int(value) });
-    this.liftChange(newValue);
-  }
-
-  onChangeMinutes = ({ target }) => {
-    const { value } = target;
-    const newValue = this.createValueObject({ ...this.state, minutes: int(value) });
-    this.liftChange(newValue);
-  }
-
-  onChangeSeconds = ({ target }) => {
-    const { value } = target;
-    const newValue = this.createValueObject({ ...this.state, seconds: int(value) });
+  onChange = ({ target }) => {
+    const { name, value } = target;
+    const newValue = this.createValueObject({ ...this.state, [name]: int(value) });
     this.liftChange(newValue);
   }
 
@@ -155,6 +147,7 @@ export class DurationControl extends Component {
     const { disabled, className } = this.props;
     const genericProps = {
       ...DurationControl.defaultProps,
+      onChange: this.onChange,
       disabled
     };
     const { hours, minutes, seconds } = this.state;
@@ -165,49 +158,64 @@ export class DurationControl extends Component {
           <FormLabel>HH</FormLabel>
           <FormControl 
             {...genericProps}
-            value={this.format(hours)}
-            onChange={this.onChangeHours} />
+            name="hours"
+            value={this.format(hours)} />
         </FormGroup>
         <Svg path={svgs.colon} className="duration-colon-icon" />
         <FormGroup>
           <FormLabel>MM</FormLabel>
           <FormControl 
             {...genericProps}
-            value={this.format(minutes)}
-            onChange={this.onChangeMinutes} />
+            name="minutes"
+            value={this.format(minutes)} />
         </FormGroup>
         <Svg path={svgs.colon} className="duration-colon-icon" />
         <FormGroup>
           <FormLabel>SS</FormLabel>
           <FormControl 
             {...genericProps}
-            value={this.format(seconds)}
-            onChange={this.onChangeSeconds} />
+            name="seconds"
+            value={this.format(seconds)} />
         </FormGroup>
       </div>
     );
   }
 }
 
-export const Radio = (props) => {
-  const { className, children, id, checked, ...radioProps } = props;
-  const formGroupId = `formGroupId${idCounter++}`;
-  let contentChildren = children;
-  if (typeof contentChildren === 'string') {
-    contentChildren = <FormLabel>{contentChildren}</FormLabel>;
-  }
-  const childrenWithProps = React.Children.map(contentChildren,
-    (child) => React.cloneElement(child, { 
-      formGroupId, 
-      disabled: checked === undefined ? false : !checked 
-    })
-  );
-  return (
-    <div className={joinClasses('radio-container', className)}>
-      <div className="input-container">
-        <input {...radioProps} type="radio" checked={checked} id={id || formGroupId} />
+
+export class Radio extends Component {
+  // Needs to be a stateful component in order to access refs
+  render() {
+    const { className, children, id, checked, disabled, ...radioProps } = this.props;
+    const formGroupId = `formGroupId${idCounter++}`;
+    let contentChildren = children;
+    if (typeof contentChildren === 'string') {
+      contentChildren = <FormLabel>{contentChildren}</FormLabel>;
+    }
+    const childrenWithProps = React.Children.map(contentChildren,
+      (child) => React.cloneElement(child, { 
+        formGroupId, 
+        disabled: disabled || (checked === undefined ? false : !checked)
+      })
+    );
+    const { radioSelected, radioUnselected }  = svgs;
+    return (
+      <div className={joinClasses('radio-container', className)}>
+        <div className="radio-input-container">
+          <input 
+            {...radioProps} 
+            type="radio" 
+            disabled={disabled}
+            checked={checked} 
+            id={id || formGroupId} 
+            ref="radioInputElement" />
+          <Svg 
+            path={checked ? radioSelected : radioUnselected } 
+            className={joinClasses('radio-icon', disabled ? 'disabled' : '')}
+            onClick={() => this.refs.radioInputElement.click()} />
+        </div>
+        <div className="input-contents">{childrenWithProps}</div>
       </div>
-      <div className="input-contents">{childrenWithProps}</div>
-    </div>
-  );
-};
+    );
+  }
+}

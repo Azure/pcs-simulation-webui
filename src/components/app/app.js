@@ -9,7 +9,7 @@ import { routeEvent } from 'actions';
 import Header from './header/header';
 import Navigation from './navigation/navigation';
 import Main from './main/main';
-import PageContainer from './pageContainer/pageContainer';
+import PageContent from './pageContent/pageContent';
 
 // Page Components
 import  { 
@@ -34,13 +34,13 @@ class App extends Component {
         <Navigation />
         <Main>
           <Header />
-          <PageContainer>
+          <PageContent>
             <Switch>
               <Route exact path="/" render={() => <Redirect to="/simulation" push={true} />} />
               <Route exact path="/simulation" component={Simulation} />
               <Route component={PageNotFound} />
             </Switch>
-          </PageContainer>
+          </PageContent>
         </Main>
       </div>
     );
