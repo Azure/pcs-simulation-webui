@@ -12,6 +12,14 @@ const Header = (props) => (
   <div className="page-header">{props.children}</div>
 );
 
+const options = [
+  { value: 'Chiller', label: 'Chiller', className: 'custom-option' },
+  { value: 'Custom', label: 'Custom', className: 'custom-option' },
+  { value: 'Elevator', label: 'Elevator', className: 'custom-option' },
+  { value: 'JSON', label: 'JSON', className: 'custom-option' },
+  { value: 'Truck', label: 'Truck', className: 'custom-option' }
+]
+
 /**
  * TODO: Add the real component. Currently being used as a test bed for the
  * shared controls.
