@@ -105,13 +105,13 @@ export class DurationControl extends Component {
   }
 
   convertMsToUnits(ms) {
-    let acc = (ms || 0) / 1000;
+    // Max duration of 99h, 59m, 59 seconds
+    const clippedMs = Math.min(ms || 0, 359999000);
+    let acc = clippedMs / 1000;
     const seconds = Math.floor(acc % 60);
     acc /= 60;
     const minutes = Math.floor(acc % 60);
-    const unClippedHours = Math.floor(acc / 60);
-    // Since the input only supports two digits, don't allow values above 99
-    const hours = unClippedHours > 99 ? 99 : unClippedHours;
+    const hours = Math.floor(acc / 60);
     return { hours, minutes, seconds };
   }
 
