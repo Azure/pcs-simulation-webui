@@ -24,19 +24,36 @@ $select-padding-vertical: 6px;
 
   &.select-long { @include rem-fallback(width, 248px); }
 
-  &.select-short { @include rem-fallback(width, 124px); }
+.Select {
+	position: relative;
 
-  // handle disabled state
-  &.is-disabled > .Select-control {
-    @include themify($themes) { background-color: themed('colorMidFirst'); }
+	// preferred box model
+	&,
+	& div,
+	& input,
+	& span {
+		@include box-sizing(border-box);
+	}
 
-    &:hover { box-shadow: none; }
+  &.select-long {
+    @include rem-fallback(width, 248px);
   }
 
-  &.is-disabled .Select-arrow-zone {
-    cursor: default;
-    pointer-events: none;
+  &.select-short {
+    @include rem-fallback(width, 124px);
   }
+
+	// handle disabled state
+	&.is-disabled > .Select-control {
+		background-color: $select-input-bg-disabled;
+		&:hover {
+			box-shadow: none;
+		}
+	}
+	&.is-disabled .Select-arrow-zone {
+		cursor: default;
+		pointer-events: none;
+	}
 }
 
 // base
