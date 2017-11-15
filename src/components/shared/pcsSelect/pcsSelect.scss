@@ -1,0 +1,16 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+// Overriding react-select Sass Variables
+
+$select-input-height:               26px;
+$select-input-bg:                   #111;
+$select-text-color:                 #fff;
+$select-item-bg:                    #121316;
+$select-item-color:                 #111;
+$select-input-border-color:         #6A737C;
+$select-input-border-focus:         #6A737C;
+$select-option-selected-bg:         #6A737C;
+$select-option-focused-bg:          #3E4145;
+$select-input-border-radius:        0;
+
+@import "../../../../node_modules/react-select/scss/default";
