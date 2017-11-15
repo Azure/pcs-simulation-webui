@@ -23,7 +23,13 @@
 		@include box-sizing(border-box);
 	}
 
-  @include rem-fallback(width, 248px);
+  &.select-long {
+    @include rem-fallback(width, 248px);
+  }
+
+  &.select-short {
+    @include rem-fallback(width, 124px);
+  }
 
 	// handle disabled state
 	&.is-disabled > .Select-control {
