@@ -1,0 +1,75 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/themes';
+@import 'styles/mixins';
+
+$headerHeight: 48px;
+$svgSize: 16px;
+$imgSize: 30px;
+
+.app-header {
+  display: flex;
+  flex-flow: row nowrap;
+  flex-shrink: 0;
+
+  @include rem-fallback(height, $headerHeight);
+
+  .breadcrumbs { flex-grow: 1; }
+
+  .label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include rem-fallback(line-height, $headerHeight);
+    @include rem-fallback(padding-right, 24px);
+  }
+
+  .items-container {
+    display: flex;
+    align-items: center;
+
+    button {
+      border: 0;
+      padding: 0;
+      background-color: transparent;
+    }
+
+    .item-icon {
+      cursor: pointer;
+
+      @include square-px-rem($headerHeight);
+
+      svg { @include square-px-rem($svgSize); }
+
+      &.profile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img { @include square-px-rem($imgSize); }
+      }
+    }
+  }
+  
+  // Apply theme properties
+  @include themify($themes) {
+    border-bottom: 1px solid themed('headerBorderColor');
+
+    .label { color: themed('navItemColor'); }
+
+    .items-container {
+      border-left: 1px solid themed('headerBorderColor');
+
+      .item-icon {
+        svg { fill: themed('navItemColor'); }
+        
+        &:hover {
+          background-color: themed('navHoverBgColor');
+  
+          svg { fill: themed('bright'); }
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,36 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-.app { 
-  margin: 20px;
-  padding: 20px;
-  background-color: rgb(83, 83, 83);
-  color: #fff;
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.app {
+  height: 100%;
+  display: flex;
+
+  ::-webkit-scrollbar { width: 12px; }
+
+  // Apply theme properties
+  @include themify($themes) {
+    background-color: themed('bgColor');
+
+    // Style text highlights
+    ::selection { 
+      color: themed('alertColor'); 
+      background: themed('textSelectionColor'); 
+    }
+    
+    ::-moz-selection { 
+      color: themed('alertColor'); 
+      background: themed('textSelectionColor'); 
+    }
+
+    // Style all scroll bars in the app
+    ::-webkit-scrollbar-track { background-color: themed('navHoverBgColor'); }
+
+    ::-webkit-scrollbar-corner { background-color: themed('navHoverBgColor'); }
+
+    ::-webkit-scrollbar { background-color: themed('navHoverBgColor'); }
+
+    ::-webkit-scrollbar-thumb { background-color: themed('scrollbarThumbColor'); }
+  }
 }

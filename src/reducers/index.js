@@ -3,10 +3,13 @@
 import { combineReducers } from 'redux';
 
 // Reducers
-import timer from './timer';
+// TODO: Replace with reducer imports
 
-const rootReducer = combineReducers({
-  timer
+// Added to prevent errors until a real reducer is added
+const placeholder = (state = {}, action) => state;
+
+const rootReducer = combineReducers({ 
+  placeholder 
 });
 
 export default rootReducer;
