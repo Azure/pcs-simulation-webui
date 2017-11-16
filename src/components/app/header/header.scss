@@ -51,22 +51,22 @@ $imgSize: 30px;
       }
     }
   }
-  
+
   // Apply theme properties
   @include themify($themes) {
-    border-bottom: 1px solid themed('headerBorderColor');
+    border-bottom: 1px solid themed('colorMidSecond');
 
     .label { color: themed('colorLightestFirst'); }
 
     .items-container {
-      border-left: 1px solid themed('headerBorderColor');
+      border-left: 1px solid themed('colorMidSecond');
 
       .item-icon {
         svg { fill: themed('colorLightestFirst'); }
-        
+
         &:hover {
           background-color: themed('colorLowestSecond');
-  
+
           svg { fill: themed('colorHighest'); }
         }
       }

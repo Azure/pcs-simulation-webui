@@ -15,13 +15,13 @@
 
     // Style text highlights
     // Set RGBa opacity to .99 to get correct color in the selection styling
-    ::selection { 
-      color: themed('colorHighest'); 
+    ::selection {
+      color: themed('colorHighest');
       background: rgba(themed('colorSystem'), .99);
     }
-    
-    ::-moz-selection { 
-      color: themed('colorHighest'); 
+
+    ::-moz-selection {
+      color: themed('colorHighest');
       background: rgba(themed('colorSystem'), .99);
     }
 
@@ -32,6 +32,6 @@
 
     ::-webkit-scrollbar { background-color: themed('colorLowestSecond'); }
 
-    ::-webkit-scrollbar-thumb { background-color: themed('scrollbarThumbColor'); }
+    ::-webkit-scrollbar-thumb { background-color: themed('colorMidSecond'); }
   }
 }
