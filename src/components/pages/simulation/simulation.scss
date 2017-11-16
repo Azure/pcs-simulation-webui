@@ -5,7 +5,7 @@
 @import 'styles/mixins';
 
 .simulation-container {
-  @include rem-fallback(padding, 64px, 32px);
+  @include rem-fallback(padding, 24px, 32px);
 
   .page-header {
     font-family: $fontSelawikBold;

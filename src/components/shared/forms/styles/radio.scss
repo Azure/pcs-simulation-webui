@@ -54,7 +54,7 @@
 
       // Highlight the radio circle border on hover when not checked
       > input[type=radio]:not(:checked) + .radio-icon:hover svg .outer-border
-      { stroke: themed('colorMidFirst'); }
+      { stroke: themed('colorLightestFirst'); }
 
     }
   }

@@ -8,12 +8,12 @@ import ProfileImagePath from 'assets/images/profile.png';
 
 import './header.css';
 
-/** The hader component for the top of the page */
+/** The header component for the top of the page */
 const Header = (props) => {
   return (
     <header className="app-header">
       <div className="breadcrumbs">{props.breadcrumbs || ''}</div>
-      <div className="label">Azure IoT Device Simulation</div>
+      <div className="label">Microsoft Azure IoT Device Simulation</div>
       <div className="items-container">
         <button onClick={() => console.log('Settings coming soon!')}>
           <Svg path={svgs.settings} className="item-icon" />

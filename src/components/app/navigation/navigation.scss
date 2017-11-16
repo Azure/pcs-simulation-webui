@@ -28,7 +28,7 @@ $companySvgSize: 23px;
 
     @include rem-fallback(height, $navItemHeight);
 
-    &.hamburger { @include rem-fallback(margin-bottom, 16px); }
+    &.hamburger { @include rem-fallback(margin-bottom, 24px); }
 
     .nav-item-icon {
       @include square-px-rem($navItemHeight);
