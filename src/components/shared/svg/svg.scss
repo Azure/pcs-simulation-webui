@@ -1,17 +1,16 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-.svg-container {
+@mixin center-flex() {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+};
+
+.svg-container {
+  @include center-flex();
 
   // The ReactSVG component adds two layers of divs before the injected SVG,
   // here we force the divs to properly center the Svgs
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-  }
+  div { @include center-flex(); }
 }
