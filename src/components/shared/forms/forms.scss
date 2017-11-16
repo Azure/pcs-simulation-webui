@@ -135,8 +135,39 @@ $btnIconSize: 14px;
   
   + .radio-container { @include rem-fallback(margin-top, 12px); }
 
-  .input-container {
+  .radio-input-container {
     @include rem-fallback(margin-left, 16px);
+
+    > input[type=radio] { display: none; }
+
+    .radio-icon {
+      cursor: pointer;
+      @include square-px-rem(16px);
+      
+      svg { @include square-px-rem(16px); }
+
+      &.disabled { cursor: auto; }
+
+      @include themify($themes) {
+        // Apply special styles to the radio button svg
+        svg {
+          .outer-border { 
+            stroke: themed('headerBorderColor'); 
+            fill: none;
+          }
+          
+          .inner-circle { fill: themed('bright'); }
+        }
+
+        &.disabled svg {
+          .inner-circle,
+          .outer-border { 
+            stroke: themed('headerBorderColor'); 
+            fill: themed('headerBorderColor'); 
+          }
+        }
+      }
+    }
   }
 
   .input-contents {
@@ -160,21 +191,40 @@ $btnIconSize: 14px;
   }
 }
 
-input[type=text],
-input[type=number],
-textarea {
+input[type=text].form-control,
+input[type=number].form-control,
+textarea.form-control {
   font-size: inherit;
   background: transparent;
   @include rem-fallback(padding, 3px, 4px);
   @include rem-fallback(width, 300px); // Default input width
   
+  &:disabled {
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+  }
+
   @include themify($themes) {
     color: themed('navItemColor');
     border: 1px solid themed('headerBorderColor');
+
+    &:disabled {
+      background-color: themed('headerBorderColor');
+      color: themed('headerBorderColor');
+
+      &::-webkit-input-placeholder { color: themed('headerBorderColor'); }
+      &::-moz-placeholder { color: themed('headerBorderColor'); }
+      &:-ms-input-placeholder { color: themed('headerBorderColor'); }
+      &:-moz-placeholder { color: themed('headerBorderColor'); }
+    }
   }
 }
 
-textarea {
+textarea.form-control {
   resize: none;
   min-height: 1em;
   @include rem-fallback(height, 100px);
