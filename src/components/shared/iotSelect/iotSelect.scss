@@ -24,36 +24,19 @@ $select-padding-vertical: 6px;
 
   &.select-long { @include rem-fallback(width, 248px); }
 
-.Select {
-	position: relative;
+  &.select-short { @include rem-fallback(width, 124px); }
 
-	// preferred box model
-	&,
-	& div,
-	& input,
-	& span {
-		@include box-sizing(border-box);
-	}
+  // handle disabled state
+  &.is-disabled > .Select-control {
+    @include themify($themes) { background-color: themed('colorMidFirst'); }
 
-  &.select-long {
-    @include rem-fallback(width, 248px);
+    &:hover { box-shadow: none; }
   }
 
-  &.select-short {
-    @include rem-fallback(width, 124px);
+  &.is-disabled .Select-arrow-zone {
+    cursor: default;
+    pointer-events: none;
   }
-
-	// handle disabled state
-	&.is-disabled > .Select-control {
-		background-color: $select-input-bg-disabled;
-		&:hover {
-			box-shadow: none;
-		}
-	}
-	&.is-disabled .Select-arrow-zone {
-		cursor: default;
-		pointer-events: none;
-	}
 }
 
 // base
@@ -61,18 +44,20 @@ $select-padding-vertical: 6px;
 .Select-control {
   border-style: solid;
   cursor: default;
-  display: table;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   border-spacing: 0;
   border-collapse: separate;
   outline: none;
   overflow: hidden;
   position: relative;
-  width: 100%;
+  @include rem-fallback(width, calc(100%));
   @include rem-fallback(height, $select-input-height);
-  @include rem-fallback(border-width, 1px);
   @include themify($themes) {
     background-color: themed('colorLowestFirst');
-    border-color: themed('colorLightestSecond');
+    border: 1px solid themed('colorLightestSecond');
     color: themed('colorHighest');
   }
 
@@ -123,8 +108,8 @@ $select-padding-vertical: 6px;
   color: $select-input-placeholder;
   left: 0;
   @include rem-fallback(line-height, 24px);
-  padding-left: $select-padding-horizontal;
-  padding-right: $select-padding-horizontal;
+  @include rem-fallback(padding-right, $select-padding-horizontal);
+  @include rem-fallback(padding-left, $select-padding-horizontal);
   position: absolute;
   right: 0;
   top: 0;
@@ -136,7 +121,9 @@ $select-padding-vertical: 6px;
   white-space: nowrap;
 }
 
-.has-value.is-clearable.Select--single > .Select-control .Select-value { padding-right: ($select-clear-width + $select-arrow-width * 5); }
+.has-value.is-clearable.Select--single > .Select-control .Select-value {
+  @include rem-fallback(padding-right, ($select-clear-width + $select-arrow-width * 5));
+}
 
 .has-value.Select--single > .Select-control .Select-value,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value {
@@ -164,8 +151,8 @@ $select-padding-vertical: 6px;
 .Select-input {
   // inherits `display: inline-block` from "react-input-autosize"
   @include rem-fallback(height, 24px);
-  padding-left: $select-padding-horizontal;
-  padding-right: $select-padding-horizontal;
+  @include rem-fallback(padding-right, $select-padding-horizontal);
+  @include rem-fallback(padding-left, $select-padding-horizontal);
   vertical-align: middle;
 
   > input {
@@ -200,7 +187,7 @@ $select-padding-vertical: 6px;
   position: relative;
   text-align: center;
   vertical-align: middle;
-  width: $select-loading-size;
+  @include rem-fallback(width, $select-loading-size);
 }
 
 .Select-loading {
@@ -218,7 +205,7 @@ $select-padding-vertical: 6px;
   position: relative;
   text-align: center;
   vertical-align: middle;
-  width: $select-clear-width;
+  @include rem-fallback(width, $select-clear-width);
 
   &:hover { color: $select-clear-hover-color; }
 }
@@ -229,7 +216,7 @@ $select-padding-vertical: 6px;
   line-height: 1;
 }
 
-.Select--multi .Select-clear-zone { width: $select-clear-width; }
+.Select--multi .Select-clear-zone { @include rem-fallback(width, $select-clear-width); }
 
 .Select--multi .Select-multi-value-wrapper { display: inline-block; }
 
@@ -299,9 +286,7 @@ $select-padding-vertical: 6px;
   @include rem-font-size($selectFontSize);
   @include themify($themes) {
     background-color: themed('colorLowestFirst');
-    border-color: themed('colorLightestSecond');
-    border-style: solid;
-    @include rem-fallback(border-width, 1px);
+    border: 1px solid themed('colorLightestSecond');
     border-top-color: mix(
       themed('colorLowestFirst'),
       themed('colorLightestSecond'),
@@ -380,25 +365,23 @@ $select-padding-vertical: 6px;
   .Select-input {
     vertical-align: middle;
     // border: 1px solid transparent;
-    margin-left: $select-padding-horizontal;
+    @include rem-fallback(margin-left, $select-padding-horizontal);
     padding: 0;
   }
 
   // reduce margin once there is value
-  &.has-value .Select-input { margin-left: $select-item-gutter; }
+  &.has-value .Select-input { @include rem-fallback(margin-left, $select-item-gutter); }
 
   // Items
   .Select-value {
     display: inline-block;
-    margin-left: $select-item-gutter;
-    margin-top: $select-item-gutter;
+    @include rem-fallback(margin-left, $select-item-gutter);
+    @include rem-fallback(margin-top, $select-item-gutter);
     vertical-align: top;
-    border-style: solid;
-    @include rem-fallback(border-width, 1px);
     @include rem-font-size($selectFontSize);
     @include themify($themes) {
       background-color: themed('colorLowestFirst');
-      border-color: themed('colorLightestSecond');
+      border: 1px solid themed('colorLightestSecond');
       color: themed('colorHighest');
     }
   }
@@ -447,12 +430,10 @@ $select-padding-vertical: 6px;
 }
 
 .Select--multi.is-disabled {
-  border-style: solid;
-  @include rem-fallback(border-width, 1px);
   @include themify($themes) {
     .Select-value {
       background-color: themed('colorLowestFirst');
-      border-color: themed('colorLightestSecond');
+      border: 1px solid themed('colorLightestSecond');
       color: themed('colorMidFirst');
     }
     // icon
