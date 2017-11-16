@@ -18,15 +18,15 @@ $btnIconSize: 14px;
   .btn-icon {
     @include rem-fallback(height, $btnHeight);
     @include rem-fallback(width, $btnIconSize);
-    
+
     svg { @include square-px-rem($btnIconSize); }
 
-    + .btn-text { 
-      @include rem-fallback(padding-left, 5px); 
+    + .btn-text {
+      @include rem-fallback(padding-left, 5px);
     }
   }
 
-  .btn-text { 
+  .btn-text {
     @include rem-fallback(line-height, $btnHeight);
     @include rem-fallback(padding-right, (($btnHeight - $btnIconSize) / 2));
     @include rem-font-size(14px);

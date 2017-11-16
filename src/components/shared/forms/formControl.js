@@ -11,7 +11,7 @@ import './styles//formControl.css';
 export const FormControl = (props) => {
   const { type, formGroupId, className, ...rest } = props;
   const controlProps = {
-    ...rest, 
+    ...rest,
     id: rest.id || formGroupId,
     className: joinClasses('form-control', className)
   };

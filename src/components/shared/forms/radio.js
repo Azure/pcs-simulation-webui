@@ -20,24 +20,23 @@ export class Radio extends Component {
       contentChildren = <FormLabel>{contentChildren}</FormLabel>;
     }
     const childrenWithProps = React.Children.map(contentChildren,
-      (child) => React.cloneElement(child, { 
-        formGroupId, 
+      (child) => React.cloneElement(child, {
+        formGroupId,
         disabled: disabled || (checked === undefined ? false : !checked)
       })
     );
-    const { radioSelected, radioUnselected }  = svgs;
     return (
       <div className={joinClasses('radio-container', className)}>
         <div className="radio-input-container">
-          <input 
-            {...radioProps} 
-            type="radio" 
+          <input
+            {...radioProps}
+            type="radio"
             disabled={disabled}
-            checked={checked} 
-            id={id || formGroupId} 
+            checked={checked}
+            id={id || formGroupId}
             ref="radioInputElement" />
-          <Svg 
-            path={checked ? radioSelected : radioUnselected } 
+          <Svg
+            path={svgs.radioSelected}
             className={joinClasses('radio-icon', disabled ? 'disabled' : '')}
             onClick={() => this.refs.radioInputElement.click()} />
         </div>

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { joinClasses } from 'utilities';
 
-// This component has no style sheet. 
+// This component has no style sheet.
 // The styles are applied contextually by its parent.
 
 export const SectionDesc = (props) => (
