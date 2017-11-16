@@ -11,25 +11,26 @@
 
   // Apply theme properties
   @include themify($themes) {
-    background-color: themed('bgColor');
+    background-color: themed('colorLowestFirst');
 
     // Style text highlights
+    // Set RGBa opacity to .99 to get correct color in the selection styling
     ::selection { 
-      color: themed('alertColor'); 
-      background: themed('textSelectionColor'); 
+      color: themed('colorHighest'); 
+      background: rgba(themed('colorSystem'), .99);
     }
     
     ::-moz-selection { 
-      color: themed('alertColor'); 
-      background: themed('textSelectionColor'); 
+      color: themed('colorHighest'); 
+      background: rgba(themed('colorSystem'), .99);
     }
 
     // Style all scroll bars in the app
-    ::-webkit-scrollbar-track { background-color: themed('navHoverBgColor'); }
+    ::-webkit-scrollbar-track { background-color: themed('colorLowestSecond'); }
 
-    ::-webkit-scrollbar-corner { background-color: themed('navHoverBgColor'); }
+    ::-webkit-scrollbar-corner { background-color: themed('colorLowestSecond'); }
 
-    ::-webkit-scrollbar { background-color: themed('navHoverBgColor'); }
+    ::-webkit-scrollbar { background-color: themed('colorLowestSecond'); }
 
     ::-webkit-scrollbar-thumb { background-color: themed('scrollbarThumbColor'); }
   }

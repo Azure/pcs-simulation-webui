@@ -1,15 +1,29 @@
 // Copyright (c) Microsoft. All rights reserved.
 
+@import 'variables';
+
 $themes: (
   dark: (
-    bgColor: #121416,
-    navBgColor: #242628,
-    navHoverBgColor: #1b1d1f,
-    bright: #fff,
-    navItemColor: #afb9c3,
+    // Temp colors
     headerBorderColor: #454a4e,
     scrollbarThumbColor: #35373a,
     textSelectionColor: rgba(0, 0, 0, .4),
-    alertColor: #7065fd,
+
+    // Lows
+    colorLowestFirst: $colorNoir,
+    colorLowestSecond: $colorMidnight,
+    colorLowestThird: $colorCharcoal,
+    // Mids
+    colorMidThird: $colorGraphite,
+    colorMidSecond: $colorLead,
+    colorMidFirst: $colorAsh,
+    // Highs
+    colorLightestSecond: $colorStone,
+    colorLightestFirst: $colorSmoke,
+    colorHighest: $colorWhite,
+    // Functional colors
+    colorAlarm: $colorAlarm,
+    colorWarning: $colorWarning,
+    colorSystem: $colorSystem,
   ),
 );

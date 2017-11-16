@@ -13,7 +13,7 @@ const Header = (props) => {
   return (
     <header className="app-header">
       <div className="breadcrumbs">{props.breadcrumbs || ''}</div>
-      <div className="label">Azure Device Simulation</div>
+      <div className="label">Azure IoT Device Simulation</div>
       <div className="items-container">
         <button onClick={() => console.log('Settings coming soon!')}>
           <Svg path={svgs.settings} className="item-icon" />

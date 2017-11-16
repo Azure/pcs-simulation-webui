@@ -36,15 +36,16 @@ $companySvgSize: 23px;
       svg { @include square-px-rem($svgSize); }
     }
 
-    &.company .nav-item-icon svg { @include square-px-rem($companySvgSize); }
-
-    .nav-item-text { 
+    .nav-item-text {
       display: none;
       flex-grow: 1;
       flex-shrink: 0;
+      @include rem-fallback(padding-left, $navItemHeight - (2 * $svgSize));
 
       @include rem-fallback(line-height, $navItemHeight);
     }
+
+    .nav-item-icon + .nav-item-text { padding-left: 0; }
   }
 
   a.nav-item {
@@ -68,25 +69,25 @@ $companySvgSize: 23px;
 
   // Apply theme properties
   @include themify($themes) {
-    background-color: themed('navBgColor');
-    color: themed('bright');
+    background-color: themed('colorLowestThird');
+    color: themed('colorHighest');
 
     .nav-item {
-      color: themed('bright');
+      color: themed('colorHighest');
 
-      .nav-item-icon svg { fill: themed('navItemColor');}
+      .nav-item-icon svg { fill: themed('colorLightestFirst');}
     }
 
     a.nav-item,
     .nav-item.hamburger {
-      color: themed('navItemColor');
+      color: themed('colorLightestFirst');
 
       &.active,
       &:hover {
-        color: themed('bright');
-        background-color: themed('navHoverBgColor');
+        color: themed('colorHighest');
+        background-color: themed('colorLowestSecond');
 
-        .nav-item-icon svg { fill: themed('bright'); }
+        .nav-item-icon svg { fill: themed('colorHighest'); }
       }
     }
   }

@@ -1,0 +1,66 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.radio-container {
+  display: flex;
+  flex-flow: row nowrap;
+  
+  + .radio-container { @include rem-fallback(margin-top, 12px); }
+
+  .radio-input-container {
+    @include rem-fallback(margin-left, 16px);
+
+    > input[type=radio] { display: none; }
+
+    .radio-icon {
+      cursor: pointer;
+      @include square-px-rem(16px);
+      
+      svg { @include square-px-rem(16px); }
+
+      &.disabled { cursor: auto; }
+
+      @include themify($themes) {
+        // Apply special styles to the radio button svg
+        svg {
+          .outer-border { 
+            stroke: themed('colorMidThird'); 
+            fill: none;
+          }
+          
+          .inner-circle { fill: themed('colorHighest'); }
+        }
+
+        &.disabled svg {
+          .inner-circle,
+          .outer-border { 
+            stroke: themed('colorMidThird'); 
+            fill: themed('colorMidThird'); 
+          }
+        }
+      }
+    }
+  }
+
+  .input-contents {
+    display: flex;
+    flex-flow: column nowrap;
+    flex-grow: 1;
+    @include rem-fallback(margin-left, 10px);
+
+    > .form-group-label {
+      @include rem-font-size(14px);
+      // If there is div content after the label, adding some padding above it
+      + div { @include rem-fallback(margin-top, 12px); }
+
+      @include themify($themes) {
+        color: themed('colorHighest');
+      }
+    }
+
+    > input[type=text],
+    > input[type=number] { @include rem-font-size(14px); }
+  }
+}

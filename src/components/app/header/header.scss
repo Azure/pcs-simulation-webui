@@ -56,18 +56,18 @@ $imgSize: 30px;
   @include themify($themes) {
     border-bottom: 1px solid themed('headerBorderColor');
 
-    .label { color: themed('navItemColor'); }
+    .label { color: themed('colorLightestFirst'); }
 
     .items-container {
       border-left: 1px solid themed('headerBorderColor');
 
       .item-icon {
-        svg { fill: themed('navItemColor'); }
+        svg { fill: themed('colorLightestFirst'); }
         
         &:hover {
-          background-color: themed('navHoverBgColor');
+          background-color: themed('colorLowestSecond');
   
-          svg { fill: themed('bright'); }
+          svg { fill: themed('colorHighest'); }
         }
       }
     }

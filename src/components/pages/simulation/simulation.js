@@ -40,7 +40,6 @@ export class Simulation extends Component {
   onChange = ({ target }) => {
     const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    console.log({ [name]: value });
     this.setState({ [name]: value });
   }
 
