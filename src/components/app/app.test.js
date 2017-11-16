@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router';
 import App from './app';
 import 'polyfills';
 
-it('renders without crashing', () => {
+it('App renders without crashing', () => {
   const div = document.createElement('div');
   const fakeProps = {
     history: { listen: _ => _ },
