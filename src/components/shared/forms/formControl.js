@@ -2,9 +2,8 @@
 
 import React from 'react';
 
-import { joinClasses } from 'utilities';
-
 import { Duration } from './duration';
+import { joinClasses } from 'utilities';
 
 import './styles//formControl.css';
 
