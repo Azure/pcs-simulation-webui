@@ -23,21 +23,17 @@
 		@include box-sizing(border-box);
 	}
 
-  &.select-long {
-    @include rem-fallback(width, 248px);
-  }
+  &.select-long { @include rem-fallback(width, 248px); }
 
-  &.select-short {
-    @include rem-fallback(width, 124px);
-  }
+  &.select-short { @include rem-fallback(width, 124px); }
 
 	// handle disabled state
 	&.is-disabled > .Select-control {
-		background-color: $select-input-bg-disabled;
-		&:hover {
-			box-shadow: none;
-		}
+		@include themify($themes) { background-color: themed('selectDisabledColor'); }
+
+		&:hover { box-shadow: none; }
 	}
+
 	&.is-disabled .Select-arrow-zone {
 		cursor: default;
 		pointer-events: none;
@@ -64,19 +60,13 @@
 	position: relative;
 	width: 100%;
 
-	&:hover {
-		box-shadow: $select-input-hover-box-shadow;
-	}
+	&:hover { box-shadow: $select-input-hover-box-shadow; }
 
-	.Select-input:focus {
-		outline: none;
-	}
+	.Select-input:focus { outline: none; }
 }
 
 .is-searchable {
-	&.is-open > .Select-control {
-		cursor: text;
-	}
+	&.is-open > .Select-control { cursor: text; }
 }
 
 .is-open > .Select-control {
@@ -95,9 +85,7 @@
 }
 
 .is-searchable {
-	&.is-focused:not(.is-open) > .Select-control {
-		cursor: text;
-	}
+	&.is-focused:not(.is-open) > .Select-control { cursor: text; }
 }
 
 .is-focused:not(.is-open) > .Select-control {
@@ -135,9 +123,7 @@
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value {
 	.Select-value-label {
     @include rem-font-size($selectFontSize);
-    @include themify($themes) {
-      color: themed('bright');
-    }
+    @include themify($themes) { color: themed('bright'); }
 	}
 	a.Select-value-label {
 		cursor: pointer;
@@ -145,9 +131,7 @@
 
 		&:hover,
 		&:focus {
-      @include themify($themes) {
-        color: themed('selectBorderColor');
-      }
+      @include themify($themes) { color: themed('selectBorderColor'); }
 			outline: none;
 			text-decoration: underline;
 		}
@@ -181,22 +165,16 @@
 		padding: 3 0 7;  /* For IE 8 compatibility */
 		-webkit-appearance: none;
 
-		.is-focused & {
-			cursor: text;
-		}
+		.is-focused & { cursor: text; }
 	}
 
 }
 
 // fake-hide the input when the control is pseudo-focused
-.has-value.is-pseudo-focused .Select-input {
-	opacity: 0;
-}
+.has-value.is-pseudo-focused .Select-input { opacity: 0; }
 
 // fake input
-.Select-control:not(.is-searchable) > .Select-input {
-	outline: none;
-}
+.Select-control:not(.is-searchable) > .Select-input { outline: none; }
 
 // loading indicator
 .Select-loading-zone {
@@ -207,6 +185,7 @@
 	vertical-align: middle;
 	width: $select-loading-size;
 }
+
 .Select-loading {
 	@include Select-spinner($select-loading-size, $select-loading-color-bg, $select-loading-color);
 	vertical-align: middle;
@@ -225,22 +204,19 @@
 	vertical-align: middle;
 	width: $select-clear-width;
 
-	&:hover {
-		color: $select-clear-hover-color;
-	}
+	&:hover { color: $select-clear-hover-color; }
 }
+
 .Select-clear {
 	display: inline-block;
 	font-size: $select-clear-size;
 	line-height: 1;
 }
-.Select--multi .Select-clear-zone {
-	width: $select-clear-width;
-}
 
-.Select--multi .Select-multi-value-wrapper {
-  display: inline-block;
-}
+.Select--multi .Select-clear-zone { width: $select-clear-width; }
+
+.Select--multi .Select-multi-value-wrapper { display: inline-block; }
+
 .Select .Select-aria-only {
 	display: inline-block;
 	height: 1px;
@@ -273,10 +249,9 @@
 	width: 0;
 	position: relative;
 }
+
 .is-open .Select-arrow,
-.Select-arrow-zone:hover > .Select-arrow {
-	border-top-color: $select-arrow-color-hover;
-}
+.Select-arrow-zone:hover > .Select-arrow { border-top-color: $select-arrow-color-hover; }
 
 
 
@@ -290,6 +265,7 @@
 	from { opacity: 0; }
 	to { opacity: 1; }
 }
+
 @keyframes Select-animation-fadeIn {
 	from { opacity: 0; }
 	to { opacity: 1; }
@@ -395,9 +371,7 @@
 	}
 
 	// reduce margin once there is value
-	&.has-value .Select-input {
-		margin-left: $select-item-gutter;
-	}
+	&.has-value .Select-input { margin-left: $select-item-gutter; }
 
 	// Items
 	.Select-value {
@@ -426,6 +400,7 @@
 		cursor: default;
 		padding: $select-item-padding-vertical $select-item-padding-horizontal;
 	}
+
 	a.Select-value-label {
     @include themify($themes) {
   		color: themed('bright');
@@ -454,6 +429,7 @@
   			background-color: themed('hoverIconDarkGray');
   			color: themed('bright');
   		}
+
   		&:active {
   			background-color: themed('selectBorderColor');
   		}
