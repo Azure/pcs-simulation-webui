@@ -10,8 +10,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 $selectFontSize: 14px;
+<<<<<<< HEAD
 $select-input-height: 26px;
 $select-menu-max-height: 226px;
+=======
+>>>>>>> scroll on 8 items in menu
 $select-padding-vertical: 6px;
 
 =======
@@ -695,7 +698,7 @@ $selectFontSize: 14px;
 	@include rem-fallback(margin-top, -1px);
 	@include rem-fallback(margin-top, -1px);
 	@include rem-fallback(margin-top, -1px);
-  max-height: $select-menu-max-height;
+  @include rem-fallback(max-height, 226px);
   position: absolute;
   top: 100%;
   width: 100%;
@@ -706,7 +709,7 @@ $selectFontSize: 14px;
 // wrapper
 
 .Select-menu {
-	@include rem-fallback(max-height, 222px);
+	@include rem-fallback(max-height, 224px);
   overflow-y: auto;
 }
 
