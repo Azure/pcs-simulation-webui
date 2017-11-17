@@ -8,6 +8,7 @@
 @import "../../../../node_modules/react-select/scss/spinner";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 $selectFontSize: 14px;
 $select-input-height: 26px;
 $select-menu-max-height: 226px;
@@ -15,10 +16,15 @@ $select-padding-vertical: 6px;
 
 =======
 >>>>>>> add theme to select input
+=======
+$selectFontSize: 14px;
+
+>>>>>>> rebase master
 //
 // Control
 // ------------------------------
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 .iot-select.Select {
   position: relative;
@@ -42,34 +48,37 @@ $select-padding-vertical: 6px;
     pointer-events: none;
   }
 =======
+=======
+.iot-select.Select {
+  position: relative;
+>>>>>>> rebase master
 
-.Select {
-	position: relative;
-
-	// preferred box model
-	&,
-	& div,
-	& input,
-	& span {
-		@include box-sizing(border-box);
-	}
+  // preferred box model
+  &, & div, & input, & span { @include box-sizing(border-box); }
 
   &.select-long { @include rem-fallback(width, 248px); }
 
   &.select-short { @include rem-fallback(width, 124px); }
 
-	// handle disabled state
-	&.is-disabled > .Select-control {
-		@include themify($themes) { background-color: themed('selectDisabledColor'); }
+  // handle disabled state
+  &.is-disabled > .Select-control {
+    @include themify($themes) { background-color: themed('colorMidFirst'); }
 
-		&:hover { box-shadow: none; }
-	}
+    &:hover { box-shadow: none; }
+  }
 
+<<<<<<< HEAD
 	&.is-disabled .Select-arrow-zone {
 		cursor: default;
 		pointer-events: none;
 	}
 >>>>>>> add theme to select input
+=======
+  &.is-disabled .Select-arrow-zone {
+    cursor: default;
+    pointer-events: none;
+  }
+>>>>>>> rebase master
 }
 
 // base
@@ -126,47 +135,48 @@ $select-padding-vertical: 6px;
   &.is-focused:not(.is-open) > .Select-control { cursor: text; }
 =======
   @include themify($themes) {
-    background-color: themed('bgColor');
-  	border-color: lighten(themed('selectBorderColor'), 5%) themed('selectBorderColor') darken(themed('selectBorderColor'), 10%);
-  	border: 1px solid themed('selectBorderColor');
-  	color: themed('bright');
+    background-color: themed('colorLowestFirst');
+    border-color: lighten(themed('colorLightestSecond'), 5%) themed('colorLightestSecond') darken(themed('colorLightestSecond'), 10%);
+    border: 1px solid themed('colorLightestSecond');
+    color: themed('colorHighest');
   }
 
-	cursor: default;
-	display: table;
-	border-spacing: 0;
-	border-collapse: separate;
+  cursor: default;
+  display: table;
+  border-spacing: 0;
+  border-collapse: separate;
   @include rem-fallback(height, 26px);
-	outline: none;
-	overflow: hidden;
-	position: relative;
-	width: 100%;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 
-	&:hover { box-shadow: $select-input-hover-box-shadow; }
+  &:hover { box-shadow: $select-input-hover-box-shadow; }
 
-	.Select-input:focus { outline: none; }
+  .Select-input:focus { outline: none; }
 }
 
 .is-searchable {
-	&.is-open > .Select-control { cursor: text; }
+  &.is-open > .Select-control { cursor: text; }
 }
 
 .is-open > .Select-control {
-	@include border-bottom-radius( 0 );
+  @include border-bottom-radius( 0 );
   @include themify($themes) {
-    background: themed('bgColor');
-    border-color: lighten(themed('selectBorderColor'), 10%) themed('selectBorderColor') darken(themed('selectBorderColor'), 5%);
+    background: themed('colorLowestFirst');
+    border-color: lighten(themed('colorLightestSecond'), 10%) themed('colorLightestSecond') darken(themed('colorLightestSecond'), 5%);
   }
 
-	// flip the arrow so its pointing up when the menu is open
-	.Select-arrow {
-		top: -2px;
-		border-color: transparent transparent $select-arrow-color;
-		border-width: 0 $select-arrow-width $select-arrow-width;
-	}
+  // flip the arrow so its pointing up when the menu is open
+  .Select-arrow {
+    @include rem-fallback(top, -2px);
+    border-color: transparent transparent $select-arrow-color;
+    border-width: 0 $select-arrow-width $select-arrow-width;
+  }
 }
 
 .is-searchable {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	&.is-focused:not(.is-open) > .Select-control {
 		cursor: text;
@@ -175,10 +185,14 @@ $select-padding-vertical: 6px;
 =======
 	&.is-focused:not(.is-open) > .Select-control { cursor: text; }
 >>>>>>> format scss
+=======
+  &.is-focused:not(.is-open) > .Select-control { cursor: text; }
+>>>>>>> rebase master
 }
 
 .is-focused:not(.is-open) > .Select-control {
   @include themify($themes) {
+<<<<<<< HEAD
 <<<<<<< HEAD
     border-color: themed('colorLightestSecond')
       lighten(themed('colorLightestSecond'), 5%)
@@ -186,6 +200,11 @@ $select-padding-vertical: 6px;
 =======
     border-color: themed('selectBorderColor') lighten(themed('selectBorderColor'), 5%) lighten(themed('selectBorderColor'), 5%);
 >>>>>>> add theme to select input
+=======
+    border-color: themed('colorLightestSecond')
+      lighten(themed('colorLightestSecond'), 5%)
+      lighten(themed('colorLightestSecond'), 5%);
+>>>>>>> rebase master
   }
   box-shadow: $select-input-box-shadow-focus;
 }
@@ -193,6 +212,7 @@ $select-padding-vertical: 6px;
 // placeholder
 .Select-placeholder,
 .Select--single > .Select-control .Select-value {
+<<<<<<< HEAD
 <<<<<<< HEAD
   bottom: 0;
   color: $select-input-placeholder;
@@ -217,20 +237,26 @@ $select-padding-vertical: 6px;
 	bottom: 0;
 	color: $select-input-placeholder;
 	left: 0;
+=======
+  bottom: 0;
+  color: $select-input-placeholder;
+  left: 0;
+>>>>>>> rebase master
   @include rem-fallback(line-height, 24px);
-	padding-left: $select-padding-horizontal;
-	padding-right: $select-padding-horizontal;
-	position: absolute;
-	right: 0;
-	top: 0;
+  padding-left: $select-padding-horizontal;
+  padding-right: $select-padding-horizontal;
+  position: absolute;
+  right: 0;
+  top: 0;
 
-	// crop text
-	max-width: 100%;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  // crop text
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+<<<<<<< HEAD
 .has-value.is-clearable.Select--single > .Select-control .Select-value {
 	padding-right: ($select-clear-width + $select-arrow-width * 5);
 >>>>>>> add theme to select input
@@ -343,52 +369,57 @@ $select-padding-vertical: 6px;
 }
 =======
 	.Select-value-label {
+=======
+.has-value.is-clearable.Select--single > .Select-control .Select-value { padding-right: ($select-clear-width + $select-arrow-width * 5); }
+
+.has-value.Select--single > .Select-control .Select-value,
+.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value {
+  .Select-value-label {
+>>>>>>> rebase master
     @include rem-font-size($selectFontSize);
-    @include themify($themes) { color: themed('bright'); }
-	}
-	a.Select-value-label {
-		cursor: pointer;
-		text-decoration: none;
+    @include themify($themes) {
+      color: themed('colorHighest');
+    }
+  }
 
-		&:hover,
-		&:focus {
-      @include themify($themes) { color: themed('selectBorderColor'); }
-			outline: none;
-			text-decoration: underline;
-		}
-	}
+  a.Select-value-label {
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover, &:focus {
+      @include themify($themes) { color: themed('colorLightestSecond'); }
+      outline: none;
+      text-decoration: underline;
+    }
+  }
 }
-
 
 // the <input> element users type in
 
 .Select-input {
-	// inherits `display: inline-block` from "react-input-autosize"
-	@include rem-fallback(height, 24px);
-	padding-left: $select-padding-horizontal;
-	padding-right: $select-padding-horizontal;
-	vertical-align: middle;
+  // inherits `display: inline-block` from "react-input-autosize"
+  @include rem-fallback(height, 24px);
+  padding-left: $select-padding-horizontal;
+  padding-right: $select-padding-horizontal;
+  vertical-align: middle;
 
-	> input {
-		background: none transparent;
-		border: 0 none;
-		box-shadow: none;
-    @include themify($themes) {
-      color: themed('bright');
-    }
-		cursor: default;
-		display: inline-block;
-		font-family: inherit;
-		font-size: inherit;
-		margin: 0;
-		outline: none;
-		line-height: 14px;  /* For IE 8 compatibility */
-		padding: 3 0 7;  /* For IE 8 compatibility */
-		-webkit-appearance: none;
+  > input {
+    background: none transparent;
+    border: 0 none;
+    box-shadow: none;
+    @include themify($themes) { color: themed('colorHighest'); }
+    cursor: default;
+    display: inline-block;
+    font-family: inherit;
+    font-size: inherit;
+    margin: 0;
+    outline: none;
+    line-height: 14px; /* For IE 8 compatibility */
+    padding: 3 0 7; /* For IE 8 compatibility */
+    -webkit-appearance: none;
 
-		.is-focused & { cursor: text; }
-	}
-
+    .is-focused & { cursor: text; }
+  }
 }
 
 // fake-hide the input when the control is pseudo-focused
@@ -399,39 +430,38 @@ $select-padding-vertical: 6px;
 
 // loading indicator
 .Select-loading-zone {
-	cursor: pointer;
-	display: table-cell;
-	position: relative;
-	text-align: center;
-	vertical-align: middle;
-	width: $select-loading-size;
+  cursor: pointer;
+  display: table-cell;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: $select-loading-size;
 }
 
 .Select-loading {
-	@include Select-spinner($select-loading-size, $select-loading-color-bg, $select-loading-color);
-	vertical-align: middle;
+  @include Select-spinner($select-loading-size, $select-loading-color-bg, $select-loading-color);
+  vertical-align: middle;
 }
-
 
 // the little cross that clears the field
 
 .Select-clear-zone {
-	@include animation( Select-animation-fadeIn 200ms );
-	color: $select-clear-color;
-	cursor: pointer;
-	display: table-cell;
-	position: relative;
-	text-align: center;
-	vertical-align: middle;
-	width: $select-clear-width;
+  @include animation( Select-animation-fadeIn 200ms );
+  color: $select-clear-color;
+  cursor: pointer;
+  display: table-cell;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: $select-clear-width;
 
-	&:hover { color: $select-clear-hover-color; }
+  &:hover { color: $select-clear-hover-color; }
 }
 
 .Select-clear {
-	display: inline-block;
-	font-size: $select-clear-size;
-	line-height: 1;
+  display: inline-block;
+  font-size: $select-clear-size;
+  line-height: 1;
 }
 
 .Select--multi .Select-clear-zone { width: $select-clear-width; }
@@ -439,26 +469,33 @@ $select-padding-vertical: 6px;
 .Select--multi .Select-multi-value-wrapper { display: inline-block; }
 
 .Select .Select-aria-only {
-	display: inline-block;
-	height: 1px;
-	width: 1px;
-	margin: -1px;
-	clip: rect(0,0,0,0);
-	overflow: hidden;
-	float: left;
+  display: inline-block;
+  @include rem-fallback(height, 1px);
+  @include rem-fallback(width, 1px);
+	@include rem-fallback(margin, -1px);
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  float: left;
 }
 
+<<<<<<< HEAD
 >>>>>>> add theme to select input
 
 // arrow indicator
 
 .Select-arrow-zone {
 <<<<<<< HEAD
+=======
+// arrow indicator
+
+.Select-arrow-zone {
+>>>>>>> rebase master
   cursor: pointer;
   display: table-cell;
   position: relative;
   text-align: center;
   vertical-align: middle;
+<<<<<<< HEAD
   @include rem-fallback(width, $select-arrow-width * 5);
   @include rem-fallback(padding-right, $select-arrow-width);
 }
@@ -485,24 +522,32 @@ $select-padding-vertical: 6px;
 	vertical-align: middle;
 	width: ($select-arrow-width * 5);
 	padding-right: $select-arrow-width;
+=======
+  width: ($select-arrow-width * 5);
+  padding-right: $select-arrow-width;
+>>>>>>> rebase master
 }
 
 .Select-arrow {
-	border-color: $select-arrow-color transparent transparent;
-	border-style: solid;
-	border-width: $select-arrow-width $select-arrow-width ($select-arrow-width / 2);
-	display: inline-block;
-	height: 0;
-	width: 0;
-	position: relative;
+  border-color: $select-arrow-color transparent transparent;
+  border-style: solid;
+  border-width: $select-arrow-width $select-arrow-width ($select-arrow-width / 2);
+  display: inline-block;
+  height: 0;
+  width: 0;
+  position: relative;
 }
 
+<<<<<<< HEAD
 .is-open .Select-arrow,
 .Select-arrow-zone:hover > .Select-arrow { border-top-color: $select-arrow-color-hover; }
 
 
 
 >>>>>>> add theme to select input
+=======
+.is-open .Select-arrow, .Select-arrow-zone:hover > .Select-arrow { border-top-color: $select-arrow-color-hover; }
+>>>>>>> rebase master
 
 // Animation
 // ------------------------------
@@ -510,6 +555,7 @@ $select-padding-vertical: 6px;
 // fade in
 
 @-webkit-keyframes Select-animation-fadeIn {
+<<<<<<< HEAD
 <<<<<<< HEAD
   from { opacity: 0; }
   to { opacity: 1; }
@@ -527,12 +573,22 @@ $select-padding-vertical: 6px;
 	from { opacity: 0; }
 	to { opacity: 1; }
 >>>>>>> add theme to select input
+=======
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes Select-animation-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+>>>>>>> rebase master
 }
 
 //
 // Select Menu
 // ------------------------------
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 // wrapper around the menu
 
@@ -614,88 +670,99 @@ $select-padding-vertical: 6px;
 
 =======
 
+=======
+>>>>>>> rebase master
 // wrapper around the menu
 
 .Select-menu-outer {
-	// Unfortunately, having both border-radius and allows scrolling using overflow defined on the same
-	// element forces the browser to repaint on scroll.  However, if these definitions are split into an
-	// outer and an inner element, the browser is able to optimize the scrolling behavior and does not
-	// have to repaint on scroll.
+  // Unfortunately, having both border-radius and allows scrolling using overflow defined on the same
+  // element forces the browser to repaint on scroll.  However, if these definitions are split into an
+  // outer and an inner element, the browser is able to optimize the scrolling behavior and does not
+  // have to repaint on scroll.
   @include rem-font-size($selectFontSize);
   @include themify($themes) {
-    background-color: themed('bgColor');
-    border: 1px solid themed('selectBorderColor');
-    border-top-color: mix(themed('bgColor'), themed('selectBorderColor'), 50%);
+    background-color: themed('colorLowestFirst');
+    border: 1px solid themed('colorLightestSecond');
+    border-top-color: mix(
+      themed('colorLowestFirst'),
+      themed('colorLightestSecond'),
+      50%
+    );
   }
-	box-shadow: $select-menu-box-shadow;
-	box-sizing: border-box;
-	margin-top: -1px;
-	max-height: $select-menu-max-height;
-	position: absolute;
-	top: 100%;
-	width: 100%;
-	z-index: $select-menu-zindex;
-	-webkit-overflow-scrolling: touch;
+  box-shadow: $select-menu-box-shadow;
+  box-sizing: border-box;
+	@include rem-fallback(margin-top, -1px);
+	@include rem-fallback(margin-top, -1px);
+	@include rem-fallback(margin-top, -1px);
+	@include rem-fallback(margin-top, -1px);
+  max-height: $select-menu-max-height;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: $select-menu-zindex;
+  -webkit-overflow-scrolling: touch;
 }
-
 
 // wrapper
 
 .Select-menu {
-	max-height: ($select-menu-max-height - 2px);
-	overflow-y: auto;
+	@include rem-fallback(max-height, 222px);
+  overflow-y: auto;
 }
-
 
 // options
 
 .Select-option {
-	box-sizing: border-box;
+  box-sizing: border-box;
   cursor: pointer;
   display: block;
-  padding: $select-padding-vertical $select-padding-horizontal;
+	@include rem-fallback(padding-top, $select-padding-vertical);
+	@include rem-fallback(padding-bottom, $select-padding-vertical);
+	@include rem-fallback(padding-right, $select-padding-horizontal);
+	@include rem-fallback(padding-left, $select-padding-horizontal);
   @include themify($themes) {
-    background-color: themed('bgColor');
-  	color: lighten(themed('bright'), 20%);
+    background-color: themed('colorLowestFirst');
+    color: lighten(themed('colorHighest'), 20%);
 
-  	&:last-child {
-  		@include border-bottom-radius( $select-input-border-radius );
-  	}
+    &:last-child { @include border-bottom-radius( $select-input-border-radius ); }
 
-  	&.is-selected {
-  		background-color: themed('navBgColor');
-  		color: themed('bright');
-  	}
+    &.is-selected {
+      background-color: themed('colorMidThird');
+      color: themed('colorHighest');
+    }
 
-  	&.is-focused {
-  		background-color: themed('hoverIconDarkGray');
-  		color: themed('bright');
-  	}
+    &.is-focused {
+      background-color: themed('colorLowestThird');
+      color: themed('colorHighest');
+    }
 
-  	&.is-disabled {
-  		color: themed('selectDisabledColor');
-  		cursor: default;
-  	}
+    &.is-disabled {
+      color: themed('colorMidFirst');
+      cursor: default;
+    }
   }
 }
-
 
 // no results
 
 .Select-noresults {
-	box-sizing: border-box;
-	color: $select-noresults-color;
-	cursor: default;
-	display: block;
-	padding: $select-padding-vertical $select-padding-horizontal;
+  box-sizing: border-box;
+  color: $select-noresults-color;
+  cursor: default;
+  display: block;
+  padding: $select-padding-vertical $select-padding-horizontal;
 }
 
+<<<<<<< HEAD
 
 >>>>>>> add theme to select input
+=======
+>>>>>>> rebase master
 //
 // Multi-Select
 // ------------------------------
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 // Base
 
@@ -768,90 +835,91 @@ $select-padding-vertical: 6px;
   }
 =======
 
+=======
+>>>>>>> rebase master
 // Base
 
 .Select--multi {
+  // add margin to the input element
+  .Select-input {
+    vertical-align: middle;
+    // border: 1px solid transparent;
+    margin-left: $select-padding-horizontal;
+    padding: 0;
+  }
 
-	// add margin to the input element
-	.Select-input {
-		vertical-align: middle;
-		// border: 1px solid transparent;
-		margin-left: $select-padding-horizontal;
-		padding: 0;
-	}
+  // reduce margin once there is value
+  &.has-value .Select-input { margin-left: $select-item-gutter; }
 
-	// reduce margin once there is value
-	&.has-value .Select-input { margin-left: $select-item-gutter; }
-
-	// Items
-	.Select-value {
+  // Items
+  .Select-value {
     display: inline-block;
     margin-left: $select-item-gutter;
     margin-top: $select-item-gutter;
     vertical-align: top;
     @include rem-font-size($selectFontSize);
     @include themify($themes) {
-  		background-color: themed('bgColor');
-  		border: 1px solid themed('selectBorderColor');
-  		color: themed('bright');
+      background-color: themed('colorLowestFirst');
+      border: 1px solid themed('colorLightestSecond');
+      color: themed('colorHighest');
     }
-	}
+  }
 
-	// common
-	.Select-value-icon,
-	.Select-value-label {
-		display: inline-block;
-		vertical-align: middle;
-	}
+  // common
+  .Select-value-icon,
+  .Select-value-label {
+    display: inline-block;
+    vertical-align: middle;
+  }
 
-	// label
-	.Select-value-label {
-		@include border-right-radius( $select-item-border-radius );
-		cursor: default;
-		padding: $select-item-padding-vertical $select-item-padding-horizontal;
-	}
+  // label
+  .Select-value-label {
+    @include border-right-radius( $select-item-border-radius );
+    cursor: default;
+    padding: $select-item-padding-vertical $select-item-padding-horizontal;
+  }
 
-	a.Select-value-label {
-    @include themify($themes) {
-  		color: themed('bright');
-    }
-		cursor: pointer;
-		text-decoration: none;
+  a.Select-value-label {
+    @include themify($themes) { color: themed('colorHighest'); }
+    cursor: pointer;
+    text-decoration: none;
 
-		&:hover {
-			text-decoration: underline;
-		}
-	}
+    &:hover { text-decoration: underline; }
+  }
 
-	// icon
-	.Select-value-icon {
-		cursor: pointer;
-		@include border-left-radius( $select-item-border-radius );
+  // icon
+  .Select-value-icon {
+    cursor: pointer;
+    @include border-left-radius( $select-item-border-radius );
 
-		// move the baseline up by 1px
-		padding: ($select-item-padding-vertical - 1) $select-item-padding-horizontal ($select-item-padding-vertical + 1);
+    // move the baseline up by 1px
+    padding: ($select-item-padding-vertical - 1) $select-item-padding-horizontal ($select-item-padding-vertical + 1);
 
     @include themify($themes) {
-      border-right: 1px solid themed('selectBorderColor');
+      border-right: 1px solid themed('colorLightestSecond');
 
-  		&:hover,
-  		&:focus {
-  			background-color: themed('hoverIconDarkGray');
-  			color: themed('bright');
-  		}
+      &:hover, &:focus {
+        background-color: themed('hoverIconDarkGray');
+        color: themed('colorHighest');
+      }
 
-  		&:active {
-  			background-color: themed('selectBorderColor');
-  		}
+      &:active { background-color: themed('colorLightestSecond'); }
     }
+<<<<<<< HEAD
 	}
 
 >>>>>>> add theme to select input
+=======
+  }
+>>>>>>> rebase master
 }
 
 .Select--multi.is-disabled {
   @include themify($themes) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> rebase master
     .Select-value {
       background-color: themed('colorLowestFirst');
       border: 1px solid themed('colorLightestSecond');
@@ -860,6 +928,7 @@ $select-padding-vertical: 6px;
     // icon
     .Select-value-icon {
       cursor: not-allowed;
+<<<<<<< HEAD
       border-right-color: darken(themed('colorLightestSecond'), 10%);
 
       &:hover, &:focus, &:active { background-color: themed('colorLowestFirst'); }
@@ -882,5 +951,11 @@ $select-padding-vertical: 6px;
   		}
   	}
 >>>>>>> add theme to select input
+=======
+      border-right: 1px solid darken(themed('colorLightestSecond'), 10%);
+
+      &:hover, &:focus, &:active { background-color: themed('colorLowestFirst'); }
+    }
+>>>>>>> rebase master
   }
 }
