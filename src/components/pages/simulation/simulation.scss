@@ -5,7 +5,7 @@
 @import 'styles/mixins';
 
 .simulation-container {
-  @include rem-fallback(padding, 64px, 32px);
+  @include rem-fallback(padding, 24px, 32px);
 
   .page-header {
     font-family: $fontSelawikBold;
@@ -15,18 +15,18 @@
 
   // Apply theme properties
   @include themify($themes) {
-    color: themed('navItemColor');
+    color: themed('colorLightestFirst');
 
     .apply-btn {
       // The start simulation svg uses stroke rather than fill
       svg {
         fill: transparent;
-        stroke: themed('bright'); 
+        stroke: themed('colorHighest'); 
       }
 
       &:hover svg {
         fill: transparent;
-        stroke: themed('navHoverBgColor');
+        stroke: themed('colorLowestSecond');
       }
     }
   }

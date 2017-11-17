@@ -18,6 +18,6 @@
 
   // Apply theme properties
   @include themify($themes) {
-    color: themed('navItemColor');
+    color: themed('colorLightestFirst');
   }
 }
