@@ -7,14 +7,13 @@ import { MemoryRouter as Router } from 'react-router-dom';
 import { mount } from 'enzyme';
 import configureStore from 'configureStore';
 import AppContainer from 'components/app/app.container';
-import "mocha-steps";
 
 import 'polyfills';
 
 describe('App integration test', () => {
   let store, wrapper;
 
-  step('Create redux store', () => {
+  it('Create redux store', () => {
     store = configureStore();
   });
 

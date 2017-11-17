@@ -9,7 +9,8 @@ import 'polyfills';
 
 describe('Simulation Component', () => {
   let wrapper;
-  step('Renders without crashing', () => {
+
+  it('Renders without crashing', () => {
     wrapper = mount(<Simulation />);
   });
 });
