@@ -41,10 +41,6 @@ class Navigation extends Component {
     const isExpanded = !(this.state || {}).collapsed;
     return (
       <nav className={`app-nav ${isExpanded && 'expanded'}`}>
-        <div className="nav-item company">
-          <NavIcon path={svgs.contoso} />
-          <div className="nav-item-text">Company</div>
-        </div>
         <button className="nav-item hamburger" onClick={this.toggleExpanded}>
           <NavIcon path={svgs.hamburger} />
         </button>

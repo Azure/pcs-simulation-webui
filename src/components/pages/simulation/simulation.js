@@ -3,12 +3,12 @@
 import React, { Component } from 'react';
 
 import { svgs } from 'utilities';
-import { 
+import {
   FormSection,
   SectionHeader,
   SectionDesc,
-  FormGroup, 
-  FormLabel, 
+  FormGroup,
+  FormLabel,
   FormControl,
   FormActions,
   Btn,
@@ -22,8 +22,8 @@ const Header = (props) => (
   <div className="page-header">{props.children}</div>
 );
 
-/** 
- * TODO: Add the real component. Currently being used as a test bed for the 
+/**
+ * TODO: Add the real component. Currently being used as a test bed for the
  * shared controls .
  */
 export class Simulation extends Component {
@@ -31,7 +31,7 @@ export class Simulation extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { 
+    this.state = {
       duration: {},
       radioTest: undefined
     };
@@ -40,7 +40,6 @@ export class Simulation extends Component {
   onChange = ({ target }) => {
     const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    console.log({ [name]: value });
     this.setState({ [name]: value });
   }
 

@@ -3,4 +3,4 @@
 // Exports the shared react components into as a library
 
 export * from './svg/svg';
-export * from './forms/forms';
+export * from './forms';
