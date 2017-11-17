@@ -12,8 +12,8 @@ import Main from './main/main';
 import PageContent from './pageContent/pageContent';
 
 // Page Components
-import  { 
-  Simulation,
+import  {
+  Simulation as SimulationPage,
   PageNotFound
 } from 'components/pages';
 
@@ -37,7 +37,7 @@ class App extends Component {
           <PageContent>
             <Switch>
               <Route exact path="/" render={() => <Redirect to="/simulation" push={true} />} />
-              <Route exact path="/simulation" component={Simulation} />
+              <Route exact path="/simulation" component={SimulationPage} />
               <Route component={PageNotFound} />
             </Switch>
           </PageContent>
@@ -45,7 +45,7 @@ class App extends Component {
       </div>
     );
   }
-  
+
 }
 
 export default App;

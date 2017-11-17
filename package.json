@@ -15,7 +15,10 @@
     "rxjs": "5.5.2"
   },
   "devDependencies": {
+    "enzyme": "3.2.0",
+    "enzyme-adapter-react-16": "1.1.0",
     "flow-bin": "0.48.0",
+    "mocha-steps": "1.1.0",
     "node-fetch": "1.7.1",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "4.0.2",
