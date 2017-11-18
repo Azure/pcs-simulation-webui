@@ -1,0 +1,17 @@
+# Copyright (c) Microsoft. All rights reserved.
+
+FROM azureiotpcs/device-simulation-webui:temp2
+
+MAINTAINER Devis Lucato (https://github.com/dluc)
+
+RUN echo "Installing web server..." \
+ && apk add --no-cache nginx \
+ && mkdir /app/logs \
+ && echo "Removing temp files..." \
+ && apk del --force --purge alpine-keys apk-tools \
+ && rm -rf /var/cache/apk /etc/apk /lib/apk
+
+EXPOSE 80 443
+VOLUME /app/logs
+
+ENTRYPOINT ["/bin/sh", "/app/run.sh"]

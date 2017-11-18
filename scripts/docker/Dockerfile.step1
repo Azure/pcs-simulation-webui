@@ -4,25 +4,21 @@ FROM node:9.2.0-alpine
 
 MAINTAINER Devis Lucato (https://github.com/dluc)
 
-LABEL Tags="Azure,IoT,Solutions,React,SPA"
-
-COPY ./ /app
+COPY .env ./ /app/
 WORKDIR /app
 
-RUN apk update && apk upgrade \
+RUN echo "Installing node packages ..." \
  && npm install \
  && export CI=true \
+ && echo "Building app..." \
  && npm run build \
+ && echo "Removing temp files..." \
  && rm -rf node_modules src public package.json Dockerfile .dockerignore \
+ && rm -rf /usr/local \
+ && rm -rf /opt/yarn \
+ && apk update && apk upgrade \
  && apk del --force --purge ncurses-terminfo ncurses-terminfo-base ncurses-libs readline \
  && apk del --force --purge ca-certificates libcrypto1.0 libgcc http-parser libssl1.0 libstdc++ libuv nodejs nodejs-npm \
- && rm -fR /root/.npm /root/.*history /tmp/* \
- && apk add --no-cache nginx \
- && apk del --force --purge alpine-keys apk-tools \
- && rm -rf /var/cache/apk /etc/apk /lib/apk \
- && mkdir /app/logs
+ && rm -fR /root/.npm /root/.config /root/.gnupg /root/.*history /tmp/*
 
-EXPOSE 80 443
-VOLUME /app/logs
-
-ENTRYPOINT ["/bin/sh", "/app/run.sh"]
+ENTRYPOINT "/bin/sh"

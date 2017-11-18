@@ -17,27 +17,43 @@ build_docker_image() {
 
     cd $APP_HOME
 
+    DOCKER_LABEL1="Tags=Azure,IoT,Solutions,React,SPA"
     DOCKER_LABEL2="Commit=$(git log --pretty=format:'%H' -n 1)"
     DOCKER_LABEL3="Date=$(/usr/bin/env date +%Y-%m-%dT%H:%M:%S)"
 
     rm -fR out/docker
 
-    mkdir -p            out/docker/src/
-    mkdir -p            out/docker/public/
+    mkdir -p              out/docker/src/
+    mkdir -p              out/docker/public/
 
-    cp -pR package.json out/docker/
-    cp -pR src/*        out/docker/src/
-    cp -pR public/*     out/docker/public/
+    cp -p .env            out/docker/
+    cp -pR package*.json  out/docker/
+    cp -pR src/*          out/docker/src/
+    cp -pR public/*       out/docker/public/
 
-    cp scripts/docker/.dockerignore              out/docker/
-    cp scripts/docker/Dockerfile                 out/docker/
-    cp scripts/docker/content/run.sh             out/docker/
-    cp scripts/docker/content/nginx.conf         out/docker/
+    cp scripts/docker/.dockerignore        out/docker/
+    cp scripts/docker/Dockerfile*          out/docker/
+    cp scripts/docker/content/run.sh       out/docker/
+    cp scripts/docker/content/nginx.conf   out/docker/
 
     cd out/docker/
 
-    docker build --squash --compress --tag $DOCKER_TAG \
-        --label "$DOCKER_LABEL2" --label "$DOCKER_LABEL3" .
+    TMP_NAME="devicesimulationwebui-tmp"
+    TMP_IMG1="$DOCKER_IMAGE:temp1"
+    TMP_IMG2="$DOCKER_IMAGE:temp2"
+
+    # Build the first image - ~80 MB
+    docker build --file Dockerfile.step1  --squash --compress --tag $TMP_IMG1 .
+    # Export the content - ~ 10 MB
+    docker run -d --name "$TMP_NAME" --rm "$TMP_IMG1" \
+        && docker export "$TMP_NAME" \
+         | docker import - -m "Import from optimized production build" "$TMP_IMG2" \
+         | docker rm -f "$TMP_NAME"
+    # Build the second image with nginx
+    docker build --file Dockerfile.step2  --squash --compress --tag "$DOCKER_TAG" --label "$DOCKER_LABEL1" --label "$DOCKER_LABEL2" --label "$DOCKER_LABEL3" .
+    # Delete the temporary images
+    docker rmi $TMP_IMG1
+    docker rmi $TMP_IMG2
 }
 
 build_docker_image
