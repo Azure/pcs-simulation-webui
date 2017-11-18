@@ -11,10 +11,15 @@
 <<<<<<< HEAD
 $selectFontSize: 14px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 $select-input-height: 26px;
 $select-menu-max-height: 226px;
 =======
 >>>>>>> scroll on 8 items in menu
+=======
+$select-input-height: 26px;
+$select-menu-max-height: 226px;
+>>>>>>> add style to arrow
 $select-padding-vertical: 6px;
 
 =======
@@ -88,6 +93,7 @@ $selectFontSize: 14px;
 
 .Select-control {
 <<<<<<< HEAD
+<<<<<<< HEAD
   border-style: solid;
   cursor: default;
   display: flex;
@@ -144,15 +150,24 @@ $selectFontSize: 14px;
     color: themed('colorHighest');
   }
 
+=======
+  border-style: solid;
+>>>>>>> add style to arrow
   cursor: default;
   display: table;
   border-spacing: 0;
   border-collapse: separate;
-  @include rem-fallback(height, 26px);
   outline: none;
   overflow: hidden;
   position: relative;
   width: 100%;
+  @include rem-fallback(height, $select-input-height);
+  @include rem-fallback(border-width, 1px);
+  @include themify($themes) {
+    background-color: themed('colorLowestFirst');
+    border-color: themed('colorLightestSecond');
+    color: themed('colorHighest');
+  }
 
   &:hover { box-shadow: $select-input-hover-box-shadow; }
 
@@ -167,14 +182,17 @@ $selectFontSize: 14px;
   @include border-bottom-radius( 0 );
   @include themify($themes) {
     background: themed('colorLowestFirst');
-    border-color: lighten(themed('colorLightestSecond'), 10%) themed('colorLightestSecond') darken(themed('colorLightestSecond'), 5%);
+    border-color: themed('colorLightestSecond');
   }
 
   // flip the arrow so its pointing up when the menu is open
   .Select-arrow {
     @include rem-fallback(top, -2px);
     border-color: transparent transparent $select-arrow-color;
-    border-width: 0 $select-arrow-width $select-arrow-width;
+    @include rem-fallback(border-top-width, 0px);
+    @include rem-fallback(border-right-width, $select-arrow-width);
+    @include rem-fallback(border-left-width, $select-arrow-width);
+    @include rem-fallback(border-bottom-width, $select-arrow-width);
   }
 }
 
@@ -417,7 +435,7 @@ $selectFontSize: 14px;
     font-size: inherit;
     margin: 0;
     outline: none;
-    line-height: 14px; /* For IE 8 compatibility */
+    @include rem-fallback(line-height, $selectFontSize);
     padding: 3 0 7; /* For IE 8 compatibility */
     -webkit-appearance: none;
 
@@ -499,6 +517,7 @@ $selectFontSize: 14px;
   text-align: center;
   vertical-align: middle;
 <<<<<<< HEAD
+<<<<<<< HEAD
   @include rem-fallback(width, $select-arrow-width * 5);
   @include rem-fallback(padding-right, $select-arrow-width);
 }
@@ -529,12 +548,19 @@ $selectFontSize: 14px;
   width: ($select-arrow-width * 5);
   padding-right: $select-arrow-width;
 >>>>>>> rebase master
+=======
+  @include rem-fallback(width, $select-arrow-width * 5);
+  @include rem-fallback(padding-right, $select-arrow-width);
+>>>>>>> add style to arrow
 }
 
 .Select-arrow {
   border-color: $select-arrow-color transparent transparent;
   border-style: solid;
-  border-width: $select-arrow-width $select-arrow-width ($select-arrow-width / 2);
+  @include rem-fallback(border-top-width, $select-arrow-width);
+  @include rem-fallback(border-right-width, $select-arrow-width);
+  @include rem-fallback(border-left-width, $select-arrow-width);
+  @include rem-fallback(border-bottom-width, ($select-arrow-width / 2));
   display: inline-block;
   height: 0;
   width: 0;
@@ -685,7 +711,9 @@ $selectFontSize: 14px;
   @include rem-font-size($selectFontSize);
   @include themify($themes) {
     background-color: themed('colorLowestFirst');
-    border: 1px solid themed('colorLightestSecond');
+    border-color: themed('colorLightestSecond');
+    border-style: solid;
+    @include rem-fallback(border-width, 1px);
     border-top-color: mix(
       themed('colorLowestFirst'),
       themed('colorLightestSecond'),
@@ -695,13 +723,10 @@ $selectFontSize: 14px;
   box-shadow: $select-menu-box-shadow;
   box-sizing: border-box;
 	@include rem-fallback(margin-top, -1px);
-	@include rem-fallback(margin-top, -1px);
-	@include rem-fallback(margin-top, -1px);
-	@include rem-fallback(margin-top, -1px);
-  @include rem-fallback(max-height, 226px);
+  @include rem-fallback(max-height, $select-menu-max-height);
   position: absolute;
   top: 100%;
-  width: 100%;
+  @include rem-fallback(width, calc(100%));
   z-index: $select-menu-zindex;
   -webkit-overflow-scrolling: touch;
 }
@@ -860,10 +885,12 @@ $selectFontSize: 14px;
     margin-left: $select-item-gutter;
     margin-top: $select-item-gutter;
     vertical-align: top;
+    border-style: solid;
+    @include rem-fallback(border-width, 1px);
     @include rem-font-size($selectFontSize);
     @include themify($themes) {
       background-color: themed('colorLowestFirst');
-      border: 1px solid themed('colorLightestSecond');
+      border-color: themed('colorLightestSecond');
       color: themed('colorHighest');
     }
   }
@@ -918,6 +945,8 @@ $selectFontSize: 14px;
 }
 
 .Select--multi.is-disabled {
+  border-style: solid;
+  @include rem-fallback(border-width, 1px);
   @include themify($themes) {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -925,12 +954,13 @@ $selectFontSize: 14px;
 >>>>>>> rebase master
     .Select-value {
       background-color: themed('colorLowestFirst');
-      border: 1px solid themed('colorLightestSecond');
+      border-color: themed('colorLightestSecond');
       color: themed('colorMidFirst');
     }
     // icon
     .Select-value-icon {
       cursor: not-allowed;
+<<<<<<< HEAD
 <<<<<<< HEAD
       border-right-color: darken(themed('colorLightestSecond'), 10%);
 
@@ -956,6 +986,9 @@ $selectFontSize: 14px;
 >>>>>>> add theme to select input
 =======
       border-right: 1px solid darken(themed('colorLightestSecond'), 10%);
+=======
+      border-right-color: darken(themed('colorLightestSecond'), 10%);
+>>>>>>> add style to arrow
 
       &:hover, &:focus, &:active { background-color: themed('colorLowestFirst'); }
     }
