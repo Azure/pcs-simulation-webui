@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft. All rights reserved.
 
-FROM alpine:3.6
+FROM node:9.2.0-alpine
 
 MAINTAINER Devis Lucato (https://github.com/dluc)
 
@@ -10,7 +10,6 @@ COPY ./ /app
 WORKDIR /app
 
 RUN apk update && apk upgrade \
- && apk add --no-cache nodejs-npm \
  && npm install \
  && export CI=true \
  && npm run build \
