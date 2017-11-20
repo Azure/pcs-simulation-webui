@@ -41,12 +41,22 @@ if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) {
     'use strict';
     if (typeof start !== 'number') start = 0;
-    
+
     if (start + search.length > this.length) {
       return false;
     } else {
       return this.indexOf(search, start) !== -1;
     }
+  };
+}
+
+if (!String.prototype.endsWith) {
+  String.prototype.endsWith = function(searchStr, Position) {
+    if (!(Position < this.length))
+      Position = this.length;
+    else
+      Position |= 0;
+    return this.substr(Position - searchStr.length, searchStr.length) === searchStr;
   };
 }
 

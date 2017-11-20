@@ -17,7 +17,7 @@
   @include themify($themes) {
     color: themed('colorLightestFirst');
 
-    .apply-btn {
+    .primary.apply-btn {
       // The start simulation svg uses stroke rather than fill
       svg {
         fill: transparent;

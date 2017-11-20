@@ -8,7 +8,7 @@
 
   .form-group-label {
     display: block;
-    @include rem-fallback(margin-bottom, 12px);
+    @include rem-fallback(padding-bottom, 12px);
   }
 
   + .form-group { @include rem-fallback(margin-top, 16px); }

@@ -37,7 +37,7 @@ $btnIconSize: 14px;
 
     .btn-icon svg { fill: themed('colorHighest'); }
 
-    &:hover {
+    &.primary:hover {
       color: themed('colorLowestSecond');
       background-color: themed('colorLightestFirst');
 
