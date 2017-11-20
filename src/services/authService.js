@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import AuthenticationContext from 'adal-angular/dist/adal.min.js'
-// import HttpClient from './httpClient';
+import { HttpClient } from './httpClient';
+import Config from 'config'
 
 export class AuthService {
 
-  static authContext; // Create on AuthService.initialize()
+  static authContext; // Created on AuthService.initialize()
   static authEnabled = true;
   static aadInstance = '';
   static appId = '00000000-0000-0000-0000-000000000000';
@@ -25,20 +26,12 @@ export class AuthService {
       }
     }
 
-    // Add "endsWith" function, not supported by IE (without touching String.prototype)
-    // TODO: clean up IoT Suite and remove this "workaround"
-    //       https://github.com/Azure/pcs-remote-monitoring-webui/issues/700
-    const stringEndsWith = (haystack, needle) => {
-      return haystack.substr(haystack.length - needle.length, needle.length) === needle;
-    };
-
     AuthService.tenantId = global.DeploymentConfig.aad.tenant;
     AuthService.clientId = global.DeploymentConfig.aad.appId;
     AuthService.appId = global.DeploymentConfig.aad.appId;
     AuthService.aadInstance = global.DeploymentConfig.aad.instance;
 
-    // TODO: remove this code - https://github.com/Azure/pcs-remote-monitoring-webui/issues/700
-    if (AuthService.aadInstance && stringEndsWith(AuthService.aadInstance, '{0}')) {
+    if (AuthService.aadInstance && AuthService.aadInstance.endsWith('{0}')) {
       AuthService.aadInstance = AuthService.aadInstance.substr(0, AuthService.aadInstance.length - 3);
     }
 
@@ -78,7 +71,7 @@ export class AuthService {
       console.debug('Handling Auth Window callback');
       // Handle redirect after authentication
       AuthService.authContext.handleWindowCallback();
-      var error = AuthService.authContext.getLoginError();
+      const error = AuthService.authContext.getLoginError();
       if (error) {
         throw new Error(`Authentication Error: ${error}`);
       }
@@ -94,16 +87,22 @@ export class AuthService {
     }
   }
 
+  static getCurrentUser() {
+    return HttpClient.get(`${Config.authApiUrl}users/current`);
+  }
+
   static getUserName(callback) {
     if (AuthService.isDisabled()) return;
 
     if (AuthService.authContext.getCachedUser()) {
-      // TODO: Implement call to get user
-      /*
-      HttpClient.get(`${Config.authApiUrl}users/current`)
-        .map(data => data ? { Name: '', Email: '' } : null)
-        .subscribe(params => callback(params));
-      */
+      // TODO: Add model for response handling
+      // TODO: Add error handling
+      AuthService.getCurrentUser()
+        .map(data => data ? { Name: "", Email: "" } : null)
+        .subscribe(
+          callback,
+          // TODO: Add error handling
+        );
     } else {
       console.log('The user is not signed in');
       AuthService.authContext.login();

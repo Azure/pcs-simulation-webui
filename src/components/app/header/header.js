@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
-import { svgs } from 'utilities';
-import { Svg } from 'components/shared';
 
 import ProfileImagePath from 'assets/images/profile.png';
 
@@ -15,9 +13,6 @@ const Header = (props) => {
       <div className="breadcrumbs">{props.breadcrumbs || ''}</div>
       <div className="label">Microsoft Azure IoT Device Simulation</div>
       <div className="items-container">
-        <button onClick={() => console.log('Settings coming soon!')}>
-          <Svg path={svgs.settings} className="item-icon" />
-        </button>
         <button className="item-icon profile" onClick={() => console.log('Profile coming soon!')}>
           <img src={ProfileImagePath} alt="Generic profile" />
         </button>
