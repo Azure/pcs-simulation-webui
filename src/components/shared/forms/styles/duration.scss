@@ -14,8 +14,6 @@
     input[type=text] {
       width: 1.2em;
       text-align: center;
-      @include rem-fallback(padding-left, 4px);
-      @include rem-fallback(padding-right, 4px);
     }
   }
 

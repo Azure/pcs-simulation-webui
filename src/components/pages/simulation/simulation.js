@@ -102,7 +102,7 @@ export class Simulation extends Component {
           <FormActions>
             <BtnToolbar>
               <Btn svg={svgs.x} type="reset">Reset</Btn>
-              <Btn svg={svgs.startSimulation} type="submit" className="apply-btn primary">Apply</Btn>
+              <Btn svg={svgs.startSimulation} type="submit" className="apply-btn">Apply</Btn>
             </BtnToolbar>
           </FormActions>
         </form>
