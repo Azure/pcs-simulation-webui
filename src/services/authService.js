@@ -96,7 +96,6 @@ export class AuthService {
 
     if (AuthService.authContext.getCachedUser()) {
       // TODO: Add model for response handling
-      // TODO: Add error handling
       AuthService.getCurrentUser()
         .map(data => data ? { Name: "", Email: "" } : null)
         .subscribe(

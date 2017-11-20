@@ -58,6 +58,7 @@ export class HttpClient {
    *
    * @param {string} url The url path to the make the request to
    * @param {AjaxRequest} [options={}] See https://github.com/ReactiveX/rxjs/blob/master/src/observable/dom/AjaxObservable.ts
+   * @param {boolean} withAuth Allows a backdoor to not wrap auth headers if false
    * @return an Observable of the AjaxReponse
    */
   static ajax(url, options = {}, withAuth = true) {
