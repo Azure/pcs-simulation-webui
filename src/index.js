@@ -8,11 +8,16 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'configureStore';
 import AppContainer from 'components/app/app.container';
 import registerServiceWorker from 'registerServiceWorker';
+import { AuthService } from 'services';
 
 import './polyfills';
 
 import './index.css';
 
+// Initialize the user authentication
+AuthService.onLoad();
+
+// Create the redux store and redux-observable streams
 const store = configureStore();
 
 // Create the React app
