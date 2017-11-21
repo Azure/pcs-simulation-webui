@@ -2,7 +2,7 @@
 
 // TODO: Add real API urls
 const Config = {
-  authApiUrl: ''
+  simulationApiUrl: 'https://xiong-simulation-3.azurewebsites.net/devicesimulation-svc/v1/'
 };
 
 export default Config;

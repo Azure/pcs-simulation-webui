@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import AuthenticationContext from 'adal-angular/dist/adal.min.js'
-import { HttpClient } from './httpClient';
-import Config from 'config'
+import Observable from 'rxjs/Observable';
 
 export class AuthService {
 
@@ -87,21 +86,13 @@ export class AuthService {
     }
   }
 
-  static getCurrentUser() {
-    return HttpClient.get(`${Config.authApiUrl}users/current`);
-  }
-
   static getUserName(callback) {
     if (AuthService.isDisabled()) return;
 
     if (AuthService.authContext.getCachedUser()) {
-      // TODO: Add model for response handling
-      AuthService.getCurrentUser()
-        .map(data => data ? { Name: "", Email: "" } : null)
-        .subscribe(
-          callback,
-          // TODO: Add error handling
-        );
+      Observable.of({ Name: 'Temp Name', Email: 'temp.name@fake.com' })
+        .map(data => data ? { Name: data.Name, Email: data.Email } : null)
+        .subscribe(callback);
     } else {
       console.log('The user is not signed in');
       AuthService.authContext.login();
