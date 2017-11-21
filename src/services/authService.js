@@ -90,7 +90,7 @@ export class AuthService {
     if (AuthService.isDisabled()) return;
 
     if (AuthService.authContext.getCachedUser()) {
-      Observable.of({ Name: 'Temp Name', Email: 'temp.name@fake.com' })
+      Observable.of({ Name: 'Temp Name', Email: 'temp.name@contoso.com' })
         .map(data => data ? { Name: data.Name, Email: data.Email } : null)
         .subscribe(callback);
     } else {
