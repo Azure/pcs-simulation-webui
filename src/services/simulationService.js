@@ -18,4 +18,8 @@ export class SimulationService {
     return HttpClient.patch(`${ENDPOINT}simulations/1`, { ETag, Enabled });
   }
 
+  static getDeviceModels() {
+    return HttpClient.get(`${Config.deviceModelApiUrl}`);
+  }
+
 }
