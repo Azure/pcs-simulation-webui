@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import SimulationDetails from './views/simulationDetails';
 import SimulationForm from './views/simulationForm';
-import { FormActions } from 'components/shared';
+import { FormActions, Indicator } from 'components/shared';
 
 import './simulation.css';
 
@@ -30,7 +30,7 @@ export class Simulation extends Component {
     } else if (enabled === false) {
       return <SimulationForm {...this.props} />
     } else {
-      return <FormActions>Loading...</FormActions>
+      return <FormActions><Indicator pattern="bar" /></FormActions>
     }
   }
 
