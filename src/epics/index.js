@@ -4,9 +4,11 @@ import { combineEpics } from 'redux-observable';
 
 // Epics
 import { detectRouteChange } from "./routeEpics";
+import { loadDeviceModelsEpic } from "./simulationEpics";
 
 const rootEpic = combineEpics(
-  detectRouteChange
+  detectRouteChange,
+  loadDeviceModelsEpic
 );
 
 export default rootEpic;

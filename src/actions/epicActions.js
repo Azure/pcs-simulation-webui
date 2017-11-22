@@ -5,6 +5,8 @@
 // Action types
 export const ROUTE_EVENT = 'ROUTE_EVENT';
 export const ROUTE_CHANGE = 'ROUTE_CHANGE';
+export const LOAD_DEVICE_MODELS = 'LOAD_DEVICE_MODELS';
+export const LOAD_DEVICE_MODELS_FAILED = 'LOAD_DEVICE_MODELS_FAILED';
 
 // Actions
 export function routeEvent(pathname) {
@@ -14,3 +16,7 @@ export function routeEvent(pathname) {
 export function routeChange(pathname) {
   return { type: ROUTE_CHANGE, pathname };
 }
+
+export const loadDeviceModels = () => {
+  return { type: LOAD_DEVICE_MODELS };
+};
