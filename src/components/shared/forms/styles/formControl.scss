@@ -3,14 +3,23 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
-input[type=text].form-control,
-input[type=number].form-control,
+$horizontalPadding: 8px;
+$verticalPadding: 5px;
+$inputHeight: 24px;
+$defaultInputWidth: 124px;
+$smallInputWidth: 80px;
+$longInputWidth: 248px;
+$textareaWidth: 348px;
+$textareaHeight: 60px;
+
+input.form-control,
 textarea.form-control {
   font-size: inherit;
   font-family: inherit;
   background: transparent;
-  @include rem-fallback(padding, 3px, 4px);
-  @include rem-fallback(width, 300px); // Default input width
+  @include rem-fallback(padding-left, $horizontalPadding);
+  @include rem-fallback(padding-top, $verticalPadding);
+  @include rem-fallback(padding-bottom, $verticalPadding);
 
   &:disabled {
     -webkit-touch-callout: none;
@@ -41,9 +50,15 @@ textarea.form-control {
              &::-moz-placeholder { color: themed('colorLightestSecond'); }
               &:-moz-placeholder { color: themed('colorLightestSecond'); }
 
+    &:hover,
+    &:focus { border-color: themed('colorLightestFirst'); }
+
+    &.error { border-color: themed('colorAlarm'); }
+
     &:disabled {
       background-color: themed('colorMidThird');
       color: themed('colorMidThird');
+      border: 1px solid themed('colorMidThird');
 
       &::-webkit-input-placeholder { color: themed('colorMidThird'); }
            &:-ms-input-placeholder { color: themed('colorMidThird'); }
@@ -53,9 +68,19 @@ textarea.form-control {
   }
 }
 
+input.form-control {
+  @include rem-fallback(height, $inputHeight - (2 * $verticalPadding));
+  @include rem-fallback(width, $defaultInputWidth - $horizontalPadding);
+
+  &.small { @include rem-fallback(width, $smallInputWidth - $horizontalPadding); }
+
+  &.long { @include rem-fallback(width, longInputWidth - $horizontalPadding); }
+}
+
 textarea.form-control {
   resize: none;
   min-height: 1em;
-  @include rem-fallback(height, 100px);
-  @include rem-fallback(width, 380px);
+  @include rem-fallback(padding-right, $horizontalPadding);
+  @include rem-fallback(height, $textareaHeight);
+  @include rem-fallback(width, $textareaWidth - (2 * $horizontalPadding));
 }

@@ -12,4 +12,5 @@ check_dependency_npm
 export CI=true
 
 npm install
+npm run build-css
 npm test

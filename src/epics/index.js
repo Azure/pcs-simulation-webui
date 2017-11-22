@@ -3,10 +3,27 @@
 import { combineEpics } from 'redux-observable';
 
 // Epics
-import { detectRouteChange } from "./routeEpics";
+import {
+  initializeApp,
+  detectRouteChange,
+  loadDeviceModels
+} from "./appEpics";
+import {
+  loadSimulationStatus,
+  loadSimulation,
+  toggleSimulation,
+  updateSimulation
+} from "./simulationEpics";
 
 const rootEpic = combineEpics(
-  detectRouteChange
+  detectRouteChange,
+  initializeApp,
+  // Simulation epics
+  loadSimulationStatus,
+  loadSimulation,
+  loadDeviceModels,
+  toggleSimulation,
+  updateSimulation
 );
 
 export default rootEpic;
