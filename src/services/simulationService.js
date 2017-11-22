@@ -22,7 +22,7 @@ export class SimulationService {
       .map(toDeviceModel);
   }
 
-  /** Returns any currently running simulations */
+  /** Returns any currently running simulation */
   static getSimulation() {
     return HttpClient.get(`${ENDPOINT}simulations/1`)
       .map(cleanResponse)
