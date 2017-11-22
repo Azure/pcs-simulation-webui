@@ -16,11 +16,11 @@ export const loadSimulationStatus = action$ => {
 export const loadSimulation = action$ => {
   return action$
     .ofType(actions.EPIC_SIMULATION_LOAD)
-    .flatMap(_ => {
-      return SimulationService.getSimulation()
+    .flatMap(_ =>
+      SimulationService.getSimulation()
         .map(actions.updateReduxSimulation)
-        .startWith(actions.clearReduxSimulation());
-    })
+        .startWith(actions.clearReduxSimulation())
+    );
 };
 
 /** Used to enable or disable the simulation */
