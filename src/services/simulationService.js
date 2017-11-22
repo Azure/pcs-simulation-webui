@@ -45,7 +45,7 @@ export class SimulationService {
           ETag: model.eTag,
           Enabled: model.enabled,
           StartTime: model.startTime,
-          endTime: model.endTime,
+          EndTime: model.endTime,
           Id: model.id,
           DeviceModels: model.deviceModels
         }
