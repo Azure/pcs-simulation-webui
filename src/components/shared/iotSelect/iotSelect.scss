@@ -7,33 +7,15 @@
 @import "../../../../node_modules/react-select/scss/mixins";
 @import "../../../../node_modules/react-select/scss/spinner";
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 $selectFontSize: 14px;
-<<<<<<< HEAD
-<<<<<<< HEAD
 $select-input-height: 26px;
 $select-menu-max-height: 226px;
-=======
->>>>>>> scroll on 8 items in menu
-=======
-$select-input-height: 26px;
-$select-menu-max-height: 226px;
->>>>>>> add style to arrow
 $select-padding-vertical: 6px;
 
-=======
->>>>>>> add theme to select input
-=======
-$selectFontSize: 14px;
-
->>>>>>> rebase master
 //
 // Control
 // ------------------------------
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 .iot-select.Select {
   position: relative;
 
@@ -55,45 +37,11 @@ $selectFontSize: 14px;
     cursor: default;
     pointer-events: none;
   }
-=======
-=======
-.iot-select.Select {
-  position: relative;
->>>>>>> rebase master
-
-  // preferred box model
-  &, & div, & input, & span { @include box-sizing(border-box); }
-
-  &.select-long { @include rem-fallback(width, 248px); }
-
-  &.select-short { @include rem-fallback(width, 124px); }
-
-  // handle disabled state
-  &.is-disabled > .Select-control {
-    @include themify($themes) { background-color: themed('colorMidFirst'); }
-
-    &:hover { box-shadow: none; }
-  }
-
-<<<<<<< HEAD
-	&.is-disabled .Select-arrow-zone {
-		cursor: default;
-		pointer-events: none;
-	}
->>>>>>> add theme to select input
-=======
-  &.is-disabled .Select-arrow-zone {
-    cursor: default;
-    pointer-events: none;
-  }
->>>>>>> rebase master
 }
 
 // base
 
 .Select-control {
-<<<<<<< HEAD
-<<<<<<< HEAD
   border-style: solid;
   cursor: default;
   display: flex;
@@ -106,7 +54,6 @@ $selectFontSize: 14px;
   overflow: hidden;
   position: relative;
   @include rem-fallback(width, calc(100%));
-<<<<<<< HEAD
   @include rem-fallback(height, $select-input-height);
   @include themify($themes) {
     background-color: themed('colorLowestFirst');
@@ -143,91 +90,13 @@ $selectFontSize: 14px;
 
 .is-searchable {
   &.is-focused:not(.is-open) > .Select-control { cursor: text; }
-=======
-  @include themify($themes) {
-    background-color: themed('colorLowestFirst');
-    border-color: lighten(themed('colorLightestSecond'), 5%) themed('colorLightestSecond') darken(themed('colorLightestSecond'), 10%);
-    border: 1px solid themed('colorLightestSecond');
-    color: themed('colorHighest');
-  }
-
-=======
-  border-style: solid;
->>>>>>> add style to arrow
-  cursor: default;
-  display: table;
-  border-spacing: 0;
-  border-collapse: separate;
-  outline: none;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-=======
->>>>>>> change border-width to 1px
-  @include rem-fallback(height, $select-input-height);
-  @include themify($themes) {
-    background-color: themed('colorLowestFirst');
-    border: 1px solid themed('colorLightestSecond');
-    color: themed('colorHighest');
-  }
-
-  &:hover { box-shadow: $select-input-hover-box-shadow; }
-
-  .Select-input:focus { outline: none; }
-}
-
-.is-searchable {
-  &.is-open > .Select-control { cursor: text; }
-}
-
-.is-open > .Select-control {
-  @include border-bottom-radius( 0 );
-  @include themify($themes) {
-    background: themed('colorLowestFirst');
-    border-color: themed('colorLightestSecond');
-  }
-
-  // flip the arrow so its pointing up when the menu is open
-  .Select-arrow {
-    @include rem-fallback(top, -2px);
-    border-color: transparent transparent $select-arrow-color;
-    @include rem-fallback(border-top-width, 0px);
-    @include rem-fallback(border-right-width, $select-arrow-width);
-    @include rem-fallback(border-left-width, $select-arrow-width);
-    @include rem-fallback(border-bottom-width, $select-arrow-width);
-  }
-}
-
-.is-searchable {
-<<<<<<< HEAD
-<<<<<<< HEAD
-	&.is-focused:not(.is-open) > .Select-control {
-		cursor: text;
-	}
->>>>>>> add theme to select input
-=======
-	&.is-focused:not(.is-open) > .Select-control { cursor: text; }
->>>>>>> format scss
-=======
-  &.is-focused:not(.is-open) > .Select-control { cursor: text; }
->>>>>>> rebase master
 }
 
 .is-focused:not(.is-open) > .Select-control {
   @include themify($themes) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     border-color: themed('colorLightestSecond')
       lighten(themed('colorLightestSecond'), 5%)
       lighten(themed('colorLightestSecond'), 5%);
-=======
-    border-color: themed('selectBorderColor') lighten(themed('selectBorderColor'), 5%) lighten(themed('selectBorderColor'), 5%);
->>>>>>> add theme to select input
-=======
-    border-color: themed('colorLightestSecond')
-      lighten(themed('colorLightestSecond'), 5%)
-      lighten(themed('colorLightestSecond'), 5%);
->>>>>>> rebase master
   }
   box-shadow: $select-input-box-shadow-focus;
 }
@@ -235,15 +104,12 @@ $selectFontSize: 14px;
 // placeholder
 .Select-placeholder,
 .Select--single > .Select-control .Select-value {
-<<<<<<< HEAD
-<<<<<<< HEAD
   bottom: 0;
   color: $select-input-placeholder;
   left: 0;
   @include rem-fallback(line-height, 24px);
   @include rem-fallback(padding-right, $select-padding-horizontal);
   @include rem-fallback(padding-left, $select-padding-horizontal);
-<<<<<<< HEAD
   position: absolute;
   right: 0;
   top: 0;
@@ -257,41 +123,10 @@ $selectFontSize: 14px;
 
 .has-value.is-clearable.Select--single > .Select-control .Select-value {
   @include rem-fallback(padding-right, ($select-clear-width + $select-arrow-width * 5));
-=======
-	bottom: 0;
-	color: $select-input-placeholder;
-	left: 0;
-=======
-  bottom: 0;
-  color: $select-input-placeholder;
-  left: 0;
->>>>>>> rebase master
-  @include rem-fallback(line-height, 24px);
-  padding-left: $select-padding-horizontal;
-  padding-right: $select-padding-horizontal;
-=======
->>>>>>> change border-width to 1px
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  // crop text
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-.has-value.is-clearable.Select--single > .Select-control .Select-value {
-	padding-right: ($select-clear-width + $select-arrow-width * 5);
->>>>>>> add theme to select input
 }
 
 .has-value.Select--single > .Select-control .Select-value,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value {
-<<<<<<< HEAD
   .Select-value-label {
     @include rem-font-size($selectFontSize);
     @include themify($themes) {
@@ -394,141 +229,15 @@ $selectFontSize: 14px;
   overflow: hidden;
   float: left;
 }
-=======
-	.Select-value-label {
-=======
-.has-value.is-clearable.Select--single > .Select-control .Select-value { padding-right: ($select-clear-width + $select-arrow-width * 5); }
-=======
-.has-value.is-clearable.Select--single > .Select-control .Select-value {
-  @include rem-fallback(padding-right, ($select-clear-width + $select-arrow-width * 5));
-}
->>>>>>> change border-width to 1px
-
-.has-value.Select--single > .Select-control .Select-value,
-.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value {
-  .Select-value-label {
->>>>>>> rebase master
-    @include rem-font-size($selectFontSize);
-    @include themify($themes) {
-      color: themed('colorHighest');
-    }
-  }
-
-  a.Select-value-label {
-    cursor: pointer;
-    text-decoration: none;
-
-    &:hover, &:focus {
-      @include themify($themes) { color: themed('colorLightestSecond'); }
-      outline: none;
-      text-decoration: underline;
-    }
-  }
-}
-
-// the <input> element users type in
-
-.Select-input {
-  // inherits `display: inline-block` from "react-input-autosize"
-  @include rem-fallback(height, 24px);
-  @include rem-fallback(padding-right, $select-padding-horizontal);
-  @include rem-fallback(padding-left, $select-padding-horizontal);
-  vertical-align: middle;
-
-  > input {
-    background: none transparent;
-    border: 0 none;
-    box-shadow: none;
-    @include themify($themes) { color: themed('colorHighest'); }
-    cursor: default;
-    display: inline-block;
-    font-family: inherit;
-    font-size: inherit;
-    margin: 0;
-    outline: none;
-    @include rem-fallback(line-height, $selectFontSize);
-    padding: 3 0 7; /* For IE 8 compatibility */
-    -webkit-appearance: none;
-
-    .is-focused & { cursor: text; }
-  }
-}
-
-// fake-hide the input when the control is pseudo-focused
-.has-value.is-pseudo-focused .Select-input { opacity: 0; }
-
-// fake input
-.Select-control:not(.is-searchable) > .Select-input { outline: none; }
-
-// loading indicator
-.Select-loading-zone {
-  cursor: pointer;
-  display: table-cell;
-  position: relative;
-  text-align: center;
-  vertical-align: middle;
-  @include rem-fallback(width, $select-loading-size);
-}
-
-.Select-loading {
-  @include Select-spinner($select-loading-size, $select-loading-color-bg, $select-loading-color);
-  vertical-align: middle;
-}
-
-// the little cross that clears the field
-
-.Select-clear-zone {
-  @include animation( Select-animation-fadeIn 200ms );
-  color: $select-clear-color;
-  cursor: pointer;
-  display: table-cell;
-  position: relative;
-  text-align: center;
-  vertical-align: middle;
-  @include rem-fallback(width, $select-clear-width);
-
-  &:hover { color: $select-clear-hover-color; }
-}
-
-.Select-clear {
-  display: inline-block;
-  font-size: $select-clear-size;
-  line-height: 1;
-}
-
-.Select--multi .Select-clear-zone { @include rem-fallback(width, $select-clear-width); }
-
-.Select--multi .Select-multi-value-wrapper { display: inline-block; }
-
-.Select .Select-aria-only {
-  display: inline-block;
-  @include rem-fallback(height, 1px);
-  @include rem-fallback(width, 1px);
-	@include rem-fallback(margin, -1px);
-  clip: rect(0, 0, 0, 0);
-  overflow: hidden;
-  float: left;
-}
-
-<<<<<<< HEAD
->>>>>>> add theme to select input
 
 // arrow indicator
 
 .Select-arrow-zone {
-<<<<<<< HEAD
-=======
-// arrow indicator
-
-.Select-arrow-zone {
->>>>>>> rebase master
   cursor: pointer;
   display: table-cell;
   position: relative;
   text-align: center;
   vertical-align: middle;
-<<<<<<< HEAD
-<<<<<<< HEAD
   @include rem-fallback(width, $select-arrow-width * 5);
   @include rem-fallback(padding-right, $select-arrow-width);
 }
@@ -547,47 +256,6 @@ $selectFontSize: 14px;
 }
 
 .is-open .Select-arrow, .Select-arrow-zone:hover > .Select-arrow { border-top-color: $select-arrow-color-hover; }
-=======
-	cursor: pointer;
-	display: table-cell;
-	position: relative;
-	text-align: center;
-	vertical-align: middle;
-	width: ($select-arrow-width * 5);
-	padding-right: $select-arrow-width;
-=======
-  width: ($select-arrow-width * 5);
-  padding-right: $select-arrow-width;
->>>>>>> rebase master
-=======
-  @include rem-fallback(width, $select-arrow-width * 5);
-  @include rem-fallback(padding-right, $select-arrow-width);
->>>>>>> add style to arrow
-}
-
-.Select-arrow {
-  border-color: $select-arrow-color transparent transparent;
-  border-style: solid;
-  @include rem-fallback(border-top-width, $select-arrow-width);
-  @include rem-fallback(border-right-width, $select-arrow-width);
-  @include rem-fallback(border-left-width, $select-arrow-width);
-  @include rem-fallback(border-bottom-width, ($select-arrow-width / 2));
-  display: inline-block;
-  height: 0;
-  width: 0;
-  position: relative;
-}
-
-<<<<<<< HEAD
-.is-open .Select-arrow,
-.Select-arrow-zone:hover > .Select-arrow { border-top-color: $select-arrow-color-hover; }
-
-
-
->>>>>>> add theme to select input
-=======
-.is-open .Select-arrow, .Select-arrow-zone:hover > .Select-arrow { border-top-color: $select-arrow-color-hover; }
->>>>>>> rebase master
 
 // Animation
 // ------------------------------
@@ -595,8 +263,6 @@ $selectFontSize: 14px;
 // fade in
 
 @-webkit-keyframes Select-animation-fadeIn {
-<<<<<<< HEAD
-<<<<<<< HEAD
   from { opacity: 0; }
   to { opacity: 1; }
 }
@@ -604,32 +270,12 @@ $selectFontSize: 14px;
 @keyframes Select-animation-fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-=======
-	from { opacity: 0; }
-	to { opacity: 1; }
-}
-
-@keyframes Select-animation-fadeIn {
-	from { opacity: 0; }
-	to { opacity: 1; }
->>>>>>> add theme to select input
-=======
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes Select-animation-fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
->>>>>>> rebase master
 }
 
 //
 // Select Menu
 // ------------------------------
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 // wrapper around the menu
 
 .Select-menu-outer {
@@ -708,99 +354,10 @@ $selectFontSize: 14px;
   padding: $select-padding-vertical $select-padding-horizontal;
 }
 
-=======
-
-=======
->>>>>>> rebase master
-// wrapper around the menu
-
-.Select-menu-outer {
-  // Unfortunately, having both border-radius and allows scrolling using overflow defined on the same
-  // element forces the browser to repaint on scroll.  However, if these definitions are split into an
-  // outer and an inner element, the browser is able to optimize the scrolling behavior and does not
-  // have to repaint on scroll.
-  @include rem-font-size($selectFontSize);
-  @include themify($themes) {
-    background-color: themed('colorLowestFirst');
-    border: 1px solid themed('colorLightestSecond');
-    border-top-color: mix(
-      themed('colorLowestFirst'),
-      themed('colorLightestSecond'),
-      50%
-    );
-  }
-  box-shadow: $select-menu-box-shadow;
-  box-sizing: border-box;
-	@include rem-fallback(margin-top, -1px);
-  @include rem-fallback(max-height, $select-menu-max-height);
-  position: absolute;
-  top: 100%;
-  @include rem-fallback(width, calc(100%));
-  z-index: $select-menu-zindex;
-  -webkit-overflow-scrolling: touch;
-}
-
-// wrapper
-
-.Select-menu {
-	@include rem-fallback(max-height, 224px);
-  overflow-y: auto;
-}
-
-// options
-
-.Select-option {
-  box-sizing: border-box;
-  cursor: pointer;
-  display: block;
-	@include rem-fallback(padding-top, $select-padding-vertical);
-	@include rem-fallback(padding-bottom, $select-padding-vertical);
-	@include rem-fallback(padding-right, $select-padding-horizontal);
-	@include rem-fallback(padding-left, $select-padding-horizontal);
-  @include themify($themes) {
-    background-color: themed('colorLowestFirst');
-    color: lighten(themed('colorHighest'), 20%);
-
-    &:last-child { @include border-bottom-radius( $select-input-border-radius ); }
-
-    &.is-selected {
-      background-color: themed('colorMidThird');
-      color: themed('colorHighest');
-    }
-
-    &.is-focused {
-      background-color: themed('colorLowestThird');
-      color: themed('colorHighest');
-    }
-
-    &.is-disabled {
-      color: themed('colorMidFirst');
-      cursor: default;
-    }
-  }
-}
-
-// no results
-
-.Select-noresults {
-  box-sizing: border-box;
-  color: $select-noresults-color;
-  cursor: default;
-  display: block;
-  padding: $select-padding-vertical $select-padding-horizontal;
-}
-
-<<<<<<< HEAD
-
->>>>>>> add theme to select input
-=======
->>>>>>> rebase master
 //
 // Multi-Select
 // ------------------------------
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 // Base
 
 .Select--multi {
@@ -870,93 +427,10 @@ $selectFontSize: 14px;
       &:active { background-color: themed('colorLightestSecond'); }
     }
   }
-=======
-
-=======
->>>>>>> rebase master
-// Base
-
-.Select--multi {
-  // add margin to the input element
-  .Select-input {
-    vertical-align: middle;
-    // border: 1px solid transparent;
-    @include rem-fallback(margin-left, $select-padding-horizontal);
-    padding: 0;
-  }
-
-  // reduce margin once there is value
-  &.has-value .Select-input { @include rem-fallback(margin-left, $select-item-gutter); }
-
-  // Items
-  .Select-value {
-    display: inline-block;
-    @include rem-fallback(margin-left, $select-item-gutter);
-    @include rem-fallback(margin-top, $select-item-gutter);
-    vertical-align: top;
-    @include rem-font-size($selectFontSize);
-    @include themify($themes) {
-      background-color: themed('colorLowestFirst');
-      border: 1px solid themed('colorLightestSecond');
-      color: themed('colorHighest');
-    }
-  }
-
-  // common
-  .Select-value-icon,
-  .Select-value-label {
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  // label
-  .Select-value-label {
-    @include border-right-radius( $select-item-border-radius );
-    cursor: default;
-    padding: $select-item-padding-vertical $select-item-padding-horizontal;
-  }
-
-  a.Select-value-label {
-    @include themify($themes) { color: themed('colorHighest'); }
-    cursor: pointer;
-    text-decoration: none;
-
-    &:hover { text-decoration: underline; }
-  }
-
-  // icon
-  .Select-value-icon {
-    cursor: pointer;
-    @include border-left-radius( $select-item-border-radius );
-
-    // move the baseline up by 1px
-    padding: ($select-item-padding-vertical - 1) $select-item-padding-horizontal ($select-item-padding-vertical + 1);
-
-    @include themify($themes) {
-      border-right: 1px solid themed('colorLightestSecond');
-
-      &:hover, &:focus {
-        background-color: themed('hoverIconDarkGray');
-        color: themed('colorHighest');
-      }
-
-      &:active { background-color: themed('colorLightestSecond'); }
-    }
-<<<<<<< HEAD
-	}
-
->>>>>>> add theme to select input
-=======
-  }
->>>>>>> rebase master
 }
 
 .Select--multi.is-disabled {
   @include themify($themes) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> rebase master
     .Select-value {
       background-color: themed('colorLowestFirst');
       border: 1px solid themed('colorLightestSecond');
@@ -965,38 +439,9 @@ $selectFontSize: 14px;
     // icon
     .Select-value-icon {
       cursor: not-allowed;
-<<<<<<< HEAD
-<<<<<<< HEAD
       border-right-color: darken(themed('colorLightestSecond'), 10%);
 
       &:hover, &:focus, &:active { background-color: themed('colorLowestFirst'); }
     }
-=======
-  	.Select-value {
-  		background-color: themed('bgColor');
-  		border: 1px solid themed('selectBorderColor');
-  		color: themed('selectDisabledColor');
-  	}
-  	// icon
-  	.Select-value-icon {
-  		cursor: not-allowed;
-  		border-right: 1px solid darken(themed('selectBorderColor'), 10%);
-
-  		&:hover,
-  		&:focus,
-  		&:active {
-  			background-color: themed('bgColor');
-  		}
-  	}
->>>>>>> add theme to select input
-=======
-      border-right: 1px solid darken(themed('colorLightestSecond'), 10%);
-=======
-      border-right-color: darken(themed('colorLightestSecond'), 10%);
->>>>>>> add style to arrow
-
-      &:hover, &:focus, &:active { background-color: themed('colorLowestFirst'); }
-    }
->>>>>>> rebase master
   }
 }
