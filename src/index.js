@@ -9,6 +9,7 @@ import configureStore from 'configureStore';
 import AppContainer from 'components/app/app.container';
 import registerServiceWorker from 'registerServiceWorker';
 import { AuthService } from 'services';
+import { initializeApp } from 'actions';
 
 import './polyfills';
 
@@ -19,6 +20,9 @@ AuthService.onLoad();
 
 // Create the redux store and redux-observable streams
 const store = configureStore();
+
+// Initialize the app redux data
+store.dispatch(initializeApp());
 
 // Create the React app
 ReactDOM.render(

@@ -3,13 +3,12 @@
 import { combineReducers } from 'redux';
 
 // Reducers
-// TODO: Replace with reducer imports
-
-// Added to prevent errors until a real reducer is added
-const placeholder = (state = {}, action) => state;
+import { app } from './app';
+import { simulation } from './simulation';
 
 const rootReducer = combineReducers({
-  placeholder
+  app,
+  simulation
 });
 
 export default rootReducer;

@@ -13,7 +13,7 @@ import PageContent from './pageContent/pageContent';
 
 // Page Components
 import  {
-  Simulation as SimulationPage,
+  SimulationContainer as SimulationPage,
   PageNotFound
 } from 'components/pages';
 

@@ -43,5 +43,14 @@ $btnIconSize: 14px;
 
       .btn-icon svg { fill: themed('colorLowestSecond'); }
     }
+
+    &:disabled {
+      background-color: transparent;
+      color: themed('colorMidFirst');
+      cursor: auto;
+
+      .btn-icon svg { fill: themed('colorMidFirst'); }
+    }
+
   }
 }

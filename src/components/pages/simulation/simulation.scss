@@ -28,6 +28,11 @@
         fill: transparent;
         stroke: themed('colorLowestSecond');
       }
+
+      &:disabled svg {
+        fill: transparent;
+        stroke: themed('colorMidFirst');
+      }
     }
   }
 }
