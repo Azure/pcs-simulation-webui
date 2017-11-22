@@ -3,12 +3,15 @@
 import { combineReducers } from 'redux';
 
 // Reducers
-import { app } from './app';
-import { simulation } from './simulation';
+import { appReducer } from './appReducer';
+import { simulationReducer } from './simulationReducer';
 
 const rootReducer = combineReducers({
-  app,
-  simulation
+  app: appReducer,
+  simulation: simulationReducer
 });
 
 export default rootReducer;
+
+// Selectors
+export const getSimulation = state => state.simulation;

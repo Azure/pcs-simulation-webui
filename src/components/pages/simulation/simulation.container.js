@@ -1,16 +1,17 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { connect } from 'react-redux';
+import { getSimulation } from 'reducers';
 import { Simulation } from './simulation';
-import { toggleSimulation, updateSimulation } from 'actions';
+import { toggleSimulationEvent, updateSimulationEvent } from 'actions';
 
 // Pass the simulation status
-const mapStateToProps = ({ simulation }) => ({ simulation });
+const mapStateToProps = state => ({ simulation: getSimulation(state) });
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
-  toggleSimulation: enabled => dispatch(toggleSimulation(enabled)),
-  updateSimulation: modelUpdates => dispatch(updateSimulation(modelUpdates))
+  toggleSimulation: enabled => dispatch(toggleSimulationEvent(enabled)),
+  updateSimulation: modelUpdates => dispatch(updateSimulationEvent(modelUpdates))
 });
 
 export const SimulationContainer = connect(mapStateToProps, mapDispatchToProps)(Simulation);
