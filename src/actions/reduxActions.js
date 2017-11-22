@@ -17,7 +17,7 @@ export function updateSimulationStore(payload) {
 
 /** Emits an empty simulation model */
 export function clearSimulationStore() {
-  return { type: UPDATE_SIMULATION_STORE, payload: toSimulationModel() };
+  return { type: CLEAR_SIMULATION_STORE, payload: toSimulationModel() };
 }
 
 export function updateDeviceModels(deviceModels) {
