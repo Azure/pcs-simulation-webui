@@ -2,7 +2,8 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSimulationModel, toDeviceModel } from './models';
+import { toSimulationStatus, toSimulationModel, toDeviceModel } from './models';
+import { Observable } from 'rxjs/Observable';
 
 const ENDPOINT = Config.simulationApiUrl;
 
@@ -12,28 +13,26 @@ export class SimulationService {
   /** Returns the device status */
   static getStatus() {
     return HttpClient.get(`${ENDPOINT}status`)
-      .map(cleanResponse);
+      .map(toSimulationStatus);
   }
 
   /** Returns a list of device models */
   static getDeviceModels() {
     return HttpClient.get(`${ENDPOINT}devicemodels`)
-      .map(cleanResponse)
       .map(toDeviceModel);
   }
 
   /** Returns any currently running simulation */
   static getSimulation() {
     return HttpClient.get(`${ENDPOINT}simulations/1`)
-      .map(cleanResponse)
       .map(toSimulationModel);
   }
 
   /** Enables or disables a simulation */
   static toggleSimulation(ETag, Enabled) {
     return HttpClient.patch(`${ENDPOINT}simulations/1`, { ETag, Enabled })
-      .map(cleanResponse)
-      .map(toSimulationModel);
+      .map(toSimulationModel)
+      .catch(resolveConflict);
   }
 
   /** Enables or disables a simulation */
@@ -50,31 +49,15 @@ export class SimulationService {
           DeviceModels: model.deviceModels
         }
       )
-      .map(cleanResponse)
-      .map(toSimulationModel);
+      .map(toSimulationModel)
+      .catch(resolveConflict);
   }
 }
 
-/**
- * A utility method for handling ajax response codes
- * @param {AjaxResponse} ajaxResponse See https://github.com/Reactive-Extensions/RxJS-DOM/blob/master/doc/operators/ajax.md#returns
- */
-function cleanResponse(ajaxResponse) {
-  if (isSuccess(ajaxResponse.status)) {
-    return handleSuccess(ajaxResponse);
-  } else if (isUserError(ajaxResponse.status)) {
-    throw new Error(`${ajaxResponse.status}: User error`); // TEMP: Needs more granular handling
-  } else if (isServerError(ajaxResponse.status)) {
-    throw new Error(`${ajaxResponse.status}: Server error`); // TEMP: Needs more granular handling
-  } else {
-    throw new Error(`An unknown error occurred`);
+/** If the UI resources is out of sync with the service, update the UI */
+function resolveConflict(error) {
+  if (error.status === 409) {
+    return SimulationService.getSimulation();
   }
+  return Observable.throw(error);
 }
-
-// Status Code Checkers
-const isSuccess = code => code >= 200 && code < 300;
-const isUserError = code => code >= 400 && code < 500;
-const isServerError = code => code >= 500 && code < 600;
-
-// Status Code Handlers
-const handleSuccess = ({ response }) => response;

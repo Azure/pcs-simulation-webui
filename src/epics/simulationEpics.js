@@ -1,15 +1,18 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import 'rxjs';
+import { Observable } from 'rxjs';
 import * as actions from 'actions';
 import { SimulationService } from 'services';
+
+const dispatchError = error => Observable.of(actions.updateReduxSimulationError(error.message));
 
 /** Loads the simulation status */
 export const loadSimulationStatus = action$ => {
   return action$
     .ofType(actions.EPIC_APP_SIMULATION_STATUS_LOAD)
     .flatMap(_ => SimulationService.getStatus())
-    .map(_ => ({ type: 'REDUX_SIMULATION_STATUS_UPDATE'})); // TODO: Implement
+    .map(actions.updateReduxSimulationStatus);
 };
 
 /** Loads the simulation */
@@ -20,7 +23,8 @@ export const loadSimulation = action$ => {
       SimulationService.getSimulation()
         .map(actions.updateReduxSimulation)
         .startWith(actions.clearReduxSimulation())
-    );
+    )
+    .catch(dispatchError);
 };
 
 /** Used to enable or disable the simulation */
@@ -32,7 +36,8 @@ export const toggleSimulation = (action$, store) => {
       return SimulationService.toggleSimulation(simulation.eTag, payload)
         .map(actions.updateReduxSimulation)
         .startWith(actions.clearReduxSimulation());
-    });
+    })
+    .catch(dispatchError);
 };
 
 /** Updates the simulation */
@@ -45,5 +50,6 @@ export const updateSimulation = (action$, store) => {
       return SimulationService.updateSimulation(newModel)
         .map(actions.updateReduxSimulation)
         .startWith(actions.clearReduxSimulation());
-    });
+    })
+    .catch(dispatchError);
 };

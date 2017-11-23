@@ -2,4 +2,5 @@
 
 // Exports models
 
+export * from './ajaxModels';
 export * from './simulationModels';
