@@ -1,12 +1,16 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { connect } from 'react-redux';
-import { getSimulation } from 'reducers';
+import { getSimulation, getDeviceModels, getDuration } from 'reducers';
 import { Simulation } from './simulation';
 import { toggleSimulationEvent, updateSimulationEvent } from 'actions';
 
 // Pass the simulation status
-const mapStateToProps = state => ({ simulation: getSimulation(state) });
+const mapStateToProps = state => ({
+  simulation: getSimulation(state),
+  deviceModels: getDeviceModels(state),
+  duration: getDuration(state)
+});
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
