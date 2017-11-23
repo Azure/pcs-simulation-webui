@@ -54,7 +54,7 @@ export class SimulationService {
   }
 }
 
-/** If the UI resources is out of sync with the service, update the UI */
+/** If the UI resource is out of sync with the service, update the UI resource */
 function resolveConflict(error) {
   if (error.status === 409) {
     return SimulationService.getSimulation();
