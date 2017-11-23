@@ -4,7 +4,7 @@
 // object to UI friendly objects
 // TODO: Map to backend models and add links to github
 
-export const toSimulationStatus = (response = {}) => ({
+export const toSimulationStatusModel = (response = {}) => ({
   simulationStatus: ((response.Properties || {}).Simulation || '').toLowerCase()
 });
 

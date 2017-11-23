@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSimulationStatus, toSimulationModel, toDeviceModel } from './models';
+import { toSimulationStatusModel, toSimulationModel, toDeviceModel } from './models';
 import { Observable } from 'rxjs/Observable';
 
 const ENDPOINT = Config.simulationApiUrl;
@@ -13,7 +13,7 @@ export class SimulationService {
   /** Returns the device status */
   static getStatus() {
     return HttpClient.get(`${ENDPOINT}status`)
-      .map(toSimulationStatus);
+      .map(toSimulationStatusModel);
   }
 
   /** Returns a list of device models */
