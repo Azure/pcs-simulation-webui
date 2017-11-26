@@ -2,6 +2,8 @@
 
 import { Observable } from 'rxjs';
 import { AuthService } from './authService';
+import Config from 'app.config';
+import { AjaxError, RetryableAjaxError } from './models';
 
 /**
  * A class of static methods for creating ajax requests
@@ -62,8 +64,25 @@ export class HttpClient {
    * @return an Observable of the AjaxReponse
    */
   static ajax(url, options = {}, withAuth = true) {
-    let request = HttpClient.withHeaders({ ...options, url }, withAuth);
-    return Observable.ajax(request);
+    const request = HttpClient.withHeaders({ ...options, url }, withAuth);
+    const { retryWaitTime, maxRetryAttempts } = Config;
+    return Observable.ajax(request)
+      // If success, extract the response object
+      .map(({ response }) => response)
+      // Preprocess errors
+      .catch(ajaxError => Observable.throw(classifyError(ajaxError)))
+      // Retry any retryable errors
+      .retryWhen(error$ => {
+        return error$
+          .zip(Observable.range(0, maxRetryAttempts + 1)) // Plus 1 to not count initial call
+          .flatMap(([ error, attempt ]) =>
+            (!isRetryable(error) || attempt === maxRetryAttempts)
+              ? Observable.throw(error)
+              : Observable.of(error)
+          )
+          .delay(retryWaitTime);
+        }
+      );
   }
 
   /**
@@ -87,4 +106,20 @@ export class HttpClient {
     return { ...request, headers };
   }
 
+}
+
+// HttpClient helper methods
+
+/** A help function for checking if a value is a retryable error */
+const isRetryable = error => error instanceof RetryableAjaxError;
+
+/** A help function for classifying errors as retryable or not */
+function classifyError(error) {
+  switch(error.status) {
+    case 502: // TODO: Make these config values
+    case 503:
+      return RetryableAjaxError.fromResponse(error);
+    default:
+      return AjaxError.fromResponse(error);
+  }
 }
