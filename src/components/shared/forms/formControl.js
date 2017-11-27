@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { Duration } from './duration';
+import { Select } from './select';
 import { joinClasses } from 'utilities';
 
 import './styles//formControl.css';
@@ -23,6 +24,8 @@ export const FormControl = (props) => {
       return <textarea type="text" {...controlProps} />;
     case 'duration':
       return <Duration {...controlProps} />;
+    case 'select':
+      return <Select {...controlProps} />;
     default:
       return null; // Unknown form control
   }
