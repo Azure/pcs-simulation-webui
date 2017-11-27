@@ -21,7 +21,7 @@
       // The start simulation svg uses stroke rather than fill
       svg {
         fill: transparent;
-        stroke: themed('colorHighest');
+        stroke: themed('colorHighest'); 
       }
 
       &:hover svg {
