@@ -19,8 +19,8 @@ class SimulationDetails extends Component {
     const deviceModelsMap = this.props.deviceModels || [];
     const deviceModels = this.props.simulation.deviceModels || [];
     const numDevices = deviceModels.length ? deviceModels[0].Count : 0;
-    const modelDetail = deviceModelsMap.filter(model => model.Id === deviceModels[0].Id)
-    const modelName = modelDetail.length ? modelDetail[0].Name : '';
+    const modelDetail = deviceModels.length ? deviceModelsMap.filter(model => model.Id === deviceModels[0].Id) : [];
+    const modelName = modelDetail.length ? modelDetail[0].Name : 'N/A';
     const { duration } = this.props;
     return (
       <div className="simulation-details-container">
