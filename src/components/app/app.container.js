@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { routeEvent } from 'actions';
 import App from './app';
 
-// Wrap with the router and connect (to access dispatch)
-// Wrap the dispatch method
+// Wrap with the router and wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
   registerRouteEvent: pathname => dispatch(routeEvent(pathname))
 });
