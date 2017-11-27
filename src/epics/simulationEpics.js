@@ -4,6 +4,7 @@ import 'rxjs';
 import { Observable } from 'rxjs';
 import * as actions from 'actions';
 import { SimulationService } from 'services';
+import { getSimulation } from 'reducers';
 
 const dispatchError = error => Observable.of(actions.updateReduxSimulationError(error.message));
 
@@ -12,7 +13,8 @@ export const loadSimulationStatus = action$ => {
   return action$
     .ofType(actions.EPIC_APP_SIMULATION_STATUS_LOAD)
     .flatMap(_ => SimulationService.getStatus())
-    .map(actions.updateReduxSimulationStatus);
+    .map(actions.updateReduxSimulationStatus)
+    .catch(dispatchError);
 };
 
 /** Loads the simulation */
@@ -32,7 +34,7 @@ export const toggleSimulation = (action$, store) => {
   return action$
     .ofType(actions.EPIC_SIMULATION_TOGGLE)
     .flatMap(({ payload }) => {
-      const { simulation } = store.getState();
+      const simulation = getSimulation(store.getState());
       return SimulationService.toggleSimulation(simulation.eTag, payload)
         .map(actions.updateReduxSimulation)
         .startWith(actions.clearReduxSimulation());
@@ -45,7 +47,7 @@ export const updateSimulation = (action$, store) => {
   return action$
     .ofType(actions.EPIC_SIMULATION_UPDATE)
     .flatMap(({ payload }) => {
-      const { simulation } = store.getState();
+      const simulation = getSimulation(store.getState());
       const newModel = { ...simulation, ...payload };
       return SimulationService.updateSimulation(newModel)
         .map(actions.updateReduxSimulation)
