@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { Duration } from './duration';
-import { IotSelect } from '../iotSelect/iotSelect';
+import { Select } from './select';
 import { joinClasses } from 'utilities';
 
 import './styles//formControl.css';
@@ -25,7 +25,7 @@ export const FormControl = (props) => {
     case 'duration':
       return <Duration {...controlProps} />;
     case 'select':
-      return <IotSelect {...controlProps} />;
+      return <Select {...controlProps} />;
     default:
       return null; // Unknown form control
   }
