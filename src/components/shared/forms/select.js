@@ -6,4 +6,4 @@ import { joinClasses } from 'utilities';
 
 import './styles/select.css';
 
-export const Select = ({className, ...props}) => <ReactSelect className={joinClasses('select', className)} {...props} />;
+export const Select = ({className, ...props}) => <ReactSelect className={joinClasses('select-container', className)} {...props} />;

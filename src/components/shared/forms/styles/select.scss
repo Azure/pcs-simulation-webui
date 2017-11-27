@@ -3,9 +3,9 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 @import 'styles/variables';
-@import "../../../../../node_modules/react-select/scss/select";
-@import "../../../../../node_modules/react-select/scss/mixins";
-@import "../../../../../node_modules/react-select/scss/spinner";
+@import "node_modules/react-select/scss/select";
+@import "node_modules/react-select/scss/mixins";
+@import "node_modules/react-select/scss/spinner";
 
 $selectFontSize: 14px;
 $select-input-height: 26px;
@@ -16,7 +16,7 @@ $select-padding-vertical: 6px;
 // Control
 // ------------------------------
 
-.select.Select {
+.select-container.Select {
   position: relative;
 
   // preferred box model
