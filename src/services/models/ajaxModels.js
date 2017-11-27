@@ -22,7 +22,6 @@ export class AjaxError {
         return "Oops, we were not able to find the service";
       default:
         return this.errorMessage;
-
     }
   }
 }
