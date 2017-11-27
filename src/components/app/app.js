@@ -3,8 +3,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
-import { routeEvent } from 'actions';
-
 // App Components
 import Header from './header/header';
 import Navigation from './navigation/navigation';
@@ -23,10 +21,12 @@ import './app.css';
 class App extends Component {
 
   componentDidMount() {
-    const { history, dispatch } = this.props;
+    const { history, registerRouteEvent } = this.props;
     // Initialize listener to inject the route change event into the epic action stream
-    history.listen(({ pathname }) => dispatch(routeEvent(pathname)));
+    history.listen(({ pathname }) => registerRouteEvent(pathname));
   }
+
+  redirectToSimulation = () => <Redirect to="/simulation" push={true} />;
 
   render() {
     return (
@@ -36,7 +36,7 @@ class App extends Component {
           <Header />
           <PageContent>
             <Switch>
-              <Route exact path="/" render={() => <Redirect to="/simulation" push={true} />} />
+              <Route exact path="/" render={this.redirectToSimulation} />
               <Route exact path="/simulation" component={SimulationPage} />
               <Route component={PageNotFound} />
             </Switch>

@@ -6,7 +6,7 @@ const Config = {
   simulationApiUrl: '',
 
   // Constants
-  retryWaitTime: 2000, // On retryable error, rety after 2s
+  retryWaitTime: 2000, // On retryable error, retry after 2s
   maxRetryAttempts: 2
 };
 
