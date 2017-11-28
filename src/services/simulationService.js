@@ -19,7 +19,8 @@ export class SimulationService {
   /** Returns a list of device models */
   static getDeviceModels() {
     return HttpClient.get(`${ENDPOINT}devicemodels`)
-      .map(toDeviceModel);
+      .map(({ Items }) => Items)
+      .map(models => models.map(toDeviceModel));
   }
 
   /** Returns any currently running simulation */

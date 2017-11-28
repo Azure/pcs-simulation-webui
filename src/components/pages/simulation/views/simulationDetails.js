@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import moment from 'moment'
 
 import { svgs } from 'utilities';
 import {
@@ -16,13 +17,26 @@ class SimulationDetails extends Component {
   stopSimulation = () => this.props.toggleSimulation(false);
 
   render () {
-    const deviceModels = this.props.simulation.deviceModels || [];
-    const numDevices = deviceModels.length ? deviceModels[0].Count : 0;
+    const { deviceModels, startTime, endTime } = this.props.simulation;
+    const modelName = deviceModels.length ? deviceModels[0].name : 'N/A';
+    const numDevices = deviceModels.length ? deviceModels[0].count : 0;
+    const duration = (!startTime || !endTime)
+      ? 'Run indefinitely'
+      : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
+
     return (
       <div className="simulation-details-container">
         <FormSection>
+          <SectionHeader>Device Model</SectionHeader>
+          <SectionHeader>{modelName}</SectionHeader>
+        </FormSection>
+        <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
           <SectionHeader>{numDevices}</SectionHeader>
+        </FormSection>
+        <FormSection>
+          <SectionHeader>Simulation duration</SectionHeader>
+          <SectionHeader>{duration}</SectionHeader>
         </FormSection>
         <FormActions>
           <BtnToolbar>

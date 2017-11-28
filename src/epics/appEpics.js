@@ -19,9 +19,10 @@ export const initializeApp = action$ =>
 export const loadDeviceModels = action$ =>
   action$.ofType(actions.EPIC_APP_DEVICE_MODELS_LOAD)
     .flatMap(_ => SimulationService.getDeviceModels())
-    .map(({ Items }) => actions.updateReduxDeviceModels({ deviceModels: Items }))
+    .map(actions.updateReduxDeviceModels)
     // TODO: Implement actual error handling for device models
     .catch(error => Observable.of({ type: 'REDUX_DEVICE_MODELS_ERROR', payload: error.message }));
+
 
 /** Listen to route events and emit a route change event when the url changes */
 export const detectRouteChange = action$ =>

@@ -12,6 +12,3 @@ const rootReducer = combineReducers({
 });
 
 export default rootReducer;
-
-// Selectors
-export const getSimulation = state => state.simulation;
