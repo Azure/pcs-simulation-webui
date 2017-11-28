@@ -4,6 +4,7 @@
 
 export * from './btn';
 export * from './btnToolbar';
+export * from './errorMsg';
 export * from './formActions';
 export * from './formControl';
 export * from './formGroup';
