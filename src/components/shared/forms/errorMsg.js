@@ -5,7 +5,7 @@ import React from 'react';
 import { Svg } from 'components/shared/svg/svg';
 import { joinClasses, svgs } from 'utilities';
 
-import './styles/error.css';
+import './styles/errorMsg.css';
 
 export const ErrorMsg = (props) => {
   const { children, className } = props;
