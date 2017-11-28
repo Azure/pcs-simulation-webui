@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-// TODO: Add real API urls
 const Config = {
   // APIs
   simulationApiUrl: '/devicesimulation-svc/v1/',
