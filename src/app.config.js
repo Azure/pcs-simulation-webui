@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-// TODO: Add real API urls
 const Config = {
   // APIs
-  simulationApiUrl: '',
+  simulationApiUrl: '/devicesimulation-svc/v1/',
 
   // Constants
   retryWaitTime: 2000, // On retryable error, retry after 2s
