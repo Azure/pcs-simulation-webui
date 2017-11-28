@@ -8,9 +8,6 @@ $errorIconSize: 14px;
   display: flex;
   flex-flow: row nowrap;
   flex-shrink: 0;
-  align-items: center;
-  background-color: transparent;
-  border: none;
 
   .error-icon {
     @include square-px-rem($errorIconSize);
