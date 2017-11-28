@@ -14,13 +14,18 @@ export const toSimulationModel = (response = {}) => ({
   startTime: response.StartTime,
   endTime: response.EndTime,
   id: response.Id,
-  deviceModels: (response.DeviceModels || []).map(toDeviceModel)
+  deviceModels: (response.DeviceModels || []).map(({ Id, Count }) => ({
+    id: Id,
+    count: Count
+  }))
 });
 
 export const toDeviceModel = (response = {}) => {
   return {
     id: response.Id,
     name: response.Name,
-    count: response.Count
+    description: response.Description,
+    simulation: response.Simulation,
+    telemetry: response.Telemetry
   };
 };

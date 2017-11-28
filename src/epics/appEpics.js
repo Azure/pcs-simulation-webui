@@ -21,7 +21,7 @@ export const loadDeviceModels = action$ => {
   return action$
     .ofType(actions.EPIC_APP_DEVICE_MODELS_LOAD)
     .flatMap(_ => SimulationService.getDeviceModels())
-    .map(deviceModels => actions.updateReduxDeviceModels({ deviceModels }));
+    .map(actions.updateReduxDeviceModels);
 };
 
 /** Listen to route events and emit a route change event when the url changes */
