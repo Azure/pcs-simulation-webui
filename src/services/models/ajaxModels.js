@@ -10,8 +10,8 @@ export class AjaxError {
 
   constructor(ajaxError) {
     this.ajaxError = ajaxError;
-    const { ExceptionMessage, Message } = ajaxError.response || {};
-    this.errorMessage = ExceptionMessage || Message || ajaxError.message || `An unknown error occurred`;
+    const resp = ajaxError.response || {};
+    this.errorMessage = resp.ExceptionMessage || resp.Message || resp.Error || ajaxError.message || `An unknown error occurred`;
     this.status = ajaxError.status;
     // Log all errors in the console
     console.error(ajaxError);
