@@ -7,12 +7,12 @@ import { joinClasses, svgs } from 'utilities';
 
 import './styles/error.css';
 
-export const Error = (props) => {
+export const ErrorMsg = (props) => {
   const { children, className } = props;
   return (
-    <div className={joinClasses('error-container', className)}>
+    <div className={joinClasses('error-message', className)}>
       <Svg path={svgs.error} className="error-icon" />
-      { props.children }
+      { children }
     </div>
   );
 };

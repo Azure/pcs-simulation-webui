@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import SimulationDetails from './views/simulationDetails';
 import SimulationForm from './views/simulationForm';
-import { FormActions, Indicator, Error } from 'components/shared';
+import { FormActions, Indicator, ErrorMsg } from 'components/shared';
 
 import './simulation.css';
 
@@ -26,7 +26,7 @@ export class Simulation extends Component {
   getView() {
     const { enabled, error, status } = this.props.simulation;
     if (error) {
-      return (<FormActions><Error>{error}</Error></FormActions>);
+      return (<FormActions><ErrorMsg>{error}</ErrorMsg></FormActions>);
     } else if (status && status !== 'off') {
       if (enabled === true) {
         return <SimulationDetails {...this.props} />
