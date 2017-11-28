@@ -18,6 +18,8 @@ export const FormControl = (props) => {
   switch(type) {
     case 'text':
       return <input type="text" {...controlProps} />;
+    case 'password':
+      return <input type="password" {...controlProps} />;
     case 'number':
       return <input type="number" {...controlProps} />;
     case 'textarea':
