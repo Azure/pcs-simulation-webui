@@ -23,6 +23,7 @@ class SimulationForm extends Component {
 
     this.state = {
       onBlur: false,
+      iotHubString: '',
       duration: {},
       durationRadio: '',
       frequency: {},
@@ -47,7 +48,9 @@ class SimulationForm extends Component {
     const numDevices = simulation.deviceModels.length
       ? simulation.deviceModels[0].count
       : '';
+    const iotHubString = ((simulation || {}).iotHub || {}).connectionString || '';
     this.setState({
+      iotHubString,
       deviceModelOptions,
       deviceModel,
       numDevices
@@ -81,6 +84,13 @@ class SimulationForm extends Component {
     } else {
       delete modelUpdates.startTime;
       delete modelUpdates.endTime;
+    }
+    if (this.state.iotHubString !== 'default') {
+      Object.assign(modelUpdates, {
+        iotHub: {
+          connectionString: this.state.iotHubString
+        }
+      });
     }
     this.props.updateSimulation(modelUpdates);
   };
@@ -117,6 +127,8 @@ class SimulationForm extends Component {
               onBlur={this.inputOnBlur}
               onFocus={this.inputOnFocus}
               onChange={this.onChange}
+              value={this.state.iotHubString}
+              name="iotHubString"
               placeholder="Enter IoT Hub connection string" />
           </FormGroup>
         </FormSection>

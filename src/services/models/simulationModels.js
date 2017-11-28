@@ -8,7 +8,8 @@ export const toSimulationStatusModel = (response = {}) => ({
   simulationStatus: ((response.Properties || {}).Simulation || '').toLowerCase()
 });
 
-export const toSimulationModel = (response = {}) => ({
+export const toSimulationModel = (response = {}) => {
+  return {
   eTag: response.ETag,
   enabled: response.Enabled,
   startTime: response.StartTime,
@@ -17,8 +18,13 @@ export const toSimulationModel = (response = {}) => ({
   deviceModels: (response.DeviceModels || []).map(({ Id, Count }) => ({
     id: Id,
     count: Count
-  }))
-});
+  })),
+  iotHub: toIotHubModel(response.IoTHub)
+}};
+
+const toIotHubModel = (response = {}) => ({
+  connectionString: response.ConnectionString
+})
 
 export const toDeviceModel = (response = {}) => {
   return {
@@ -29,3 +35,19 @@ export const toDeviceModel = (response = {}) => {
     telemetry: response.Telemetry
   };
 };
+
+// Request models
+export const toSimulationRequestModel = (request = {}) => {
+  return {
+    ETag: request.eTag,
+    Enabled: request.enabled,
+    StartTime: request.startTime,
+    EndTime: request.endTime,
+    Id: request.id,
+    DeviceModels: request.deviceModels,
+    IoTHub: toIotHubRequestModel(request.iotHub)
+}};
+
+const toIotHubRequestModel = (request = {}) => ({
+  ConnectionString: request.connectionString
+})
