@@ -16,12 +16,10 @@ class SimulationDetails extends Component {
   stopSimulation = () => this.props.toggleSimulation(false);
 
   render () {
-    const deviceModelsMap = this.props.deviceModels || [];
-    const deviceModels = this.props.simulation.deviceModels || [];
+    const { duration, deviceModels } = this.props.simulation;
+    const modelName = deviceModels.length ? deviceModels[0].Name : 'N/A';
     const numDevices = deviceModels.length ? deviceModels[0].Count : 0;
-    const modelDetail = deviceModels.length ? deviceModelsMap.filter(model => model.Id === deviceModels[0].Id) : [];
-    const modelName = modelDetail.length ? modelDetail[0].Name : 'N/A';
-    const { duration } = this.props;
+
     return (
       <div className="simulation-details-container">
         <FormSection>
