@@ -4,7 +4,7 @@ import 'rxjs';
 import { Observable } from 'rxjs';
 import * as actions from 'actions';
 import { SimulationService } from 'services';
-import { getSimulation } from 'reducers';
+import { getSimulation } from 'reducers/selectors';
 
 const dispatchError = error => Observable.of(actions.updateReduxSimulationError(error.message));
 
