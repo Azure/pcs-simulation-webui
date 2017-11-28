@@ -115,11 +115,8 @@ const isRetryable = error => error instanceof RetryableAjaxError;
 
 /** A help function for classifying errors as retryable or not */
 function classifyError(error) {
-  switch(error.status) {
-    case 502: // TODO: Make these config values
-    case 503:
-      return RetryableAjaxError.fromResponse(error);
-    default:
-      return AjaxError.fromResponse(error);
+  if (Config.retryableStatusCodes.has(error.status)) {
+    return RetryableAjaxError.from(error);
   }
+  return AjaxError.from(error);
 }

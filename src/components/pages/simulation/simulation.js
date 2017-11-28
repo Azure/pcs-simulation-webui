@@ -25,12 +25,12 @@ export class Simulation extends Component {
 
   getView() {
     const { enabled, error, status } = this.props.simulation;
-    if (status && status !== 'off') {
-      if (error) {
-        return (<FormActions>{error}</FormActions>);
-      } else if (enabled === true) {
+    if (error) {
+      return (<FormActions>Error: {error}</FormActions>);
+    } else if (status && status !== 'off') {
+      if (enabled === true) {
         return <SimulationDetails {...this.props} />
-      } else if (enabled === false) {
+      } else {
         return <SimulationForm {...this.props} />
       }
     } else if (status && status === 'off') {
