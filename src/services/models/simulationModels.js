@@ -18,6 +18,9 @@ export const toSimulationModel = (response = {}) => ({
 });
 
 export const toDeviceModel = (response = {}) => {
-  // TODO: Implement
-  return response;
+  return {
+    id: response.Id,
+    name: response.Name,
+    count: response.Count
+  };
 };

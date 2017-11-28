@@ -19,7 +19,7 @@ class SimulationDetails extends Component {
   render () {
     const { deviceModels, startTime, endTime } = this.props.simulation;
     const modelName = deviceModels.length ? deviceModels[0].name : 'N/A';
-    const numDevices = deviceModels.length ? deviceModels[0].Count : 0;
+    const numDevices = deviceModels.length ? deviceModels[0].count : 0;
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
