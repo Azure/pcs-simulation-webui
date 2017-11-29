@@ -81,7 +81,7 @@ class SimulationForm extends Component {
     const modelUpdates = {
       enabled: true,
       deviceModels,
-      iotHub,
+      ...iotHub,
       ...simulationDuration
     };
     this.props.updateSimulation(modelUpdates);

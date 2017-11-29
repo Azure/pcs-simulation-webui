@@ -43,7 +43,6 @@ export const updateSimulation = (action$, store) =>
       const simulation = getSimulation(store.getState());
       const newModel = { ...payload, eTag: simulation.eTag };
       return SimulationService.updateSimulation(newModel)
-        .do(res => console.log('res', res))
         .map(actions.updateReduxSimulation)
         .startWith(actions.clearReduxSimulation());
     })

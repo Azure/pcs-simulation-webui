@@ -45,6 +45,6 @@ export const toSimulationRequestModel = (request = {}) => ({
     }
   })),
   IoTHub: {
-    ConnectionString: (request.iotHub || {}).connectionString
+    ConnectionString: request.connectionString
   }
 });
