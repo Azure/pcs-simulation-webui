@@ -44,7 +44,7 @@ class SimulationForm extends Component {
     const numDevices = simulation.deviceModels.length
       ? simulation.deviceModels[0].count
       : 0;
-    const iotHubString = ((simulation || {}).iotHub || {}).connectionString || '';
+    const iotHubString = (simulation || {}).connectionString || '';
     this.setState({
       iotHubString,
       deviceModelOptions,

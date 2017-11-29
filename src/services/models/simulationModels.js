@@ -18,9 +18,7 @@ export const toSimulationModel = (response = {}) => ({
     id: Id,
     count: Count
   })),
-  iotHub: {
-    connectionString: (response.IoTHub || {}).ConnectionString
-  }
+  connectionString: (response.IoTHub || {}).ConnectionString
 });
 
 export const toDeviceModel = (response = {}) => ({
