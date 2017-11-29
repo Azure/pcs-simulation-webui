@@ -26,7 +26,11 @@ export class SimulationService {
   /** Returns any currently running simulation */
   static getSimulation() {
     return HttpClient.get(`${ENDPOINT}simulations/1`)
-      .map(toSimulationModel);
+      .map(toSimulationModel)
+      .catch(error => {
+        if (error.status === 404) return Observable.of(toSimulationModel())
+        return Observable.throw(error);
+      });
   }
 
   /** Enables or disables a simulation */

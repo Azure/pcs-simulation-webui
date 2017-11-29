@@ -23,6 +23,7 @@ class SimulationForm extends Component {
 
     this.state = {
       connectionStrFocused: false,
+      preProvisionedRadio: 'preProvisioned',
       iotHubString: '',
       duration: {},
       durationRadio: '',
@@ -34,7 +35,15 @@ class SimulationForm extends Component {
   }
 
   componentDidMount() {
-    const { deviceModels, simulation } = this.props;
+    this.getFormState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.getFormState(nextProps);
+  }
+
+  getFormState = (props) => {
+    const { deviceModels, simulation } = props;
     const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
     const deviceModel = simulation.deviceModels.length
       ? this.toSelectOption(simulation.deviceModels[0])
@@ -43,11 +52,14 @@ class SimulationForm extends Component {
       ? simulation.deviceModels[0].count
       : 0;
     const iotHubString = (simulation || {}).connectionString || '';
+    const preProvisionedRadio = (simulation || {}).ioTHubConnectionStringConfigured
+      ? 'preProvisioned' : 'customString';
     this.setState({
       iotHubString,
       deviceModelOptions,
       deviceModel,
-      numDevices
+      numDevices,
+      preProvisionedRadio
     });
   }
 
@@ -61,8 +73,7 @@ class SimulationForm extends Component {
 
   apply = (event) => {
     event.preventDefault();
-    const { simulation } = this.props;
-    const { durationRadio, duration, deviceModel, iotHubString, numDevices, frequency } = this.state;
+    const { durationRadio, duration, deviceModel, iotHubString, numDevices, frequency, preProvisionedRadio } = this.state;
     const simulationDuration = (durationRadio === 'endIn') ? {
       startTime: 'NOW',
       endTime: this.convertDurationToISO(duration)
@@ -75,7 +86,7 @@ class SimulationForm extends Component {
     }];
     const modelUpdates = {
       enabled: true,
-      connectionString: iotHubString,
+      connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString,
       deviceModels,
       ...simulationDuration
     };
@@ -110,17 +121,20 @@ class SimulationForm extends Component {
         <FormSection>
           <SectionHeader>Target Iot Hub</SectionHeader>
           <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
-          <FormGroup>
-            <FormControl
-              className="long"
-              type={this.state.connectionStrFocused ? 'password' : 'text'}
-              onBlur={this.inputOnBlur}
-              onFocus={this.inputOnFocus}
-              onChange={this.onChange}
-              value={this.state.iotHubString}
-              name="iotHubString"
-              placeholder="Enter IoT Hub connection string" />
-          </FormGroup>
+            <Radio { ...this.toRadioProps('preProvisionedRadio', 'preProvisioned') }>
+              Use pre-provisioned IoT Hub
+            </Radio>
+            <Radio { ...this.toRadioProps('preProvisionedRadio', 'customString') }>
+              <FormControl
+                className="long"
+                type={this.state.connectionStrFocused ? 'password' : 'text'}
+                onBlur={this.inputOnBlur}
+                onFocus={this.inputOnFocus}
+                onChange={this.onChange}
+                value={this.state.iotHubString}
+                name="iotHubString"
+                placeholder="Enter IoT Hub connection string" />
+            </Radio>
         </FormSection>
         <FormSection>
           <SectionHeader>Device model</SectionHeader>

@@ -5,8 +5,9 @@
 // TODO: Map to backend models and add links to github
 
 export const toSimulationStatusModel = (response = {}) => ({
-  simulationStatus: ((response.Properties || {}).Simulation || '').toLowerCase()
-});
+    simulationRunning: (response.Properties || {}).SimulationRunning,
+    ioTHubConnectionStringConfigured: (response.Properties || {}).IoTHubConnectionStringConfigured
+  });
 
 export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,
@@ -18,7 +19,8 @@ export const toSimulationModel = (response = {}) => ({
     id: Id,
     count: Count
   })),
-  connectionString: (response.IoTHub || {}).ConnectionString
+  connectionString: (response.IoTHub || {}).ConnectionString === 'default'
+    ? '' : (response.IoTHub || {}).ConnectionString
 });
 
 export const toDeviceModel = (response = {}) => ({
