@@ -8,8 +8,7 @@ export const toSimulationStatusModel = (response = {}) => ({
   simulationStatus: ((response.Properties || {}).Simulation || '').toLowerCase()
 });
 
-export const toSimulationModel = (response = {}) => {
-  return {
+export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,
   enabled: response.Enabled,
   startTime: response.StartTime,
@@ -19,35 +18,31 @@ export const toSimulationModel = (response = {}) => {
     id: Id,
     count: Count
   })),
-  iotHub: toIotHubModel(response.IoTHub)
-}};
+  iotHub: {
+    connectionString: (response.IoTHub || {}).ConnectionString
+  }
+});
 
-const toIotHubModel = (response = {}) => ({
-  connectionString: response.ConnectionString
-})
-
-export const toDeviceModel = (response = {}) => {
-  return {
-    id: response.Id,
-    name: response.Name,
-    description: response.Description,
-    simulation: response.Simulation,
-    telemetry: response.Telemetry
-  };
-};
+export const toDeviceModel = (response = {}) => ({
+  id: response.Id,
+  name: response.Name,
+  description: response.Description,
+  simulation: response.Simulation,
+  telemetry: response.Telemetry
+});
 
 // Request models
-export const toSimulationRequestModel = (request = {}) => {
-  return {
-    ETag: request.eTag,
-    Enabled: request.enabled,
-    StartTime: request.startTime,
-    EndTime: request.endTime,
-    Id: request.id,
-    DeviceModels: request.deviceModels,
-    IoTHub: toIotHubRequestModel(request.iotHub)
-}};
-
-const toIotHubRequestModel = (request = {}) => ({
-  ConnectionString: request.connectionString
-})
+export const toSimulationRequestModel = (request = {}) => ({
+  ETag: request.eTag,
+  Enabled: request.enabled,
+  StartTime: request.startTime,
+  EndTime: request.endTime,
+  Id: request.id,
+  DeviceModels: (request.deviceModels || []).map(({ id, count }) => ({
+    Id: id,
+    Count: count
+  })),
+  IoTHub: {
+    ConnectionString: (request.iotHub || {}).connectionString
+  }
+});
