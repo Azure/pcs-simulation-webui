@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Duration } from './duration';
 import { Select } from './select';
@@ -31,4 +32,10 @@ export const FormControl = (props) => {
     default:
       return null; // Unknown form control
   }
+};
+
+FormControl.propTypes = {
+  className: PropTypes.string,
+  formGroupId: PropTypes.string,
+  type: PropTypes.string
 };

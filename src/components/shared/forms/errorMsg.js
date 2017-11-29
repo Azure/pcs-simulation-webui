@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Svg } from 'components/shared/svg/svg';
 import { joinClasses, svgs } from 'utilities';
@@ -15,4 +16,9 @@ export const ErrorMsg = (props) => {
       { children }
     </div>
   );
+};
+
+ErrorMsg.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string
 };
