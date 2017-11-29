@@ -73,7 +73,15 @@ class SimulationForm extends Component {
 
   apply = (event) => {
     event.preventDefault();
-    const { durationRadio, duration, deviceModel, iotHubString, numDevices, frequency, preProvisionedRadio } = this.state;
+    const {
+      durationRadio,
+      duration,
+      deviceModel,
+      iotHubString,
+      numDevices,
+      frequency,
+      preProvisionedRadio
+    } = this.state;
     const simulationDuration = (durationRadio === 'endIn') ? {
       startTime: 'NOW',
       endTime: this.convertDurationToISO(duration)
