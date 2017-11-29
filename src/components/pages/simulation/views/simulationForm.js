@@ -35,9 +35,7 @@ class SimulationForm extends Component {
 
   componentDidMount() {
     const { deviceModels, simulation } = this.props;
-    const deviceModelOptions = deviceModels
-      ? deviceModels.map(this.toSelectOption)
-      : [];
+    const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
     const deviceModel = simulation.deviceModels.length
       ? this.toSelectOption(simulation.deviceModels[0])
       : '';
