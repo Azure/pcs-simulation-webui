@@ -36,9 +36,13 @@ export const toSimulationRequestModel = (request = {}) => ({
   StartTime: request.startTime,
   EndTime: request.endTime,
   Id: request.id,
-  DeviceModels: (request.deviceModels || []).map(({ id, count }) => ({
+  DeviceModels: (request.deviceModels || []).map(({ id, count, interval }) => ({
     Id: id,
-    Count: count
+    Count: count,
+    Override: {
+      Simulation: { Scripts: [{ Interval: interval }] },
+      Telemetry: [{ Interval: interval }]
+    }
   })),
   IoTHub: {
     ConnectionString: (request.iotHub || {}).connectionString

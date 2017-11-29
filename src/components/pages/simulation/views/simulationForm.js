@@ -64,14 +64,16 @@ class SimulationForm extends Component {
   apply = (event) => {
     event.preventDefault();
     const { simulation } = this.props;
-    const { durationRadio, duration, deviceModel, iotHubString, numDevices } = this.state;
+    const { durationRadio, duration, deviceModel, iotHubString, numDevices, frequency } = this.state;
     const simulationDuration = (durationRadio === 'endIn') ? {
       startTime: 'NOW',
       endTime: this.convertDurationToISO(duration)
     } : {};
+    const telemetryFrequency = frequency.ms > 0 ? { interval: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
     const deviceModels = [{
-      id: deviceModel,
-      count: numDevices
+      id: deviceModel.value,
+      count: numDevices,
+      ...telemetryFrequency
     }];
     const iotHub = {
       connectionString: iotHubString
@@ -91,7 +93,7 @@ class SimulationForm extends Component {
     this.setState({ [name]: value });
   }
 
-  onDeviceModelChange = ({ value }) => this.setState({ deviceModel: value });
+  onDeviceModelChange = (deviceModel) => this.setState({ deviceModel });
 
   numDevicesIsValid = () => {
     const number = int(this.state.numDevices);
@@ -156,15 +158,13 @@ class SimulationForm extends Component {
               value={this.state.numDevices} />
           </FormGroup>
         </FormSection>
-        { this.state.deviceModel === 'custom' &&
-          <FormSection>
-            <SectionHeader>Telemetry frequency</SectionHeader>
-            <SectionDesc>Set how often to send telemetry from each device</SectionDesc>
-            <FormGroup>
-              <FormControl type="duration" name="frequency" value={this.state.frequency.ms} onChange={this.onChange} />
-            </FormGroup>
-          </FormSection>
-        }
+        <FormSection>
+          <SectionHeader>Telemetry frequency</SectionHeader>
+          <SectionDesc>Set how often to send telemetry from each device</SectionDesc>
+          <FormGroup>
+            <FormControl type="duration" name="frequency" value={this.state.frequency.ms} onChange={this.onChange} />
+          </FormGroup>
+        </FormSection>
         <FormSection>
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionDesc>Set how long the simulation will run.</SectionDesc>
