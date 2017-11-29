@@ -28,9 +28,9 @@ $select-padding-vertical: 6px;
     @include box-sizing(border-box);
   }
 
-  &.select-long { @include rem-fallback(width, 248px); }
+  &.long { @include rem-fallback(width, 248px); }
 
-  &.select-short { @include rem-fallback(width, 124px); }
+  &.short { @include rem-fallback(width, 124px); }
 
   // handle disabled state
   &.is-disabled > .Select-control {

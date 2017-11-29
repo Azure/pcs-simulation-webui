@@ -12,7 +12,8 @@ import {
   FormControl,
   FormActions,
   Btn,
-  BtnToolbar
+  BtnToolbar,
+  Radio
 } from 'components/shared';
 
 class SimulationForm extends Component {
@@ -20,19 +21,63 @@ class SimulationForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { numDevices: this.getNumDevices() };
+    this.state = {
+      connectionStrFocused: false,
+      iotHubString: '',
+      duration: {},
+      durationRadio: '',
+      frequency: {},
+      deviceModelOptions: [],
+      deviceModel: '',
+      numDevices: ''
+    };
   }
+
+  componentDidMount() {
+    const { deviceModels, simulation } = this.props;
+    const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
+    const deviceModel = simulation.deviceModels.length
+      ? this.toSelectOption(simulation.deviceModels[0])
+      : '';
+    const numDevices = simulation.deviceModels.length
+      ? simulation.deviceModels[0].count
+      : 0;
+    const iotHubString = (simulation || {}).connectionString || '';
+    this.setState({
+      iotHubString,
+      deviceModelOptions,
+      deviceModel,
+      numDevices
+    });
+  }
+
+  inputOnBlur = () => this.setState({ connectionStrFocused: true })
+
+  inputOnFocus = () => this.setState({ connectionStrFocused: false })
+
+  toSelectOption = ({ id, name }) => ({ value: id, label: name });
+
+  convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
   apply = (event) => {
     event.preventDefault();
     const { simulation } = this.props;
+    const { durationRadio, duration, deviceModel, iotHubString, numDevices, frequency } = this.state;
+    const simulationDuration = (durationRadio === 'endIn') ? {
+      startTime: 'NOW',
+      endTime: this.convertDurationToISO(duration)
+    } : {};
+    const telemetryFrequency = frequency.ms > 0 ? { interval: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
+    const deviceModels = [{
+      id: deviceModel.value,
+      count: numDevices,
+      ...telemetryFrequency
+    }];
     const modelUpdates = {
       enabled: true,
-      deviceModels: simulation.deviceModels
-    };
-    modelUpdates.deviceModels[0] = {
-      ...modelUpdates.deviceModels[0],
-      Count: this.state.numDevices
+      connectionString: iotHubString,
+      deviceModels,
+      ...simulationDuration
     };
     this.props.updateSimulation(modelUpdates);
   };
@@ -43,18 +88,56 @@ class SimulationForm extends Component {
     this.setState({ [name]: value });
   }
 
-  getNumDevices() {
-    return this.props.simulation.deviceModels[0].Count;
-  }
+  onDeviceModelChange = deviceModel => this.setState({ deviceModel });
 
   numDevicesIsValid = () => {
     const number = int(this.state.numDevices);
     return !isNaN(number) && number >= 0 && number <= 1000;
   }
 
+  toRadioProps = (name, value) => {
+    return {
+      name,
+      value,
+      checked: this.state[name] === value,
+      onChange: this.onChange
+    };
+  };
+
   render () {
     return (
       <form onSubmit={this.apply}>
+        <FormSection>
+          <SectionHeader>Target Iot Hub</SectionHeader>
+          <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
+          <FormGroup>
+            <FormControl
+              className="long"
+              type={this.state.connectionStrFocused ? 'password' : 'text'}
+              onBlur={this.inputOnBlur}
+              onFocus={this.inputOnFocus}
+              onChange={this.onChange}
+              value={this.state.iotHubString}
+              name="iotHubString"
+              placeholder="Enter IoT Hub connection string" />
+          </FormGroup>
+        </FormSection>
+        <FormSection>
+          <SectionHeader>Device model</SectionHeader>
+          <SectionDesc>Choose type of device to simulate.</SectionDesc>
+          <FormGroup>
+            <FormLabel>Select</FormLabel>
+            <FormControl
+              className="long"
+              type="select"
+              options={this.state.deviceModelOptions}
+              value={this.state.deviceModel}
+              onChange={this.onDeviceModelChange}
+              clearable={false}
+              searchable={true}
+              placeholder="Select model" />
+          </FormGroup>
+        </FormSection>
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
           <SectionDesc>Number of devices to simulate (maximum 1000 devices).</SectionDesc>
@@ -62,12 +145,31 @@ class SimulationForm extends Component {
             <FormLabel>Amount</FormLabel>
             <FormControl
               name="numDevices"
-              type="text"
+              type="number"
               placeholder="# devices"
               className="small"
+              max="1000"
               onChange={this.onChange}
               value={this.state.numDevices} />
           </FormGroup>
+        </FormSection>
+        <FormSection>
+          <SectionHeader>Telemetry frequency</SectionHeader>
+          <SectionDesc>Set how often to send telemetry from each device</SectionDesc>
+          <FormGroup>
+            <FormControl type="duration" name="frequency" value={this.state.frequency.ms} onChange={this.onChange} />
+          </FormGroup>
+        </FormSection>
+        <FormSection>
+          <SectionHeader>Simulation duration</SectionHeader>
+          <SectionDesc>Set how long the simulation will run.</SectionDesc>
+          <Radio { ...this.toRadioProps('durationRadio', 'endIn') }>
+            <FormLabel>End in:</FormLabel>
+            <FormControl type="duration" name="duration" value={this.state.duration.ms} onChange={this.onChange} />
+          </Radio>
+          <Radio { ...this.toRadioProps('durationRadio', 'indefinite') }>
+            Run indefinitely
+          </Radio>
         </FormSection>
         <FormActions>
           <BtnToolbar>

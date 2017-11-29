@@ -41,7 +41,7 @@ export const updateSimulation = (action$, store) =>
   action$.ofType(actions.EPIC_SIMULATION_UPDATE)
     .flatMap(({ payload }) => {
       const simulation = getSimulation(store.getState());
-      const newModel = { ...simulation, ...payload };
+      const newModel = { ...payload, eTag: simulation.eTag };
       return SimulationService.updateSimulation(newModel)
         .map(actions.updateReduxSimulation)
         .startWith(actions.clearReduxSimulation());

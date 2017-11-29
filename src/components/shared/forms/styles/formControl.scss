@@ -30,6 +30,12 @@ textarea.form-control {
               user-select: none;
   }
 
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   @include themify($themes) {
     color: themed('colorLightestFirst');
     border: 1px solid themed('colorMidThird');
@@ -74,7 +80,7 @@ input.form-control {
 
   &.small { @include rem-fallback(width, $smallInputWidth - $horizontalPadding); }
 
-  &.long { @include rem-fallback(width, longInputWidth - $horizontalPadding); }
+  &.long { @include rem-fallback(width, $longInputWidth - $horizontalPadding); }
 }
 
 textarea.form-control {

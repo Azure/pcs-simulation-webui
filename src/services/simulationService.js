@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSimulationStatusModel, toSimulationModel, toDeviceModel } from './models';
+import { toSimulationStatusModel, toSimulationModel, toDeviceModel, toSimulationRequestModel } from './models';
 import { Observable } from 'rxjs/Observable';
 
 const ENDPOINT = Config.simulationApiUrl;
@@ -41,14 +41,7 @@ export class SimulationService {
   static updateSimulation(model) {
     return HttpClient.put(
         `${ENDPOINT}simulations/1`,
-        {
-          ETag: model.eTag,
-          Enabled: model.enabled,
-          StartTime: model.startTime,
-          EndTime: model.endTime,
-          Id: model.id,
-          DeviceModels: model.deviceModels
-        }
+        toSimulationRequestModel(model)
       )
       .map(toSimulationModel)
       .catch(resolveConflict);

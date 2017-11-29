@@ -17,15 +17,34 @@ export const toSimulationModel = (response = {}) => ({
   deviceModels: (response.DeviceModels || []).map(({ Id, Count }) => ({
     id: Id,
     count: Count
-  }))
+  })),
+  connectionString: (response.IoTHub || {}).ConnectionString
 });
 
-export const toDeviceModel = (response = {}) => {
-  return {
-    id: response.Id,
-    name: response.Name,
-    description: response.Description,
-    simulation: response.Simulation,
-    telemetry: response.Telemetry
-  };
-};
+export const toDeviceModel = (response = {}) => ({
+  id: response.Id,
+  name: response.Name,
+  description: response.Description,
+  simulation: response.Simulation,
+  telemetry: response.Telemetry
+});
+
+// Request models
+export const toSimulationRequestModel = (request = {}) => ({
+  ETag: request.eTag,
+  Enabled: request.enabled,
+  StartTime: request.startTime,
+  EndTime: request.endTime,
+  Id: request.id,
+  DeviceModels: (request.deviceModels || []).map(({ id, count, interval }) => ({
+    Id: id,
+    Count: count,
+    Override: {
+      Simulation: { Scripts: [{ Interval: interval }] },
+      Telemetry: [{ Interval: interval }]
+    }
+  })),
+  IoTHub: {
+    ConnectionString: request.connectionString
+  }
+});
