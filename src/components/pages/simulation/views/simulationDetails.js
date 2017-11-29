@@ -18,7 +18,7 @@ class SimulationDetails extends Component {
 
   render () {
     const { deviceModels, startTime, endTime, connectionString } = this.props.simulation;
-    const iotHubString = (connectionString || 'default').split(';')[0];
+    const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
     const modelName = deviceModels.length ? deviceModels[0].name : 'N/A';
     const numDevices = deviceModels.length ? deviceModels[0].count : 0;
     const duration = (!startTime || !endTime)

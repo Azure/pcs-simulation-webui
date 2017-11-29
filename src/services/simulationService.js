@@ -26,7 +26,12 @@ export class SimulationService {
   /** Returns any currently running simulation */
   static getSimulation() {
     return HttpClient.get(`${ENDPOINT}simulations/1`)
-      .map(toSimulationModel);
+      .map(toSimulationModel)
+      .catch(error => {
+        // A 404 from the GET request means that no simulation is configured, not an actual 404 error
+        if (error.status === 404) return Observable.of(toSimulationModel())
+        return Observable.throw(error);
+      });
   }
 
   /** Enables or disables a simulation */
