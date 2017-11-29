@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { joinClasses } from 'utilities';
 
@@ -10,3 +11,8 @@ import { joinClasses } from 'utilities';
 export const SectionDesc = (props) => (
   <div className={joinClasses('section-desc', props.className)}>{props.children}</div>
 );
+
+SectionDesc.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string
+};

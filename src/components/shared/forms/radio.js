@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { Svg } from 'components/shared/svg/svg';
 import { FormLabel } from './formLabel';
@@ -11,17 +12,22 @@ import './styles/radio.css';
 let radioInputCnt = 0;
 
 export class Radio extends Component {
+
+  constructor(props) {
+    super(props);
+    this.formGroupId = `radioInputId${radioInputCnt++}`;
+  }
+
   // Needs to be a stateful component in order to access refs
   render() {
     const { className, children, id, checked, disabled, ...radioProps } = this.props;
-    const formGroupId = `radioInputId${radioInputCnt++}`;
     let contentChildren = children;
     if (typeof contentChildren === 'string') {
       contentChildren = <FormLabel>{contentChildren}</FormLabel>;
     }
     const childrenWithProps = React.Children.map(contentChildren,
       (child) => React.cloneElement(child, {
-        formGroupId,
+        formGroupId: this.formGroupId,
         disabled: disabled || (checked === undefined ? false : !checked)
       })
     );
@@ -33,7 +39,7 @@ export class Radio extends Component {
             type="radio"
             disabled={disabled}
             checked={checked}
-            id={id || formGroupId}
+            id={id || this.formGroupId}
             ref="radioInputElement" />
           <Svg
             path={svgs.radioSelected}
@@ -45,3 +51,11 @@ export class Radio extends Component {
     );
   }
 }
+//className, children, id, checked, disabled
+Radio.propTypes = {
+  checked: PropTypes.bool,
+  children: PropTypes.node,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  id: PropTypes.string,
+};
