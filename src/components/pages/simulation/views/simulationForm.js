@@ -22,7 +22,7 @@ class SimulationForm extends Component {
     super(props);
 
     this.state = {
-      onBlur: false,
+      connectionStrFocused: false,
       iotHubString: '',
       duration: {},
       durationRadio: '',
@@ -34,20 +34,16 @@ class SimulationForm extends Component {
   }
 
   componentDidMount() {
-    this.getFormState(this.props);
-  }
-
-  getFormState = (props) => {
-    const { deviceModels, simulation } = props;
+    const { deviceModels, simulation } = this.props;
     const deviceModelOptions = deviceModels
-      ? deviceModels.map(this.getSelectOption)
+      ? deviceModels.map(this.toSelectOption)
       : [];
     const deviceModel = simulation.deviceModels.length
-      ? simulation.deviceModels.map(this.getSelectOption)[0]
+      ? this.toSelectOption(simulation.deviceModels[0])
       : '';
     const numDevices = simulation.deviceModels.length
       ? simulation.deviceModels[0].count
-      : '';
+      : 0;
     const iotHubString = ((simulation || {}).iotHub || {}).connectionString || '';
     this.setState({
       iotHubString,
@@ -57,41 +53,35 @@ class SimulationForm extends Component {
     });
   }
 
-  inputOnBlur = () => this.setState({ onBlur: true })
+  inputOnBlur = () => this.setState({ connectionStrFocused: true })
 
-  inputOnFocus = () => this.setState({ onBlur: false })
+  inputOnFocus = () => this.setState({ connectionStrFocused: false })
 
-  getSelectOption = ({ id, name }) => ({ value: id, label: name });
+  toSelectOption = ({ id, name }) => ({ value: id, label: name });
 
-  getISOTimeString = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
+  convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
   apply = (event) => {
     event.preventDefault();
     const { simulation } = this.props;
-    let modelUpdates = {
+    const { durationRadio, duration, deviceModel, iotHubString, numDevices } = this.state;
+    const simulationDuration = (durationRadio === 'endIn') ? {
+      startTime: 'NOW',
+      endTime: this.convertDurationToISO(duration)
+    } : {};
+    const deviceModels = [{
+      id: deviceModel,
+      count: numDevices
+    }];
+    const iotHub = {
+      connectionString: iotHubString
+    };
+    const modelUpdates = {
       enabled: true,
-      deviceModels: simulation.deviceModels
+      deviceModels,
+      iotHub,
+      ...simulationDuration
     };
-    modelUpdates.deviceModels[0] = {
-      Id: this.state.deviceModel.value,
-      Count: this.state.numDevices
-    };
-    if (this.state.durationRadio === "endIn") {
-      Object.assign(modelUpdates, {
-        startTime: "NOW",
-        endTime: this.getISOTimeString(this.state.duration),
-      });
-    } else {
-      delete modelUpdates.startTime;
-      delete modelUpdates.endTime;
-    }
-    if (this.state.iotHubString !== 'default') {
-      Object.assign(modelUpdates, {
-        iotHub: {
-          connectionString: this.state.iotHubString
-        }
-      });
-    }
     this.props.updateSimulation(modelUpdates);
   };
 
@@ -101,20 +91,23 @@ class SimulationForm extends Component {
     this.setState({ [name]: value });
   }
 
+  onDeviceModelChange = ({ value }) => this.setState({ deviceModel: value });
+
   numDevicesIsValid = () => {
     const number = int(this.state.numDevices);
     return !isNaN(number) && number >= 0 && number <= 1000;
   }
 
-  render () {
-    const radioProps = (name, value) => {//TODO: remove from render
-      return {
-        name,
-        value,
-        checked: this.state[name] === value,
-        onChange: this.onChange
-      };
+  toRadioProps = (name, value) => {
+    return {
+      name,
+      value,
+      checked: this.state[name] === value,
+      onChange: this.onChange
     };
+  };
+
+  render () {
     return (
       <form onSubmit={this.apply}>
         <FormSection>
@@ -123,7 +116,7 @@ class SimulationForm extends Component {
           <FormGroup>
             <FormControl
               className="long"
-              type={this.state.onBlur ? 'password' : 'text'}
+              type={this.state.connectionStrFocused ? 'password' : 'text'}
               onBlur={this.inputOnBlur}
               onFocus={this.inputOnFocus}
               onChange={this.onChange}
@@ -138,11 +131,11 @@ class SimulationForm extends Component {
           <FormGroup>
             <FormLabel>Select</FormLabel>
             <FormControl
-              className="select-long"
+              className="long"
               type="select"
               options={this.state.deviceModelOptions}
               value={this.state.deviceModel}
-              onChange={value => this.onChange({ target: { name: 'deviceModel', value } })}
+              onChange={this.onDeviceModelChange}
               clearable={false}
               searchable={true}
               placeholder="Select model" />
@@ -175,11 +168,11 @@ class SimulationForm extends Component {
         <FormSection>
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionDesc>Set how long the simulation will run.</SectionDesc>
-          <Radio {...radioProps('durationRadio', 'endIn')}>
+          <Radio { ...this.toRadioProps('durationRadio', 'endIn') }>
             <FormLabel>End in:</FormLabel>
             <FormControl type="duration" name="duration" value={this.state.duration.ms} onChange={this.onChange} />
           </Radio>
-          <Radio {...radioProps('durationRadio', 'indefinite')}>
+          <Radio { ...this.toRadioProps('durationRadio', 'indefinite') }>
             Run indefinitely
           </Radio>
         </FormSection>
