@@ -73,13 +73,10 @@ class SimulationForm extends Component {
       count: numDevices,
       ...telemetryFrequency
     }];
-    const iotHub = {
-      connectionString: iotHubString
-    };
     const modelUpdates = {
       enabled: true,
+      connectionString: iotHubString,
       deviceModels,
-      ...iotHub,
       ...simulationDuration
     };
     this.props.updateSimulation(modelUpdates);
@@ -91,7 +88,7 @@ class SimulationForm extends Component {
     this.setState({ [name]: value });
   }
 
-  onDeviceModelChange = (deviceModel) => this.setState({ deviceModel });
+  onDeviceModelChange = deviceModel => this.setState({ deviceModel });
 
   numDevicesIsValid = () => {
     const number = int(this.state.numDevices);
