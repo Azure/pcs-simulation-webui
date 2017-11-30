@@ -3,10 +3,13 @@
 import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
-import { getSimulation, getSimulationIsRunning } from 'reducers/selectors';
-import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { toSimulationModel, toSimulationStatusModel } from 'services/models';
+import { getSimulation, getSimulationIsRunning } from 'store/selectors';
+import { createReducerScenario, createEpicScenario } from 'store/utilities';
 
+// Simulation reducer constants
+const EMPTY_SIMULATION = toSimulationModel();
+const EMPTY_STATUS = toSimulationStatusModel();
 const initialState = { model: undefined, status: undefined };
 
 // ========================= Reducers - START
@@ -14,19 +17,15 @@ const simulationModelReducer = (state, action) => ({ ...state, model: action.pay
 const simulationStatusReducer = (state, action) => ({ ...state, status: action.payload });
 const simulationErrorReducer = (state, action) => ({ error: action.payload });
 
-// Extract these scenarios to make them easier to reuse for the clear updates
-const updateSimulationModel = { type: 'SIMULATION_UPDATE', reducer: simulationModelReducer };
-const updateSimulationStatus = { type: 'SIMULATION_STATUS_UPDATE', reducer: simulationStatusReducer };
+const updateModel = { type: 'SIMULATION_UPDATE', reducer: simulationModelReducer };
+const updateStatus = { type: 'SIMULATION_STATUS_UPDATE', reducer: simulationStatusReducer };
 
 export const redux = createReducerScenario({
-  // Simulation model reducers
-  updateSimulationModel,
-  clearSimulationModel: { ...updateSimulationModel, type: 'SIMULATION_CLEAR', payload: toSimulationModel() },
-  // Simulation status reducers
-  updateSimulationStatus,
-  clearSimulationStatus: { ...updateSimulationStatus, type: 'SIMULATION_STATUS_CLEAR', payload: toSimulationStatusModel() },
-  // Simulation error reducer
-  simulationErrorReducer: { type: 'SIMULATION_ERROR', reducer: simulationErrorReducer }
+  updateModel,
+  updateStatus,
+  clearModel: { ...updateModel, type: 'SIMULATION_CLEAR', staticPayload: EMPTY_SIMULATION },
+  clearStatus: { ...updateStatus, type: 'SIMULATION_STATUS_CLEAR', staticPayload: EMPTY_STATUS },
+  registerError: { type: 'SIMULATION_ERROR', reducer: simulationErrorReducer }
 });
 
 export const reducer = { simulation: redux.getReducer(initialState) };
@@ -37,16 +36,16 @@ export const reducer = { simulation: redux.getReducer(initialState) };
 // ========================= Selectors - END
 
 // ========================= Epics - START
-const simulationError = error => Observable.of(redux.simulationErrorReducer.action(error.message));
+const simulationError = error => Observable.of(redux.registerError.action(error.message));
 
 export const epics = {
   /** Loads the simulation */
   fetchSimulation: createEpicScenario({
-    type: 'SIMULATION_LOAD',
+    type: 'SIMULATION_FETCH',
     epic: () =>
       SimulationService.getSimulation()
-        .map(redux.updateSimulationModel.action)
-        .startWith(redux.clearSimulationModel.action())
+        .map(redux.updateModel.action)
+        .startWith(redux.clearModel.action())
         .catch(simulationError)
   }),
 
@@ -56,19 +55,19 @@ export const epics = {
     epic: ({ payload }, store) => {
       const { eTag } = getSimulation(store.getState());
       return SimulationService.toggleSimulation(eTag, payload)
-        .map(redux.updateSimulationModel.action)
-        .startWith(redux.clearSimulationModel.action())
+        .map(redux.updateModel.action)
+        .startWith(redux.clearModel.action())
         .catch(simulationError);
     }
   }),
 
   /** Loads the simulation status */
   fetchSimulationStatus: createEpicScenario({
-    type: 'APP_SIMULATION_STATUS_LOAD',
+    type: 'SIMULATION_STATUS_FETCH',
     epic: () =>
       SimulationService.getStatus()
-        .map(redux.updateSimulationStatus.action)
-        .startWith(redux.clearSimulationStatus.action())
+        .map(redux.updateStatus.action)
+        .startWith(redux.clearStatus.action())
         .catch(simulationError)
   }),
 
@@ -82,13 +81,13 @@ export const epics = {
       const newModel = { ...payload, eTag };
       const refreshStatus = !isRunning && newModel.enabled;
       // Force the simulation status to update if turned off
-      if (refreshStatus) store.dispatch(redux.clearSimulationStatus.action());
+      if (refreshStatus) store.dispatch(redux.clearStatus.action());
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
           const extraEvents = refreshStatus ? [epics.fetchSimulationStatus.action()] : [];
-          return [ ...extraEvents, redux.updateSimulationModel.action(model) ];
+          return [ ...extraEvents, redux.updateModel.action(model) ];
         })
-        .startWith(redux.clearSimulationModel.action())
+        .startWith(redux.clearModel.action())
         .catch(simulationError);
     }
   })

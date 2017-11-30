@@ -3,8 +3,7 @@
 import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
-import { createAction } from 'utilities';
-import { createReducerScenario, createEpicScenario } from 'store/utilities';
+import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as simulationEpics } from './simulationReducer';
 
 // ========================= Reducers - START
@@ -29,16 +28,15 @@ export const epics = {
   initializeApp: createEpicScenario({
     type: 'APP_INITIALIZE',
     epic: () => [
-      // Actions to take when the app loads
       simulationEpics.fetchSimulationStatus.action(),
       simulationEpics.fetchSimulation.action(),
-      epics.loadDeviceModels.action()
+      epics.fetchDeviceModels.action()
     ]
   }),
 
   /** Loads the available device models */
-  loadDeviceModels: createEpicScenario({
-    type: 'APP_DEVICE_MODELS_LOAD',
+  fetchDeviceModels: createEpicScenario({
+    type: 'APP_DEVICE_MODELS_FETCH',
     epic: () =>
       SimulationService.getDeviceModels()
         .map(redux.updateDeviceModels.action)

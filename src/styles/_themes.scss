@@ -21,4 +21,22 @@ $themes: (
     colorWarning: $colorWarning,
     colorSystem: $colorSystem,
   ),
+  light: (
+    // Lows
+    colorLowestFirst: $colorWhite,
+    colorLowestSecond: $colorMagnesium,
+    colorLowestThird: $colorAluminum,
+    // Mids
+    colorMidThird: $colorSilver,
+    colorMidSecond: $colorNickel,
+    colorMidFirst: $colorSterling,
+    // Highs
+    colorLightestSecond: $colorPlatinum,
+    colorLightestFirst: $colorBurnished,
+    colorHighest: $colorStephanite,
+    // Functional colors
+    colorAlarm: $colorAlarm,
+    colorWarning: #F0D227,
+    colorSystem: $colorSystem,
+  ),
 );

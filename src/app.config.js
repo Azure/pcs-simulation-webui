@@ -2,7 +2,7 @@
 
 const Config = {
   // APIs
-  simulationApiUrl: '/devicesimulation-svc/v1/',
+  simulationApiUrl: 'https://xiong-1127.azurewebsites.net/devicesimulation-svc/v1/',
 
   // Constants
   retryWaitTime: 2000, // On retryable error, retry after 2s

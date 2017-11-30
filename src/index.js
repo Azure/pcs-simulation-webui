@@ -5,11 +5,11 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import configureStore from 'configureStore';
+import configureStore from 'store/configureStore';
 import AppContainer from 'components/app/app.container';
 import registerServiceWorker from 'registerServiceWorker';
 import { AuthService } from 'services';
-import { epics as appEpics } from 'reducers/appReducer';
+import { epics as appEpics } from 'store/reducers/appReducer';
 
 import './polyfills';
 

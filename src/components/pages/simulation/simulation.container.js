@@ -6,9 +6,9 @@ import {
   getDeviceModels,
   getSimulationIsRunning,
   getSimulationError
-} from 'reducers/selectors';
+} from 'store/selectors';
 import { Simulation } from './simulation';
-import { epics as simulationEpics } from 'reducers/simulationReducer';
+import { epics as simulationEpics } from 'store/reducers/simulationReducer';
 
 // Pass the simulation status
 const mapStateToProps = state => ({

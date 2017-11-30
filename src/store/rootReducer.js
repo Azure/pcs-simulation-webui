@@ -3,8 +3,8 @@
 import { combineReducers } from 'redux';
 
 // Reducers
-import { reducer as appReducer } from './appReducer';
-import { reducer as simulationReducer } from './simulationReducer';
+import { reducer as appReducer } from './reducers/appReducer';
+import { reducer as simulationReducer } from './reducers/simulationReducer';
 
 const rootReducer = combineReducers({
   ...appReducer,
