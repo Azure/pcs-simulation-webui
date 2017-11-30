@@ -4,10 +4,10 @@ import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
 import { createAction } from 'utilities';
-import * as actions from 'actions';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
+import { epics as simulationEpics } from './simulationReducer';
 
-// ========================= Reducers
+// ========================= Reducers - START
 const deviceModelReducer = (state, action) => ({ ...state, deviceModels: action.payload });
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
 
@@ -17,18 +17,21 @@ export const redux = createReducerScenario({
 });
 
 export const reducer = { app: redux.getReducer() };
+// ========================= Reducers - END
 
-// ========================= Selectors
+// ========================= Selectors - START
+// TODO: Migrate from selectors
+// ========================= Selectors - END
 
-// ========================= Epics
+// ========================= Epics - START
 export const epics = {
   /** Kicks off all the events that need to happen on app initialization */
   initializeApp: createEpicScenario({
     type: 'APP_INITIALIZE',
     epic: () => [
       // Actions to take when the app loads
-      actions.loadSimulationStatusEvent(),
-      actions.loadSimulationEvent(),
+      simulationEpics.fetchSimulationStatus.action(),
+      simulationEpics.fetchSimulation.action(),
       epics.loadDeviceModels.action()
     ]
   }),
@@ -47,8 +50,9 @@ export const epics = {
     type: 'APP_ROUTE_EVENT',
     rawEpic: (action$, store, actionType) =>
       action$.ofType(actionType)
-        .map(({ payload }) => payload)
+        .map(({ payload }) => payload) // Pathname
         .distinctUntilChanged()
         .map(createAction('EPIC_APP_ROUTE_CHANGE'))
   }),
 };
+// ========================= Epics - END

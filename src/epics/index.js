@@ -4,22 +4,14 @@ import { combineEpics } from 'redux-observable';
 
 // Epics
 import { epics as appEpics } from 'reducers/appReducer';
-import {
-  loadSimulationStatus,
-  loadSimulation,
-  toggleSimulation,
-  updateSimulation
-} from "./simulationEpics";
+import { epics as simulationEpics } from 'reducers/simulationReducer';
 
-const rootEpic = combineEpics(
-  appEpics.detectRouteChange.epic,
-  appEpics.initializeApp.epic,
-  // Simulation epics
-  loadSimulationStatus,
-  loadSimulation,
-  appEpics.loadDeviceModels.epic,
-  toggleSimulation,
-  updateSimulation
-);
+// Extract the epic function from each property object
+const epics = Object.values({
+  ...appEpics,
+  ...simulationEpics
+}).map(({ epic }) => epic);
+
+const rootEpic = combineEpics(...epics);
 
 export default rootEpic;

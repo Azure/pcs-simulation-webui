@@ -4,11 +4,11 @@ import { combineReducers } from 'redux';
 
 // Reducers
 import { reducer as appReducer } from './appReducer';
-import { simulationReducer } from './simulationReducer';
+import { reducer as simulationReducer } from './simulationReducer';
 
 const rootReducer = combineReducers({
   ...appReducer,
-  simulation: simulationReducer
+  ...simulationReducer
 });
 
 export default rootReducer;
