@@ -9,7 +9,7 @@ import configureStore from 'configureStore';
 import AppContainer from 'components/app/app.container';
 import registerServiceWorker from 'registerServiceWorker';
 import { AuthService } from 'services';
-import { initializeAppEvent } from 'actions';
+import { epics as appEpics } from 'reducers/appReducer';
 
 import './polyfills';
 
@@ -22,7 +22,7 @@ AuthService.onLoad();
 const store = configureStore();
 
 // Initialize the app redux data
-store.dispatch(initializeAppEvent());
+store.dispatch(appEpics.initializeApp.action());
 
 // Create the React app
 ReactDOM.render(
