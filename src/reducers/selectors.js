@@ -20,7 +20,7 @@ export const getDeviceModelsAsMap = createSelector(
 
 export const getSimulationWithDeviceModels = createSelector(
   [getSimulation, getDeviceModelsAsMap],
-  (simulationModel, deviceModelsMap) => {
+  (simulationModel = {}, deviceModelsMap) => {
     const modelId = ((simulationModel.deviceModels || [])[0] || {}).id;
     const name = (deviceModelsMap[modelId] || {}).name;
     const deviceModels = (simulationModel.deviceModels || [])
