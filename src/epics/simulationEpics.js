@@ -44,9 +44,9 @@ export const updateSimulation = (action$, store) =>
   action$
     .ofType(actions.EPIC_SIMULATION_UPDATE)
     .flatMap(({ payload }) => {
-      const redux = store.getState();
-      const simulation = getSimulation(redux);
-      const isRunning = getSimulationIsRunning(redux);
+      const state = store.getState();
+      const simulation = getSimulation(state);
+      const isRunning = getSimulationIsRunning(state);
       const newModel = { ...payload, eTag: simulation.eTag };
       const refreshStatus = !isRunning && newModel.enabled;
       // Force the simulation status to update if turned off
