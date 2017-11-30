@@ -24,16 +24,14 @@ export class Simulation extends Component {
   };
 
   getView() {
-    const { enabled, error, simulationRunning } = this.props.simulation;
+    const { simulation, isRunning } = this.props;
+    const { enabled, error } = simulation;
+    const isLoading = typeof enabled === 'undefined' || typeof isRunning === 'undefined';
     if (error) {
       return (<FormActions><ErrorMsg>{error}</ErrorMsg></FormActions>);
-    } else if (simulationRunning) {
-      if (enabled === true) {
-        return <SimulationDetails {...this.props} />
-      } else {
-        return <SimulationForm {...this.props} />
-      }
-    } else if (!simulationRunning) {
+    } else if (isRunning === true && enabled === true) {
+      return <SimulationDetails {...this.props} />;
+    } else if ((isRunning === false && !isLoading) || (isRunning === true && enabled === false)) {
       return <SimulationForm {...this.props} />;
     } else {
       return <FormActions><Indicator pattern="bar" /></FormActions>

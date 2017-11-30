@@ -4,10 +4,15 @@
 // object to UI friendly objects
 // TODO: Map to backend models and add links to github
 
-export const toSimulationStatusModel = (response = {}) => ({
-    simulationRunning: (response.Properties || {}).SimulationRunning,
+export const toSimulationStatusModel = (response = {}) => {
+  let simulationRunning = (response.Properties || {}).SimulationRunning;
+  if (simulationRunning === "true") simulationRunning = true;
+  else if (simulationRunning === "false") simulationRunning = false;
+  return {
+    simulationRunning,
     ioTHubConnectionStringConfigured: (response.Properties || {}).IoTHubConnectionStringConfigured
-  });
+  }
+};
 
 export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,

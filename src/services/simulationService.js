@@ -29,7 +29,7 @@ export class SimulationService {
       .map(toSimulationModel)
       .catch(error => {
         // A 404 from the GET request means that no simulation is configured, not an actual 404 error
-        if (error.status === 404) return Observable.of(toSimulationModel())
+        if (error.status === 404) return Observable.of(toSimulationModel({ Enabled: null }))
         return Observable.throw(error);
       });
   }
