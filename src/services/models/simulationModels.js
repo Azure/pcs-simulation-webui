@@ -1,21 +1,16 @@
 // Copyright (c) Microsoft. All rights reserved.
 
+import { stringToBoolean } from 'utilities'
+
 // Contains methods for converting service response
 // object to UI friendly objects
 // TODO: Map to backend models and add links to github
 
-export const toSimulationStatusModel = (response = {}) => {
-  let simulationRunning = (response.Properties || {}).SimulationRunning;
-  let ioTHubConnectionStringConfigured = (response.Properties || {}).IoTHubConnectionStringConfigured;
-  if (simulationRunning === "true") simulationRunning = true;
-  else if (simulationRunning === "false") simulationRunning = false;
-  if (ioTHubConnectionStringConfigured === "true") ioTHubConnectionStringConfigured = true;
-  else if (ioTHubConnectionStringConfigured === "false") ioTHubConnectionStringConfigured = false;
-  return {
-    simulationRunning,
-    ioTHubConnectionStringConfigured
-  }
-};
+export const toSimulationStatusModel = (response = {}) => ({
+  simulationRunning: stringToBoolean((response.Properties || {}).SimulationRunning),
+  ioTHubConnectionStringConfigured: stringToBoolean((response.Properties || {}).IoTHubConnectionStringConfigured)
+});
+
 
 export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,

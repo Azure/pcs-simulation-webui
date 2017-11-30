@@ -15,3 +15,9 @@ export const createAction = (type, staticPayload) => {
   const useStaticPayload = typeof staticPayload !== 'undefined';
   return useStaticPayload ? () => creator(staticPayload) : creator;
 };
+
+export const stringToBoolean = str => {
+  if (str === "true") return true;
+  else if (str === "false") return false;
+  return str;
+};
