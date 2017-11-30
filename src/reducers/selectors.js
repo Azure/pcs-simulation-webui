@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 // Selectors
 export const getSimulation = state => state.simulation.model;
 export const getSimulationStatus = state => state.simulation.status;
+export const getSimulationError = state => state.simulation.error;
 export const getDeviceModels = state => state.app.deviceModels;
 
 export const getSimulationIsRunning = createSelector(

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import {
   getSimulationWithDeviceModels,
   getDeviceModels,
-  getSimulationIsRunning
+  getSimulationIsRunning,
+  getSimulationError
 } from 'reducers/selectors';
 import { Simulation } from './simulation';
 import { toggleSimulationEvent, updateSimulationEvent } from 'actions';
@@ -13,7 +14,8 @@ import { toggleSimulationEvent, updateSimulationEvent } from 'actions';
 const mapStateToProps = state => ({
   simulation: getSimulationWithDeviceModels(state),
   isRunning: getSimulationIsRunning(state),
-  deviceModels: getDeviceModels(state)
+  deviceModels: getDeviceModels(state),
+  error: getSimulationError(state)
 });
 
 // Wrap the dispatch method

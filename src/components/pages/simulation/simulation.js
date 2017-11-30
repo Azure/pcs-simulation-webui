@@ -24,8 +24,8 @@ export class Simulation extends Component {
   };
 
   getView() {
-    const { simulation, isRunning } = this.props;
-    const { enabled, error } = simulation;
+    const { simulation, isRunning, error } = this.props;
+    const { enabled } = simulation;
     const isLoading = typeof enabled === 'undefined' || typeof isRunning === 'undefined';
     if (error) {
       return (<FormActions><ErrorMsg>{error}</ErrorMsg></FormActions>);
