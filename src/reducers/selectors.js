@@ -3,8 +3,14 @@
 import { createSelector } from 'reselect';
 
 // Selectors
-export const getSimulation = state => state.simulation;
+export const getSimulation = state => state.simulation.model;
+export const getSimulationStatus = state => state.simulation.status;
 export const getDeviceModels = state => state.app.deviceModels;
+
+export const getSimulationIsRunning = createSelector(
+  getSimulationStatus,
+  status => !status ? undefined : status.simulationRunning
+);
 
 export const getDeviceModelsAsMap = createSelector(
   getDeviceModels,
@@ -14,7 +20,7 @@ export const getDeviceModelsAsMap = createSelector(
 
 export const getSimulationWithDeviceModels = createSelector(
   [getSimulation, getDeviceModelsAsMap],
-  (simulationModel, deviceModelsMap) => {
+  (simulationModel = {}, deviceModelsMap) => {
     const modelId = ((simulationModel.deviceModels || [])[0] || {}).id;
     const name = (deviceModelsMap[modelId] || {}).name;
     const deviceModels = (simulationModel.deviceModels || [])

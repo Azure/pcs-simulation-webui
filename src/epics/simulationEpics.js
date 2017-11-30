@@ -4,15 +4,18 @@ import 'rxjs';
 import { Observable } from 'rxjs';
 import * as actions from 'actions';
 import { SimulationService } from 'services';
-import { getSimulation } from 'reducers/selectors';
+import { getSimulation, getSimulationIsRunning } from 'reducers/selectors';
 
 const dispatchError = error => Observable.of(actions.updateReduxSimulationError(error.message));
 
 /** Loads the simulation status */
 export const loadSimulationStatus = action$ =>
   action$.ofType(actions.EPIC_APP_SIMULATION_STATUS_LOAD)
-    .flatMap(_ => SimulationService.getStatus())
-    .map(actions.updateReduxSimulationStatus)
+    .flatMap(_ =>
+      SimulationService.getStatus()
+        .map(actions.updateReduxSimulationStatus)
+        .startWith(actions.clearReduxSimulationStatus())
+    )
     .catch(dispatchError);
 
 /** Loads the simulation */
@@ -38,12 +41,21 @@ export const toggleSimulation = (action$, store) =>
 
 /** Updates the simulation */
 export const updateSimulation = (action$, store) =>
-  action$.ofType(actions.EPIC_SIMULATION_UPDATE)
+  action$
+    .ofType(actions.EPIC_SIMULATION_UPDATE)
     .flatMap(({ payload }) => {
-      const simulation = getSimulation(store.getState());
+      const state = store.getState();
+      const simulation = getSimulation(state);
+      const isRunning = getSimulationIsRunning(state);
       const newModel = { ...payload, eTag: simulation.eTag };
+      const refreshStatus = !isRunning && newModel.enabled;
+      // Force the simulation status to update if turned off
+      if (refreshStatus) store.dispatch(actions.clearReduxSimulationStatus());
       return SimulationService.updateSimulation(newModel)
-        .map(actions.updateReduxSimulation)
+        .flatMap(model => {
+          const extraEvents = refreshStatus ? [actions.loadSimulationStatusEvent()] : [];
+          return [ ...extraEvents, actions.updateReduxSimulation(model) ];
+        })
         .startWith(actions.clearReduxSimulation());
     })
     .catch(dispatchError);
