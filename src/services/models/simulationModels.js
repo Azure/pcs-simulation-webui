@@ -6,11 +6,14 @@
 
 export const toSimulationStatusModel = (response = {}) => {
   let simulationRunning = (response.Properties || {}).SimulationRunning;
+  let ioTHubConnectionStringConfigured = (response.Properties || {}).IoTHubConnectionStringConfigured;
   if (simulationRunning === "true") simulationRunning = true;
   else if (simulationRunning === "false") simulationRunning = false;
+  if (ioTHubConnectionStringConfigured === "true") ioTHubConnectionStringConfigured = true;
+  else if (ioTHubConnectionStringConfigured === "false") ioTHubConnectionStringConfigured = false;
   return {
     simulationRunning,
-    ioTHubConnectionStringConfigured: (response.Properties || {}).IoTHubConnectionStringConfigured
+    ioTHubConnectionStringConfigured
   }
 };
 
