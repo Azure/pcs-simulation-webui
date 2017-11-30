@@ -13,11 +13,6 @@ export const getSimulationIsRunning = createSelector(
   status => !status ? undefined : status.simulationRunning
 );
 
-export const getConnectStringConfig = createSelector(
-  getSimulationStatus,
-  status => !status ? undefined : status.ioTHubConnectionStringConfigured
-);
-
 export const getDeviceModelsAsMap = createSelector(
   getDeviceModels,
   (deviceModels = []) =>
@@ -25,12 +20,12 @@ export const getDeviceModelsAsMap = createSelector(
 );
 
 export const getSimulationWithDeviceModels = createSelector(
-  [getSimulation, getDeviceModelsAsMap, getSimulationError],
-  (simulationModel = {}, deviceModelsMap, error) => {
+  [getSimulation, getDeviceModelsAsMap],
+  (simulationModel = {}, deviceModelsMap) => {
     const modelId = ((simulationModel.deviceModels || [])[0] || {}).id;
     const name = (deviceModelsMap[modelId] || {}).name;
     const deviceModels = (simulationModel.deviceModels || [])
       .map(model => ({ ...model, name }));
-    return { ...simulationModel, deviceModels, error };
+    return { ...simulationModel, deviceModels };
   }
 );
