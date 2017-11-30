@@ -19,6 +19,7 @@
       @include square-px-rem(16px);
 
       svg {
+        overflow: visible; // Visible to avoid clipping the edges of the circle
         @include square-px-rem(16px);
         // Add 1px of padding to make sure the circle isn't clipped
         @include rem-fallback(padding, 1px);

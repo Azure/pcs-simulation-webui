@@ -1,29 +1,54 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import React from 'react';
-import { svgs } from 'utilities';
-import { Svg } from 'components/shared';
+import React, { Component } from 'react';
 
 import ProfileImagePath from 'assets/images/profile.png';
 
 import './header.css';
 
 /** The header component for the top of the page */
-const Header = (props) => {
-  return (
-    <header className="app-header">
-      <div className="breadcrumbs">{props.breadcrumbs || ''}</div>
-      <div className="label">Microsoft Azure IoT Device Simulation</div>
-      <div className="items-container">
-        <button onClick={() => console.log('Settings coming soon!')}>
-          <Svg path={svgs.settings} className="item-icon" />
-        </button>
-        <button className="item-icon profile" onClick={() => console.log('Profile coming soon!')}>
-          <img src={ProfileImagePath} alt="Generic profile" />
-        </button>
-      </div>
-    </header>
-  );
+class Header extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = { dropdownExpanded: false };
+
+    window.onmousedown = ({ target }) => {
+      if (target.className !== 'dropdown-item' && this.state.dropdownExpanded) {
+        this.setState({ dropdownExpanded: false });
+      }
+    }
+  }
+
+  logout = () => {
+    this.toggleDropdown();
+    this.props.logout();
+  }
+
+  toggleDropdown = () => {
+    this.setState({ dropdownExpanded: !this.state.dropdownExpanded })
+  };
+
+  render() {
+    return (
+      <header className="app-header">
+        <div className="breadcrumbs">{this.props.breadcrumbs || ''}</div>
+        <div className="label">Microsoft Azure IoT Device Simulation</div>
+        <div className="items-container">
+          <button className="item-icon profile" onClick={this.toggleDropdown}>
+            <img src={ProfileImagePath} alt="Logout" />
+          </button>
+          {
+            this.state.dropdownExpanded &&
+            <div className="profile-dropdown">
+              <button className="dropdown-item" onClick={this.logout}>Logout</button>
+            </div>
+          }
+        </div>
+      </header>
+    );
+  }
 };
 
 export default Header;

@@ -13,9 +13,11 @@ const navLinks = [
   { key: 0, to: '/simulation', svg: svgs.simulationLogo, label: 'Simulation' }
 ];
 
-/** 
- * A presentational component for nav item svgs 
- * 
+const minExpandedNavWindowWidth = 800;
+
+/**
+ * A presentational component for nav item svgs
+ *
  * @param {ReactSVGProps} props see https://www.npmjs.com/package/react-svg
  */
 const NavIcon = (props) => (
@@ -33,12 +35,41 @@ const TabLink = (props) => (
 /** The navigation component for the left navigation */
 class Navigation extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      collapsed: false,
+      lastWidth: window.innerWidth
+    };
+
+    // Collapse the nav if the window width is too small
+    window.onresize = () => {
+      if (
+        window.innerWidth < minExpandedNavWindowWidth
+        && window.innerWidth < this.state.lastWidth // When the window is shrinking
+        && !this.state.collapsed
+      ) {
+        this.setState({ collapsed: true, lastWidth: window.innerWidth });
+      } else {
+        this.setState({ lastWidth: window.innerWidth });
+      }
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.collapsed !== nextState.collapsed) {
+      return true;
+    }
+    return true;
+  }
+
   toggleExpanded = (event) => {
-    this.setState({ collapsed: !(this.state || {}).collapsed });
+    this.setState({ collapsed: !this.state.collapsed });
   }
 
   render() {
-    const isExpanded = !(this.state || {}).collapsed;
+    const isExpanded = !this.state.collapsed;
     return (
       <nav className={`app-nav ${isExpanded && 'expanded'}`}>
         <button className="nav-item hamburger" onClick={this.toggleExpanded}>
