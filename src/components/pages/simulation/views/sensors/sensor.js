@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { FormGroup, FormControl } from 'components/shared';
-import './styles/sensors.css';
 
 const options = [
   { value: 'Math.Increasing', label: 'Increment' },

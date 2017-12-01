@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { Sensors } from './sensors';
+import { Sensors } from './sensors/sensors';
 import { svgs, int } from 'utilities';
 import {
   FormSection,

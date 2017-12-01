@@ -18,9 +18,24 @@ export const toSimulationModel = (response = {}) => ({
   startTime: response.StartTime,
   endTime: response.EndTime,
   id: response.Id,
-  deviceModels: (response.DeviceModels || []).map(({ Id, Count }) => ({
+  deviceModels: (response.DeviceModels || []).map(({ Id, Count, Override }) => ({
     id: Id,
-    count: Count
+    count: Count,
+    interval: ((Override || {}).Simulation || {}).Interval,
+    sensors: (((Override || {}).Simulation || {}).Scripts || [])
+      .map(({ Params, Path, Type }) => Object.keys(Params || {}).map(key => {
+        const { Max, Min, Step, Unit } = Params[key];
+        return {
+          name: key,
+          min: Min,
+          max: Max,
+          step: Step,
+          unit: Unit,
+          path: Path,
+          type: Type,
+        }
+      }))
+      .reduce((acc, obj) => [...acc, ...obj], [])
   })),
   connectionString: (response.IoTHub || {}).ConnectionString === 'default'
     ? '' : (response.IoTHub || {}).ConnectionString
@@ -81,7 +96,8 @@ const toCustomSensorModel = (sensors) => {
         [_name]: {
           Min: int(minValue),
           Max: int(maxValue),
-          Step: 1
+          Step: 1,
+          Unit: unit
         }
       }
     });
