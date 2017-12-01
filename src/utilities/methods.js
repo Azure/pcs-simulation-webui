@@ -16,8 +16,9 @@ export const createAction = (type, staticPayload) => {
   return useStaticPayload ? () => creator(staticPayload) : creator;
 };
 
-export const stringToBoolean = str => {
+export const stringToBoolean = value => {
+  if (typeof value !== 'string') return str;
+  const str = value.toLowerCase();
   if (str === "true") return true;
   else if (str === "false") return false;
-  return str;
 };
