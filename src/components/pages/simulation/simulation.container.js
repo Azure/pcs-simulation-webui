@@ -5,6 +5,7 @@ import {
   getSimulationWithDeviceModels,
   getDeviceModels,
   getSimulationIsRunning,
+  getConnectStringConfig,
   getSimulationError
 } from 'store/selectors';
 import { Simulation } from './simulation';
@@ -14,6 +15,7 @@ import { epics as simulationEpics } from 'store/reducers/simulationReducer';
 const mapStateToProps = state => ({
   simulation: getSimulationWithDeviceModels(state),
   isRunning: getSimulationIsRunning(state),
+  connectionStringConfigured: getConnectStringConfig(state),
   deviceModels: getDeviceModels(state),
   error: getSimulationError(state)
 });

@@ -13,6 +13,11 @@ export const getSimulationIsRunning = createSelector(
   status => !status ? undefined : status.simulationRunning
 );
 
+export const getConnectStringConfig = createSelector(
+  getSimulationStatus,
+  status => !status ? undefined : status.ioTHubConnectionStringConfigured
+);
+
 export const getDeviceModelsAsMap = createSelector(
   getDeviceModels,
   (deviceModels = []) =>

@@ -8,3 +8,11 @@ export const int = (num) => parseInt(num, 10);
 
 /** Merges css classnames into a single string */
 export const joinClasses = (...classNames) => classNames.join(' ').trim();
+
+/** Convert a string of type 'true' or 'false' to its boolean equivalent */
+export const stringToBoolean = value => {
+  if (typeof value !== 'string') return str;
+  const str = value.toLowerCase();
+  if (str === "true") return true;
+  else if (str === "false") return false;
+};
