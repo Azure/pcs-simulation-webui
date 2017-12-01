@@ -5,6 +5,7 @@ import {
   getSimulationWithDeviceModels,
   getDeviceModels,
   getSimulationIsRunning,
+  getConnectStringConfig,
   getSimulationError
 } from 'reducers/selectors';
 import { Simulation } from './simulation';
@@ -14,6 +15,7 @@ import { toggleSimulationEvent, updateSimulationEvent } from 'actions';
 const mapStateToProps = state => ({
   simulation: getSimulationWithDeviceModels(state),
   isRunning: getSimulationIsRunning(state),
+  connectionStringConfigured: getConnectStringConfig(state),
   deviceModels: getDeviceModels(state),
   error: getSimulationError(state)
 });
