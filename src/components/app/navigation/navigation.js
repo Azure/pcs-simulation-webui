@@ -58,10 +58,7 @@ class Navigation extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.collapsed !== nextState.collapsed) {
-      return true;
-    }
-    return false;
+    return this.state.collapsed !== nextState.collapsed;
   }
 
   toggleExpanded = (event) => {
