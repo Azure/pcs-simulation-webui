@@ -11,7 +11,7 @@ export const joinClasses = (...classNames) => classNames.join(' ').trim();
 
 /** Convert a string of type 'true' or 'false' to its boolean equivalent */
 export const stringToBoolean = value => {
-  if (typeof value !== 'string') return str;
+  if (typeof value !== 'string') return value;
   const str = value.toLowerCase();
   if (str === "true") return true;
   else if (str === "false") return false;
