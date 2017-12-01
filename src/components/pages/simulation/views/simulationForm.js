@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 
+import { Sensors } from './sensors';
 import { svgs, int } from 'utilities';
 import {
   FormSection,
@@ -28,9 +29,10 @@ class SimulationForm extends Component {
       duration: {},
       durationRadio: '',
       frequency: {},
-      deviceModelOptions: [],
+      deviceModelOptions: [{value: 'Custom', label: 'Custom', name: 'Custom'}],
       deviceModel: '',
-      numDevices: ''
+      numDevices: '',
+      sensors: {}
     };
   }
 
@@ -44,7 +46,10 @@ class SimulationForm extends Component {
 
   getFormState = (props) => {
     const { deviceModels, simulation, connectionStringConfigured } = props;
-    const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
+    const deviceModelOptions = [
+      ...this.state.deviceModelOptions,
+      ...(deviceModels || []).map(this.toSelectOption)
+    ];
     const deviceModel = simulation.deviceModels.length
       ? this.toSelectOption(simulation.deviceModels[0])
       : '';
@@ -67,7 +72,7 @@ class SimulationForm extends Component {
 
   inputOnFocus = () => this.setState({ connectionStrFocused: false })
 
-  toSelectOption = ({ id, name }) => ({ value: id, label: name });
+  toSelectOption = ({ id, name }) => ({ value: id, label: name ? name : id });
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
@@ -80,17 +85,20 @@ class SimulationForm extends Component {
       iotHubString,
       numDevices,
       frequency,
-      preProvisionedRadio
+      preProvisionedRadio,
+      sensors
     } = this.state;
     const simulationDuration = (durationRadio === 'endIn') ? {
       startTime: 'NOW',
       endTime: this.convertDurationToISO(duration)
     } : {};
     const telemetryFrequency = frequency.ms > 0 ? { interval: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
+    const customSensors = Object.keys(sensors).length > 0 ? {sensors} : {};
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
-      ...telemetryFrequency
+      ...telemetryFrequency,
+      ...customSensors
     }];
     const modelUpdates = {
       enabled: true,
@@ -122,6 +130,45 @@ class SimulationForm extends Component {
       onChange: this.onChange
     };
   };
+
+  onSensorSelectionChange = behavior => {
+    const { sensorId, ...option } = behavior;
+    this.setState({
+      sensors: {
+        ...this.state.sensors,
+        [sensorId]: {
+          ...this.state.sensors[sensorId],
+          behavior: option
+        }
+      }
+    });
+  };
+
+  onSensorInputChange = ({ target }) => {
+    const { name, value, id } = target;
+    this.setState({
+      sensors: {
+        ...this.state.sensors,
+        [id]: {
+          ...this.state.sensors[id],
+          [name]: value
+        }
+      }
+    });
+  }
+
+  addSensor = () => this.setState({
+    sensors: {
+      ...this.state.sensors,
+      [`sensor-${Object.keys(this.state.sensors).length}`]: {
+        name: '',
+        behavior: '',
+        minValue: '',
+        maxValue: '',
+        unit: ''
+      }
+    }
+  })
 
   render () {
     return (
@@ -160,6 +207,19 @@ class SimulationForm extends Component {
               placeholder="Select model" />
           </FormGroup>
         </FormSection>
+        { (this.state.deviceModel || {}).label === 'Custom' &&
+          <FormSection>
+            <SectionHeader>Sensors</SectionHeader>
+            <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>
+            <FormGroup>
+              <Sensors
+                sensors={this.state.sensors}
+                onChange={this.onSensorInputChange}
+                onSelectionChange={this.onSensorSelectionChange}
+                addSensor={this.addSensor} />
+            </FormGroup>
+          </FormSection>
+        }
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
           <SectionDesc>Number of devices to simulate (maximum 1000 devices).</SectionDesc>
