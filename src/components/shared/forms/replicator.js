@@ -149,7 +149,7 @@ class FormReplicator extends Component {
 
   render() {
     const { value, children } = this.props;
-    return value.map((_, idx) => this.cloneChildren(isFunc(children) ? children(idx, value) : children, idx));
+    return value.map((item, idx) => this.cloneChildren(isFunc(children) ? children(item, idx, value) : children, idx));
   }
 
 }
