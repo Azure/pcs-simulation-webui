@@ -131,7 +131,9 @@ class FormReplicator extends Component {
         children: this.cloneChildren(children, idx)
       };
     } else {
-      return { children: this.cloneChildren(children, idx) };
+      return {
+        children: this.cloneChildren(children, idx)
+      };
     }
   }
 
