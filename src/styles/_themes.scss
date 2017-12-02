@@ -9,16 +9,34 @@ $themes: (
     colorLowestSecond: $colorMidnight,
     colorLowestThird: $colorCharcoal,
     // Mids
-    colorMidThird: $colorGraphite,
-    colorMidSecond: $colorLead,
     colorMidFirst: $colorAsh,
+    colorMidSecond: $colorLead,
+    colorMidThird: $colorGraphite,
     // Highs
-    colorLightestSecond: $colorStone,
     colorLightestFirst: $colorSmoke,
+    colorLightestSecond: $colorStone,
     colorHighest: $colorWhite,
     // Functional colors
     colorAlarm: $colorAlarm,
     colorWarning: $colorWarning,
+    colorSystem: $colorSystem,
+  ),
+  light: (
+    // Lows
+    colorLowestFirst: $colorWhite,
+    colorLowestSecond: $colorMagnesium,
+    colorLowestThird: $colorAluminum,
+    // Mids
+    colorMidFirst: $colorSterling,
+    colorMidSecond: $colorNickel,
+    colorMidThird: $colorSilver,
+    // Highs
+    colorLightestFirst: $colorBurnished,
+    colorLightestSecond: $colorPlatinum,
+    colorHighest: $colorStephanite,
+    // Functional colors
+    colorAlarm: $colorAlarm,
+    colorWarning: #F0D227,
     colorSystem: $colorSystem,
   ),
 );
