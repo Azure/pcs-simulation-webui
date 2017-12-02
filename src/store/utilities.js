@@ -58,8 +58,15 @@ export function createEpicCase(params) {
   return { type, action, epic };
 }
 
+/**
+ * A helper function creating epics from epic cases.
+ * An epic scenario takes an object of epic cases and returns
+ * the following object:
+ *  - actionTypes: An object of user defined names mapped to action type strings
+ *  - actions: An object of user defined names mapped to action creators
+ *  - epics: An object of user defined names mapped to epic
+ */
 export function createEpicScenario(cases = {}) {
-  // A mapping from scenario names to their reducer properties
   return Object.keys(cases)
     .reduce(
       (acc, caseName) => {
@@ -99,10 +106,12 @@ function createReducerCase(params) {
 }
 
 /**
- * A helper function creating reducers from reducer cases
+ * A helper function creating reducers from reducer cases.
  * A reducer scenario takes an object of reducer cases and returns
- * an object of reducer case objects and a combined reducer for
- * those cases.
+ * the following object:
+ *  - actionTypes: An object of user defined names mapped to action type strings
+ *  - actions: An object of user defined names mapped to action creators
+ *  - reducers: An object of user defined names mapped to reducer functions
  */
 export function createReducerScenario(cases = {}) {
   // A mapping from scenario names to their reducer properties
