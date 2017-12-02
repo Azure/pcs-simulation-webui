@@ -8,8 +8,8 @@ import { epics as simulationEpics } from './reducers/simulationReducer';
 
 // Extract the epic function from each property object
 const epics = [
-  ...Object.values(appEpics.epics),
-  ...Object.values(simulationEpics.epics),
+  ...appEpics.getEpics(),
+  ...simulationEpics.getEpics()
 ];
 
 const rootEpic = combineEpics(...epics);

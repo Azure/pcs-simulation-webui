@@ -67,7 +67,7 @@ export function createEpicCase(params) {
  *  - epics: An object of user defined names mapped to epic
  */
 export function createEpicScenario(cases = {}) {
-  return Object.keys(cases)
+  const scenario = Object.keys(cases)
     .reduce(
       (acc, caseName) => {
         const { type, action, epic } = createEpicCase(cases[caseName]);
@@ -83,6 +83,10 @@ export function createEpicScenario(cases = {}) {
         epics: {}
       }
     );
+
+  const getEpics = () => Object.values(scenario.epics);
+
+  return { ...scenario, getEpics }
 }
 
 /**
