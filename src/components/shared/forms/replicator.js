@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
  *     this.state = { tags: [] };
  *   }
  *
- *   addRow = () => this.setState({ tags: [ ...this.state.tags, newTag() ] });
+ *   addTag = () => this.setState({ tags: [ ...this.state.tags, newTag() ] });
  *   onChange = ({ target: { name, value } }) => ({ name, value });
  *   updateState = (tags) => this.setState({ tags });
  *
@@ -37,7 +37,7 @@ import PropTypes from 'prop-types';
  *             <button deletebtn>Remove</button>
  *           </div>
  *         </FormReplicator>
- *         <button onClick={this.addSensor}>+ Tag</button>
+ *         <button onClick={this.addTag}>+ Tag</button>
  *       </div>
  *     );
  *   }
@@ -46,6 +46,10 @@ import PropTypes from 'prop-types';
  * ==== Example 2: Nested FormReplicator
  * const newTag = () => ({ tag: '', metadata: [] });
  * const newMetadata = () => ({ meta: '' });
+ * ...
+ * // Inside the component
+ * // Tell the replicator how to create a new state from the current state
+ * addMetadata = (currMetadataState) => [ ...currMetadataState, newMetadata() ];
  * ...
  * // In the render function
  * <FormReplicator value={this.state.tags} onChange={this.updateState}>
@@ -57,10 +61,11 @@ import PropTypes from 'prop-types';
  *         <button deletebtn>Delete Metadata</button>
  *       </div>
  *     </FormReplicator>
- *     <button addBtnFor="tags" addBtnAction={this.addTag}>+ Metadata</button>
+ *     <button addBtnFor="tags" addBtnAction={this.addMetadata}>+ Metadata</button>
  *     <button deletebtn>Delete Tag</button>
  *   </div>
  * </FormReplicator>
+ * <button onClick={this.addTag}>+ Tag</button>
  * ...
  */
 
