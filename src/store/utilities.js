@@ -25,7 +25,7 @@ function handleUncaughtError(type) {
 
 /**
  * A helper method for choosing between the epic and rawEpic parameters of the
- * createEpicScenario input
+ * createEpicCase input
  */
 function chooseEpicParam(type, epic, rawEpic) {
   if (rawEpic) {
@@ -45,9 +45,9 @@ function chooseEpicParam(type, epic, rawEpic) {
  *  - The action creator
  *  - The epic that handles actions of given type
  */
-export function createEpicScenario(params) {
+export function createEpicCase(params) {
   if (!params.type || (!params.epic && !params.rawEpic)) {
-    throw new Error('Error in createEpicScenario: "type" and "epic" are required parameters');
+    throw new Error('Error in createEpicCase: "type" and "epic" are required parameters');
   }
 
   // The scenario properties
@@ -56,6 +56,26 @@ export function createEpicScenario(params) {
   const epic = chooseEpicParam(type, params.epic, params.rawEpic);
 
   return { type, action, epic };
+}
+
+export function createEpicScenario(cases = {}) {
+  // A mapping from scenario names to their reducer properties
+  return Object.keys(cases)
+    .reduce(
+      (acc, caseName) => {
+        const { type, action, epic } = createEpicCase(cases[caseName]);
+        return {
+          actionTypes: { ...acc.actionTypes, [caseName]: type },
+          actions: { ...acc.actions, [caseName]: action },
+          epics: { ...acc.epics, [caseName]: epic }
+        };
+      },
+      {
+        actionTypes: {},
+        actions: {},
+        epics: {}
+      }
+    );
 }
 
 /**
@@ -86,7 +106,7 @@ function createReducerCase(params) {
  */
 export function createReducerScenario(cases = {}) {
   // A mapping from scenario names to their reducer properties
-  const reducerCases = Object.keys(cases)
+  const { actionTypes, actions, reducers } = Object.keys(cases)
     .reduce(
       (acc, caseName) => {
         const { type, action, reducer } = createReducerCase(cases[caseName]);
@@ -105,10 +125,10 @@ export function createReducerScenario(cases = {}) {
 
   // A mapping from action type strings to their reducers
   // Used for fast lookup of action types in the primary reducer method
-  const actionReducers = Object.keys(reducerCases.reducers)
+  const actionReducers = Object.keys(reducers)
     .reduce((acc, actionName) => {
-      const type = reducerCases.actionTypes[actionName];
-      const reducer = reducerCases.reducers[actionName];
+      const type = actionTypes[actionName];
+      const reducer = reducers[actionName];
       return { ...acc, [type]: reducer };
     }, {});
 
@@ -120,5 +140,5 @@ export function createReducerScenario(cases = {}) {
     return state;
   };
 
-  return { ...reducerCases, getReducer };
+  return { actionTypes, actions, reducers, getReducer };
 }

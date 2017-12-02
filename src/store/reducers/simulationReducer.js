@@ -38,19 +38,19 @@ export const reducer = { simulation: redux.getReducer(initialState) };
 // ========================= Epics - START
 const simulationError = error => Observable.of(redux.actions.registerError(error.message));
 
-export const epics = {
+export const epics = createEpicScenario({
   /** Loads the simulation */
-  fetchSimulation: createEpicScenario({
+  fetchSimulation: {
     type: 'SIMULATION_FETCH',
     epic: () =>
       SimulationService.getSimulation()
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel())
         .catch(simulationError)
-  }),
+  },
 
   /** Used to enable or disable the simulation */
-  toggleSimulation: createEpicScenario({
+  toggleSimulation: {
     type: 'SIMULATION_TOGGLE',
     epic: ({ payload }, store) => {
       const { eTag } = getSimulation(store.getState());
@@ -59,20 +59,20 @@ export const epics = {
         .startWith(redux.actions.clearModel())
         .catch(simulationError);
     }
-  }),
+  },
 
   /** Loads the simulation status */
-  fetchSimulationStatus: createEpicScenario({
+  fetchSimulationStatus: {
     type: 'SIMULATION_STATUS_FETCH',
     epic: () =>
       SimulationService.getStatus()
         .map(redux.actions.updateStatus)
         .startWith(redux.actions.clearStatus())
         .catch(simulationError)
-  }),
+  },
 
   /** Updates the simulation */
-  updateSimulation: createEpicScenario({
+  updateSimulation: {
     type: 'SIMULATION_UPDATE',
     epic: ({ payload }, store) => {
       const state = store.getState();
@@ -84,12 +84,12 @@ export const epics = {
       if (refreshStatus) store.dispatch(redux.actions.clearStatus());
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
-          const extraEvents = refreshStatus ? [epics.fetchSimulationStatus.action()] : [];
+          const extraEvents = refreshStatus ? [epics.actions.fetchSimulationStatus()] : [];
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
         .startWith(redux.actions.clearModel())
         .catch(simulationError);
     }
-  })
-};
+  }
+});
 // ========================= Epics - END

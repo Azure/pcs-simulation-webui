@@ -23,34 +23,34 @@ export const reducer = { app: redux.getReducer() };
 // ========================= Selectors - END
 
 // ========================= Epics - START
-export const epics = {
+export const epics = createEpicScenario({
   /** Kicks off all the events that need to happen on app initialization */
-  initializeApp: createEpicScenario({
+  initializeApp: {
     type: 'APP_INITIALIZE',
     epic: () => [
-      simulationEpics.fetchSimulationStatus.action(),
-      simulationEpics.fetchSimulation.action(),
-      epics.fetchDeviceModels.action()
+      simulationEpics.actions.fetchSimulationStatus(),
+      simulationEpics.actions.fetchSimulation(),
+      epics.actions.fetchDeviceModels()
     ]
-  }),
+  },
 
   /** Loads the available device models */
-  fetchDeviceModels: createEpicScenario({
+  fetchDeviceModels: {
     type: 'APP_DEVICE_MODELS_FETCH',
     epic: () =>
       SimulationService.getDeviceModels()
         .map(redux.actions.updateDeviceModels)
         .catch(({ message }) => Observable.of(redux.actions.deviceModelsError(message)))
-  }),
+  },
 
   /** Listen to route events and emit a route change event when the url changes */
-  detectRouteChange: createEpicScenario({
+  detectRouteChange: {
     type: 'APP_ROUTE_EVENT',
     rawEpic: (action$, store, actionType) =>
       action$.ofType(actionType)
         .map(({ payload }) => payload) // Pathname
         .distinctUntilChanged()
         .map(createAction('EPIC_APP_ROUTE_CHANGE'))
-  }),
-};
+  },
+});
 // ========================= Epics - END

@@ -22,7 +22,7 @@ AuthService.onLoad();
 const store = configureStore();
 
 // Initialize the app redux data
-store.dispatch(appEpics.initializeApp.action());
+store.dispatch(appEpics.actions.initializeApp());
 
 // Create the React app
 ReactDOM.render(
