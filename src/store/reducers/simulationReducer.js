@@ -36,7 +36,7 @@ export const reducer = { simulation: redux.getReducer(initialState) };
 // ========================= Selectors - END
 
 // ========================= Epics - START
-const simulationError = error => Observable.of(redux.registerError.action(error.message));
+const simulationError = error => Observable.of(redux.actions.registerError(error.message));
 
 export const epics = {
   /** Loads the simulation */
@@ -44,8 +44,8 @@ export const epics = {
     type: 'SIMULATION_FETCH',
     epic: () =>
       SimulationService.getSimulation()
-        .map(redux.updateModel.action)
-        .startWith(redux.clearModel.action())
+        .map(redux.actions.updateModel)
+        .startWith(redux.actions.clearModel())
         .catch(simulationError)
   }),
 
@@ -55,8 +55,8 @@ export const epics = {
     epic: ({ payload }, store) => {
       const { eTag } = getSimulation(store.getState());
       return SimulationService.toggleSimulation(eTag, payload)
-        .map(redux.updateModel.action)
-        .startWith(redux.clearModel.action())
+        .map(redux.actions.updateModel)
+        .startWith(redux.actions.clearModel())
         .catch(simulationError);
     }
   }),
@@ -66,8 +66,8 @@ export const epics = {
     type: 'SIMULATION_STATUS_FETCH',
     epic: () =>
       SimulationService.getStatus()
-        .map(redux.updateStatus.action)
-        .startWith(redux.clearStatus.action())
+        .map(redux.actions.updateStatus)
+        .startWith(redux.actions.clearStatus())
         .catch(simulationError)
   }),
 
@@ -81,13 +81,13 @@ export const epics = {
       const newModel = { ...payload, eTag };
       const refreshStatus = !isRunning && newModel.enabled;
       // Force the simulation status to update if turned off
-      if (refreshStatus) store.dispatch(redux.clearStatus.action());
+      if (refreshStatus) store.dispatch(redux.actions.clearStatus());
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
           const extraEvents = refreshStatus ? [epics.fetchSimulationStatus.action()] : [];
-          return [ ...extraEvents, redux.updateModel.action(model) ];
+          return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
-        .startWith(redux.clearModel.action())
+        .startWith(redux.actions.clearModel())
         .catch(simulationError);
     }
   })

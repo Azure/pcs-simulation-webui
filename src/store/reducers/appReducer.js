@@ -39,8 +39,8 @@ export const epics = {
     type: 'APP_DEVICE_MODELS_FETCH',
     epic: () =>
       SimulationService.getDeviceModels()
-        .map(redux.updateDeviceModels.action)
-        .catch(({ message }) => Observable.of(redux.deviceModelsError.action(message)))
+        .map(redux.actions.updateDeviceModels)
+        .catch(({ message }) => Observable.of(redux.actions.deviceModelsError(message)))
   }),
 
   /** Listen to route events and emit a route change event when the url changes */

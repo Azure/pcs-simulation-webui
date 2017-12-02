@@ -87,13 +87,28 @@ function createReducerCase(params) {
 export function createReducerScenario(cases = {}) {
   // A mapping from scenario names to their reducer properties
   const reducerCases = Object.keys(cases)
-    .reduce((acc, key) => ({ ...acc, [key]: createReducerCase(cases[key]) }), {});
+    .reduce(
+      (acc, caseName) => {
+        const { type, action, reducer } = createReducerCase(cases[caseName]);
+        return {
+          actionTypes: { ...acc.actionTypes, [caseName]: type },
+          actions: { ...acc.actions, [caseName]: action },
+          reducers: { ...acc.reducers, [caseName]: reducer }
+        };
+      },
+      {
+        actionTypes: {},
+        actions: {},
+        reducers: {}
+      }
+    );
 
   // A mapping from action type strings to their reducers
   // Used for fast lookup of action types in the primary reducer method
-  const actionReducers = Object.keys(reducerCases)
-    .reduce((acc, key) => {
-      const { type, reducer } = reducerCases[key];
+  const actionReducers = Object.keys(reducerCases.reducers)
+    .reduce((acc, actionName) => {
+      const type = reducerCases.actionTypes[actionName];
+      const reducer = reducerCases.reducers[actionName];
       return { ...acc, [type]: reducer };
     }, {});
 
