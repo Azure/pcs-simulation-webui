@@ -79,11 +79,11 @@ export const epics = createEpicScenario({
       const { eTag } = getSimulation(state);
       const isRunning = getSimulationIsRunning(state);
       const newModel = { ...payload, eTag };
-      const refreshStatus = !isRunning && newModel.enabled;
+      const statusIsOld = !isRunning && newModel.enabled;
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
-          const extraEvents = refreshStatus ? [
+          const extraEvents = statusIsOld ? [
             redux.actions.clearStatus(),
             epics.actions.fetchSimulationStatus()
           ] : [];
