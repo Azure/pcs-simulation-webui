@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { mount } from 'enzyme';
-import configureStore from 'configureStore';
+import configureStore from 'store/configureStore';
 import AppContainer from 'components/app/app.container';
 
 import 'polyfills';
