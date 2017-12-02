@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
 import PropTypes from 'prop-types';
-import { isFunc } from 'utilities';
+import { isFunc, isObject } from 'utilities';
 
 /**
  * The FormReplicator component is used to replicate subsections of forms.
@@ -93,10 +93,10 @@ class FormReplicator extends Component {
   }
 
   cloneChildren = (children, idx) => {
-    if (typeof children !== 'object') return children;
+    if (!isObject(children)) return children;
     return React.Children.map(children,
       child => {
-        if (!child) return child; // Don't try to clone null elements
+        if (!isObject(child)) return child;
         return React.cloneElement(child, this.overrideProps(child, idx));
       }
     );
