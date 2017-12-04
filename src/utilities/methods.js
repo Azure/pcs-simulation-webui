@@ -3,6 +3,9 @@
 /** Tests if a value is a function */
 export const isFunc = value => typeof value === 'function';
 
+/** Tests if a value is an object */
+export const isObject = value => typeof value === 'object';
+
 /** Converts a value to an integer */
 export const int = (num) => parseInt(num, 10);
 

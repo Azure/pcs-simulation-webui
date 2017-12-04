@@ -9,6 +9,7 @@ export * from './formActions';
 export * from './formControl';
 export * from './formGroup';
 export * from './formLabel';
+export * from './formReplicator';
 export * from './formSection';
 export * from './radio';
 export * from './sectionDesc';
