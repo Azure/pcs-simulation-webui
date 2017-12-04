@@ -5,23 +5,25 @@ import {
   getSimulationWithDeviceModels,
   getDeviceModels,
   getSimulationIsRunning,
+  getConnectStringConfig,
   getSimulationError
-} from 'reducers/selectors';
+} from 'store/selectors';
 import { Simulation } from './simulation';
-import { toggleSimulationEvent, updateSimulationEvent } from 'actions';
+import { epics as simulationEpics } from 'store/reducers/simulationReducer';
 
 // Pass the simulation status
 const mapStateToProps = state => ({
   simulation: getSimulationWithDeviceModels(state),
   isRunning: getSimulationIsRunning(state),
+  connectionStringConfigured: getConnectStringConfig(state),
   deviceModels: getDeviceModels(state),
   error: getSimulationError(state)
 });
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
-  toggleSimulation: enabled => dispatch(toggleSimulationEvent(enabled)),
-  updateSimulation: modelUpdates => dispatch(updateSimulationEvent(modelUpdates))
+  toggleSimulation: enabled => dispatch(simulationEpics.toggleSimulation.action(enabled)),
+  updateSimulation: modelUpdates => dispatch(simulationEpics.updateSimulation.action(modelUpdates))
 });
 
 export const SimulationContainer = connect(mapStateToProps, mapDispatchToProps)(Simulation);

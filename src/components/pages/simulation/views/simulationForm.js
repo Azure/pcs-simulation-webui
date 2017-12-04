@@ -43,7 +43,7 @@ class SimulationForm extends Component {
   }
 
   getFormState = (props) => {
-    const { deviceModels, simulation } = props;
+    const { deviceModels, simulation, connectionStringConfigured } = props;
     const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
     const deviceModel = simulation.deviceModels.length
       ? this.toSelectOption(simulation.deviceModels[0])
@@ -52,7 +52,7 @@ class SimulationForm extends Component {
       ? simulation.deviceModels[0].count
       : 0;
     const iotHubString = (simulation || {}).connectionString || '';
-    const preProvisionedRadio = (simulation || {}).ioTHubConnectionStringConfigured
+    const preProvisionedRadio = connectionStringConfigured
       ? 'preProvisioned' : 'customString';
     this.setState({
       iotHubString,
