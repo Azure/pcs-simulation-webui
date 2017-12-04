@@ -75,6 +75,8 @@ export class FormReplicator extends Component {
   /** Performs an immutable state update for the props.value array */
   updateState = (idx, name, value) => {
     const newData = update(this.props.value, { [idx]: { [name]: { $set: value } } });
+    // TODO: Update this to return an input event object { target: { name, value } }
+    //       So the user doesn't need a bespoke onChange handler
     this.props.onChange(newData);
   }
 
