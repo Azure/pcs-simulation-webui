@@ -32,7 +32,7 @@ class SimulationForm extends Component {
       deviceModelOptions: [{value: 'Custom', label: 'Custom', name: 'Custom'}],
       deviceModel: '',
       numDevices: '',
-      sensors: {}
+      sensors: []
     };
   }
 
@@ -131,44 +131,22 @@ class SimulationForm extends Component {
     };
   };
 
-  onSensorSelectionChange = behavior => {
-    const { sensorId, ...option } = behavior;
-    this.setState({
-      sensors: {
-        ...this.state.sensors,
-        [sensorId]: {
-          ...this.state.sensors[sensorId],
-          behavior: option
-        }
-      }
-    });
-  };
-
-  onSensorInputChange = ({ target }) => {
-    const { name, value, id } = target;
-    this.setState({
-      sensors: {
-        ...this.state.sensors,
-        [id]: {
-          ...this.state.sensors[id],
-          [name]: value
-        }
-      }
-    });
-  }
+  onSensorInputChange = ({ target: { name, value } }) => ({ name, value });
 
   addSensor = () => this.setState({
-    sensors: {
+    sensors: [
       ...this.state.sensors,
-      [`sensor-${Object.keys(this.state.sensors).length}`]: {
+      {
         name: '',
         behavior: '',
         minValue: '',
         maxValue: '',
         unit: ''
       }
-    }
+    ]
   })
+
+  updateSensors = (sensors) => this.setState({ sensors });
 
   render () {
     return (
@@ -215,7 +193,7 @@ class SimulationForm extends Component {
               <Sensors
                 sensors={this.state.sensors}
                 onChange={this.onSensorInputChange}
-                onSelectionChange={this.onSensorSelectionChange}
+                updateSensors={this.updateSensors}
                 addSensor={this.addSensor} />
             </FormGroup>
           </FormSection>

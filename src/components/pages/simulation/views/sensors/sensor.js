@@ -9,9 +9,9 @@ const options = [
   { value: 'Math.Decreasing', label: 'Decrement' }
 ]
 
-export function Sensor({ sensor, onChange, onSelectionChange, value }) {
-  const { name, behavior, minValue, maxValue, unit, sensorId } = sensor;
-  const onBehaviorChange = (option) => onSelectionChange({...option, sensorId})
+export function Sensor({ sensor, onChange, value }) {
+  const { name, behavior, minValue, maxValue, unit } = sensor;
+  const onBehaviorChange = (value) => onChange({target: { name: 'behavior', value }});
 
   return (
     <div className="sensor-container">
@@ -20,7 +20,6 @@ export function Sensor({ sensor, onChange, onSelectionChange, value }) {
           <FormControl
           type="text"
           className="short"
-          id={sensorId}
           name="name"
           value={name}
           onChange={onChange}
@@ -33,7 +32,6 @@ export function Sensor({ sensor, onChange, onSelectionChange, value }) {
             className="short"
             name="behavior"
             type="select"
-            id={sensorId}
             options={options}
             value={behavior}
             onChange={onBehaviorChange}
@@ -47,7 +45,6 @@ export function Sensor({ sensor, onChange, onSelectionChange, value }) {
           <FormControl
             type="number"
             className="short"
-            id={sensorId}
             value={minValue}
             name="minValue"
             onChange={onChange}
@@ -57,7 +54,6 @@ export function Sensor({ sensor, onChange, onSelectionChange, value }) {
       <div className="sensor-box">
         <FormGroup>
           <FormControl
-            id={sensorId}
             type="number"
             className="short"
             name="maxValue"
@@ -69,7 +65,6 @@ export function Sensor({ sensor, onChange, onSelectionChange, value }) {
       <div className="sensor-box">
         <FormGroup>
           <FormControl
-            id={sensorId}
             type="text"
             className="short"
             value={unit}
