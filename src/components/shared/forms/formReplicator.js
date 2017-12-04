@@ -114,9 +114,7 @@ export class FormReplicator extends Component {
       deletebtn,
       name,
       onChange,
-      onClick,
-      replicable,
-      value
+      replicable
     } = child.props || {};
 
     const isReplicatorComp = child.type && child.type.name === 'FormReplicator';
@@ -155,7 +153,13 @@ export class FormReplicator extends Component {
 }
 
 FormReplicator.propTypes = {
+  // Nested props
   name: PropTypes.string,
   onChange: PropTypes.func,
-  value: PropTypes.array
+  // Un-nested props
+  value: PropTypes.array,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.func
+  ])
 };
