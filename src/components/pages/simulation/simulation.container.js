@@ -22,8 +22,8 @@ const mapStateToProps = state => ({
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
-  toggleSimulation: enabled => dispatch(simulationEpics.toggleSimulation.action(enabled)),
-  updateSimulation: modelUpdates => dispatch(simulationEpics.updateSimulation.action(modelUpdates))
+  toggleSimulation: enabled => dispatch(simulationEpics.actions.toggleSimulation(enabled)),
+  updateSimulation: modelUpdates => dispatch(simulationEpics.actions.updateSimulation(modelUpdates))
 });
 
 export const SimulationContainer = connect(mapStateToProps, mapDispatchToProps)(Simulation);
