@@ -70,7 +70,7 @@ import { isFunc, isObject } from 'utilities';
  * ...
  */
 
-class FormReplicator extends Component {
+export class FormReplicator extends Component {
 
   /** Performs an immutable state update for the props.value array */
   updateState = (idx, name, value) => {
@@ -159,5 +159,3 @@ FormReplicator.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.array
 };
-
-export default FormReplicator;
