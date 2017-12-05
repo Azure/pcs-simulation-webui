@@ -21,7 +21,8 @@ class SimulationDetails extends Component {
     const { deviceModels, startTime, endTime, connectionString } = this.props.simulation;
     const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
     const [deviceModel = {}] = deviceModels;
-    const { count = 0, name = 'N/A', sensors = [] } = deviceModel;
+    const { count = 0, name = 'N/A', sensors = [], interval = '' } = deviceModel;
+    const [hour = '00', minutes = '00', seconds = '00'] = interval.split(':');
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
@@ -58,6 +59,11 @@ class SimulationDetails extends Component {
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
           <SectionHeader>{count}</SectionHeader>
+        </FormSection>
+        <FormSection>
+          <SectionHeader>Telemetry frequency</SectionHeader>
+          <SectionHeader>{`HH  MM  SS`}</SectionHeader>
+          <SectionHeader>{`${hour} : ${minutes} : ${seconds}`}</SectionHeader>
         </FormSection>
         <FormSection>
           <SectionHeader>Simulation duration</SectionHeader>
