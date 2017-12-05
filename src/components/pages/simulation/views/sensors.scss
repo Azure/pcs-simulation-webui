@@ -3,7 +3,7 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
-.simulation-details-container {
+.simulation-container {
   .sensors-container {
     @include rem-fallback(min-width, 850px);
 
