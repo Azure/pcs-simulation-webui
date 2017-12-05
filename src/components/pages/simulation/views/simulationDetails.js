@@ -62,7 +62,7 @@ class SimulationDetails extends Component {
         </FormSection>
         <FormSection>
           <SectionHeader>Telemetry frequency</SectionHeader>
-          <SectionHeader>{`HH  MM  SS`}</SectionHeader>
+          <div className="duration-header">{`HH  MM  SS`}</div>
           <SectionHeader>{`${hour} : ${minutes} : ${seconds}`}</SectionHeader>
         </FormSection>
         <FormSection>

@@ -32,7 +32,7 @@ class SimulationForm extends Component {
       duration: {},
       durationRadio: '',
       frequency: {},
-      deviceModelOptions: [{value: 'Custom', label: 'Custom', name: 'Custom'}],
+      deviceModelOptions: [{value: 'Custom', label: 'Custom' }],
       deviceModel: '',
       numDevices: '',
       sensors: []
