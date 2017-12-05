@@ -104,7 +104,7 @@ const toCustomSensorModel = (sensors = []) => {
 
     const script = Object.keys(behaviorMap).map(Path => ({
       Type: "internal",
-      Path: 'Math.Increasing',
+      Path,
       Params: behaviorMap[Path]
     }));
     const messageTemplate = `{${messages.join(',')}}`;
