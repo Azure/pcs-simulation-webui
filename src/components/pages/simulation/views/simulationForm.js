@@ -75,7 +75,7 @@ class SimulationForm extends Component {
 
   inputOnFocus = () => this.setState({ connectionStrFocused: false })
 
-  toSelectOption = ({ id, name }) => ({ value: id, label: name ? name : id });
+  toSelectOption = ({ id, name }) => ({ value: id, label: name || id });
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
@@ -140,14 +140,16 @@ class SimulationForm extends Component {
   addSensor = () => this.setState({
     sensors: [
       ...this.state.sensors,
-      {
-        name: '',
-        behavior: '',
-        minValue: '',
-        maxValue: '',
-        unit: ''
-      }
+      this.toNewSensor()
     ]
+  })
+
+  toNewSensor = () => ({
+    name: '',
+    behavior: '',
+    minValue: '',
+    maxValue: '',
+    unit: ''
   })
 
   updateSensors = (sensors) => this.setState({ sensors });
