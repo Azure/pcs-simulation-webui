@@ -93,12 +93,11 @@ class SimulationForm extends Component {
       endTime: this.convertDurationToISO(duration)
     } : {};
     const telemetryFrequency = frequency.ms > 0 ? { interval: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
-    const customSensors = Object.keys(sensors).length > 0 ? {sensors} : {};
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
-      ...telemetryFrequency,
-      ...customSensors
+      sensors,
+      ...telemetryFrequency
     }];
     const modelUpdates = {
       enabled: true,

@@ -36,12 +36,13 @@ class SimulationDetails extends Component {
           <SectionHeader>Device Model</SectionHeader>
           <SectionHeader>{name}</SectionHeader>
         </FormSection>
-        <FormSection>
-          <SectionHeader>Sensors</SectionHeader>
-          <SectionHeader>
-            <SensorsDetails sensors={sensors} />
-          </SectionHeader>
-        </FormSection>
+        { sensors.length > 0 && <FormSection>
+            <SectionHeader>Sensors</SectionHeader>
+            <SectionHeader>
+              <SensorsDetails sensors={sensors} />
+            </SectionHeader>
+          </FormSection>
+        }
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
           <SectionHeader>{count}</SectionHeader>

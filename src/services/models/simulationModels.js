@@ -76,12 +76,12 @@ export const toSimulationRequestModel = (request = {}) => ({
   }
 });
 
-const toCustomSensorModel = (sensors) => {
+const toCustomSensorModel = (sensors = []) => {
   const behaviorMap = {};
   let Fields = {};
   let messages = [];
 
-  Object.values(sensors)
+  sensors
     .forEach(({ name, behavior, minValue, maxValue, unit }) => {
       const _name = name.toLowerCase();
       const _unit = unit.toLowerCase();
