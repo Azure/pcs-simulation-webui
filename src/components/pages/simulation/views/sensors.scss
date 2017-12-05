@@ -24,7 +24,16 @@
 
 .duration-header {
   text-transform: uppercase;
-  @include rem-font-size(16px);
-  @include rem-fallback(margin-bottom, 16px);
   @include themify($themes) { color: themed('colorLightestFirst'); }
+}
+
+.duration-content {
+  text-transform: uppercase;
+  @include themify($themes) { color: themed('colorHighest'); }
+}
+
+.duration-header,
+.duration-content {
+  @include rem-font-size(14px);
+  @include rem-fallback(margin-bottom, 16px);
 }
