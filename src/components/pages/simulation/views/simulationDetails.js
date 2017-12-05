@@ -11,6 +11,7 @@ import {
   Btn,
   BtnToolbar
 } from 'components/shared';
+import { SensorHeader } from './sensors.utils';
 
 class SimulationDetails extends Component {
 
@@ -19,8 +20,8 @@ class SimulationDetails extends Component {
   render () {
     const { deviceModels, startTime, endTime, connectionString } = this.props.simulation;
     const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
-    const modelName = deviceModels.length ? deviceModels[0].name : 'N/A';
-    const numDevices = deviceModels.length ? deviceModels[0].count : 0;
+    const [deviceModel = {}] = deviceModels;
+    const { count = 0, name = 'N/A', sensors = [] } = deviceModel;
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
@@ -33,11 +34,30 @@ class SimulationDetails extends Component {
         </FormSection>
         <FormSection>
           <SectionHeader>Device Model</SectionHeader>
-          <SectionHeader>{modelName}</SectionHeader>
+          <SectionHeader>{name}</SectionHeader>
         </FormSection>
+        { sensors.length > 0 &&
+          <FormSection>
+            <SectionHeader>Sensors</SectionHeader>
+            <SectionHeader className="sensors-container">
+              { sensors.length > 0 && SensorHeader }
+              {
+                sensors.map((sensor, index) =>
+                  <div className="sensor-container" key={index}>
+                    <div className="sensor-box">{sensor.name}</div>
+                    <div className="sensor-box">{sensor.path}</div>
+                    <div className="sensor-box">{sensor.min}</div>
+                    <div className="sensor-box">{sensor.max}</div>
+                    <div className="sensor-box">{sensor.unit}</div>
+                  </div>
+                )
+              }
+            </SectionHeader>
+          </FormSection>
+        }
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
-          <SectionHeader>{numDevices}</SectionHeader>
+          <SectionHeader>{count}</SectionHeader>
         </FormSection>
         <FormSection>
           <SectionHeader>Simulation duration</SectionHeader>

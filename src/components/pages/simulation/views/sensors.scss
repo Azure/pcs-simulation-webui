@@ -1,0 +1,19 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.sensors-container {
+  @include rem-fallback(min-width, 850px);
+
+  .sensor-container,
+  .sensor-headers { display: flex; }
+
+  .sensor-box,
+  .sensor-header {
+    @include rem-fallback(width, 130px);
+    @include rem-fallback(margin, 6px, 32px, 6px, 0px);
+  }
+
+  .sensor-header { text-transform: uppercase; }
+}

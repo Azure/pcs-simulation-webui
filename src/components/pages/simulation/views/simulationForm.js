@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import { svgs, int } from 'utilities';
+import { SensorHeader, behaviorOptions, toSensorInput, toSensorSelect } from './sensors.utils';
 import {
   FormSection,
   SectionHeader,
@@ -13,8 +14,11 @@ import {
   FormActions,
   Btn,
   BtnToolbar,
-  Radio
+  Radio,
+  FormReplicator
 } from 'components/shared';
+
+import './sensors.css';
 
 class SimulationForm extends Component {
 
@@ -28,9 +32,10 @@ class SimulationForm extends Component {
       duration: {},
       durationRadio: '',
       frequency: {},
-      deviceModelOptions: [],
+      deviceModelOptions: [{value: 'Custom', label: 'Custom', name: 'Custom'}],
       deviceModel: '',
-      numDevices: ''
+      numDevices: '',
+      sensors: []
     };
   }
 
@@ -44,7 +49,10 @@ class SimulationForm extends Component {
 
   getFormState = (props) => {
     const { deviceModels, simulation, connectionStringConfigured } = props;
-    const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
+    const deviceModelOptions = [
+      ...this.state.deviceModelOptions,
+      ...(deviceModels || []).map(this.toSelectOption)
+    ];
     const deviceModel = simulation.deviceModels.length
       ? this.toSelectOption(simulation.deviceModels[0])
       : '';
@@ -67,7 +75,7 @@ class SimulationForm extends Component {
 
   inputOnFocus = () => this.setState({ connectionStrFocused: false })
 
-  toSelectOption = ({ id, name }) => ({ value: id, label: name });
+  toSelectOption = ({ id, name }) => ({ value: id, label: name || id });
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
@@ -80,7 +88,8 @@ class SimulationForm extends Component {
       iotHubString,
       numDevices,
       frequency,
-      preProvisionedRadio
+      preProvisionedRadio,
+      sensors
     } = this.state;
     const simulationDuration = (durationRadio === 'endIn') ? {
       startTime: 'NOW',
@@ -90,6 +99,7 @@ class SimulationForm extends Component {
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
+      sensors,
       ...telemetryFrequency
     }];
     const modelUpdates = {
@@ -122,6 +132,27 @@ class SimulationForm extends Component {
       onChange: this.onChange
     };
   };
+
+  onSensorInputChange = ({ target: { name, value } }) => ({ name, value });
+
+  onBehaviorChange = (value) => this.onSensorInputChange({ target: { name: 'behavior', value }});
+
+  addSensor = () => this.setState({
+    sensors: [
+      ...this.state.sensors,
+      this.toNewSensor()
+    ]
+  })
+
+  toNewSensor = () => ({
+    name: '',
+    behavior: '',
+    minValue: '',
+    maxValue: '',
+    unit: ''
+  })
+
+  updateSensors = (sensors) => this.setState({ sensors });
 
   render () {
     return (
@@ -160,6 +191,27 @@ class SimulationForm extends Component {
               placeholder="Select model" />
           </FormGroup>
         </FormSection>
+        { (this.state.deviceModel || {}).label === 'Custom' &&
+          <FormSection>
+            <SectionHeader>Sensors</SectionHeader>
+            <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>
+            <div className="sensors-container">
+              { this.state.sensors.length > 0 && SensorHeader }
+              <FormReplicator value={this.state.sensors} onChange={this.updateSensors}>
+                <div className="sensor-container">
+                  { toSensorInput("name", "text", "Enter sensor name", this.onSensorInputChange) }
+                  { toSensorSelect("behavior", "select", "Select behavior", this.onBehaviorChange, behaviorOptions) }
+                  { toSensorInput("minValue", "number", "Enter min value", this.onSensorInputChange) }
+                  { toSensorInput("maxValue", "number", "Enter max value", this.onSensorInputChange) }
+                  { toSensorInput("unit", "text", "Enter unit value",  this.onSensorInputChange) }
+                </div>
+              </FormReplicator>
+              <Btn svg={svgs.plus} type="button" onClick={this.addSensor}>
+                Add sensor
+              </Btn>
+            </div>
+          </FormSection>
+        }
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
           <SectionDesc>Number of devices to simulate (maximum 1000 devices).</SectionDesc>
