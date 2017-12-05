@@ -25,13 +25,14 @@ export const toSimulationModel = (response = {}) => ({
     sensors: (((Override || {}).Simulation || {}).Scripts || [])
       .map(({ Params, Path, Type }) => Object.keys(Params || {}).map(key => {
         const { Max, Min, Step, Unit } = Params[key];
+        const [, path] = Path.split('.');
         return {
           name: key,
           min: Min,
           max: Max,
           step: Step,
           unit: Unit,
-          path: Path,
+          path,
           type: Type,
         }
       }))
