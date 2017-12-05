@@ -11,6 +11,7 @@ import {
   Btn,
   BtnToolbar
 } from 'components/shared';
+import { SensorsDetails } from './sensors/sensors';
 
 class SimulationDetails extends Component {
 
@@ -25,8 +26,6 @@ class SimulationDetails extends Component {
       ? 'Run indefinitely'
       : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
 
-
-    console.log('simulation',deviceModels,deviceModel)
     return (
       <div className="simulation-details-container">
         <FormSection>
@@ -39,7 +38,9 @@ class SimulationDetails extends Component {
         </FormSection>
         <FormSection>
           <SectionHeader>Sensors</SectionHeader>
-          <SectionHeader><pre>{JSON.stringify(sensors, null, 2)}</pre></SectionHeader>
+          <SectionHeader>
+            <SensorsDetails sensors={sensors} />
+          </SectionHeader>
         </FormSection>
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
