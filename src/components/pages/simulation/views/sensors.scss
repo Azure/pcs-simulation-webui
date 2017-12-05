@@ -38,4 +38,9 @@
     @include rem-font-size(14px);
     @include rem-fallback(margin-bottom, 16px);
   }
+
+  .deleteSensorBtn {
+    @include rem-fallback(height, 26px);
+    @include rem-fallback(margin-top, 6px);
+  }
 }
