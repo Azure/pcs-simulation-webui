@@ -18,25 +18,29 @@ export const behaviorOptions = [
   { value: 'Math.Decreasing', label: 'Decrement' }
 ]
 
-export const toSensorInput = (name, type, placeholder, onChange) => (<FormGroup className="sensor-box">
-  <FormControl
-    className="short"
-    replicable
-    type={type}
-    name={name}
-    onChange={onChange}
-    placeholder={placeholder} />
-</FormGroup>);
+export const toSensorInput = (name, type, placeholder, onChange) => (
+  <FormGroup className="sensor-box">
+    <FormControl
+      className="short"
+      replicable
+      type={type}
+      name={name}
+      onChange={onChange}
+      placeholder={placeholder} />
+  </FormGroup>
+);
 
-export const toSensorSelect = (name, type, placeholder, onChange, options) => (<FormGroup className="sensor-box">
-  <FormControl
-    className="short"
-    replicable
-    type={type}
-    name={name}
-    onChange={onChange}
-    options={options}
-    clearable={false}
-    searchable={true}
-    placeholder={placeholder} />
-</FormGroup>);
+export const toSensorSelect = (name, type, placeholder, onChange, options) => (
+  <FormGroup className="sensor-box">
+    <FormControl
+      className="short"
+      replicable
+      type={type}
+      name={name}
+      onChange={onChange}
+      options={options}
+      clearable={false}
+      searchable={true}
+      placeholder={placeholder} />
+  </FormGroup>
+);

@@ -36,7 +36,8 @@ class SimulationDetails extends Component {
           <SectionHeader>Device Model</SectionHeader>
           <SectionHeader>{name}</SectionHeader>
         </FormSection>
-        { sensors.length > 0 && <FormSection>
+        { sensors.length > 0 &&
+          <FormSection>
             <SectionHeader>Sensors</SectionHeader>
             <SectionHeader className="sensors-container">
               { sensors.length > 0 && SensorHeader }
