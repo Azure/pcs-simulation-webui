@@ -65,6 +65,7 @@ $select-padding-vertical: 6px;
       background-color: themed('colorLowestFirst');
       border: 1px solid themed('colorMidThird');
       color: themed('colorHighest');
+      
       &:hover,
       &:focus { border-color: themed('colorLightestFirst'); }
     }
