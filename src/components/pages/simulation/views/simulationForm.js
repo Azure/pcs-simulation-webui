@@ -228,7 +228,7 @@ class SimulationForm extends Component {
                   { toSensorInput("minValue", "number", "Enter min value", this.onSensorInputChange) }
                   { toSensorInput("maxValue", "number", "Enter max value", this.onSensorInputChange) }
                   { toSensorInput("unit", "text", "Enter unit value",  this.onSensorInputChange) }
-                  <Btn className="deleteSensorBtn" svg={svgs.trash} type="button" deletebtn />
+                  <Btn className="deleteSensorBtn" svg={svgs.trash} type="button" deletebtn="deletebtn" />
                 </div>
               </FormReplicator>
               <Btn svg={svgs.plus} type="button" onClick={this.addSensor}>
