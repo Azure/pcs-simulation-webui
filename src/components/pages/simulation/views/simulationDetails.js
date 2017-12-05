@@ -11,7 +11,7 @@ import {
   Btn,
   BtnToolbar
 } from 'components/shared';
-import { SensorsDetails } from './sensors/sensors';
+import { SensorHeader } from './sensors.utils';
 
 class SimulationDetails extends Component {
 
@@ -38,8 +38,19 @@ class SimulationDetails extends Component {
         </FormSection>
         { sensors.length > 0 && <FormSection>
             <SectionHeader>Sensors</SectionHeader>
-            <SectionHeader>
-              <SensorsDetails sensors={sensors} />
+            <SectionHeader className="sensors-container">
+              { sensors.length > 0 && SensorHeader }
+              {
+                sensors.map((sensor, index) =>
+                  <div className="sensor-container" key={index}>
+                    <div className="sensor-box" key="name">{sensor.name}</div>
+                    <div className="sensor-box" key="behavior">{sensor.path}</div>
+                    <div className="sensor-box" key="min">{sensor.min}</div>
+                    <div className="sensor-box" key="max">{sensor.max}</div>
+                    <div className="sensor-box" key="unit">{sensor.unit}</div>
+                  </div>
+                )
+              }
             </SectionHeader>
           </FormSection>
         }

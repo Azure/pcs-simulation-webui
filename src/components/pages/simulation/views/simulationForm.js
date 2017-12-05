@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 
-import { Sensors } from './sensors/sensors';
 import { svgs, int } from 'utilities';
+import { SensorHeader, behaviorOptions, toSensorInput, toSensorSelect } from './sensors.utils';
 import {
   FormSection,
   SectionHeader,
@@ -14,8 +14,11 @@ import {
   FormActions,
   Btn,
   BtnToolbar,
-  Radio
+  Radio,
+  FormReplicator
 } from 'components/shared';
+
+import './simulation.sensors.css';
 
 class SimulationForm extends Component {
 
@@ -132,6 +135,8 @@ class SimulationForm extends Component {
 
   onSensorInputChange = ({ target: { name, value } }) => ({ name, value });
 
+  onBehaviorChange = (value) => this.onSensorInputChange({target: { name: 'behavior', value }});
+
   addSensor = () => this.setState({
     sensors: [
       ...this.state.sensors,
@@ -188,13 +193,27 @@ class SimulationForm extends Component {
           <FormSection>
             <SectionHeader>Sensors</SectionHeader>
             <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>
-            <FormGroup>
-              <Sensors
-                sensors={this.state.sensors}
-                onChange={this.onSensorInputChange}
-                updateSensors={this.updateSensors}
-                addSensor={this.addSensor} />
-            </FormGroup>
+            <div className="sensors-container">
+              { this.state.sensors.length > 0 && SensorHeader }
+              <FormReplicator value={this.state.sensors} onChange={this.updateSensors}>
+                {(sensor, index) => {
+                    const { name, behavior, minValue, maxValue, unit } = sensor;
+                    return (
+                      <div key={index} className="sensor-container">
+                        {toSensorInput("name", "text", "Enter sensor name", name, this.onSensorInputChange)}
+                        {toSensorSelect("behavior", "select", "Select behavior", behavior, this.onBehaviorChange, behaviorOptions)}
+                        {toSensorInput("minValue", "number", "Enter min value", minValue, this.onSensorInputChange)}
+                        {toSensorInput("maxValue", "number", "Enter max value", maxValue, this.onSensorInputChange)}
+                        {toSensorInput("unit", "text", "Enter unit value", unit, this.onSensorInputChange)}
+                      </div>
+                    );
+                  }
+                }
+              </FormReplicator>
+              <Btn svg={svgs.plus} type="button" onClick={this.addSensor}>
+                Add sensor
+              </Btn>
+            </div>
           </FormSection>
         }
         <FormSection>
