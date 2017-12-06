@@ -136,6 +136,7 @@ export class FormReplicator extends Component {
       };
     } else if (!!replicable && onChange) {
       return {
+        replicable: 'true', // Added to avoid placing a gray attribute to DOM nodes
         onChange: this.onChange(idx, onChange),
         value: this.props.value[idx][name],
         children: this.cloneChildren(children, idx)
