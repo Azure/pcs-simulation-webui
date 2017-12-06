@@ -231,7 +231,7 @@ class SimulationForm extends Component {
                   <Btn className="deleteSensorBtn" svg={svgs.trash} type="button" deletebtn="deletebtn" />
                 </div>
               </FormReplicator>
-              <Btn svg={svgs.plus} type="button" onClick={this.addSensor}>
+              <Btn svg={svgs.plus} type="button" onClick={this.addSensor} disabled={this.state.sensors.length >= 10}>
                 Add sensor
               </Btn>
             </div>
