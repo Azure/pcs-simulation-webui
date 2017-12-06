@@ -62,14 +62,38 @@ class SimulationForm extends Component {
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = connectionStringConfigured
       ? 'preProvisioned' : 'customString';
+    const sensors = simulation.deviceModels.length
+      ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
+      : [];
+
     this.setState({
       iotHubString,
       deviceModelOptions,
       deviceModel,
       numDevices,
-      preProvisionedRadio
+      preProvisionedRadio,
+      sensors
     });
   }
+
+  toSensorReplicable = ({max, min, name, path, unit}) => ({
+    name,
+    behavior: (path => {
+      switch (path) {
+        case 'Increment':
+          return { value: 'Math.Increasing', label: 'Increment' };
+        case 'Random':
+          return { value: 'Math.Random.WithinRange', label: 'Random' };
+        case 'Decrement':
+          return { value: 'Math.Decreasing', label: 'Decrement' };
+        default:
+          return '';
+      }
+    })(path),
+    minValue: min,
+    maxValue: max,
+    unit
+  })
 
   inputOnBlur = () => this.setState({ connectionStrFocused: true })
 
@@ -204,9 +228,10 @@ class SimulationForm extends Component {
                   { toSensorInput("minValue", "number", "Enter min value", this.onSensorInputChange) }
                   { toSensorInput("maxValue", "number", "Enter max value", this.onSensorInputChange) }
                   { toSensorInput("unit", "text", "Enter unit value",  this.onSensorInputChange) }
+                  <Btn className="deleteSensorBtn" svg={svgs.trash} type="button" deletebtn="deletebtn" />
                 </div>
               </FormReplicator>
-              <Btn svg={svgs.plus} type="button" onClick={this.addSensor}>
+              <Btn svg={svgs.plus} type="button" onClick={this.addSensor} disabled={this.state.sensors.length >= 10}>
                 Add sensor
               </Btn>
             </div>
