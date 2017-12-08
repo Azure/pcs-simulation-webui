@@ -26,12 +26,14 @@ export class Duration extends Component {
   }
 
   componentDidMount() {
-    this.setState(this.convertMsToUnits(this.props.value));
+    const ms = (this.props.value && this.props.value.ms) || 0
+    this.setState(this.convertMsToUnits(ms));
   }
 
   // TODO: Update the props to accept h, m, seconds, or value
   componentWillReceiveProps(nextProps) {
-    this.setState(this.convertMsToUnits(nextProps.value));
+    const ms = (nextProps.value && nextProps.value.ms) || 0
+    this.setState(this.convertMsToUnits(ms));
   }
 
   convertMsToUnits(ms) {
@@ -69,13 +71,18 @@ export class Duration extends Component {
     return `${value}`.padStart(2, '0');
   }
 
+  onBlur = (evt) => {
+    if (this.props.onBlur) this.props.onBlur(evt);
+  }
+
   render() {
     const { disabled, className } = this.props;
     const genericProps = {
       ...Duration.defaultProps,
       onChange: this.onChange,
       onFocus: ({ target }) => target.select(), // Select contents on focus
-      disabled
+      disabled,
+      onBlur: this.onBlur
     };
     const { hours, minutes, seconds } = this.state;
     return (
@@ -109,7 +116,7 @@ export class Duration extends Component {
 }
 
 Duration.propTypes = {
-  value: PropTypes.number,
+  value: PropTypes.object,
   disabled: PropTypes.bool,
   className: PropTypes.string,
   children: PropTypes.node,

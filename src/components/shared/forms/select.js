@@ -8,6 +8,13 @@ import { joinClasses } from 'utilities';
 
 import './styles/select.css';
 
-export const Select = ({className, ...props}) => <ReactSelect className={joinClasses('select-container', className)} {...props} />;
+const onChangeSelect = (onChange, name) => (value) => onChange({ target: { name, value } });
+
+export const Select = ({ className, onChange, name, ...props }) => {
+  return <ReactSelect
+    className={joinClasses('select-container', className)}
+    {...props}
+    onChange={onChangeSelect(onChange, name)} />;
+};
 
 Select.propTypes = { className: PropTypes.string };

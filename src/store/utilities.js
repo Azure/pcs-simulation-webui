@@ -84,7 +84,7 @@ export function createEpicScenario(cases = {}) {
       }
     );
 
-  const getEpics = () => Object.values(scenario.epics);
+  const getEpics = () => Object.keys(scenario.epics).map(key => scenario.epics[key]);
 
   return { ...scenario, getEpics }
 }

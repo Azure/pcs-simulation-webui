@@ -7,7 +7,7 @@
   .sensors-container {
     @include rem-fallback(min-width, 850px);
 
-    .sensor-container,
+    .sensor-row,
     .sensor-headers { display: flex; }
 
     .sensor-box,

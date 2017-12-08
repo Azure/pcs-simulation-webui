@@ -3,11 +3,12 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
-$errorIconSize: 14px;
+$errorIconSize: 10px;
 .error-message {
   display: flex;
   flex-flow: row nowrap;
   flex-shrink: 0;
+  @include rem-font-size(14px);
 
   .error-icon {
     @include square-px-rem($errorIconSize);
@@ -17,6 +18,8 @@ $errorIconSize: 14px;
   }
 
   @include themify($themes) {
+    color: themed('colorHighest');
+
     .error-icon svg { fill: themed('colorAlarm'); }
   }
 }
