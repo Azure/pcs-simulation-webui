@@ -34,5 +34,7 @@
     .form-group .form-group-label { color: themed('colorLightestFirst'); }
 
     .duration-colon-icon svg { fill: themed('colorMidThird'); }
+
+    &.error .form-group input[type=text] { border-color: themed('colorAlarm'); }
   }
 }

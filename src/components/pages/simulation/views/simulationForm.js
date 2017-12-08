@@ -1,26 +1,48 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import React, { Component } from 'react';
+import React from 'react';
 
-import { svgs, int } from 'utilities';
-import { SensorHeader, behaviorOptions, toSensorInput, toSensorSelect } from './sensors.utils';
+import { svgs, LinkedComponent, Validator } from 'utilities';
 import {
-  FormSection,
-  SectionHeader,
-  SectionDesc,
-  FormGroup,
-  FormLabel,
-  FormControl,
-  FormActions,
   Btn,
   BtnToolbar,
+  ErrorMsg,
+  FormActions,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormReplicator,
+  FormSection,
   Radio,
-  FormReplicator
+  SectionDesc,
+  SectionHeader
 } from 'components/shared';
+import {
+  SensorHeader,
+  behaviorOptions,
+  toSensorInput,
+  toSensorSelect
+} from './sensors.utils';
 
 import './sensors.css';
 
-class SimulationForm extends Component {
+// Sensor validators
+const sensorNameValidator = (new Validator())
+  .check(Validator.notEmpty, 'Name is required');
+
+const sensorBehaviorValidator = (new Validator())
+  .check(Validator.notEmpty, 'Behavior is required');
+
+const sensorMinValueValidator = (new Validator())
+  .check(Validator.notEmpty, 'Min value is required');
+
+const sensorMaxValueValidator = (new Validator())
+  .check(Validator.notEmpty, 'Max value is required');
+
+const sensorUnitValueValidator = (new Validator())
+  .check(Validator.notEmpty, 'Unit is required');
+
+class SimulationForm extends LinkedComponent {
 
   constructor(props) {
     super(props);
@@ -37,6 +59,47 @@ class SimulationForm extends Component {
       numDevices: '',
       sensors: []
     };
+
+    // State to input links
+    this.iotHubString = this.linkTo('iotHubString')
+      .check(Validator.notEmpty, 'IoT Hub connection string is required');
+
+    this.deviceModel = this.linkTo('deviceModel')
+      .check(Validator.notEmpty, 'A device model must be selected')
+
+    this.numDevices = this.linkTo('numDevices')
+      .check(Validator.notEmpty, 'Number of devices is required')
+      .check(num => num > 0, 'Number of devices must be greater than zero')
+      .check(num => num <= 1000, 'Number of devices must be no greater than 1000');
+
+    this.duration = this.linkTo('duration')
+      .check(({ ms }) => ms > 0, 'Duration must be greater than zero');
+
+    this.frequency = this.linkTo('frequency')
+      .check(({ ms }) => ms > 0, 'Telemetry frequency must be greater than zero');
+
+    // Validators
+    this.hubValidator = (new Validator())
+      .check(Validator.notEmpty)
+      .check(value => (value === 'customString' && !this.iotHubString.error) || value === 'preProvisioned');
+
+    this.durationRadioValidator = (new Validator())
+      .check(Validator.notEmpty)
+      .check(value => (value === 'endIn' && !this.duration.error) || value === 'indefinite');
+  }
+
+  formIsValid() {
+    const { preProvisionedRadio, durationRadio } = this.state;
+    const hubCorrect = !this.hubValidator.hasErrors(preProvisionedRadio);
+    const deviceModelCorrect = !this.deviceModel.error;
+    const numDevicesCorrect = !this.numDevices.error;
+    const frequencyCorrect = !this.frequency.error;
+    const durationCorrect = !this.durationRadioValidator.hasErrors(durationRadio);
+    return hubCorrect
+      && deviceModelCorrect
+      && numDevicesCorrect
+      && frequencyCorrect
+      && durationCorrect;
   }
 
   componentDidMount() {
@@ -141,13 +204,6 @@ class SimulationForm extends Component {
     this.setState({ [name]: value });
   }
 
-  onDeviceModelChange = deviceModel => this.setState({ deviceModel });
-
-  numDevicesIsValid = () => {
-    const number = int(this.state.numDevices);
-    return !isNaN(number) && number >= 0 && number <= 1000;
-  }
-
   toRadioProps = (name, value) => {
     return {
       name,
@@ -159,13 +215,8 @@ class SimulationForm extends Component {
 
   onSensorInputChange = ({ target: { name, value } }) => ({ name, value });
 
-  onBehaviorChange = (value) => this.onSensorInputChange({ target: { name: 'behavior', value }});
-
   addSensor = () => this.setState({
-    sensors: [
-      ...this.state.sensors,
-      this.toNewSensor()
-    ]
+    sensors: [ ...this.state.sensors, this.toNewSensor() ]
   })
 
   toNewSensor = () => ({
@@ -193,9 +244,7 @@ class SimulationForm extends Component {
                 type={this.state.connectionStrFocused ? 'password' : 'text'}
                 onBlur={this.inputOnBlur}
                 onFocus={this.inputOnFocus}
-                onChange={this.onChange}
-                value={this.state.iotHubString}
-                name="iotHubString"
+                link={this.iotHubString}
                 placeholder="Enter IoT Hub connection string" />
             </Radio>
         </FormSection>
@@ -208,8 +257,7 @@ class SimulationForm extends Component {
               className="long"
               type="select"
               options={this.state.deviceModelOptions}
-              value={this.state.deviceModel}
-              onChange={this.onDeviceModelChange}
+              link={this.deviceModel}
               clearable={false}
               searchable={true}
               placeholder="Select model" />
@@ -222,14 +270,30 @@ class SimulationForm extends Component {
             <div className="sensors-container">
               { this.state.sensors.length > 0 && SensorHeader }
               <FormReplicator value={this.state.sensors} onChange={this.updateSensors}>
-                <div className="sensor-container">
-                  { toSensorInput("name", "text", "Enter sensor name", this.onSensorInputChange) }
-                  { toSensorSelect("behavior", "select", "Select behavior", this.onBehaviorChange, behaviorOptions) }
-                  { toSensorInput("minValue", "number", "Enter min value", this.onSensorInputChange) }
-                  { toSensorInput("maxValue", "number", "Enter max value", this.onSensorInputChange) }
-                  { toSensorInput("unit", "text", "Enter unit value",  this.onSensorInputChange) }
-                  <Btn className="deleteSensorBtn" svg={svgs.trash} type="button" deletebtn="deletebtn" />
-                </div>
+                {
+                  ({ name, behavior, minValue, maxValue, unit }) => {
+                    const nameError = sensorNameValidator.hasErrors(name);
+                    const behaviourError = sensorBehaviorValidator.hasErrors(behavior);
+                    const minValueError = sensorMinValueValidator.hasErrors(minValue);
+                    const maxValueError = sensorMaxValueValidator.hasErrors(maxValue);
+                    const unitError = sensorUnitValueValidator.hasErrors(unit);
+                    const edited = !(!name && !behavior && !minValue && !maxValue && !unit);
+                    const error = (edited && (nameError || behaviourError || minValueError || maxValueError || unitError)) || '';
+                    return (
+                      <div className="sensor-container">
+                        <div className="sensor-row">
+                          { toSensorInput("name", "text", "Enter sensor name", this.onSensorInputChange, edited && !!nameError) }
+                          { toSensorSelect("behavior", "select", "Select behavior", this.onSensorInputChange, behaviorOptions, edited && !!behaviourError) }
+                          { toSensorInput("minValue", "number", "Enter min value", this.onSensorInputChange, edited && !!minValueError) }
+                          { toSensorInput("maxValue", "number", "Enter max value", this.onSensorInputChange, edited && !!maxValueError) }
+                          { toSensorInput("unit", "text", "Enter unit value",  this.onSensorInputChange, edited && !!unitError) }
+                          <Btn className="deleteSensorBtn" svg={svgs.trash} type="button" deletebtn="deletebtn" />
+                        </div>
+                        { error && <ErrorMsg>{ error }</ErrorMsg>}
+                      </div>
+                    );
+                  }
+                }
               </FormReplicator>
               <Btn svg={svgs.plus} type="button" onClick={this.addSensor} disabled={this.state.sensors.length >= 10}>
                 Add sensor
@@ -243,20 +307,18 @@ class SimulationForm extends Component {
           <FormGroup>
             <FormLabel>Amount</FormLabel>
             <FormControl
-              name="numDevices"
               type="number"
               placeholder="# devices"
               className="small"
               max="1000"
-              onChange={this.onChange}
-              value={this.state.numDevices} />
+              link={this.numDevices} />
           </FormGroup>
         </FormSection>
         <FormSection>
           <SectionHeader>Telemetry frequency</SectionHeader>
           <SectionDesc>Set how often to send telemetry from each device</SectionDesc>
           <FormGroup>
-            <FormControl type="duration" name="frequency" value={this.state.frequency.ms} onChange={this.onChange} />
+            <FormControl type="duration" name="frequency" link={this.frequency} />
           </FormGroup>
         </FormSection>
         <FormSection>
@@ -264,7 +326,7 @@ class SimulationForm extends Component {
           <SectionDesc>Set how long the simulation will run.</SectionDesc>
           <Radio { ...this.toRadioProps('durationRadio', 'endIn') }>
             <FormLabel>End in:</FormLabel>
-            <FormControl type="duration" name="duration" value={this.state.duration.ms} onChange={this.onChange} />
+            <FormControl type="duration" link={this.duration} />
           </Radio>
           <Radio { ...this.toRadioProps('durationRadio', 'indefinite') }>
             Run indefinitely
@@ -276,7 +338,7 @@ class SimulationForm extends Component {
               svg={svgs.startSimulation}
               type="submit"
               className="apply-btn"
-              disabled={!this.numDevicesIsValid()}>
+              disabled={!this.formIsValid()}>
                 Start Simulation
             </Btn>
           </BtnToolbar>

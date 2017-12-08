@@ -2,5 +2,6 @@
 
 // Exports the app utilities
 
-export * from './svgs';
 export * from './methods';
+export * from './svgs';
+export * from './validation';
