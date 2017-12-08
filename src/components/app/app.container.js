@@ -8,7 +8,7 @@ import App from './app';
 
 // Wrap with the router and wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
-  registerRouteEvent: pathname => dispatch(appEpics.detectRouteChange.action(pathname)),
+  registerRouteEvent: pathname => dispatch(appEpics.actions.detectRouteChange(pathname)),
   logout: () => AuthService.logout()
 });
 
