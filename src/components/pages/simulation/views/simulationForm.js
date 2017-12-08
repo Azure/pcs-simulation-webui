@@ -230,7 +230,8 @@ class SimulationForm extends LinkedComponent {
   updateSensors = (sensors) => this.setState({ sensors });
 
   render () {
-    const sensorErrors = this.state.sensors.map(
+    const sensors = this.state.deviceModel.value === 'Custom' ? this.state.sensors : [];
+    const sensorErrors = sensors.map(
       sensor => {
         const name = sensorNameValidator.hasErrors(sensor.name);
         const behavior = sensorBehaviorValidator.hasErrors(sensor.behavior);
