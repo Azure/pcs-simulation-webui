@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import Config from 'app.config';
 import { svgs, LinkedComponent, Validator } from 'utilities';
 import {
   Btn,
@@ -70,7 +71,7 @@ class SimulationForm extends LinkedComponent {
     this.numDevices = this.linkTo('numDevices')
       .check(Validator.notEmpty, 'Number of devices is required')
       .check(num => num > 0, 'Number of devices must be greater than zero')
-      .check(num => num <= 1000, 'Number of devices must be no greater than 1000');
+      .check(num => num <= Config.maxSimulatedDevices, `Number of devices must be no greater than ${Config.maxSimulatedDevices}`);
 
     this.duration = this.linkTo('duration')
       .check(({ ms }) => ms > 0, 'Duration must be greater than zero');
@@ -312,14 +313,14 @@ class SimulationForm extends LinkedComponent {
         }
         <FormSection>
           <SectionHeader>Number of devices</SectionHeader>
-          <SectionDesc>Number of devices to simulate (maximum 1000 devices).</SectionDesc>
+          <SectionDesc>Number of devices to simulate (maximum { Config.maxSimulatedDevices } devices).</SectionDesc>
           <FormGroup>
             <FormLabel>Amount</FormLabel>
             <FormControl
               type="number"
               placeholder="# devices"
               className="small"
-              max="1000"
+              max={Config.maxSimulatedDevices}
               link={this.numDevices} />
           </FormGroup>
         </FormSection>

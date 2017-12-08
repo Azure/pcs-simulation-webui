@@ -7,7 +7,8 @@ const Config = {
   // Constants
   retryWaitTime: 2000, // On retryable error, retry after 2s
   maxRetryAttempts: 2,
-  retryableStatusCodes: new Set([ 502, 503 ])
+  retryableStatusCodes: new Set([ 502, 503 ]),
+  maxSimulatedDevices: 1000
 };
 
 export default Config;
