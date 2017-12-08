@@ -8,7 +8,7 @@ import { Select } from './select';
 import { ErrorMsg } from './errorMsg';
 import { joinClasses, isFunc, Link } from 'utilities';
 
-import './styles//formControl.css';
+import './styles/formControl.css';
 
 export class FormControl extends Component {
   constructor(props) {
@@ -48,18 +48,14 @@ export class FormControl extends Component {
     }
   }
 
-  getErrorMsg(disabled, link, error = '') {
-    if (!disabled) {
-      if (link) return link.error;
-      return error;
-    }
-    return '';
+  getErrorMsg(link, error = '') {
+    return link ? link.error : error;
   }
 
   render() {
     const { type, formGroupId, className, link, error, errorState, ...rest } = this.props;
     const valueOverrides = link ? { value: link.value }: {};
-    const errorMsg = this.state.edited ? this.getErrorMsg(rest.disabled, link, error) : false;
+    const errorMsg = this.state.edited && !rest.disabled ? this.getErrorMsg(link, error) : '';
     const controlProps = {
       ...rest,
       id: rest.id || formGroupId,
@@ -86,11 +82,9 @@ FormControl.propTypes = {
     'duration',
     'select'
   ]).isRequired,
+  errorState: PropTypes.bool,
   formGroupId: PropTypes.string,
   link: PropTypes.instanceOf(Link),
-  error: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool
-  ]),
+  error: PropTypes.string,
   className: PropTypes.string
 };
