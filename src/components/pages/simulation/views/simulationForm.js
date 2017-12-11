@@ -291,8 +291,7 @@ class SimulationForm extends LinkedComponent {
               { this.state.sensors.length > 0 && SensorHeader }
               <FormReplicator value={this.state.sensors} onChange={this.updateSensors}>
                 {
-                  (sensor, idx) => {
-                    console.log('sensor', sensor);
+                  (_, idx) => {
                     const { name, behavior, minValue, maxValue, unit, edited, error } = sensorErrors[idx];
                     return (
                       <div className="sensor-container">
