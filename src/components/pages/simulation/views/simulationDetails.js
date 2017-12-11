@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import moment from 'moment'
+import moment from 'moment';
 
 import { svgs } from 'utilities';
 import {
