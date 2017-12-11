@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
+import moment from 'moment';
 
 import Config from 'app.config';
 import { svgs, LinkedComponent, Validator } from 'utilities';
@@ -125,12 +126,20 @@ class SimulationForm extends LinkedComponent {
     const numDevices = simulation.deviceModels.length
       ? simulation.deviceModels[0].count
       : 0;
+    const interval = simulation.deviceModels.length
+      ? simulation.deviceModels[0].interval
+      : '00:00:00';
+    const [hours, minutes, seconds] = interval.split(':');
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = connectionStringConfigured
       ? 'preProvisioned' : 'customString';
     const sensors = simulation.deviceModels.length
       ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
       : [];
+    const { startTime, endTime } = simulation || {};
+    const duration = (startTime && endTime)
+      ? moment.duration(moment(endTime).diff(moment(startTime)))
+      : {};
 
     this.setState({
       iotHubString,
@@ -138,7 +147,20 @@ class SimulationForm extends LinkedComponent {
       deviceModel,
       numDevices,
       preProvisionedRadio,
-      sensors
+      sensors,
+      durationRadio: (startTime && endTime) ? 'endIn' : 'indefinite',
+      duration: {
+        ms: duration.asMilliseconds(),
+        hours: duration.hours(),
+        minutes: duration.minutes(),
+        seconds: duration.seconds()
+      },
+      frequency: {
+        ms: moment.duration(interval).asMilliseconds(),
+        hours,
+        minutes,
+        seconds
+      }
     });
   }
 
