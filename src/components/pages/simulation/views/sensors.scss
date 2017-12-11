@@ -39,7 +39,7 @@
     @include rem-fallback(margin-bottom, 16px);
   }
 
-  .deleteSensorBtn {
+  .delete-sensor-btn {
     @include rem-fallback(height, 26px);
     @include rem-fallback(margin-top, 6px);
   }

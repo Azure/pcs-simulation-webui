@@ -11,7 +11,7 @@ import './styles/btn.css';
 export const Btn = (props) => {
   const {svg, children, className, ...btnProps } = props;
   return (
-    <button {...btnProps} className={joinClasses('btn', className)}>
+    <button type="button" {...btnProps} className={joinClasses('btn', className)}>
       { props.svg && <Svg path={props.svg} className="btn-icon" /> }
       { props.children && <div className="btn-text">{props.children}</div> }
     </button>
