@@ -142,7 +142,7 @@ class SimulationForm extends LinkedComponent {
       numDevices,
       preProvisionedRadio,
       sensors,
-      durationRadio: (startTime && endTime) ? 'durationRadio' : 'indefinite',
+      durationRadio: (startTime && endTime) ? 'endIn' : 'indefinite',
       duration: (startTime && endTime)
         ? { ms: moment.duration(moment(endTime).diff(moment(startTime))).asMilliseconds() }
         : { ms: 0 },
