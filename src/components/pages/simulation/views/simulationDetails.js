@@ -44,7 +44,7 @@ class SimulationDetails extends Component {
               { sensors.length > 0 && SensorHeader }
               {
                 sensors.map((sensor, index) =>
-                  <div className="sensor-container" key={index}>
+                  <div className="sensor-row" key={index}>
                     <div className="sensor-box">{sensor.name}</div>
                     <div className="sensor-box">{sensor.path}</div>
                     <div className="sensor-box">{sensor.min}</div>
