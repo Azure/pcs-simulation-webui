@@ -65,12 +65,16 @@ $select-padding-vertical: 6px;
       background-color: themed('colorLowestFirst');
       border: 1px solid themed('colorMidThird');
       color: themed('colorHighest');
-      
+
       &:hover,
       &:focus { border-color: themed('colorLightestFirst'); }
     }
 
     .Select-input:focus { outline: none; }
+  }
+
+  @include themify($themes) {
+    &.error .Select-control { border-color: themed('colorAlarm'); }
   }
 
   .is-searchable {

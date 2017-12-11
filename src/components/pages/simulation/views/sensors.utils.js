@@ -4,7 +4,7 @@ import React from 'react';
 
 import { FormGroup, FormControl } from 'components/shared';
 
-const headers = ['SENSOR NAME', 'BEHAVIOR', 'MIN VALUE', 'MAX VALUE', 'UNIT'];
+const headers = [ 'SENSOR NAME', 'BEHAVIOR', 'MIN VALUE', 'MAX VALUE', 'UNIT' ];
 
 export const  SensorHeader = <div className="sensor-headers">
   { headers.map((header, idx) => (
@@ -16,7 +16,7 @@ export const behaviorOptions = [
   { value: 'Math.Increasing', label: 'Increment' },
   { value: 'Math.Random.WithinRange', label: 'Random' },
   { value: 'Math.Decreasing', label: 'Decrement' }
-]
+];
 
 export const toSensorInput = (name, type, placeholder, onChange, error) => (
   <FormGroup className="sensor-box">

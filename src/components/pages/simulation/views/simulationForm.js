@@ -35,10 +35,12 @@ const sensorBehaviorValidator = (new Validator())
   .check(Validator.notEmpty, 'Behavior is required');
 
 const sensorMinValueValidator = (new Validator())
-  .check(Validator.notEmpty, 'Min value is required');
+  .check(({ minValue }) => Validator.notEmpty(minValue), 'Min value is required')
+  .check(({ minValue, maxValue }) => minValue < maxValue, 'Min value must be less than the max value');
 
 const sensorMaxValueValidator = (new Validator())
-  .check(Validator.notEmpty, 'Max value is required');
+  .check(({ maxValue }) => Validator.notEmpty(maxValue), 'Max value is required')
+  .check(({ minValue, maxValue }) => maxValue > minValue, 'Max value must be greater than the min value');
 
 const sensorUnitValueValidator = (new Validator())
   .check(Validator.notEmpty, 'Unit is required');
@@ -154,8 +156,8 @@ class SimulationForm extends LinkedComponent {
           return '';
       }
     })(path),
-    minValue: min,
-    maxValue: max,
+    minValue: min || '', // Pass empty string to avoid warnings for passing null values
+    maxValue: max || '',
     unit
   })
 
@@ -231,20 +233,23 @@ class SimulationForm extends LinkedComponent {
   updateSensors = (sensors) => this.setState({ sensors });
 
   render () {
-    const sensors = this.state.deviceModel.value === 'Custom' ? this.state.sensors : [];
+    const usingCustomSensors = this.state.deviceModel.value === 'Custom';
+    const sensors = usingCustomSensors ? this.state.sensors : [];
     const sensorErrors = sensors.map(
       sensor => {
         const name = sensorNameValidator.hasErrors(sensor.name);
         const behavior = sensorBehaviorValidator.hasErrors(sensor.behavior);
-        const minValue = sensorMinValueValidator.hasErrors(sensor.minValue);
-        const maxValue = sensorMaxValueValidator.hasErrors(sensor.maxValue);
+        const minValue = sensorMinValueValidator.hasErrors(sensor);
+        const maxValue = sensorMaxValueValidator.hasErrors(sensor);
         const unit = sensorUnitValueValidator.hasErrors(sensor.unit);
         const edited = !(!sensor.name && !sensor.behavior && !sensor.minValue && !sensor.maxValue && !sensor.unit);
         const error = (edited && (name || behavior || minValue || maxValue || unit)) || '';
         return { name, behavior, minValue, maxValue, unit, edited, error };
       }
     );
-    const sensorsHaveErrors = sensorErrors.some(({ error }) => !!error);
+    const editedSensors = sensorErrors.filter(({ edited }) => edited);
+    const hasErrors = editedSensors.some(({ error }) => !!error);
+    const sensorsHaveErrors = !(usingCustomSensors && editedSensors.length > 0 && !hasErrors);
     return (
       <form onSubmit={this.apply}>
         <FormSection>
@@ -291,12 +296,12 @@ class SimulationForm extends LinkedComponent {
                     return (
                       <div className="sensor-container">
                         <div className="sensor-row">
-                          { toSensorInput("name", "text", "Enter sensor name", this.onSensorInputChange, edited && !!name) }
-                          { toSensorSelect("behavior", "select", "Select behavior", this.onSensorInputChange, behaviorOptions, edited && !!behavior) }
-                          { toSensorInput("minValue", "number", "Enter min value", this.onSensorInputChange, edited && !!minValue) }
-                          { toSensorInput("maxValue", "number", "Enter max value", this.onSensorInputChange, edited && !!maxValue) }
-                          { toSensorInput("unit", "text", "Enter unit value", this.onSensorInputChange, edited && !!unit) }
-                          <Btn className="deleteSensorBtn" svg={svgs.trash} type="button" deletebtn="deletebtn" />
+                          { toSensorInput('name', 'text', 'Enter sensor name', this.onSensorInputChange, edited && !!name) }
+                          { toSensorSelect('behavior', 'select', 'Select behavior', this.onSensorInputChange, behaviorOptions, edited && !!behavior) }
+                          { toSensorInput('minValue', 'text', 'Enter min value', this.onSensorInputChange, edited && !!minValue) }
+                          { toSensorInput('maxValue', 'number', 'Enter max value', this.onSensorInputChange, edited && !!maxValue) }
+                          { toSensorInput('unit', 'text', 'Enter unit value', this.onSensorInputChange, edited && !!unit) }
+                          <Btn className="delete-sensor-btn" svg={svgs.trash} deletebtn="deletebtn" />
                         </div>
                         { error && <ErrorMsg>{ error }</ErrorMsg>}
                       </div>
@@ -306,7 +311,7 @@ class SimulationForm extends LinkedComponent {
               </FormReplicator>
               {
                 this.state.sensors.length < 10 &&
-                <Btn svg={svgs.plus} type="button" onClick={this.addSensor}>Add sensor</Btn>
+                <Btn svg={svgs.plus} onClick={this.addSensor}>Add sensor</Btn>
               }
             </div>
           </FormSection>
