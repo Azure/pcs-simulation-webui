@@ -126,14 +126,18 @@ class SimulationForm extends LinkedComponent {
       : 0;
     const interval = simulation.deviceModels.length
       ? simulation.deviceModels[0].interval
-      : "00:00:00";
+      : '00:00:00';
+    const [hours, minutes, seconds] = interval.split(':');
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = connectionStringConfigured
       ? 'preProvisioned' : 'customString';
     const sensors = simulation.deviceModels.length
       ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
       : [];
-    const { startTime, endTime } = (simulation || {});
+    const { startTime, endTime } = simulation || {};
+    const duration = (startTime && endTime)
+      ? moment.duration(moment(endTime).diff(moment(startTime)))
+      : {};
 
     this.setState({
       iotHubString,
@@ -143,10 +147,18 @@ class SimulationForm extends LinkedComponent {
       preProvisionedRadio,
       sensors,
       durationRadio: (startTime && endTime) ? 'endIn' : 'indefinite',
-      duration: (startTime && endTime)
-        ? { ms: moment.duration(moment(endTime).diff(moment(startTime))).asMilliseconds() }
-        : { ms: 0 },
-      frequency: { ms: moment.duration(interval).asMilliseconds() }
+      duration: {
+        ms: duration.asMilliseconds(),
+        hours: duration.hours(),
+        minutes: duration.minutes(),
+        seconds: duration.seconds()
+      },
+      frequency: {
+        ms: moment.duration(interval).asMilliseconds(),
+        hours,
+        minutes,
+        seconds
+      }
     });
   }
 
