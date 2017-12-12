@@ -211,7 +211,7 @@ class SimulationForm extends LinkedComponent {
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
-      sensors,
+      sensors: deviceModel.value === 'Custom' ? sensors : [],
       ...telemetryFrequency
     }];
     const modelUpdates = {
