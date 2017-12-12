@@ -139,7 +139,7 @@ class SimulationForm extends LinkedComponent {
     const { startTime, endTime } = simulation || {};
     const duration = (startTime && endTime)
       ? moment.duration(moment(endTime).diff(moment(startTime)))
-      : {};
+      : moment.duration('00:00:00');
 
     this.setState({
       iotHubString,
