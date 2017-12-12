@@ -271,7 +271,7 @@ class SimulationForm extends LinkedComponent {
     );
     const editedSensors = sensorErrors.filter(({ edited }) => edited);
     const hasErrors = editedSensors.some(({ error }) => !!error);
-    const sensorsHaveErrors = !(usingCustomSensors && editedSensors.length > 0 && !hasErrors);
+    const sensorsHaveErrors = usingCustomSensors && (editedSensors.length === 0 || hasErrors);
     return (
       <form onSubmit={this.apply}>
         <FormSection>
