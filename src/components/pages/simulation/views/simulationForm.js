@@ -275,7 +275,7 @@ class SimulationForm extends LinkedComponent {
     return (
       <form onSubmit={this.apply}>
         <FormSection>
-          <SectionHeader>Target Iot Hub</SectionHeader>
+          <SectionHeader>Target IoT Hub</SectionHeader>
           <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
             <Radio { ...this.toRadioProps('preProvisionedRadio', 'preProvisioned') }>
               Use pre-provisioned IoT Hub
