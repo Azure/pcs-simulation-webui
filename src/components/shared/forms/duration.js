@@ -80,7 +80,11 @@ export class Duration extends Component {
     const genericProps = {
       ...Duration.defaultProps,
       onChange: this.onChange,
-      onFocus: ({ target }) => target.select(), // Select contents on focus
+      onFocus: ({ target }) => {
+        // Work around for Edge selection bug
+        // See https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8229660/
+        setTimeout(() => target.select(), 10);
+      }, // Select contents on focus
       disabled,
       onBlur: this.onBlur
     };

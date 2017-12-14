@@ -13,7 +13,6 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  FormReplicator,
   FormSection,
   Radio,
   SectionDesc,
@@ -35,16 +34,16 @@ const sensorNameValidator = (new Validator())
 const sensorBehaviorValidator = (new Validator())
   .check(Validator.notEmpty, 'Behavior is required');
 
-const sensorMinValueValidator = (new Validator())
-  .check(({ minValue }) => Validator.notEmpty(minValue), 'Min value is required')
-  .check(({ minValue, maxValue }) => minValue < maxValue, 'Min value must be less than the max value');
-
-const sensorMaxValueValidator = (new Validator())
-  .check(({ maxValue }) => Validator.notEmpty(maxValue), 'Max value is required')
-  .check(({ minValue, maxValue }) => maxValue > minValue, 'Max value must be greater than the min value');
-
 const sensorUnitValueValidator = (new Validator())
   .check(Validator.notEmpty, 'Unit is required');
+
+const newSensor = () => ({
+  name: '',
+  behavior: '',
+  minValue: '',
+  maxValue: '',
+  unit: ''
+});
 
 class SimulationForm extends LinkedComponent {
 
@@ -58,7 +57,7 @@ class SimulationForm extends LinkedComponent {
       duration: {},
       durationRadio: '',
       frequency: {},
-      deviceModelOptions: [{value: 'Custom', label: 'Custom' }],
+      deviceModelOptions: [{ value: 'Custom', label: 'Custom' }],
       deviceModel: '',
       numDevices: '',
       sensors: []
@@ -82,28 +81,25 @@ class SimulationForm extends LinkedComponent {
     this.frequency = this.linkTo('frequency')
       .check(({ ms }) => ms > 0, 'Telemetry frequency must be greater than zero');
 
-    // Validators
-    this.hubValidator = (new Validator())
+    this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
       .check(value => (value === 'customString' && !this.iotHubString.error) || value === 'preProvisioned');
 
-    this.durationRadioValidator = (new Validator())
+    this.durationRadio = this.linkTo('durationRadio')
       .check(Validator.notEmpty)
       .check(value => (value === 'endIn' && !this.duration.error) || value === 'indefinite');
+
+    this.sensorLink = this.linkTo('sensors');
   }
 
   formIsValid() {
-    const { preProvisionedRadio, durationRadio } = this.state;
-    const hubCorrect = !this.hubValidator.hasErrors(preProvisionedRadio);
-    const deviceModelCorrect = !this.deviceModel.error;
-    const numDevicesCorrect = !this.numDevices.error;
-    const frequencyCorrect = !this.frequency.error;
-    const durationCorrect = !this.durationRadioValidator.hasErrors(durationRadio);
-    return hubCorrect
-      && deviceModelCorrect
-      && numDevicesCorrect
-      && frequencyCorrect
-      && durationCorrect;
+    return [
+      this.targetHub,
+      this.deviceModel,
+      this.numDevices,
+      this.frequency,
+      this.durationRadio
+    ].every(link => !link.error);
   }
 
   componentDidMount() {
@@ -223,64 +219,45 @@ class SimulationForm extends LinkedComponent {
     this.props.updateSimulation(modelUpdates);
   };
 
-  onChange = ({ target }) => {
-    const name = target.name;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    this.setState({ [name]: value });
-  }
+  addSensor = () => this.sensorLink.set([ ...this.sensorLink.value, newSensor() ]);
 
-  toRadioProps = (name, value) => {
-    return {
-      name,
-      value,
-      checked: this.state[name] === value,
-      onChange: this.onChange
-    };
-  };
-
-  onSensorInputChange = ({ target: { name, value } }) => ({ name, value });
-
-  addSensor = () => this.setState({
-    sensors: [ ...this.state.sensors, this.toNewSensor() ]
-  })
-
-  toNewSensor = () => ({
-    name: '',
-    behavior: '',
-    minValue: '',
-    maxValue: '',
-    unit: ''
-  })
-
-  updateSensors = (sensors) => this.setState({ sensors });
+  deleteSensor = (index) =>
+    (evt) => this.sensorLink.set(this.sensorLink.value.filter((_, idx) => index !== idx));
 
   render () {
     const usingCustomSensors = this.state.deviceModel.value === 'Custom';
-    const sensors = usingCustomSensors ? this.state.sensors : [];
-    const sensorErrors = sensors.map(
-      sensor => {
-        const name = sensorNameValidator.hasErrors(sensor.name);
-        const behavior = sensorBehaviorValidator.hasErrors(sensor.behavior);
-        const minValue = sensorMinValueValidator.hasErrors(sensor);
-        const maxValue = sensorMaxValueValidator.hasErrors(sensor);
-        const unit = sensorUnitValueValidator.hasErrors(sensor.unit);
-        const edited = !(!sensor.name && !sensor.behavior && !sensor.minValue && !sensor.maxValue && !sensor.unit);
-        const error = (edited && (name || behavior || minValue || maxValue || unit)) || '';
-        return { name, behavior, minValue, maxValue, unit, edited, error };
-      }
-    );
-    const editedSensors = sensorErrors.filter(({ edited }) => edited);
+    // Link these values in render because they need to update based on component state
+    const sensorLinks = this.sensorLink.getLinkedChildren(sensorLink => {
+      const name = sensorLink.forkTo('name')
+        .withValidator(sensorNameValidator);
+      const behavior = sensorLink.forkTo('behavior')
+        .withValidator(sensorBehaviorValidator);
+      const minValue = sensorLink.forkTo('minValue')
+        .check(Validator.notEmpty, 'Min value is required')
+        .check(x => x < maxValue.value, 'Min value must be less than the max value');
+      const maxValue = sensorLink.forkTo('maxValue')
+        .check(Validator.notEmpty, 'Max value is required')
+        .check(x => x > minValue.value, 'Max value must be greater than the min value');
+      const unit = sensorLink.forkTo('unit')
+        .withValidator(sensorUnitValueValidator);
+      const edited = !(!name.value && !behavior.value && !minValue.value && !maxValue.value && !unit.value);
+      const error = (edited && (name.error || behavior.error || minValue.error || maxValue.error || unit.error)) || '';
+      return { name, behavior, minValue, maxValue, unit, edited, error };
+    });
+
+    const editedSensors = sensorLinks.filter(({ edited }) => edited);
     const hasErrors = editedSensors.some(({ error }) => !!error);
     const sensorsHaveErrors = usingCustomSensors && (editedSensors.length === 0 || hasErrors);
+
     return (
       <form onSubmit={this.apply}>
         <FormSection>
           <SectionHeader>Target IoT Hub</SectionHeader>
           <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
-            <Radio { ...this.toRadioProps('preProvisionedRadio', 'preProvisioned') }>
+            <Radio link={this.targetHub} value="preProvisioned">
               Use pre-provisioned IoT Hub
             </Radio>
-            <Radio { ...this.toRadioProps('preProvisionedRadio', 'customString') }>
+            <Radio link={this.targetHub} value="customString">
               <FormControl
                 className="long"
                 type={this.state.connectionStrFocused ? 'password' : 'text'}
@@ -311,26 +288,23 @@ class SimulationForm extends LinkedComponent {
             <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>
             <div className="sensors-container">
               { this.state.sensors.length > 0 && SensorHeader }
-              <FormReplicator value={this.state.sensors} onChange={this.updateSensors}>
-                {
-                  (_, idx) => {
-                    const { name, behavior, minValue, maxValue, unit, edited, error } = sensorErrors[idx];
-                    return (
-                      <div className="sensor-container">
-                        <div className="sensor-row">
-                          { toSensorInput('name', 'text', 'Enter sensor name', this.onSensorInputChange, edited && !!name) }
-                          { toSensorSelect('behavior', 'select', 'Select behavior', this.onSensorInputChange, behaviorOptions, edited && !!behavior) }
-                          { toSensorInput('minValue', 'text', 'Enter min value', this.onSensorInputChange, edited && !!minValue) }
-                          { toSensorInput('maxValue', 'number', 'Enter max value', this.onSensorInputChange, edited && !!maxValue) }
-                          { toSensorInput('unit', 'text', 'Enter unit value', this.onSensorInputChange, edited && !!unit) }
-                          <Btn className="delete-sensor-btn" svg={svgs.trash} deletebtn="deletebtn" />
-                        </div>
-                        { error && <ErrorMsg>{ error }</ErrorMsg>}
+              {
+                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => {
+                  return (
+                    <div className="sensor-container">
+                      <div className="sensor-row">
+                        { toSensorInput(name, 'text', 'Enter sensor name', edited && !!name.error) }
+                        { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
+                        { toSensorInput(minValue, 'text', 'Enter min value', edited && !!minValue.error) }
+                        { toSensorInput(maxValue, 'number', 'Enter max value', edited && !!maxValue.error) }
+                        { toSensorInput(unit, 'text', 'Enter unit value', edited && !!unit.error) }
+                        <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
                       </div>
-                    );
-                  }
-                }
-              </FormReplicator>
+                      { error && <ErrorMsg>{ error }</ErrorMsg>}
+                    </div>
+                  );
+                })
+              }
               {
                 this.state.sensors.length < 10 &&
                 <Btn svg={svgs.plus} onClick={this.addSensor}>Add sensor</Btn>
@@ -361,11 +335,11 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionDesc>Set how long the simulation will run.</SectionDesc>
-          <Radio { ...this.toRadioProps('durationRadio', 'endIn') }>
+          <Radio link={this.durationRadio} value="endIn">
             <FormLabel>End in:</FormLabel>
             <FormControl type="duration" link={this.duration} />
           </Radio>
-          <Radio { ...this.toRadioProps('durationRadio', 'indefinite') }>
+          <Radio link={this.durationRadio} value="indefinite">
             Run indefinitely
           </Radio>
         </FormSection>

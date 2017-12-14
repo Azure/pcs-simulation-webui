@@ -55,7 +55,10 @@ export class FormControl extends Component {
   render() {
     const { type, formGroupId, className, link, error, errorState, ...rest } = this.props;
     const valueOverrides = link ? { value: link.value }: {};
-    const errorMsg = this.state.edited && !rest.disabled ? this.getErrorMsg(link, error) : '';
+    const errorMsg =
+      (typeof errorState === 'undefined' && this.state.edited && !rest.disabled)
+        ? this.getErrorMsg(link, error)
+        : '';
     const controlProps = {
       ...rest,
       id: rest.id || formGroupId,
