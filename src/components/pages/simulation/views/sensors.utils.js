@@ -22,7 +22,6 @@ export const toSensorInput = (link, type, placeholder, error) => (
   <FormGroup className="sensor-box">
     <FormControl
       className="short"
-      replicable
       type={type}
       link={link}
       placeholder={placeholder}
@@ -34,7 +33,6 @@ export const toSensorSelect = (link, type, placeholder, options, error) => (
   <FormGroup className="sensor-box">
     <FormControl
       className="short"
-      replicable
       type={type}
       link={link}
       options={options}
