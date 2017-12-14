@@ -20,11 +20,12 @@ export class Radio extends Component {
 
   // Needs to be a stateful component in order to access refs
   render() {
-    const { className, children, id, disabled, link, ...radioProps } = this.props;
+    const { className, children, id, disabled, link, ...rest } = this.props;
     const valueOverrides = link ? {
-      checked: link.value === radioProps.value,
+      checked: link.value === rest.value,
       onChange: link.onChange
     }: {};
+    const radioProps = { ...rest, ...valueOverrides };
     let contentChildren = children;
     if (typeof contentChildren === 'string') {
       contentChildren = <FormLabel>{contentChildren}</FormLabel>;
