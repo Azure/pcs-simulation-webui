@@ -18,11 +18,11 @@ export const behaviorOptions = [
   { value: 'Math.Decreasing', label: 'Decrement' }
 ];
 
-export const toSensorInput = (link, type, placeholder, error) => (
+export const toSensorInput = (link, placeholder, error) => (
   <FormGroup className="sensor-box">
     <FormControl
       className="short"
-      type={type}
+      type="text"
       link={link}
       placeholder={placeholder}
       errorState={error} />
