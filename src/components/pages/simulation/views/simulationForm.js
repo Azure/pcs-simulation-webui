@@ -56,7 +56,8 @@ class SimulationForm extends LinkedComponent {
 
     this.state = {
       connectionStrFocused: false,
-      preProvisionedRadio: 'preProvisioned',
+      connectionStringConfigured: false,
+      preProvisionedRadio: '',
       iotHubString: '',
       duration: {},
       durationRadio: '',
@@ -148,6 +149,7 @@ class SimulationForm extends LinkedComponent {
       numDevices,
       preProvisionedRadio,
       sensors,
+      connectionStringConfigured,
       durationRadio: (startTime && endTime) ? 'endIn' : 'indefinite',
       duration: {
         ms: duration.asMilliseconds(),
@@ -256,24 +258,32 @@ class SimulationForm extends LinkedComponent {
     const editedSensors = sensorLinks.filter(({ edited }) => edited);
     const hasErrors = editedSensors.some(({ error }) => !!error);
     const sensorsHaveErrors = usingCustomSensors && (editedSensors.length === 0 || hasErrors);
+    const connectStringInput = (
+      <FormControl
+          className="long"
+          type={this.state.connectionStrFocused ? 'password' : 'text'}
+          onBlur={this.inputOnBlur}
+          onFocus={this.inputOnFocus}
+          link={this.iotHubString}
+          placeholder="Enter IoT Hub connection string" />
+    );
 
     return (
       <form onSubmit={this.apply}>
         <FormSection>
           <SectionHeader>Target IoT Hub</SectionHeader>
           <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
-            <Radio link={this.targetHub} value="preProvisioned">
-              Use pre-provisioned IoT Hub
-            </Radio>
-            <Radio link={this.targetHub} value="customString">
-              <FormControl
-                className="long"
-                type={this.state.connectionStrFocused ? 'password' : 'text'}
-                onBlur={this.inputOnBlur}
-                onFocus={this.inputOnFocus}
-                link={this.iotHubString}
-                placeholder="Enter IoT Hub connection string" />
-            </Radio>
+          { this.state.connectionStringConfigured
+            ? <div>
+                <Radio link={this.targetHub} value="preProvisioned">
+                  Use pre-provisioned IoT Hub
+                </Radio>
+                <Radio link={this.targetHub} value="customString">
+                  {connectStringInput}
+                </Radio>
+              </div>
+            : connectStringInput
+          }
         </FormSection>
         <FormSection>
           <SectionHeader>Device model</SectionHeader>
