@@ -4,7 +4,7 @@ import React from 'react';
 import moment from 'moment';
 
 import Config from 'app.config';
-import { svgs, LinkedComponent, Validator } from 'utilities';
+import { svgs, LinkedComponent, Validator, int } from 'utilities';
 import {
   Btn,
   BtnToolbar,
@@ -44,6 +44,10 @@ const newSensor = () => ({
   maxValue: '',
   unit: ''
 });
+
+const isNumber = /^-?\d*$/;
+const nonNumeric = x => !x.match(isNumber);
+const stringToNumber = x => x === '' || x === '-' ? x : int(x);
 
 class SimulationForm extends LinkedComponent {
 
@@ -235,10 +239,14 @@ class SimulationForm extends LinkedComponent {
       const behavior = sensorLink.forkTo('behavior')
         .withValidator(sensorBehaviorValidator);
       const minValue = sensorLink.forkTo('minValue')
-        .check(Validator.notEmpty, 'Min value is required')
-        .check(x => x < maxValue.value, 'Min value must be less than the max value');
+        .reject(nonNumeric)
+        .map(stringToNumber)
+        .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Min value is required')
+        .check(x => x < maxValue.value, `Min value must be less than the max value`);
       const maxValue = sensorLink.forkTo('maxValue')
-        .check(Validator.notEmpty, 'Max value is required')
+        .reject(nonNumeric)
+        .map(stringToNumber)
+        .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Max value is required')
         .check(x => x > minValue.value, 'Max value must be greater than the min value');
       const unit = sensorLink.forkTo('unit')
         .withValidator(sensorUnitValueValidator);
@@ -303,11 +311,11 @@ class SimulationForm extends LinkedComponent {
                   return (
                     <div className="sensor-container" key={idx}>
                       <div className="sensor-row">
-                        { toSensorInput(name, 'text', 'Enter sensor name', edited && !!name.error) }
+                        { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
                         { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
-                        { toSensorInput(minValue, 'number', 'Enter min value', edited && !!minValue.error) }
-                        { toSensorInput(maxValue, 'number', 'Enter max value', edited && !!maxValue.error) }
-                        { toSensorInput(unit, 'text', 'Enter unit value', edited && !!unit.error) }
+                        { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
+                        { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
+                        { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }
                         <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
                       </div>
                       { error && <ErrorMsg>{ error }</ErrorMsg>}
