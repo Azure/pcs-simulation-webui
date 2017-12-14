@@ -9,6 +9,7 @@ import {
   getSimulationError
 } from 'store/selectors';
 import { Simulation } from './simulation';
+import { epics as appEpics } from 'store/reducers/appReducer';
 import { epics as simulationEpics } from 'store/reducers/simulationReducer';
 
 // Pass the simulation status
@@ -23,7 +24,8 @@ const mapStateToProps = state => ({
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
   toggleSimulation: enabled => dispatch(simulationEpics.actions.toggleSimulation(enabled)),
-  updateSimulation: modelUpdates => dispatch(simulationEpics.actions.updateSimulation(modelUpdates))
+  updateSimulation: modelUpdates => dispatch(simulationEpics.actions.updateSimulation(modelUpdates)),
+  refresh: () => dispatch(appEpics.actions.initializeApp())
 });
 
 export const SimulationContainer = connect(mapStateToProps, mapDispatchToProps)(Simulation);

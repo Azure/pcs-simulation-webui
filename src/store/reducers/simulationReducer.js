@@ -16,6 +16,7 @@ const initialState = { model: undefined, status: undefined };
 const simulationModelReducer = (state, action) => ({ ...state, model: action.payload });
 const simulationStatusReducer = (state, action) => ({ ...state, status: action.payload });
 const simulationErrorReducer = (state, action) => ({ error: action.payload });
+const initialStateReducer = (state, action) => initialState;
 
 const updateModel = { type: 'SIMULATION_UPDATE', reducer: simulationModelReducer };
 const updateStatus = { type: 'SIMULATION_STATUS_UPDATE', reducer: simulationStatusReducer };
@@ -25,7 +26,8 @@ export const redux = createReducerScenario({
   updateStatus,
   clearModel: { ...updateModel, type: 'SIMULATION_CLEAR', staticPayload: EMPTY_SIMULATION },
   clearStatus: { ...updateStatus, type: 'SIMULATION_STATUS_CLEAR', staticPayload: EMPTY_STATUS },
-  registerError: { type: 'SIMULATION_ERROR', reducer: simulationErrorReducer }
+  registerError: { type: 'SIMULATION_ERROR', reducer: simulationErrorReducer },
+  revertToInitial: { type: 'SIMULATION_REVERT_TO_INITIAL', reducer: initialStateReducer }
 });
 
 export const reducer = { simulation: redux.getReducer(initialState) };
