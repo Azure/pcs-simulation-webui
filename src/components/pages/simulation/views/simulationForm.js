@@ -52,7 +52,8 @@ class SimulationForm extends LinkedComponent {
 
     this.state = {
       connectionStrFocused: false,
-      preProvisionedRadio: 'preProvisioned',
+      connectionStringConfigured: false,
+      preProvisionedRadio: '',
       iotHubString: '',
       duration: {},
       durationRadio: '',
@@ -144,6 +145,7 @@ class SimulationForm extends LinkedComponent {
       numDevices,
       preProvisionedRadio,
       sensors,
+      connectionStringConfigured,
       durationRadio: (startTime && endTime) ? 'endIn' : 'indefinite',
       duration: {
         ms: duration.asMilliseconds(),
@@ -254,18 +256,29 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>Target IoT Hub</SectionHeader>
           <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
-            <Radio link={this.targetHub} value="preProvisioned">
-              Use pre-provisioned IoT Hub
-            </Radio>
-            <Radio link={this.targetHub} value="customString">
-              <FormControl
+          { this.state.connectionStringConfigured
+            ? <div>
+                <Radio link={this.targetHub} value="preProvisioned">
+                  Use pre-provisioned IoT Hub
+                </Radio>
+                <Radio link={this.targetHub} value="customString">
+                  <FormControl
+                    className="long"
+                    type={this.state.connectionStrFocused ? 'password' : 'text'}
+                    onBlur={this.inputOnBlur}
+                    onFocus={this.inputOnFocus}
+                    link={this.iotHubString}
+                    placeholder="Enter IoT Hub connection string" />
+                </Radio>
+              </div>
+            : <FormControl
                 className="long"
                 type={this.state.connectionStrFocused ? 'password' : 'text'}
                 onBlur={this.inputOnBlur}
                 onFocus={this.inputOnFocus}
                 link={this.iotHubString}
                 placeholder="Enter IoT Hub connection string" />
-            </Radio>
+          }
         </FormSection>
         <FormSection>
           <SectionHeader>Device model</SectionHeader>
