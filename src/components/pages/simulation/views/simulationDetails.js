@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 
 import { svgs } from 'utilities';
+import { Svg } from 'components/shared/svg/svg';
 import {
   FormSection,
   SectionHeader,
@@ -18,6 +19,7 @@ class SimulationDetails extends Component {
   stopSimulation = () => this.props.toggleSimulation(false);
 
   render () {
+    const { preprovisionedIoTHubInUse, preprovisionedIoTHubMetricsUrl } = this.props;
     const { deviceModels, startTime, endTime, connectionString } = this.props.simulation;
     const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
     const [deviceModel = {}] = deviceModels;
@@ -70,6 +72,12 @@ class SimulationDetails extends Component {
           <SectionHeader>{duration}</SectionHeader>
         </FormSection>
         <FormActions>
+          { preprovisionedIoTHubInUse &&
+            <div className="portal-link">
+              <Svg path={svgs.linkTo} className="link-svg" />
+              <a href={preprovisionedIoTHubMetricsUrl} target="_blank">View IoT Hub metrics in the Azure portal</a>
+            </div>
+          }
           <BtnToolbar>
             <Btn
               svg={svgs.stopSimulation}

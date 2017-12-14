@@ -5,7 +5,9 @@ import {
   getSimulationWithDeviceModels,
   getDeviceModels,
   getSimulationIsRunning,
-  getConnectStringConfig,
+  getPreprovisionedIoTHub,
+  getPreprovisionedIoTHubInUse,
+  getPreprovisionedIoTHubMetricsUrl,
   getSimulationError
 } from 'store/selectors';
 import { Simulation } from './simulation';
@@ -15,7 +17,9 @@ import { epics as simulationEpics } from 'store/reducers/simulationReducer';
 const mapStateToProps = state => ({
   simulation: getSimulationWithDeviceModels(state),
   isRunning: getSimulationIsRunning(state),
-  connectionStringConfigured: getConnectStringConfig(state),
+  preprovisionedIoTHub: getPreprovisionedIoTHub(state),
+  preprovisionedIoTHubInUse: getPreprovisionedIoTHubInUse(state),
+  preprovisionedIoTHubMetricsUrl: getPreprovisionedIoTHubMetricsUrl(state),
   deviceModels: getDeviceModels(state),
   error: getSimulationError(state)
 });

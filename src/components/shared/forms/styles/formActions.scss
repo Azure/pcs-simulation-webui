@@ -6,6 +6,7 @@
 .form-actions-container {
   @include rem-fallback(margin-top, 48px);
   @include rem-fallback(padding-top, 48px);
+  @include rem-fallback(padding-left, 8px);
 
   @include themify($themes) {
     border-top: 1px solid themed('colorMidThird');

@@ -52,7 +52,7 @@ class SimulationForm extends LinkedComponent {
 
     this.state = {
       connectionStrFocused: false,
-      connectionStringConfigured: false,
+      preprovisionedIoTHub: false,
       preProvisionedRadio: '',
       iotHubString: '',
       duration: {},
@@ -112,7 +112,13 @@ class SimulationForm extends LinkedComponent {
   }
 
   getFormState = (props) => {
-    const { deviceModels, simulation, connectionStringConfigured } = props;
+    const {
+      deviceModels,
+      simulation,
+      preprovisionedIoTHub,
+      preprovisionedIoTHubInUse,
+      preprovisionedIoTHubMetricsUrl
+    } = props;
     const deviceModelOptions = [
       ...this.state.deviceModelOptions,
       ...(deviceModels || []).map(this.toSelectOption)
@@ -128,8 +134,7 @@ class SimulationForm extends LinkedComponent {
       : '00:00:00';
     const [hours, minutes, seconds] = interval.split(':');
     const iotHubString = (simulation || {}).connectionString || '';
-    const preProvisionedRadio = connectionStringConfigured
-      ? 'preProvisioned' : 'customString';
+    const preProvisionedRadio = iotHubString === '' ? 'preProvisioned' : 'customString';
     const sensors = simulation.deviceModels.length
       ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
       : [];
@@ -145,7 +150,9 @@ class SimulationForm extends LinkedComponent {
       numDevices,
       preProvisionedRadio,
       sensors,
-      connectionStringConfigured,
+      preprovisionedIoTHub,
+      preprovisionedIoTHubInUse,
+      preprovisionedIoTHubMetricsUrl,
       durationRadio: (startTime && endTime) ? 'endIn' : 'indefinite',
       duration: {
         ms: duration.asMilliseconds(),
@@ -265,7 +272,7 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>Target IoT Hub</SectionHeader>
           <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
-          { this.state.connectionStringConfigured
+          { this.state.preprovisionedIoTHub
             ? <div>
                 <Radio link={this.targetHub} value="preProvisioned">
                   Use pre-provisioned IoT Hub
