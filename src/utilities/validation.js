@@ -10,6 +10,7 @@ export class Validator {
 
   static notEmpty = x => {
     if (Array.isArray(x)) return x.length > 0;
+    if(typeof x === 'number') return true;
     return !!x;
   }
 

@@ -174,8 +174,8 @@ class SimulationForm extends LinkedComponent {
           return '';
       }
     })(path),
-    minValue: min || '', // Pass empty string to avoid warnings for passing null values
-    maxValue: max || '',
+    minValue: typeof min === 'undefined' ? '' : min, // Pass empty string to avoid warnings for passing null values
+    maxValue: typeof max === 'undefined' ? '' : max,
     unit
   })
 
