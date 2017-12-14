@@ -295,7 +295,7 @@ class SimulationForm extends LinkedComponent {
                       <div className="sensor-row">
                         { toSensorInput(name, 'text', 'Enter sensor name', edited && !!name.error) }
                         { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
-                        { toSensorInput(minValue, 'text', 'Enter min value', edited && !!minValue.error) }
+                        { toSensorInput(minValue, 'number', 'Enter min value', edited && !!minValue.error) }
                         { toSensorInput(maxValue, 'number', 'Enter max value', edited && !!maxValue.error) }
                         { toSensorInput(unit, 'text', 'Enter unit value', edited && !!unit.error) }
                         <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
