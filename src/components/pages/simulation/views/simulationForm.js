@@ -291,7 +291,7 @@ class SimulationForm extends LinkedComponent {
               {
                 sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => {
                   return (
-                    <div className="sensor-container">
+                    <div className="sensor-container" key={idx}>
                       <div className="sensor-row">
                         { toSensorInput(name, 'text', 'Enter sensor name', edited && !!name.error) }
                         { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
