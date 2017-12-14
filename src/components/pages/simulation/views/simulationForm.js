@@ -250,6 +250,15 @@ class SimulationForm extends LinkedComponent {
     const editedSensors = sensorLinks.filter(({ edited }) => edited);
     const hasErrors = editedSensors.some(({ error }) => !!error);
     const sensorsHaveErrors = usingCustomSensors && (editedSensors.length === 0 || hasErrors);
+    const connectStringInput = (
+      <FormControl
+          className="long"
+          type={this.state.connectionStrFocused ? 'password' : 'text'}
+          onBlur={this.inputOnBlur}
+          onFocus={this.inputOnFocus}
+          link={this.iotHubString}
+          placeholder="Enter IoT Hub connection string" />
+    );
 
     return (
       <form onSubmit={this.apply}>
@@ -262,22 +271,10 @@ class SimulationForm extends LinkedComponent {
                   Use pre-provisioned IoT Hub
                 </Radio>
                 <Radio link={this.targetHub} value="customString">
-                  <FormControl
-                    className="long"
-                    type={this.state.connectionStrFocused ? 'password' : 'text'}
-                    onBlur={this.inputOnBlur}
-                    onFocus={this.inputOnFocus}
-                    link={this.iotHubString}
-                    placeholder="Enter IoT Hub connection string" />
+                  {connectStringInput}
                 </Radio>
               </div>
-            : <FormControl
-                className="long"
-                type={this.state.connectionStrFocused ? 'password' : 'text'}
-                onBlur={this.inputOnBlur}
-                onFocus={this.inputOnFocus}
-                link={this.iotHubString}
-                placeholder="Enter IoT Hub connection string" />
+            : connectStringInput
           }
         </FormSection>
         <FormSection>
