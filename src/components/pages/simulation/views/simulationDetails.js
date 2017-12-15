@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Rx from 'rxjs';
 import moment from 'moment';
 
+import Config from 'app.config';
 import { svgs } from 'utilities';
 import { Svg } from 'components/shared/svg/svg';
 import {
@@ -17,14 +18,14 @@ import {
 import { SensorHeader } from './sensors.utils';
 import { SimulationService } from 'services';
 
-const pollingInterval = 5000;
+const pollingInterval = Config.simulationStatusPollingInterval;
 
 class SimulationDetails extends Component {
 
   constructor() {
     super();
 
-    this.state = { 
+    this.state = {
       isRunning: true,
       showLink: false,
       hubUrl: ''
@@ -36,7 +37,7 @@ class SimulationDetails extends Component {
 
   componentDidMount() {
     // Initialize state from the most recent status
-    this.setState({ 
+    this.setState({
       isRunning: this.props.isRunning,
       hubUrl: this.props.preprovisionedIoTHubMetricsUrl,
       showLink: this.props.preprovisionedIoTHubInUse
@@ -51,9 +52,8 @@ class SimulationDetails extends Component {
           );
         }
       })
-      // .filter(isRunning => isRunning)
       .subscribe(response => {
-        this.setState({ 
+        this.setState({
           isRunning: response.simulationRunning,
           hubUrl: response.preprovisionedIoTHubMetricsUrl,
           showLink: response.preprovisionedIoTHubInUse
@@ -70,7 +70,7 @@ class SimulationDetails extends Component {
 
   stopSimulation = () => this.props.toggleSimulation(false);
 
-  getHubLink = (shouldPad = false) => {
+  getHubLink = (shouldPad = true) => {
     return this.state.showLink && (
       <div className={`portal-link ${shouldPad && 'padded'}`}>
         <Svg path={svgs.linkTo} className="link-svg" />
@@ -144,28 +144,26 @@ class SimulationDetails extends Component {
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionHeader>{duration}</SectionHeader>
         </FormSection>
-        <FormActions>
-          {
-            this.state.isRunning ? (
-              <div>
-                <Indicator pattern="bar" size="large" />
-                Your simulation is starting. Please allow a few minutes before you see data flowing to your IoT Hub.
-                { this.getHubLink(true) }
-                <BtnToolbar>
-                  <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
-                </BtnToolbar>
-              </div>
-            ) : (
-              <div>
-                Your simulation has stopped running.
-                <BtnToolbar>
-                  <Btn { ...btnProps }>Ok</Btn>
-                </BtnToolbar>
-                { this.getHubLink() }
-              </div>
-            )
-          }
-        </FormActions>
+        {
+          this.state.isRunning ? (
+            <FormActions className="details-form-actions">
+              <Indicator pattern="bar" />
+              Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.
+              { this.getHubLink() }
+              <BtnToolbar>
+                <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
+              </BtnToolbar>
+            </FormActions>
+          ) : (
+            <FormActions>
+              Your simulation has stopped running.
+              <BtnToolbar>
+                <Btn { ...btnProps }>Ok</Btn>
+              </BtnToolbar>
+              { this.getHubLink() }
+            </FormActions>
+          )
+        }
       </div>
     );
   }

@@ -73,8 +73,13 @@
 
       &:hover {
         color: themed('colorHighest');
+
         .link-svg svg { fill: themed('colorHighest'); }
       }
     }
+  }
+
+  .details-form-actions {
+    @include themify($themes) { color: themed('colorHighest'); }
   }
 }
