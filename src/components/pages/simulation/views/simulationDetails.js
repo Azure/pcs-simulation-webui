@@ -43,7 +43,7 @@ class SimulationDetails extends Component {
       showLink: this.props.preprovisionedIoTHubInUse
     });
 
-    // Continue polling until the result the simulation is complete
+    // Poll until the simulation status is false
     this.pollingSubscriber = this.pollingStream
       .do(({ simulationRunning }) => {
         if (simulationRunning) {
