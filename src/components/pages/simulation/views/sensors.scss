@@ -12,8 +12,13 @@
 
     .sensor-box,
     .sensor-header {
-      @include rem-fallback(width, 130px);
+      @include rem-fallback(width, 150px);
       @include rem-fallback(margin, 6px, 32px, 6px, 0px);
+
+      .Select-control,
+      input.form-control {
+        @include rem-fallback(width, 150px);
+      }
     }
 
     .sensor-header {
