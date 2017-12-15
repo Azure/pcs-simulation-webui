@@ -304,6 +304,7 @@ class SimulationForm extends LinkedComponent {
               type="select"
               options={this.state.deviceModelOptions}
               link={this.deviceModel}
+              onChange={() => this.setState({ sensors: this.state.sensors.length === 0 ? [newSensor()] : this.state.sensors })}
               clearable={false}
               searchable={true}
               placeholder="Select model" />
