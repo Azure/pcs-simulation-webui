@@ -155,7 +155,7 @@ class SimulationForm extends LinkedComponent {
       deviceModel,
       numDevices,
       preProvisionedRadio,
-      sensors,
+      sensors: sensors.length === 0 ? [newSensor()] : sensors,
       preprovisionedIoTHub,
       preprovisionedIoTHubInUse,
       preprovisionedIoTHubMetricsUrl,
