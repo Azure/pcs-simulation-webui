@@ -108,8 +108,8 @@ const toCustomSensorModel = (sensors = []) => {
       behaviorMap[path] = {
         ...behaviorMap[path],
         [_name]: {
-          Min: int(minValue),
-          Max: int(maxValue),
+          Min: minValue,
+          Max: maxValue,
           Step: 1,
           Unit: unit
         }

@@ -45,9 +45,12 @@ const newSensor = () => ({
   unit: ''
 });
 
-const isNumber = /^-?\d*$/;
-const nonNumeric = x => !x.match(isNumber);
-const stringToNumber = x => x === '' || x === '-' ? x : int(x);
+const isIntRegex = /^-?\d*$/;
+const isRealRegex = /^-?(([1-9][0-9]*)*|0?)\.?\d*$/;
+const nonInteger = x => !x.match(isIntRegex);
+const nonReal = x => !x.match(isRealRegex);
+const stringToInt = x => x === '' || x === '-' ? x : int(x);
+const stringToFloat = x => x === '' || x === '-' ? x : parseFloat(x);
 
 class SimulationForm extends LinkedComponent {
 
@@ -76,8 +79,8 @@ class SimulationForm extends LinkedComponent {
       .check(Validator.notEmpty, 'A device model must be selected')
 
     this.numDevices = this.linkTo('numDevices')
-      .reject(nonNumeric)
-      .map(stringToNumber)
+      .reject(nonInteger)
+      .map(stringToInt)
       .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Number of devices is required')
       .check(num => num > 0, 'Number of devices must be greater than zero')
       .check(num => num <= Config.maxSimulatedDevices, `Number of devices must be no greater than ${Config.maxSimulatedDevices}`);
@@ -248,15 +251,13 @@ class SimulationForm extends LinkedComponent {
       const behavior = sensorLink.forkTo('behavior')
         .withValidator(sensorBehaviorValidator);
       const minValue = sensorLink.forkTo('minValue')
-        .reject(nonNumeric)
-        .map(stringToNumber)
-        .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Min value is required')
-        .check(x => x < maxValue.value, `Min value must be less than the max value`);
+        .reject(nonReal)
+        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), 'Min value is required')
+        .check(x => stringToFloat(x) < stringToFloat(maxValue.value), `Min value must be less than the max value`);
       const maxValue = sensorLink.forkTo('maxValue')
-        .reject(nonNumeric)
-        .map(stringToNumber)
-        .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Max value is required')
-        .check(x => x > minValue.value, 'Max value must be greater than the min value');
+        .reject(nonReal)
+        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), 'Max value is required')
+        .check(x => stringToFloat(x) > stringToFloat(minValue.value), 'Max value must be greater than the min value');
       const unit = sensorLink.forkTo('unit')
         .withValidator(sensorUnitValueValidator);
       const edited = !(!name.value && !behavior.value && !minValue.value && !maxValue.value && !unit.value);
