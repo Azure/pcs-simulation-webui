@@ -24,8 +24,7 @@ export class Simulation extends Component {
   };
 
   getView() {
-    const { simulation, isRunning, error, refresh } = this.props;
-    const { enabled } = simulation;
+    const { simulation: { enabled }, isRunning, error, refresh } = this.props;
     const isLoading = typeof enabled === 'undefined' || typeof isRunning === 'undefined';
     if (error) {
       return (
@@ -47,9 +46,11 @@ export class Simulation extends Component {
   }
 
   render () {
+    const { isRunning, simulation: { enabled } } = this.props;
+    const showRunningHeader = isRunning === true && enabled === true;
     return (
       <div className="simulation-container">
-        <Header>Simulation setup</Header>
+        <Header>{showRunningHeader ? 'Current Simulation' : 'Simulation setup'}</Header>
         { this.getView() }
       </div>
     );
