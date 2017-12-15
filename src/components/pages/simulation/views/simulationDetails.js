@@ -83,7 +83,7 @@ class SimulationDetails extends Component {
     const duration = moment.duration(time);
     let durationString = "";
 
-    if (duration.days() > 0) durationString += ` ${duration.days()}  days`;
+    if (duration.days() > 0) durationString += ` ${duration.days()} days`;
     if (duration.hours() > 0) durationString += ` ${duration.hours()} hours`;
     if (duration.minutes() > 0) durationString += ` ${duration.minutes()} minutes`;
     if (duration.seconds() > 0) durationString += ` ${duration.seconds()} seconds`;
