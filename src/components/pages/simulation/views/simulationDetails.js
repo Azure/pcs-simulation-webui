@@ -81,12 +81,16 @@ class SimulationDetails extends Component {
 
   humanizeDuration = (time) => {
     const duration = moment.duration(time);
-    let durationString = "";
+    let durationString = '';
 
-    if (duration.days() > 0) durationString += ` ${duration.days()}  days`;
-    if (duration.hours() > 0) durationString += ` ${duration.hours()} hours`;
-    if (duration.minutes() > 0) durationString += ` ${duration.minutes()} minutes`;
-    if (duration.seconds() > 0) durationString += ` ${duration.seconds()} seconds`;
+    if (duration.days() > 0)
+      durationString += ` ${duration.days()}${duration.days() === 1 ? 'day' : 'days'}`;
+    if (duration.hours() > 0)
+      durationString += ` ${duration.hours()}${duration.hours() === 1 ? 'hour' : 'hours'}`;
+    if (duration.minutes() > 0)
+      durationString += ` ${duration.minutes()} ${duration.minutes() === 1 ? 'minute' : 'minutes'}`;
+    if (duration.seconds() > 0)
+      durationString += ` ${duration.seconds()} ${duration.seconds() === 1 ? 'second' : 'seconds'}`;
 
     return durationString.trim()
   }
