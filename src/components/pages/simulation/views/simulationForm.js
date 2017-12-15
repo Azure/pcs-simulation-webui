@@ -62,7 +62,7 @@ class SimulationForm extends LinkedComponent {
       duration: {},
       durationRadio: '',
       frequency: {},
-      deviceModelOptions: [{ value: 'Custom', label: 'Custom' }],
+      deviceModelOptions: [],
       deviceModel: '',
       numDevices: '',
       sensors: []
@@ -76,7 +76,9 @@ class SimulationForm extends LinkedComponent {
       .check(Validator.notEmpty, 'A device model must be selected')
 
     this.numDevices = this.linkTo('numDevices')
-      .check(Validator.notEmpty, 'Number of devices is required')
+      .reject(nonNumeric)
+      .map(stringToNumber)
+      .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Number of devices is required')
       .check(num => num > 0, 'Number of devices must be greater than zero')
       .check(num => num <= Config.maxSimulatedDevices, `Number of devices must be no greater than ${Config.maxSimulatedDevices}`);
 
@@ -124,7 +126,7 @@ class SimulationForm extends LinkedComponent {
       preprovisionedIoTHubMetricsUrl
     } = props;
     const deviceModelOptions = [
-      ...this.state.deviceModelOptions,
+      { value: 'Custom', label: 'Custom' },
       ...(deviceModels || []).map(this.toSelectOption)
     ];
     const deviceModel = simulation.deviceModels.length
@@ -343,7 +345,7 @@ class SimulationForm extends LinkedComponent {
           <FormGroup>
             <FormLabel>Amount</FormLabel>
             <FormControl
-              type="number"
+              type="text"
               placeholder="# devices"
               className="small"
               max={Config.maxSimulatedDevices}
