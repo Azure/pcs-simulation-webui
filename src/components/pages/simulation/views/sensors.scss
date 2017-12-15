@@ -46,12 +46,16 @@
 
   .portal-link {
     display: flex;
-    @include rem-fallback(margin-bottom, 48px);
     @include rem-fallback(width, 310px);
+
+    &.padded {
+      @include rem-fallback(margin-top, 48px);
+      @include rem-fallback(margin-bottom, 48px);
+    }
 
     .link-svg {
       @include rem-fallback(margin-right, 6px);
-      
+
       svg { @include square-px-rem(14px); }
     }
 
@@ -69,8 +73,13 @@
 
       &:hover {
         color: themed('colorHighest');
+
         .link-svg svg { fill: themed('colorHighest'); }
       }
     }
+  }
+
+  .details-form-actions {
+    @include themify($themes) { color: themed('colorHighest'); }
   }
 }

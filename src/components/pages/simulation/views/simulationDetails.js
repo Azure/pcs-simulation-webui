@@ -1,33 +1,106 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import Rx from 'rxjs';
 import moment from 'moment';
 
+import Config from 'app.config';
 import { svgs } from 'utilities';
 import { Svg } from 'components/shared/svg/svg';
 import {
-  FormSection,
-  SectionHeader,
-  FormActions,
   Btn,
-  BtnToolbar
+  BtnToolbar,
+  FormActions,
+  FormSection,
+  Indicator,
+  SectionHeader
 } from 'components/shared';
 import { SensorHeader } from './sensors.utils';
+import { SimulationService } from 'services';
+
+const pollingInterval = Config.simulationStatusPollingInterval;
 
 class SimulationDetails extends Component {
 
+  constructor() {
+    super();
+
+    this.state = {
+      isRunning: true,
+      showLink: false,
+      hubUrl: ''
+    };
+
+    this.emitter = new Rx.Subject();
+    this.pollingStream = this.emitter.switch();
+  }
+
+  componentDidMount() {
+    // Initialize state from the most recent status
+    this.setState({
+      isRunning: this.props.isRunning,
+      hubUrl: this.props.preprovisionedIoTHubMetricsUrl,
+      showLink: this.props.preprovisionedIoTHubInUse
+    });
+
+    // Poll until the simulation status is false
+    this.pollingSubscriber = this.pollingStream
+      .do(({ simulationRunning }) => {
+        if (simulationRunning) {
+          this.emitter.next(
+            Rx.Observable.of('poll').delay(pollingInterval).flatMap(SimulationService.getStatus)
+          );
+        }
+      })
+      .subscribe(response => {
+        this.setState({
+          isRunning: response.simulationRunning,
+          hubUrl: response.preprovisionedIoTHubMetricsUrl,
+          showLink: response.preprovisionedIoTHubInUse
+        });
+      });
+
+    // Start polling
+    this.emitter.next(SimulationService.getStatus());
+  }
+
+  componentWillUnmount() {
+    this.pollingSubscriber.unsubscribe();
+  }
+
   stopSimulation = () => this.props.toggleSimulation(false);
 
+  getHubLink = (shouldPad = true) => {
+    return this.state.showLink && (
+      <div className={`portal-link ${shouldPad && 'padded'}`}>
+        <Svg path={svgs.linkTo} className="link-svg" />
+        <a href={this.state.hubUrl} target="_blank">View IoT Hub metrics in the Azure portal</a>
+      </div>
+    )
+  }
+
   render () {
-    const { preprovisionedIoTHubInUse, preprovisionedIoTHubMetricsUrl } = this.props;
-    const { deviceModels, startTime, endTime, connectionString } = this.props.simulation;
+    const {
+      simulation: {
+        deviceModels,
+        startTime,
+        endTime,
+        connectionString
+      }
+    } = this.props;
     const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
-    const [deviceModel = {}] = deviceModels;
+    const [ deviceModel = {} ] = deviceModels;
     const { count = 0, name = 'N/A', sensors = [], interval = '' } = deviceModel;
-    const [hour = '00', minutes = '00', seconds = '00'] = interval.split(':');
+    const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
+
+    const btnProps = {
+      type: 'button',
+      className: 'apply-btn',
+      onClick: this.stopSimulation
+    };
 
     return (
       <div className="simulation-details-container">
@@ -71,23 +144,26 @@ class SimulationDetails extends Component {
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionHeader>{duration}</SectionHeader>
         </FormSection>
-        <FormActions>
-          { preprovisionedIoTHubInUse &&
-            <div className="portal-link">
-              <Svg path={svgs.linkTo} className="link-svg" />
-              <a href={preprovisionedIoTHubMetricsUrl} target="_blank">View IoT Hub metrics in the Azure portal</a>
-            </div>
-          }
-          <BtnToolbar>
-            <Btn
-              svg={svgs.stopSimulation}
-              type="submit"
-              className="apply-btn"
-              onClick={this.stopSimulation}>
-                Stop Simulation
-            </Btn>
-          </BtnToolbar>
-        </FormActions>
+        {
+          this.state.isRunning ? (
+            <FormActions className="details-form-actions">
+              <Indicator pattern="bar" />
+              Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.
+              { this.getHubLink() }
+              <BtnToolbar>
+                <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
+              </BtnToolbar>
+            </FormActions>
+          ) : (
+            <FormActions>
+              Your simulation has stopped running.
+              <BtnToolbar>
+                <Btn { ...btnProps }>Ok</Btn>
+              </BtnToolbar>
+              { this.getHubLink() }
+            </FormActions>
+          )
+        }
       </div>
     );
   }
