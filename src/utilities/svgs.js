@@ -6,6 +6,7 @@ import ContosoIconPath from 'assets/icons/contoso.svg';
 import ErrorIconPath from 'assets/icons/errorAsterisk.svg';
 import HamburgerIconPath from 'assets/icons/hamburger.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
+import LinkToPath from 'assets/icons/linkTo.svg';
 import PlusIconPath from 'assets/icons/plus.svg';
 import RadioSelectedIconPath from 'assets/icons/radioSelected.svg';
 import RadioUnselectedIconPath from 'assets/icons/radioUnselected.svg';
@@ -24,6 +25,7 @@ export const svgs = {
   error: ErrorIconPath,
   hamburger: HamburgerIconPath,
   infoBubble: InfoBubbleIconPath,
+  linkTo: LinkToPath,
   plus: PlusIconPath,
   radioSelected: RadioSelectedIconPath,
   radioUnselected: RadioUnselectedIconPath,

@@ -13,9 +13,19 @@ export const getSimulationIsRunning = createSelector(
   status => !status ? undefined : status.simulationRunning
 );
 
-export const getConnectStringConfig = createSelector(
+export const getPreprovisionedIoTHubInUse = createSelector(
   getSimulationStatus,
-  status => !status ? undefined : status.ioTHubConnectionStringConfigured
+  status => !status ? undefined : status.preprovisionedIoTHubInUse
+);
+
+export const getPreprovisionedIoTHubMetricsUrl = createSelector(
+  getSimulationStatus,
+  status => !status ? undefined : status.preprovisionedIoTHubMetricsUrl
+);
+
+export const getPreprovisionedIoTHub = createSelector(
+  getSimulationStatus,
+  status => !status ? undefined : status.preprovisionedIoTHub
 );
 
 export const getDeviceModelsAsMap = createSelector(

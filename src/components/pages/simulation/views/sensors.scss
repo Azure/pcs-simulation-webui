@@ -43,4 +43,34 @@
     @include rem-fallback(height, 26px);
     @include rem-fallback(margin-top, 6px);
   }
+
+  .portal-link {
+    display: flex;
+    @include rem-fallback(margin-bottom, 48px);
+    @include rem-fallback(width, 310px);
+
+    .link-svg {
+      @include rem-fallback(margin-right, 6px);
+      
+      svg { @include square-px-rem(14px); }
+    }
+
+    a {
+      color: inherit;
+      text-decoration:none;
+
+      &:link,
+      &:active,
+      &:visited { text-decoration:none;  }
+    }
+
+    @include themify($themes) {
+      .link-svg svg { fill: themed('colorMidFirst'); }
+
+      &:hover {
+        color: themed('colorHighest');
+        .link-svg svg { fill: themed('colorHighest'); }
+      }
+    }
+  }
 }

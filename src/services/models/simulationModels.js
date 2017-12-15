@@ -8,7 +8,9 @@ import { int, stringToBoolean } from 'utilities';
 
 export const toSimulationStatusModel = (response = {}) => ({
   simulationRunning: stringToBoolean((response.Properties || {}).SimulationRunning),
-  ioTHubConnectionStringConfigured: stringToBoolean((response.Properties || {}).IoTHubConnectionStringConfigured)
+  preprovisionedIoTHub: stringToBoolean((response.Properties || {}).PreprovisionedIoTHub),
+  preprovisionedIoTHubInUse: stringToBoolean((response.Properties || {}).PreprovisionedIoTHubInUse),
+  preprovisionedIoTHubMetricsUrl: (response.Properties || {}).PreprovisionedIoTHubMetricsUrl
 });
 
 
