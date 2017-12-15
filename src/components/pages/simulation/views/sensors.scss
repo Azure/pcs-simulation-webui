@@ -51,6 +51,7 @@
 
     .link-svg {
       @include rem-fallback(margin-right, 6px);
+      
       svg { @include square-px-rem(14px); }
     }
 
