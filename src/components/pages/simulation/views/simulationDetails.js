@@ -79,6 +79,18 @@ class SimulationDetails extends Component {
     )
   }
 
+  humanizeDuration = (time) => {
+    const duration = moment.duration(time);
+    let durationString = "";
+
+    if (duration.days() > 0) durationString += ` ${duration.days()}  days`;
+    if (duration.hours() > 0) durationString += ` ${duration.hours()} hours`;
+    if (duration.minutes() > 0) durationString += ` ${duration.minutes()} minutes`;
+    if (duration.seconds() > 0) durationString += ` ${duration.seconds()} seconds`;
+
+    return durationString.trim()
+  }
+
   render () {
     const {
       simulation: {
@@ -94,7 +106,7 @@ class SimulationDetails extends Component {
     const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
-      : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
+      : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
 
     const btnProps = {
       type: 'button',
