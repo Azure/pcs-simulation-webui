@@ -15,8 +15,6 @@
       @include rem-fallback(width, 150px);
       @include rem-fallback(margin, 6px, 32px, 6px, 0px);
 
-      .Select-control,
-      .Select-menu-outer,
       .form-control { @include rem-fallback(width, 150px); }
     }
 
