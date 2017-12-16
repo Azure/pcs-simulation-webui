@@ -5,7 +5,7 @@
 
 .simulation-container {
   .sensors-container {
-    @include rem-fallback(min-width, 850px);
+    @include rem-fallback(min-width, 1000px);
 
     .sensor-row,
     .sensor-headers { display: flex; }
@@ -17,9 +17,7 @@
 
       .Select-control,
       .Select-menu-outer,
-      input.form-control {
-        @include rem-fallback(width, 150px);
-      }
+      .form-control { @include rem-fallback(width, 150px); }
     }
 
     .sensor-header {
