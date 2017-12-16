@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import { int, stringToBoolean } from 'utilities';
+import { stringToBoolean } from 'utilities';
 
 // Contains methods for converting service response
 // object to UI friendly objects
@@ -108,8 +108,8 @@ const toCustomSensorModel = (sensors = []) => {
       behaviorMap[path] = {
         ...behaviorMap[path],
         [_name]: {
-          Min: int(minValue),
-          Max: int(maxValue),
+          Min: minValue,
+          Max: maxValue,
           Step: 1,
           Unit: unit
         }

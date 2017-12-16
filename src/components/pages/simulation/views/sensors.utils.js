@@ -13,8 +13,8 @@ export const  SensorHeader = <div className="sensor-headers">
 </div>;
 
 export const behaviorOptions = [
-  { value: 'Math.Increasing', label: 'Increment' },
   { value: 'Math.Random.WithinRange', label: 'Random' },
+  { value: 'Math.Increasing', label: 'Increment' },
   { value: 'Math.Decreasing', label: 'Decrement' }
 ];
 
