@@ -239,6 +239,11 @@ class SimulationForm extends LinkedComponent {
   deleteSensor = (index) =>
     (evt) => this.sensorLink.set(this.sensorLink.value.filter((_, idx) => index !== idx));
 
+  changeDeviceModal = () => {
+    if (this.state.deviceModel.value === 'Custom' && this.state.sensors.length === 0)
+      this.setState({ sensors: [newSensor()] });
+  }
+
   render () {
     const usingCustomSensors = this.state.deviceModel.value === 'Custom';
     // Link these values in render because they need to update based on component state
@@ -304,7 +309,7 @@ class SimulationForm extends LinkedComponent {
               type="select"
               options={this.state.deviceModelOptions}
               link={this.deviceModel}
-              onChange={() => this.setState({ sensors: this.state.sensors.length === 0 ? [newSensor()] : this.state.sensors })}
+              onChange={this.changeDeviceModal}
               clearable={false}
               searchable={true}
               placeholder="Select model" />
