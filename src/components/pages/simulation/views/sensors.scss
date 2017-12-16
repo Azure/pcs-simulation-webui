@@ -5,15 +5,17 @@
 
 .simulation-container {
   .sensors-container {
-    @include rem-fallback(min-width, 850px);
+    @include rem-fallback(min-width, 1000px);
 
     .sensor-row,
     .sensor-headers { display: flex; }
 
     .sensor-box,
     .sensor-header {
-      @include rem-fallback(width, 130px);
+      @include rem-fallback(width, 150px);
       @include rem-fallback(margin, 6px, 32px, 6px, 0px);
+
+      .form-control { @include rem-fallback(width, 150px); }
     }
 
     .sensor-header {

@@ -11,6 +11,7 @@ $selectFontSize: 14px;
 $select-input-height: 26px;
 $select-menu-max-height: 226px;
 $select-padding-vertical: 6px;
+$select-padding-horizontal: 8px;
 
 //
 // Control
@@ -182,6 +183,7 @@ $select-padding-vertical: 6px;
       -webkit-appearance: none;
       position: relative;
       @include rem-fallback(line-height, $selectFontSize);
+      @include rem-fallback(padding-top, 3px);
       @include themify($themes) { color: themed('colorHighest'); }
 
       .is-focused & { cursor: text; }
@@ -255,7 +257,6 @@ $select-padding-vertical: 6px;
     text-align: center;
     vertical-align: middle;
     @include rem-fallback(width, $select-arrow-width * 5);
-    @include rem-fallback(padding-right, $select-arrow-width);
   }
 
   .Select-arrow {
