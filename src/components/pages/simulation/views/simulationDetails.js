@@ -64,10 +64,7 @@ class SimulationDetails extends Component {
             showLink: response.preprovisionedIoTHubInUse
           });
         },
-        undefined,
-        ({ errorMessage }) => {
-          this.setState({ pollingError: errorMessage });
-        }
+        ({ errorMessage }) => this.setState({ pollingError: errorMessage })
       );
 
     // Start polling
