@@ -79,6 +79,14 @@ class SimulationDetails extends Component {
     )
   }
 
+  /*
+  * Return human readable time format.
+  * Examples:
+  * 1 day and 30 seconds
+  * 2 day2 and 2 hours
+  * 1 day, 2 hours, 10 minutes and 50 seconds
+  * @param {number} - time in milliseconds
+  */
   humanizeDuration = (time) => {
     const duration = moment.duration(time);
 
