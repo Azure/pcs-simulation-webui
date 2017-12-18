@@ -69,20 +69,10 @@ export class HttpClient {
     return Observable.ajax(request)
       // If success, extract the response object
       .map(({ response }) => response)
-      // Preprocess errors
+      // Classify errors as retryable or not
       .catch(ajaxError => Observable.throw(classifyError(ajaxError)))
       // Retry any retryable errors
-      .retryWhen(error$ => {
-        return error$
-          .zip(Observable.range(0, maxRetryAttempts + 1)) // Plus 1 to not count initial call
-          .flatMap(([ error, attempt ]) =>
-            (!isRetryable(error) || attempt === maxRetryAttempts)
-              ? Observable.throw(error)
-              : Observable.of(error)
-          )
-          .delay(retryWaitTime);
-        }
-      );
+      .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
   }
 
   /**
@@ -110,10 +100,21 @@ export class HttpClient {
 
 // HttpClient helper methods
 
-/** A help function for checking if a value is a retryable error */
+/** A helper function containing the logic for retrying ajax requests */
+export const retryHandler = (retryAttempts, retryDelay) =>
+  error$ =>
+    error$.zip(Observable.range(0, retryAttempts + 1)) // Plus 1 to not count initial call
+      .flatMap(([ error, attempt ]) =>
+        (!isRetryable(error) || attempt === retryAttempts)
+          ? Observable.throw(error)
+          : Observable.of(error)
+      )
+      .delay(retryDelay);
+
+/** A helper function for checking if a value is a retryable error */
 const isRetryable = error => error instanceof RetryableAjaxError;
 
-/** A help function for classifying errors as retryable or not */
+/** A helper function for classifying errors as retryable or not */
 function classifyError(error) {
   if (Config.retryableStatusCodes.has(error.status)) {
     return RetryableAjaxError.from(error);

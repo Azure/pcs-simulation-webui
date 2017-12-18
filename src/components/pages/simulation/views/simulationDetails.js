@@ -10,6 +10,7 @@ import { Svg } from 'components/shared/svg/svg';
 import {
   Btn,
   BtnToolbar,
+  ErrorMsg,
   FormActions,
   FormSection,
   Indicator,
@@ -29,7 +30,7 @@ class SimulationDetails extends Component {
       isRunning: true,
       showLink: false,
       hubUrl: '',
-      error: ''
+      pollingError: ''
     };
 
     this.emitter = new Rx.Subject();
@@ -49,7 +50,9 @@ class SimulationDetails extends Component {
       .do(({ simulationRunning }) => {
         if (simulationRunning) {
           this.emitter.next(
-            Rx.Observable.of('poll').delay(pollingInterval).flatMap(SimulationService.getStatus)
+            Rx.Observable.of('poll')
+              .delay(pollingInterval)
+              .flatMap(SimulationService.getStatus)
           );
         }
       })
@@ -63,7 +66,7 @@ class SimulationDetails extends Component {
         },
         undefined,
         ({ errorMessage }) => {
-          this.setState({ error: errorMessage });
+          this.setState({ pollingError: errorMessage });
         }
       );
 
@@ -108,6 +111,48 @@ class SimulationDetails extends Component {
     .trim();
   }
 
+  getSimulationStatusBar() {
+    const btnProps = {
+      type: 'button',
+      className: 'apply-btn',
+      onClick: this.stopSimulation
+    };
+
+    if (this.state.pollingError) {
+      const refreshPage = () => window.location.reload();
+
+      return (
+        <FormActions className="details-form-actions">
+          <ErrorMsg>Something went wrong and we weren't able to get the simulation status.</ErrorMsg>
+          <BtnToolbar>
+            <Btn { ...btnProps } onClick={refreshPage}>Refresh</Btn>
+          </BtnToolbar>
+        </FormActions>
+      );
+    } else if (this.state.isRunning) {
+      return (
+        <FormActions className="details-form-actions">
+          <Indicator pattern="bar" />
+          Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.
+          { this.getHubLink() }
+          <BtnToolbar>
+            <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
+          </BtnToolbar>
+        </FormActions>
+      );
+    } else {
+      return (
+        <FormActions>
+          Your simulation has stopped running.
+          <BtnToolbar>
+            <Btn { ...btnProps }>Ok</Btn>
+          </BtnToolbar>
+          { this.getHubLink() }
+        </FormActions>
+      );
+    }
+  }
+
   render () {
     const {
       simulation: {
@@ -124,12 +169,6 @@ class SimulationDetails extends Component {
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
-
-    const btnProps = {
-      type: 'button',
-      className: 'apply-btn',
-      onClick: this.stopSimulation
-    };
 
     return (
       <div className="simulation-details-container">
@@ -173,26 +212,7 @@ class SimulationDetails extends Component {
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionHeader>{duration}</SectionHeader>
         </FormSection>
-        {
-          this.state.isRunning ? (
-            <FormActions className="details-form-actions">
-              <Indicator pattern="bar" />
-              Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.
-              { this.getHubLink() }
-              <BtnToolbar>
-                <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
-              </BtnToolbar>
-            </FormActions>
-          ) : (
-            <FormActions>
-              Your simulation has stopped running.
-              <BtnToolbar>
-                <Btn { ...btnProps }>Ok</Btn>
-              </BtnToolbar>
-              { this.getHubLink() }
-            </FormActions>
-          )
-        }
+        { this.getSimulationStatusBar() }
       </div>
     );
   }
