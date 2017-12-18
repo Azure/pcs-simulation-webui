@@ -138,10 +138,8 @@ class SimulationForm extends LinkedComponent {
     const numDevices = simulation.deviceModels.length
       ? simulation.deviceModels[0].count
       : 0;
-    const interval = simulation.deviceModels.length
-      ? simulation.deviceModels[0].interval
-      : '00:00:00';
-    const [hours, minutes, seconds] = interval.split(':');
+    const interval = simulation.deviceModels.length && simulation.deviceModels[0].interval;
+    const [hours, minutes, seconds] = (interval || '00:00:10').split(':');
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = iotHubString === '' ? 'preProvisioned' : 'customString';
     const sensors = simulation.deviceModels.length
@@ -197,9 +195,9 @@ class SimulationForm extends LinkedComponent {
     unit
   })
 
-  inputOnBlur = () => this.setState({ connectionStrFocused: true })
+  inputOnBlur = () => this.setState({ connectionStrFocused: false })
 
-  inputOnFocus = () => this.setState({ connectionStrFocused: false })
+  inputOnFocus = () => this.setState({ connectionStrFocused: true })
 
   toSelectOption = ({ id, name }) => ({ value: id, label: name || id });
 
@@ -276,7 +274,7 @@ class SimulationForm extends LinkedComponent {
     const connectStringInput = (
       <FormControl
           className="long"
-          type={this.state.connectionStrFocused ? 'password' : 'text'}
+          type={this.state.connectionStrFocused ? 'text' : 'password'}
           onBlur={this.inputOnBlur}
           onFocus={this.inputOnFocus}
           link={this.iotHubString}
