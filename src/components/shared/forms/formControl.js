@@ -19,8 +19,9 @@ export class FormControl extends Component {
 
   onChange = (evt) => {
     const { onChange, link } = this.props;
-    if (isFunc(onChange)) onChange(evt);
     if (link && isFunc(link.onChange)) link.onChange(evt);
+    if (isFunc(onChange)) onChange(evt);
+
     !this.state.edited && this.setState({ edited: true });
   }
 

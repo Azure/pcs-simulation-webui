@@ -86,6 +86,28 @@ class SimulationDetails extends Component {
     )
   }
 
+  /*
+  * Return human readable time format.
+  * Examples:
+  * 1 day and 30 seconds
+  * 2 days and 2 hours
+  * 1 day, 2 hours, 10 minutes and 50 seconds
+  * @param {number} - time in milliseconds
+  */
+  humanizeDuration = (time) => {
+    const duration = moment.duration(time);
+
+    return [
+      [ duration.days(), 'day,', 'days,' ],
+      [ duration.hours(), 'hour,', 'hours,' ],
+      [ duration.minutes(), 'minute,', 'minutes,' ],
+      [ duration.seconds(), 'second', 'seconds' ]
+    ]
+    .reduce((acc, [ value, singular, plurals ]) => value ? `${acc} ${value} ${value === 1 ? singular : plurals}` : acc, '')
+    .replace(/,(?=[^,]*$)/, ' and')
+    .trim();
+  }
+
   render () {
     const {
       simulation: {
@@ -101,7 +123,7 @@ class SimulationDetails extends Component {
     const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
-      : moment.duration(moment(endTime).diff(moment(startTime))).humanize();
+      : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
 
     const btnProps = {
       type: 'button',
