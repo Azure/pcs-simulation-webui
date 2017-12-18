@@ -195,9 +195,9 @@ class SimulationForm extends LinkedComponent {
     unit
   })
 
-  inputOnBlur = () => this.setState({ connectionStrFocused: true })
+  inputOnBlur = () => this.setState({ connectionStrFocused: false })
 
-  inputOnFocus = () => this.setState({ connectionStrFocused: false })
+  inputOnFocus = () => this.setState({ connectionStrFocused: true })
 
   toSelectOption = ({ id, name }) => ({ value: id, label: name || id });
 
@@ -274,7 +274,7 @@ class SimulationForm extends LinkedComponent {
     const connectStringInput = (
       <FormControl
           className="long"
-          type={this.state.connectionStrFocused ? 'password' : 'text'}
+          type={this.state.connectionStrFocused ? 'text' : 'password'}
           onBlur={this.inputOnBlur}
           onFocus={this.inputOnFocus}
           link={this.iotHubString}
