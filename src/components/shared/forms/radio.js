@@ -32,7 +32,7 @@ export class Radio extends Component {
     }
     const childrenWithProps = React.Children.map(contentChildren,
       (child) => React.cloneElement(child, {
-        formGroupId: this.formGroupId,
+        formGroupId: `${this.formGroupId}_child`,
         disabled: disabled || (radioProps.checked === undefined ? false : !radioProps.checked)
       })
     );
