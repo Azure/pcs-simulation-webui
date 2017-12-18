@@ -89,7 +89,7 @@ class SimulationForm extends LinkedComponent {
       .check(({ ms }) => ms > 0, 'Duration must be greater than zero');
 
     this.frequency = this.linkTo('frequency')
-      .check(({ ms }) => ms > 0, 'Telemetry frequency must be greater than zero');
+      .check(({ ms }) => ms > 1000, 'Telemetry frequency must be greater than 10 seconds');
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
@@ -140,7 +140,7 @@ class SimulationForm extends LinkedComponent {
       : 0;
     const interval = simulation.deviceModels.length
       ? simulation.deviceModels[0].interval
-      : '00:00:00';
+      : '00:00:10';
     const [hours, minutes, seconds] = interval.split(':');
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = iotHubString === '' ? 'preProvisioned' : 'customString';
