@@ -89,7 +89,7 @@ class SimulationForm extends LinkedComponent {
       .check(({ ms }) => ms > 0, 'Duration must be greater than zero');
 
     this.frequency = this.linkTo('frequency')
-      .check(({ ms }) => ms > 0, 'Telemetry frequency must be greater than zero');
+      .check(({ ms }) => ms >= 10000, 'Telemetry frequency must be no less than 10 seconds');
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
