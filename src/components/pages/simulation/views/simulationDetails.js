@@ -28,7 +28,8 @@ class SimulationDetails extends Component {
     this.state = {
       isRunning: true,
       showLink: false,
-      hubUrl: ''
+      hubUrl: '',
+      error: ''
     };
 
     this.emitter = new Rx.Subject();
@@ -52,13 +53,19 @@ class SimulationDetails extends Component {
           );
         }
       })
-      .subscribe(response => {
-        this.setState({
-          isRunning: response.simulationRunning,
-          hubUrl: response.preprovisionedIoTHubMetricsUrl,
-          showLink: response.preprovisionedIoTHubInUse
-        });
-      });
+      .subscribe(
+        response => {
+          this.setState({
+            isRunning: response.simulationRunning,
+            hubUrl: response.preprovisionedIoTHubMetricsUrl,
+            showLink: response.preprovisionedIoTHubInUse
+          });
+        },
+        undefined,
+        ({ errorMessage }) => {
+          this.setState({ error: errorMessage });
+        }
+      );
 
     // Start polling
     this.emitter.next(SimulationService.getStatus());
