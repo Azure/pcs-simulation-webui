@@ -103,7 +103,7 @@ class SimulationDetails extends Component {
       [ duration.minutes(), 'minute', 'minutes' ],
       [ duration.seconds(), 'second', 'seconds' ]
     ]
-    .filter(e => !!e[0])
+    .filter(([ value ]) => value)
     .map(([ value, singular, plurals ]) => `${value} ${value === 1 ? singular : plurals}`)
     .join(', ')
     .replace(/,(?=[^,]*$)/, ' and')
