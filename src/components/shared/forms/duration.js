@@ -53,11 +53,11 @@ export class Duration extends Component {
 
   createValueObject(units) {
     const ms = this.convertUnitsToMs(units);
-    return { ...units, ms };
+    return { ...this.convertMsToUnits(ms), ms };
   }
 
   liftChange(value) {
-    const { onChange, name } = this.props
+    const { onChange, name } = this.props;
     if (isFunc(onChange)) onChange({ target: { name, value } });
   }
 
