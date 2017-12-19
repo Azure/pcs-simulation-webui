@@ -4,7 +4,6 @@
 @import 'styles/mixins';
 
 .simulation-container {
-
   .sensors-container {
     @include rem-fallback(min-width, 1000px);
 
