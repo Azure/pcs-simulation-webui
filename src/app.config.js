@@ -9,7 +9,7 @@ const Config = {
   maxRetryAttempts: 2,
   retryableStatusCodes: new Set([ 502, 503 ]),
   maxSimulatedDevices: 1000,
-  simulationStatusPollingInterval: 10000
+  customSensorModel: { value: 'custom', label: 'Custom' }
 };
 
 export default Config;

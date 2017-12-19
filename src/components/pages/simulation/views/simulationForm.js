@@ -129,7 +129,7 @@ class SimulationForm extends LinkedComponent {
       preprovisionedIoTHubMetricsUrl
     } = props;
     const deviceModelOptions = [
-      { value: 'custom', label: 'Custom' },
+      Config.customSensorModel,
       ...(deviceModels || []).map(this.toSelectOption)
     ];
     const deviceModel = simulation.deviceModels.length
@@ -223,7 +223,7 @@ class SimulationForm extends LinkedComponent {
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
-      sensors: deviceModel.value === 'custom' ? sensors : [],
+      sensors: deviceModel.value === Config.customSensorModel.value ? sensors : [],
       ...telemetryFrequency
     }];
     const modelUpdates = {
@@ -241,12 +241,12 @@ class SimulationForm extends LinkedComponent {
     (evt) => this.sensorLink.set(this.sensorLink.value.filter((_, idx) => index !== idx));
 
   changeDeviceModal = () => {
-    if (this.state.deviceModel.value === 'custom' && this.state.sensors.length === 0)
+    if (this.state.deviceModel.value === Config.customSensorModel.value && this.state.sensors.length === 0)
       this.setState({ sensors: [newSensor()] });
   }
 
   render () {
-    const usingCustomSensors = this.state.deviceModel.value === 'custom';
+    const usingCustomSensors = this.state.deviceModel.value === Config.customSensorModel.value;
     // Link these values in render because they need to update based on component state
     const sensorLinks = this.sensorLink.getLinkedChildren(sensorLink => {
       const name = sensorLink.forkTo('name')
@@ -314,7 +314,7 @@ class SimulationForm extends LinkedComponent {
               placeholder="Select model" />
           </FormGroup>
         </FormSection>
-        { (this.state.deviceModel || {}).value === 'custom' &&
+        { (this.state.deviceModel || {}).value === Config.customSensorModel.value &&
           <FormSection>
             <SectionHeader>Sensors</SectionHeader>
             <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>

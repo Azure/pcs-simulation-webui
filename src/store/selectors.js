@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { createSelector } from 'reselect';
+import Config from 'app.config';
 
 // Selectors
 export const getSimulation = state => state.simulation.model;
@@ -38,9 +39,9 @@ export const getSimulationWithDeviceModels = createSelector(
   [getSimulation, getDeviceModelsAsMap],
   (simulationModel = {}, deviceModelsMap) => {
     const modelId = ((simulationModel.deviceModels || [])[0] || {}).id;
-    const name = modelId === 'custom'
-               ? 'Custom'
-               : (deviceModelsMap[modelId] || {}).name;
+    const name = modelId === Config.customSensorModel.value
+      ? Config.customSensorModel.label
+      : (deviceModelsMap[modelId] || {}).name;
     const deviceModels = (simulationModel.deviceModels || [])
       .map(model => ({ ...model, name }));
     return { ...simulationModel, deviceModels };
