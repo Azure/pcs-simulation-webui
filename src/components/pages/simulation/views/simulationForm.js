@@ -241,12 +241,12 @@ class SimulationForm extends LinkedComponent {
     (evt) => this.sensorLink.set(this.sensorLink.value.filter((_, idx) => index !== idx));
 
   changeDeviceModal = () => {
-    if (this.state.deviceModel.value === Config.customSensorValue && this.state.sensors.length === 0)
+    if ((this.state.deviceModel || {}).value === Config.customSensorValue && this.state.sensors.length === 0)
       this.setState({ sensors: [newSensor()] });
   }
 
   render () {
-    const usingCustomSensors = this.state.deviceModel.value === Config.customSensorValue;
+    const usingCustomSensors = (this.state.deviceModel || {}).value === Config.customSensorValue;
     // Link these values in render because they need to update based on component state
     const sensorLinks = this.sensorLink.getLinkedChildren(sensorLink => {
       const name = sensorLink.forkTo('name')
