@@ -118,7 +118,7 @@ class SimulationDetails extends Component {
     };
 
     if (this.state.pollingError) {
-      const refreshPage = () => window.location.reload();
+      const refreshPage = () => window.location.reload(true);
 
       return (
         <FormActions className="details-form-actions">
