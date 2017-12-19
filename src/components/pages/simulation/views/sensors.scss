@@ -4,6 +4,9 @@
 @import 'styles/mixins';
 
 .simulation-container {
+  .device-model,
+  .Select-value { text-transform:capitalize; }
+
   .sensors-container {
     @include rem-fallback(min-width, 1000px);
 
