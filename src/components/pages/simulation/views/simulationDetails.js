@@ -177,7 +177,7 @@ class SimulationDetails extends Component {
         </FormSection>
         <FormSection>
           <SectionHeader>Device Model</SectionHeader>
-          <SectionHeader className='device-model'>{name}</SectionHeader>
+          <SectionHeader>{name}</SectionHeader>
         </FormSection>
         { sensors.length > 0 &&
           <FormSection>
