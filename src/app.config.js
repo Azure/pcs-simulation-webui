@@ -9,7 +9,8 @@ const Config = {
   maxRetryAttempts: 2,
   retryableStatusCodes: new Set([ 502, 503 ]),
   maxSimulatedDevices: 1000,
-  simulationStatusPollingInterval: 10000
+  simulationStatusPollingInterval: 10000,
+  customSensorValue: 'custom'
 };
 
 export default Config;

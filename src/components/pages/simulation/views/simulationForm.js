@@ -129,7 +129,7 @@ class SimulationForm extends LinkedComponent {
       preprovisionedIoTHubMetricsUrl
     } = props;
     const deviceModelOptions = [
-      { value: 'Custom', label: 'Custom' },
+      { value: Config.customSensorValue, label: 'Custom' },
       ...(deviceModels || []).map(this.toSelectOption)
     ];
     const deviceModel = simulation.deviceModels.length
@@ -199,7 +199,7 @@ class SimulationForm extends LinkedComponent {
 
   inputOnFocus = () => this.setState({ connectionStrFocused: true })
 
-  toSelectOption = ({ id, name }) => ({ value: id, label: name || id });
+  toSelectOption = ({ id, name }) => ({ value: id, label: name });
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
@@ -223,7 +223,7 @@ class SimulationForm extends LinkedComponent {
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
-      sensors: deviceModel.value === 'Custom' ? sensors : [],
+      sensors: deviceModel.value === Config.customSensorValue ? sensors : [],
       ...telemetryFrequency
     }];
     const modelUpdates = {
@@ -241,12 +241,12 @@ class SimulationForm extends LinkedComponent {
     (evt) => this.sensorLink.set(this.sensorLink.value.filter((_, idx) => index !== idx));
 
   changeDeviceModal = () => {
-    if (this.state.deviceModel.value === 'Custom' && this.state.sensors.length === 0)
+    if (this.state.deviceModel.value === Config.customSensorValue && this.state.sensors.length === 0)
       this.setState({ sensors: [newSensor()] });
   }
 
   render () {
-    const usingCustomSensors = this.state.deviceModel.value === 'Custom';
+    const usingCustomSensors = this.state.deviceModel.value === Config.customSensorValue;
     // Link these values in render because they need to update based on component state
     const sensorLinks = this.sensorLink.getLinkedChildren(sensorLink => {
       const name = sensorLink.forkTo('name')
@@ -314,7 +314,7 @@ class SimulationForm extends LinkedComponent {
               placeholder="Select model" />
           </FormGroup>
         </FormSection>
-        { (this.state.deviceModel || {}).label === 'Custom' &&
+        { (this.state.deviceModel || {}).value === Config.customSensorValue &&
           <FormSection>
             <SectionHeader>Sensors</SectionHeader>
             <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>
