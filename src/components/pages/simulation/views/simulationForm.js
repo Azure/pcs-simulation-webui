@@ -141,7 +141,7 @@ class SimulationForm extends LinkedComponent {
     const interval = (simulation.deviceModels.length && simulation.deviceModels[0].interval) || '00:00:10';
     const [hours, minutes, seconds] = interval.split(':');
     const iotHubString = (simulation || {}).connectionString || '';
-    const preProvisionedRadio = iotHubString === '' ? 'preProvisioned' : 'customString';
+    const preProvisionedRadio = preprovisionedIoTHubInUse && iotHubString === '' ? 'preProvisioned' : 'customString';
     const sensors = simulation.deviceModels.length
       ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
       : [];
