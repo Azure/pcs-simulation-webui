@@ -98,12 +98,14 @@ class SimulationDetails extends Component {
     const duration = moment.duration(time);
 
     return [
-      [ duration.days(), 'day,', 'days,' ],
-      [ duration.hours(), 'hour,', 'hours,' ],
-      [ duration.minutes(), 'minute,', 'minutes,' ],
+      [ duration.days(), 'day', 'days' ],
+      [ duration.hours(), 'hour', 'hours' ],
+      [ duration.minutes(), 'minute', 'minutes' ],
       [ duration.seconds(), 'second', 'seconds' ]
     ]
-    .reduce((acc, [ value, singular, plurals ]) => value ? `${acc} ${value} ${value === 1 ? singular : plurals}` : acc, '')
+    .filter(([ value ]) => value)
+    .map(([ value, singular, plurals ]) => `${value} ${value === 1 ? singular : plurals}`)
+    .join(', ')
     .replace(/,(?=[^,]*$)/, ' and')
     .trim();
   }
