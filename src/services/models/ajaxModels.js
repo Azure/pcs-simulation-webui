@@ -21,7 +21,7 @@ export class AjaxError {
    * Wrap the message in a getter method to allow customizing for certain status codes
    */
   get message() {
-    if (this.status === 0) { // No response from the service (e.g. network disconnect, CORS, etc.)
+    if (this.status === 0) { // No response from the service (e.g. timeout, network disconnect, CORS, etc.)
       return "Oops, there was no response from the server.";
     } else if (this.status === 401) { // User not logged in
       return "You need to login to call the service.";

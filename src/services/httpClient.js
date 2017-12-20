@@ -119,6 +119,7 @@ const isRetryable = error => error instanceof RetryableAjaxError;
 
 /** A helper function for classifying errors as retryable or not */
 function classifyError(error) {
+  console.log(error);
   if (Config.retryableStatusCodes.has(error.status)) {
     return RetryableAjaxError.from(error);
   }
