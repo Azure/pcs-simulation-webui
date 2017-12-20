@@ -64,8 +64,11 @@ export class HttpClient {
    * @return an Observable of the AjaxReponse
    */
   static ajax(url, options = {}, withAuth = true) {
-    const request = HttpClient.withHeaders({ ...options, url }, withAuth);
-    const { retryWaitTime, maxRetryAttempts } = Config;
+    const { retryWaitTime, maxRetryAttempts, defaultAjaxTimeout } = Config;
+    const request = {
+      ...HttpClient.withHeaders({ ...options, url }, withAuth),
+      timeout: options.timeout || defaultAjaxTimeout
+    };
     return Observable.ajax(request)
       // If success, extract the response object
       .map(({ response }) => response)

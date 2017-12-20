@@ -10,7 +10,8 @@ const Config = {
   retryableStatusCodes: new Set([ 502, 503 ]),
   maxSimulatedDevices: 1000,
   simulationStatusPollingInterval: 10000,
-  customSensorValue: 'custom'
+  customSensorValue: 'custom',
+  defaultAjaxTimeout: 10000, // Default timeout of 10 seconds
 };
 
 export default Config;
