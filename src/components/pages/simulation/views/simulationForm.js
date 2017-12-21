@@ -273,12 +273,12 @@ class SimulationForm extends LinkedComponent {
     const sensorsHaveErrors = usingCustomSensors && (editedSensors.length === 0 || hasErrors);
     const connectStringInput = (
       <FormControl
-          className="long"
-          type={this.state.connectionStrFocused ? 'text' : 'password'}
-          onBlur={this.inputOnBlur}
-          onFocus={this.inputOnFocus}
-          link={this.iotHubString}
-          placeholder="Enter IoT Hub connection string" />
+        className="long"
+        type={this.state.connectionStrFocused ? 'text' : 'password'}
+        onBlur={this.inputOnBlur}
+        onFocus={this.inputOnFocus}
+        link={this.iotHubString}
+        placeholder="Enter IoT Hub connection string" />
     );
 
     return (
