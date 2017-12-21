@@ -4,7 +4,6 @@
 
 Azure IoT Device Simulation Web UI
 ==================================
-
 ...
 
 Prerequisites
@@ -15,11 +14,11 @@ Prerequisites
    - [Visual Studio Code](https://code.visualstudio.com/)
    - [Atom](https://atom.io/)
    - [Sublime Text](https://www.sublimetext.com/)
-   -  or other preferred editor
+   - or other preferred editor
 
 Contributing to the solution
 ============================
-Please follow our [contribution guildelines](docs/CONTRIBUTING.md) and the code style conventions.
+Please follow our [contribution guildelines](docs/CONTRIBUTING.md) and the [code style](docs/CODE_GUIDELINES.md) conventions.
 
 References
 ==========
