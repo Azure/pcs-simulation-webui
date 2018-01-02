@@ -110,7 +110,7 @@ function as the error parameter.
 
 ```
 this.userNameLink = this.linkTo('username')
-  .check(x => x.length > 10, (username) => `${username} is too short`);
+  .check(x => x.length >= 10, (username) => `${username} is too short`);
   .check(x => x.length <= 20, (username) => `${username} is too long`);
 ```
 
