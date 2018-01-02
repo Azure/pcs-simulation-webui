@@ -13,6 +13,7 @@ const navLinks = [
   { key: 0, to: '/simulation', svg: svgs.simulationLogo, label: 'Simulation' }
 ];
 
+/** A window size less than this will automatically collapse the left nav */
 const minExpandedNavWindowWidth = 800;
 
 /**
