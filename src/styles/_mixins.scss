@@ -47,7 +47,7 @@
 
 // ========================== Theming mixins - START
 
-// A mixin for add themes
+// A mixin for adding themes
 @mixin themify($themes) {
   @each $theme, $map in $themes {
     .theme-#{$theme} & {
