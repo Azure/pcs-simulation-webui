@@ -1,4 +1,4 @@
-Application folder structure
+Application Structure Overview
 ==========
 - `assets`: Contains assets used across the application. These include fonts,
 icons, images, etc.
