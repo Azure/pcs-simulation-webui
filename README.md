@@ -4,7 +4,13 @@
 
 Azure IoT Device Simulation Web UI
 ==================================
-...
+## Core technologies overview
+- [ReactJS](https://reactjs.org/)
+- [React-Router v4](https://github.com/ReactTraining/react-router)
+- [Redux](https://redux.js.org/)
+- [Redux-Observable](https://redux-observable.js.org/)
+- [RxJs](http://reactivex.io/rxjs/)
+- [SASS](http://sass-lang.com/)
 
 Prerequisites
 =============
@@ -16,15 +22,16 @@ Prerequisites
    - [Sublime Text](https://www.sublimetext.com/)
    - or other preferred editor
 
+Running the app
+=============
+1. After initially pulling the repo, run `npm install`
+2. Run `npm start` to compile and run the app
+
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). You can find the guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+
 Contributing to the solution
 ============================
 Please follow our [contribution guildelines](docs/CONTRIBUTING.md) and the [code style](docs/CODE_GUIDELINES.md) conventions.
-
-References
-==========
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-You can find a guide to using it [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
 [build-badge]: https://img.shields.io/travis/Azure/pcs-simulation-webui.svg
 [build-url]: https://travis-ci.org/Azure/pcs-simulation-webui
