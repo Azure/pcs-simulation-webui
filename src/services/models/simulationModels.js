@@ -70,25 +70,48 @@ export const toSimulationRequestModel = (request = {}) => ({
   StartTime: request.startTime,
   EndTime: request.endTime,
   Id: request.id,
-  DeviceModels: (request.deviceModels || []).map(({ id, count, interval, sensors }) => ({
-    Id: id,
-    Count: count,
-    Override: {
-      Simulation: {
-        Interval: interval,
-        Scripts: (toCustomSensorModel(sensors) || {}).script
-      },
-      Telemetry: [{
-        Interval: interval,
-        MessageTemplate: (toCustomSensorModel(sensors) || {}).messageTemplate,
-        MessageSchema: (toCustomSensorModel(sensors) || {}).messageSchema
-      }]
-    }
-  })),
+  DeviceModels: toDeviceModels(request.deviceModels),
   IoTHub: {
     ConnectionString: request.connectionString
   }
 });
+
+const toDeviceModels = (deviceModels = []) =>
+  deviceModels.map(({ id, count, interval, sensors }) => {
+    let deviceModel = {
+      Id: id,
+      Count: count,
+      Override: {
+        Simulation: {
+          Interval: interval
+        },
+        Telemetry: [{
+          Interval: interval
+        }]
+      }
+    };
+
+    // For custom device, add properties: Scripts, MessageSchema, MessageTemplate
+    if (sensors && sensors.length > 0) {
+      deviceModel = {
+        Id: id,
+        Count: count,
+        Override: {
+          Simulation: {
+            Interval: interval,
+            Scripts: (toCustomSensorModel(sensors) || {}).script
+          },
+          Telemetry: [{
+            Interval: interval,
+            MessageTemplate: (toCustomSensorModel(sensors) || {}).messageTemplate,
+            MessageSchema: (toCustomSensorModel(sensors) || {}).messageSchema
+          }]
+        }
+      };
+    }
+    
+    return deviceModel;
+  });
 
 const toCustomSensorModel = (sensors = []) => {
   const behaviorMap = {};
