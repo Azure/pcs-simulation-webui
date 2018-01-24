@@ -11,8 +11,13 @@ import registerServiceWorker from 'registerServiceWorker';
 import { AuthService } from 'services';
 import { epics as appEpics } from 'store/reducers/appReducer';
 
+// Initialize internationalization
+import './i18n';
+
+// Include cross browser polyfills
 import './polyfills';
 
+// Include base page css
 import './index.css';
 
 // Initialize the user authentication

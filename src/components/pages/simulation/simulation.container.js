@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
 import {
   getSimulationWithDeviceModels,
   getDeviceModels,
@@ -32,4 +33,4 @@ const mapDispatchToProps = dispatch => ({
   refresh: () => dispatch(appEpics.actions.initializeApp())
 });
 
-export const SimulationContainer = connect(mapStateToProps, mapDispatchToProps)(Simulation);
+export const SimulationContainer = translate()(connect(mapStateToProps, mapDispatchToProps)(Simulation));

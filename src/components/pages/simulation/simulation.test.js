@@ -3,6 +3,8 @@
 import React from 'react';
 import { Simulation } from './simulation';
 import { mount } from 'enzyme';
+import { I18n } from 'react-i18next';
+
 import "mocha-steps";
 
 import 'polyfills';
@@ -19,7 +21,9 @@ describe('Simulation Component', () => {
       deviceModels: [
         { Id: 'chiller-01', Count: 100 }
       ]
-    }
+    },
+    // Fake the internationalization
+    t: () => ''
   };
   it('Renders without crashing', () => {
     wrapper = mount(<Simulation {...mockProps} />);
