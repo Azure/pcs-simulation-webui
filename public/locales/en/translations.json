@@ -1,4 +1,7 @@
 {
+  "tabs": {
+    "simulation": "simulation"
+  },
   "simulation": {
     "currentSim": "Current Simulation",
     "simSetup": "Simulation setup"

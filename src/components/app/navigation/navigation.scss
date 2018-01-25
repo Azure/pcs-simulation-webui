@@ -40,6 +40,7 @@ $companySvgSize: 23px;
       display: none;
       flex-grow: 1;
       flex-shrink: 0;
+      text-transform: capitalize;
       @include rem-fallback(padding-left, $navItemHeight - (2 * $svgSize));
 
       @include rem-fallback(line-height, $navItemHeight);

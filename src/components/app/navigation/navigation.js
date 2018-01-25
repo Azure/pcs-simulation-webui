@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import { translate } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { Svg } from 'components/shared';
 
@@ -10,7 +11,7 @@ import './navigation.css';
 
 /** The navigation tab configurations */
 const navLinks = [
-  { key: 0, to: '/simulation', svg: svgs.simulationLogo, label: 'Simulation' }
+  { key: 0, to: '/simulation', svg: svgs.simulationLogo, labelId: 'tabs.simulation' }
 ];
 
 const minExpandedNavWindowWidth = 800;
@@ -28,9 +29,11 @@ const NavIcon = (props) => (
 const TabLink = (props) => (
   <NavLink to={props.to} className="nav-item" activeClassName="active">
     <NavIcon path={props.svg} />
-    <div className="nav-item-text">{props.label}</div>
+    <div className="nav-item-text">{props.t(props.labelId)}</div>
   </NavLink>
 );
+
+const TransTabLink = translate()(TabLink);
 
 /** The navigation component for the left navigation */
 class Navigation extends Component {
@@ -72,7 +75,7 @@ class Navigation extends Component {
         <button className="nav-item hamburger" onClick={this.toggleExpanded}>
           <NavIcon path={svgs.hamburger} />
         </button>
-        { navLinks.map(navProps => <TabLink {...navProps} />) }
+        { navLinks.map(navProps => <TransTabLink {...navProps} />) }
       </nav>
     );
   }
