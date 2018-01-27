@@ -132,17 +132,18 @@ class SimulationForm extends LinkedComponent {
       { value: Config.customSensorValue, label: 'Custom' },
       ...(deviceModels || []).map(this.toSelectOption)
     ];
-    const deviceModel = simulation.deviceModels.length
+    const hasDeviceModels = simulation.deviceModels.length > 0;
+    const deviceModel = hasDeviceModels
       ? this.toSelectOption(simulation.deviceModels[0])
       : '';
-    const numDevices = simulation.deviceModels.length
+    const numDevices = hasDeviceModels
       ? simulation.deviceModels[0].count
       : 0;
-    const interval = (simulation.deviceModels.length && simulation.deviceModels[0].interval) || '00:00:10';
+    const interval = (hasDeviceModels && simulation.deviceModels[0].interval) || '00:00:10';
     const [hours, minutes, seconds] = interval.split(':');
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = preprovisionedIoTHub && iotHubString === '' ? 'preProvisioned' : 'customString';
-    const sensors = simulation.deviceModels.length
+    const sensors = hasDeviceModels
       ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
       : [];
     const { startTime, endTime } = simulation || {};
@@ -223,7 +224,9 @@ class SimulationForm extends LinkedComponent {
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
-      sensors: deviceModel.value === Config.customSensorValue ? sensors : [],
+      sensors,
+      isCustomDevice: deviceModel.value === Config.customSensorValue,
+      defaultDeviceModel: this.props.deviceModels.filter(({ id }) => id === deviceModel.value)[0],
       ...telemetryFrequency
     }];
     const modelUpdates = {

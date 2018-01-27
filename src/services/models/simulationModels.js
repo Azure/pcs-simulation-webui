@@ -55,6 +55,7 @@ const mapToBehavior = path => {
   }
 }
 
+// Map to deviceModel in simulation form view
 export const toDeviceModel = (response = {}) => ({
   id: response.Id,
   name: response.Name,
@@ -76,41 +77,35 @@ export const toSimulationRequestModel = (request = {}) => ({
   }
 });
 
+// Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
-  deviceModels.map(({ id, count, interval, sensors }) => {
-    let deviceModel = {
+  deviceModels.map(({ id, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
+    const { simulation = {}, telemetry = [] } = defaultDeviceModel;
+    return {
       Id: id,
       Count: count,
       Override: {
-        Simulation: {
-          Interval: interval
-        },
-        Telemetry: [{
-          Interval: interval
-        }]
-      }
-    };
-
-    // For custom device, add properties: Scripts, MessageSchema, MessageTemplate
-    if (sensors && sensors.length > 0) {
-      deviceModel = {
-        Id: id,
-        Count: count,
-        Override: {
-          Simulation: {
+        Simulation: isCustomDevice ?
+          {
             Interval: interval,
             Scripts: (toCustomSensorModel(sensors) || {}).script
+          } :
+          {
+            ...simulation,
+            Interval: interval
           },
-          Telemetry: [{
+        Telemetry: isCustomDevice ?
+          [{
             Interval: interval,
             MessageTemplate: (toCustomSensorModel(sensors) || {}).messageTemplate,
             MessageSchema: (toCustomSensorModel(sensors) || {}).messageSchema
-          }]
-        }
-      };
-    }
-    
-    return deviceModel;
+          }] :
+          telemetry.map(obj => ({
+            ...obj,
+            Interval: interval
+          }))
+      }
+    };
   });
 
 const toCustomSensorModel = (sensors = []) => {
