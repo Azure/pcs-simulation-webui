@@ -2,6 +2,7 @@
 
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
 import { AuthService } from 'services';
 import { epics as appEpics } from 'store/reducers/appReducer';
 import App from './app';
@@ -12,6 +13,6 @@ const mapDispatchToProps = dispatch => ({
   logout: () => AuthService.logout()
 });
 
-const AppContainer = withRouter(connect(undefined, mapDispatchToProps)(App));
+const AppContainer = withRouter(translate()(connect(undefined, mapDispatchToProps)(App)));
 
 export default AppContainer;
