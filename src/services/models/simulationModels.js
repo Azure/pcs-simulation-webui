@@ -81,29 +81,33 @@ export const toSimulationRequestModel = (request = {}) => ({
 const toDeviceModels = (deviceModels = []) =>
   deviceModels.map(({ id, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
     const { simulation = {}, telemetry = [] } = defaultDeviceModel;
+    if (isCustomDevice) {
+      return {
+        Id: id,
+        Count: count,
+        Override: {
+          Simulation: {
+              Interval: interval,
+              Scripts: (toCustomSensorModel(sensors) || {}).script
+            },
+          Telemetry: [{
+            Interval: interval,
+            MessageTemplate: (toCustomSensorModel(sensors) || {}).messageTemplate,
+            MessageSchema: (toCustomSensorModel(sensors) || {}).messageSchema
+          }]
+        }
+      };
+    }
     return {
       Id: id,
       Count: count,
       Override: {
-        Simulation: isCustomDevice ?
-          {
-            Interval: interval,
-            Scripts: (toCustomSensorModel(sensors) || {}).script
-          } :
-          {
-            ...simulation,
-            Interval: interval
-          },
-        Telemetry: isCustomDevice ?
-          [{
-            Interval: interval,
-            MessageTemplate: (toCustomSensorModel(sensors) || {}).messageTemplate,
-            MessageSchema: (toCustomSensorModel(sensors) || {}).messageSchema
-          }] :
-          telemetry.map(obj => ({
-            ...obj,
-            Interval: interval
-          }))
+        Simulation: {
+          Interval: interval
+        },
+        Telemetry: [{
+          Interval: interval
+        }]
       }
     };
   });
