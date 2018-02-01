@@ -82,18 +82,19 @@ const toDeviceModels = (deviceModels = []) =>
   deviceModels.map(({ id, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
     const { simulation = {}, telemetry = [] } = defaultDeviceModel;
     if (isCustomDevice) {
+      const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
       return {
         Id: id,
         Count: count,
         Override: {
           Simulation: {
               Interval: interval,
-              Scripts: (toCustomSensorModel(sensors) || {}).script
+              Scripts: script
             },
           Telemetry: [{
             Interval: interval,
-            MessageTemplate: (toCustomSensorModel(sensors) || {}).messageTemplate,
-            MessageSchema: (toCustomSensorModel(sensors) || {}).messageSchema
+            MessageTemplate: messageTemplate,
+            MessageSchema: messageSchema
           }]
         }
       };
