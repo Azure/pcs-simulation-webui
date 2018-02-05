@@ -16,22 +16,22 @@ import './polyfills';
 import './index.css';
 
 // Initialize the user authentication
-AuthService.onLoad();
+AuthService.onLoad(() => {
+  // Create the redux store and redux-observable streams
+  const store = configureStore();
 
-// Create the redux store and redux-observable streams
-const store = configureStore();
+  // Initialize the app redux data
+  store.dispatch(appEpics.actions.initializeApp());
 
-// Initialize the app redux data
-store.dispatch(appEpics.actions.initializeApp());
+  // Create the React app
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router>
+        <AppContainer />
+      </Router>
+    </Provider>,
+    document.getElementById('root')
+  );
 
-// Create the React app
-ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <AppContainer />
-    </Router>
-  </Provider>,
-  document.getElementById('root')
-);
-
-registerServiceWorker();
+  registerServiceWorker();
+});
