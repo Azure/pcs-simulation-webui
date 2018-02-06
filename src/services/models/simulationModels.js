@@ -80,7 +80,6 @@ export const toSimulationRequestModel = (request = {}) => ({
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
   deviceModels.map(({ id, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
-    const { simulation = {}, telemetry = [] } = defaultDeviceModel;
     if (isCustomDevice) {
       const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
       return {
