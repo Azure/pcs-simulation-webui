@@ -7,6 +7,6 @@ containers and presentational components.
 - `services`: Contains the logic for making ajax calls as well as mapping
 request/response objects to front end models.
 - `store`: Contains all logic related to the redux store.
-- `styles`: Contains sass used across the applicationmixins, theming, variables,
+- `styles`: Contains sass used across the application mixins, theming, variables,
 etc.
 - `utilities`: Contains helper scripts used across the application.

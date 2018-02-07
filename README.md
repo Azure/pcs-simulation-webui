@@ -31,7 +31,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Contributing to the solution
 ============================
-Please follow our [contribution guildelines](docs/CONTRIBUTING.md) and the [code style](docs/CODE_GUIDELINES.md) conventions.
+Please follow our [contribution guidelines](docs/CONTRIBUTING.md) and the [code style](docs/CODE_GUIDELINES.md) conventions.
 
 [build-badge]: https://img.shields.io/travis/Azure/pcs-simulation-webui.svg
 [build-url]: https://travis-ci.org/Azure/pcs-simulation-webui

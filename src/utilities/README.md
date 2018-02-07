@@ -10,7 +10,7 @@ the state linking pattern. The next few sections explain how to use the links.
 
 ## Linked components
 The `LinkedComponent` is a React `Component` with a single helper method included:
-`linkTo`. The `linkTo` method automatically attachs the component reference to
+`linkTo`. The `linkTo` method automatically attaches the component reference to
 the returned `Link` instance. Note that this could be done manually, but having a
 wrapper component makes things easier to write and read by automating some of the
 boilerplate.

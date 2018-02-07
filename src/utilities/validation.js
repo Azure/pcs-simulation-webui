@@ -134,7 +134,7 @@ export class Link extends Validator {
   }
 
   /**
-   * Used to create a new Link instance using the state property hierchy of an
+   * Used to create a new Link instance using the state property hierarchy of an
    * existing instance
    */
   forkTo = (name) => (new Link(this)).to(name);

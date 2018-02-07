@@ -6,7 +6,7 @@ actions in the store, we are using the [Redux-Observbale](https://redux-observab
 middleware making use of [RxJs](http://reactivex.io/rxjs/). You will notice
 that there isn't a file or folder contain actions. The reason for this is
 that, in an effort to avoid boilerplate, much of that functionality has
-been wrapped in the store utilities (found `utilities.js`). These utilites
+been wrapped in the store utilities (found `utilities.js`). These utilities
 are discussed in the following sections.
 
 Reducers and epics are tightly linked concepts. Because of this, we attempt
@@ -29,7 +29,7 @@ export const redux = createReducerScenario({
 export const reducer = redux.getReducer();
 ```
 
-To dispatch a reducer action, you use the object stored in the `redux` contant
+To dispatch a reducer action, you use the object stored in the `redux` constant
 to access the action creator.
 
 ```
@@ -71,7 +71,7 @@ export const epics = createEpicScenario({
 });
 ```
 
-To dispatch an epic action, you use the object stored in the `epics` contant
+To dispatch an epic action, you use the object stored in the `epics` constant
 to access the action creator.
 
 ```
