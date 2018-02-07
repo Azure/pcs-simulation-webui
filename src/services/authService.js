@@ -56,11 +56,12 @@ export class AuthService {
     return !AuthService.isDisabled();
   }
 
-  static onLoad() {
+  static onLoad(successCallback) {
     AuthService.initialize();
     if (AuthService.isDisabled()) {
       console.debug('Skipping Auth onLoad because Auth is disabled');
-      return
+      if (successCallback) successCallback();
+      return;
     };
 
     // Note: "window.location.hash" is the anchor part attached by
@@ -78,6 +79,7 @@ export class AuthService {
       AuthService.getUserName(user => {
         if (user) {
           console.log(`Signed in as ${user.Name} with ${user.Email}`);
+          if (successCallback) successCallback();
         } else {
           console.log('The user is not signed in');
           AuthService.authContext.login();
