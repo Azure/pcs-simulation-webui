@@ -3,6 +3,9 @@ import Backend from 'i18next-xhr-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule } from 'react-i18next';
 
+// Documentation for the i18n config can be found at the link below.
+// https://www.i18next.com/configuration-options.html
+
 i18n
   .use(Backend)
   .use(LanguageDetector)
@@ -14,7 +17,7 @@ i18n
     ns: ['translations'],
     defaultNS: 'translations',
 
-    debug: true,
+    debug: false,
 
     interpolation: {
       escapeValue: false, // Not needed for react!!
