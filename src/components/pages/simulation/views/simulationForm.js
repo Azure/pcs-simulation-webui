@@ -324,21 +324,19 @@ class SimulationForm extends LinkedComponent {
             <div className="sensors-container">
               { this.state.sensors.length > 0 && SensorHeader }
               {
-                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => {
-                  return (
-                    <div className="sensor-container" key={idx}>
-                      <div className="sensor-row">
-                        { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
-                        { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
-                        { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
-                        { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
-                        { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }
-                        <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
-                      </div>
-                      { error && <ErrorMsg>{ error }</ErrorMsg>}
+                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
+                  <div className="sensor-container" key={idx}>
+                    <div className="sensor-row">
+                      { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
+                      { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
+                      { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
+                      { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
+                      { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }
+                      <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
                     </div>
-                  );
-                })
+                    { error && <ErrorMsg>{ error }</ErrorMsg>}
+                  </div>
+                ))
               }
               {
                 this.state.sensors.length < 10 &&

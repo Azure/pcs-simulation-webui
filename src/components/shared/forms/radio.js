@@ -31,10 +31,15 @@ export class Radio extends Component {
       contentChildren = <FormLabel>{contentChildren}</FormLabel>;
     }
     const childrenWithProps = React.Children.map(contentChildren,
-      (child) => React.cloneElement(child, {
-        formGroupId: `${this.formGroupId}_child`,
-        disabled: disabled || (radioProps.checked === undefined ? false : !radioProps.checked)
-      })
+      (child) => {
+        if (child) {
+          return React.cloneElement(child, {
+            formGroupId: `${this.formGroupId}_child`,
+            disabled: disabled || (radioProps.checked === undefined ? false : !radioProps.checked)
+          });
+        }
+        return child;
+      }
     );
     return (
       <div className={joinClasses('radio-container', className)}>
