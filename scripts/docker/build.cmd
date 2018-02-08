@@ -6,7 +6,7 @@ setlocal
 :: Note: use lowercase names for the Docker images
 SET DOCKER_IMAGE=azureiotpcs/device-simulation-webui
 :: "testing" is the latest dev build, usually matching the code in the "master" branch
-SET DOCKER_TAG=%DOCKER_IMAGE%:testing
+SET DOCKER_TAG=%DOCKER_IMAGE%:millennium-testing
 
 :: strlen("\scripts\docker\") => 16
 SET APP_HOME=%~dp0
@@ -23,6 +23,8 @@ cd %APP_HOME%
     git log --pretty=format:%%H -n 1 > tmpfile.tmp
     SET /P COMMIT=<tmpfile.tmp
     DEL tmpfile.tmp
+
+    SET DOCKER_LABEL1=Tags=Azure,IoT,Solutions,React,SPA
     SET DOCKER_LABEL2=Commit=%COMMIT%
 
     rmdir /s /q out\docker
@@ -30,9 +32,10 @@ cd %APP_HOME%
     mkdir out\docker\src
     mkdir out\docker\build
 
+    copy .env            out\docker\
+    copy package.json    out\docker\
     xcopy /s src\*       out\docker\src\
     xcopy /s public\*    out\docker\public\
-    copy package.json    out\docker\
 
     copy scripts\docker\.dockerignore               out\docker\
     copy scripts\docker\Dockerfile                  out\docker\
@@ -40,7 +43,9 @@ cd %APP_HOME%
     copy scripts\docker\content\nginx.conf          out\docker\
 
     cd out\docker\
-    docker build --squash --compress --tag %DOCKER_TAG% --label "%DOCKER_LABEL2%" .
+
+    :: note: images built in Windows don't contain a label with a datetime
+    docker build --squash --compress --tag %DOCKER_TAG% --label "%DOCKER_LABEL1%" --label "%DOCKER_LABEL2%" .
 
     IF %ERRORLEVEL% NEQ 0 GOTO FAIL
 
