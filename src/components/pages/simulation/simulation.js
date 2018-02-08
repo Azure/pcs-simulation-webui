@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-
 import SimulationDetails from './views/simulationDetails';
 import SimulationForm from './views/simulationForm';
 import { FormActions, Indicator, ErrorMsg, Btn } from 'components/shared';
@@ -46,11 +45,13 @@ export class Simulation extends Component {
   }
 
   render () {
-    const { isRunning, simulation: { enabled } } = this.props;
+    const { t, isRunning, simulation: { enabled } } = this.props;
     const showRunningHeader = isRunning === true && enabled === true;
     return (
       <div className="simulation-container">
-        <Header>{showRunningHeader ? 'Current Simulation' : 'Simulation setup'}</Header>
+        <Header>
+          { showRunningHeader ? t('simulation.currentSim') : t('simulation.simSetup') }
+        </Header>
         { this.getView() }
       </div>
     );

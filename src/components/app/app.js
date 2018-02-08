@@ -33,7 +33,7 @@ class App extends Component {
       <div className="app">
         <Navigation />
         <Main>
-          <Header logout={this.props.logout} />
+          <Header logout={this.props.logout} t={this.props.t} />
           <PageContent>
             <Switch>
               <Route exact path="/" render={this.redirectToSimulation} />

@@ -33,16 +33,16 @@ class Header extends Component {
   render() {
     return (
       <header className="app-header">
-        <div className="breadcrumbs">{this.props.breadcrumbs || ''}</div>
-        <div className="label">Microsoft Azure IoT Device Simulation</div>
+        <div className="breadcrumbs">{ this.props.breadcrumbs || '' }</div>
+        <div className="label">{ this.props.t('header.appName') }</div>
         <div className="items-container">
           <button className="item-icon profile" onClick={this.toggleDropdown}>
-            <img src={ProfileImagePath} alt="Logout" />
+            <img src={ProfileImagePath} alt={ this.props.t('header.logout') } />
           </button>
           {
             this.state.dropdownExpanded &&
             <div className="profile-dropdown">
-              <button className="dropdown-item" onClick={this.logout}>Logout</button>
+              <button className="dropdown-item" onClick={this.logout}>{ this.props.t('header.logout') }</button>
             </div>
           }
         </div>

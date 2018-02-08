@@ -11,7 +11,7 @@ import './main.css';
 const Main = (props) => (
   <main className="app-main">
     <div className="main-container">
-      {props.children}
+      { props.children }
     </div>
   </main>
 );

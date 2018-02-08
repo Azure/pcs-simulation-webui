@@ -1,0 +1,13 @@
+{
+  "header": {
+    "appName": "Microsoft Azure IoT Device Simulation",
+    "logout": "Logout"
+  },
+  "tabs": {
+    "simulation": "simulation"
+  },
+  "simulation": {
+    "currentSim": "Current Simulation",
+    "simSetup": "Simulation setup"
+  }
+}
