@@ -58,7 +58,7 @@ $companySvgSize: 23px;
     &:hover { font-family: $fontSelawikSemibold; }
   }
 
-  // Don't include the hamburger style with the a.nav-item to prevent the svg 
+  // Don't include the hamburger style with the a.nav-item to prevent the svg
   // from popping when the font family changes
   .nav-item.hamburger { cursor: pointer; }
 

@@ -26,10 +26,10 @@
       $pxValues: #{$pxValues + " "};
       $remValues: #{$remValues + " "};
     }
-  } 
-  
-  #{$property}: $pxValues; 
-  #{$property}: $remValues; 
+  }
+
+  #{$property}: $pxValues;
+  #{$property}: $remValues;
 }
 
 // A helper mixin for converting Px to REMs for the font-size property
@@ -47,7 +47,7 @@
 
 // ========================== Theming mixins - START
 
-// A mixin for add themes 
+// A mixin for adding themes
 @mixin themify($themes) {
   @each $theme, $map in $themes {
     .theme-#{$theme} & {

@@ -49,7 +49,7 @@ TBD
   selector associated with the rule.
 ```
 /* Incorrect */
-.selector 
+.selector
 {
   ...
 }
@@ -119,11 +119,11 @@ TBD
 .selector {
   padding: 10px;
   color: red;
-  
+
   .child {
     ...
   }
-  
+
 }
 
 ```

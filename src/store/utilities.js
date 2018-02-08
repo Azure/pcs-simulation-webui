@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
  * Utility method for generating redux action creators
  */
 export const createAction = (type, staticPayload) => {
-  const creator = payload => ({ type, payload });
+  const creator = (payload, meta = {}) => ({ type, payload, ...meta });
   const useStaticPayload = typeof staticPayload !== 'undefined';
   return useStaticPayload ? () => creator(staticPayload) : creator;
 };

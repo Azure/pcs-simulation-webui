@@ -132,17 +132,18 @@ class SimulationForm extends LinkedComponent {
       { value: Config.customSensorValue, label: 'Custom' },
       ...(deviceModels || []).map(this.toSelectOption)
     ];
-    const deviceModel = simulation.deviceModels.length
+    const hasDeviceModels = simulation.deviceModels.length > 0;
+    const deviceModel = hasDeviceModels
       ? this.toSelectOption(simulation.deviceModels[0])
       : '';
-    const numDevices = simulation.deviceModels.length
+    const numDevices = hasDeviceModels
       ? simulation.deviceModels[0].count
       : 0;
-    const interval = (simulation.deviceModels.length && simulation.deviceModels[0].interval) || '00:00:10';
+    const interval = (hasDeviceModels && simulation.deviceModels[0].interval) || '00:00:10';
     const [hours, minutes, seconds] = interval.split(':');
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = preprovisionedIoTHub && iotHubString === '' ? 'preProvisioned' : 'customString';
-    const sensors = simulation.deviceModels.length
+    const sensors = hasDeviceModels
       ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
       : [];
     const { startTime, endTime } = simulation || {};
@@ -223,7 +224,9 @@ class SimulationForm extends LinkedComponent {
     const deviceModels = [{
       id: deviceModel.value,
       count: numDevices,
-      sensors: deviceModel.value === Config.customSensorValue ? sensors : [],
+      sensors,
+      isCustomDevice: deviceModel.value === Config.customSensorValue,
+      defaultDeviceModel: this.props.deviceModels.filter(({ id }) => id === deviceModel.value)[0],
       ...telemetryFrequency
     }];
     const modelUpdates = {
@@ -273,12 +276,12 @@ class SimulationForm extends LinkedComponent {
     const sensorsHaveErrors = usingCustomSensors && (editedSensors.length === 0 || hasErrors);
     const connectStringInput = (
       <FormControl
-          className="long"
-          type={this.state.connectionStrFocused ? 'text' : 'password'}
-          onBlur={this.inputOnBlur}
-          onFocus={this.inputOnFocus}
-          link={this.iotHubString}
-          placeholder="Enter IoT Hub connection string" />
+        className="long"
+        type={this.state.connectionStrFocused ? 'text' : 'password'}
+        onBlur={this.inputOnBlur}
+        onFocus={this.inputOnFocus}
+        link={this.iotHubString}
+        placeholder="Enter IoT Hub connection string" />
     );
 
     return (
@@ -321,21 +324,19 @@ class SimulationForm extends LinkedComponent {
             <div className="sensors-container">
               { this.state.sensors.length > 0 && SensorHeader }
               {
-                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => {
-                  return (
-                    <div className="sensor-container" key={idx}>
-                      <div className="sensor-row">
-                        { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
-                        { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
-                        { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
-                        { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
-                        { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }
-                        <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
-                      </div>
-                      { error && <ErrorMsg>{ error }</ErrorMsg>}
+                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
+                  <div className="sensor-container" key={idx}>
+                    <div className="sensor-row">
+                      { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
+                      { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
+                      { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
+                      { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
+                      { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }
+                      <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
                     </div>
-                  );
-                })
+                    { error && <ErrorMsg>{ error }</ErrorMsg>}
+                  </div>
+                ))
               }
               {
                 this.state.sensors.length < 10 &&

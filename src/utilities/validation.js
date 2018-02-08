@@ -19,6 +19,10 @@ export class Validator {
     this.rejectors = validator.rejectors || [];
   }
 
+  /**
+   * Adds a checking function to the validator list
+   * If the function returns false, validation fails
+   */
   check(checker, msg = true) {
     this.validators = [
       ...this.validators,
@@ -27,6 +31,10 @@ export class Validator {
     return this;
   }
 
+  /**
+   * Adds a rejection function to the rejector list
+   * If the function returns false, the value is rejected
+   */
   reject(rejector) {
     this.rejectors =  [ ...this.rejectors, rejector ];
     return this;
@@ -80,6 +88,7 @@ export class Link extends Validator {
     this.set(finalVal);
   };
 
+  /** Links to property in the component state */
   to = (name) => {
     const { selector, setter } = this;
     this.setter = value => setter({ [name]: value });
@@ -87,11 +96,16 @@ export class Link extends Validator {
     return this;
   };
 
+  /** Adds a function for mapping an input value to a new value */
   map = (func) => {
     this.mappers = [ ...this.mappers, func ];
     return this;
   };
 
+  /**
+   * Updates the value of the component state property the Link is
+   * connected to.
+   */
   set(value) {
     this.component.setState(
       update(this.component.state, this.setter({ $set: value }))
@@ -107,6 +121,7 @@ export class Link extends Validator {
     return this.hasErrors(this.value);
   }
 
+  /** Allows the link to use predefined validator logic */
   withValidator(validator) {
     this.validators = validator.validators;
     this.rejectors = validator.rejectors;
@@ -118,6 +133,10 @@ export class Link extends Validator {
     return this.value.map((_, idx) => mapFunc(this.forkTo(idx), idx));
   }
 
+  /**
+   * Used to create a new Link instance using the state property hierarchy of an
+   * existing instance
+   */
   forkTo = (name) => (new Link(this)).to(name);
 
 }
