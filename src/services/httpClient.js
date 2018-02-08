@@ -64,8 +64,8 @@ export class HttpClient {
    * @return an Observable of the AjaxReponse
    */
   static ajax(url, options = {}, withAuth = true) {
-    const request = HttpClient.withHeaders({ ...options, url }, withAuth);
     const { retryWaitTime, maxRetryAttempts } = Config;
+    const request = HttpClient.createAjaxRequest({ ...options, url }, withAuth);
     return Observable.ajax(request)
       // If success, extract the response object
       .map(({ response }) => response)
@@ -94,6 +94,16 @@ export class HttpClient {
       });
     }
     return { ...request, headers };
+  }
+
+  /**
+   * A helper method for constructing ajax request objects
+   */
+  static createAjaxRequest(options, withAuth) {
+    return {
+      ...HttpClient.withHeaders(options, withAuth),
+      timeout: options.timeout || Config.defaultAjaxTimeout
+    };
   }
 
 }
