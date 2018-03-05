@@ -208,8 +208,8 @@ class SimulationDetails extends Component {
       }
     ];
 
-    const statuses = simulationStatuses.map(({discription, value, className}) => (
-      <SectionHeader>
+    const statuses = simulationStatuses.map(({discription, value, className}, index) => (
+      <SectionHeader key={index}>
         <span className={className}>{value}</span>
         <span className="status-description">{discription}</span>
       </SectionHeader>
