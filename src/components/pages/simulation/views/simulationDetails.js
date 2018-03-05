@@ -61,7 +61,14 @@ class SimulationDetails extends Component {
           this.setState({
             isRunning: response.simulationRunning,
             hubUrl: response.preprovisionedIoTHubMetricsUrl,
-            showLink: response.preprovisionedIoTHubInUse
+            showLink: response.preprovisionedIoTHubInUse,
+            totalMessagesCount: response.totalMessagesCount,
+            failedMessagesCount: response.failedMessagesCount,
+            activeDevicesCount: response.activeDevicesCount,
+            totalDevicesCount: response.totalDevicesCount,
+            messagesPerSecond: response.messagesPerSecond,
+            failedDeviceConnectionsCount: response.failedDeviceConnectionsCount,
+            failedDeviceTwinUpdatesCount: response.failedDeviceTwinUpdatesCount
           });
         },
         ({ errorMessage }) => this.setState({ pollingError: errorMessage })
@@ -110,7 +117,7 @@ class SimulationDetails extends Component {
     .trim();
   }
 
-  getSimulationStatusBar() {
+  getSimulationStatusBar(totalDevicesCount) {
     const btnProps = {
       type: 'button',
       className: 'apply-btn',
@@ -133,6 +140,7 @@ class SimulationDetails extends Component {
         <FormActions className="details-form-actions">
           <Indicator pattern="bar" />
           Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.
+          { this.getSimulationStatus(totalDevicesCount) }
           { this.getHubLink() }
           <BtnToolbar>
             <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
@@ -150,6 +158,67 @@ class SimulationDetails extends Component {
         </FormActions>
       );
     }
+  }
+
+  getSimulationStatus(totalDevicesCount = 0) {
+    const {
+      totalMessagesCount = 0,
+      failedMessagesCount = 0,
+      activeDevicesCount = 0,
+      messagesPerSecond = 0,
+      failedDeviceConnectionsCount = 0,
+      failedDeviceTwinUpdatesCount = 0
+    } = this.state;
+
+    const simulationStatuses = [
+      {
+        discription: 'Active devices',
+        value: activeDevicesCount,
+        className: 'active-devices-status'
+      },
+      {
+        discription: 'Total devices',
+        value: totalDevicesCount,
+        className: 'total-devices-status'
+      },
+      {
+        discription: 'Total messages',
+        value: totalMessagesCount,
+        className: 'status-value'
+      },
+      {
+        discription: 'Messages per second',
+        value: messagesPerSecond,
+        className: 'status-value'
+      },
+      {
+        discription: 'Failed messages',
+        value: failedMessagesCount,
+        className: 'status-value'
+      },
+      {
+        discription: 'Failed device connections',
+        value: failedDeviceConnectionsCount,
+        className: 'status-value'
+      },
+      {
+        discription: 'Failed twin updates',
+        value: failedDeviceTwinUpdatesCount,
+        className: 'status-value'
+      }
+    ];
+
+    const statuses = simulationStatuses.map(({discription, value, className}) => (
+      <SectionHeader>
+        <span className={className}>{value}</span>
+        <span className="status-description">{discription}</span>
+      </SectionHeader>
+    ));
+
+    return <FormSection className="simulation-status-section">
+      <SectionHeader>Simulation Status</SectionHeader>
+      {statuses}
+    </FormSection>;
   }
 
   render () {
@@ -211,7 +280,7 @@ class SimulationDetails extends Component {
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionHeader>{duration}</SectionHeader>
         </FormSection>
-        { this.getSimulationStatusBar() }
+        { this.getSimulationStatusBar(count) }
       </div>
     );
   }
