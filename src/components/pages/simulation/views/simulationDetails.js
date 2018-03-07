@@ -172,53 +172,53 @@ class SimulationDetails extends Component {
 
     const simulationStatuses = [
       {
-        discription: 'Active devices',
+        description: 'Active devices',
         value: activeDevicesCount,
         className: 'active-devices-status'
       },
       {
-        discription: 'Total devices',
+        description: 'Total devices',
         value: totalDevicesCount,
         className: 'total-devices-status'
       },
       {
-        discription: 'Total messages',
+        description: 'Total messages',
         value: totalMessagesCount,
         className: 'status-value'
       },
       {
-        discription: 'Messages per second',
+        description: 'Messages per second',
         value: messagesPerSecond,
         className: 'status-value'
       },
       {
-        discription: 'Failed messages',
+        description: 'Failed messages',
         value: failedMessagesCount,
         className: 'status-value'
       },
       {
-        discription: 'Failed device connections',
+        description: 'Failed device connections',
         value: failedDeviceConnectionsCount,
         className: 'status-value'
       },
       {
-        discription: 'Failed twin updates',
+        description: 'Failed twin updates',
         value: failedDeviceTwinUpdatesCount,
         className: 'status-value'
       }
     ];
 
-    const statuses = simulationStatuses.map(({discription, value, className}, index) => (
+    const statuses = simulationStatuses.map(({description, value, className}, index) => (
       <SectionHeader key={index}>
         <span className={className}>{value}</span>
-        <span className="status-description">{discription}</span>
+        <span className="status-description">{description}</span>
       </SectionHeader>
     ));
 
-    return <FormSection className="simulation-status-section">
+    return (<FormSection className="simulation-status-section">
       <SectionHeader>Simulation Status</SectionHeader>
       {statuses}
-    </FormSection>;
+    </FormSection>);
   }
 
   render () {
