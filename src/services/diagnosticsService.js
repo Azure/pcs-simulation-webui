@@ -2,17 +2,17 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { logEventModel } from './models';
+import { logEventRequestModel } from './models';
 
 const ENDPOINT = Config.diagnosticsApiUrl;
 
 /** Contains methods for calling the diagnostics service */
-export class LogEventsService {
+export class DiagnosticsService {
   /**Log event */
   static logEvent(model) {
     return HttpClient.post(
-        `${ENDPOINT}logdata`,
-        logEventModel(model),
+        `${ENDPOINT}logdiagnostics`,
+        logEventRequestModel(model),
       );
   }
 }

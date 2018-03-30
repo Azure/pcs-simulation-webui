@@ -4,4 +4,4 @@
 
 export * from './ajaxModels';
 export * from './simulationModels';
-export * from './logEventModel';
+export * from './logEventRequestModel';

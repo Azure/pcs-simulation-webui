@@ -2,7 +2,7 @@
 
 import 'rxjs';
 import { Observable } from 'rxjs';
-import { SimulationService, LogEventsService } from 'services';
+import { SimulationService, DiagnosticsService } from 'services';
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import {
   epics as simulationEpics,
@@ -40,11 +40,11 @@ export const epics = createEpicScenario({
 
   /** Log diagnostics data */
   logEvent: {
-    type: 'APP_LOG_EVENT',
-    epic: ({ payload }) =>
-    LogEventsService.logEvent(payload)
-        .flatMap(_ => Observable.empty())
-        .catch(() => Observable.empty())
+        type: 'APP_LOG_EVENT',
+        epic: ({ payload }) =>
+        DiagnosticsService.logEvent(payload)
+            .flatMap(_ => Observable.empty())
+            .catch(_ => Observable.empty())
   },
 
   /** Loads the available device models */

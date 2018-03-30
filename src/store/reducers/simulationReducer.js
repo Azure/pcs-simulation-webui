@@ -59,8 +59,8 @@ export const epics = createEpicScenario({
     epic: ({ payload }, store) => {
       const { eTag } = getSimulation(store.getState());
       const logEvent = {
-        EventType: 'StopSimulation',
-        Timestamp: Date.now()
+        eventType: 'StopSimulation',
+        timestamp: now()
       };
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
@@ -89,8 +89,8 @@ export const epics = createEpicScenario({
       const newModel = { ...payload, eTag };
       const statusIsOld = !isRunning && newModel.enabled;
       const logEvent = {
-        EventType: 'StartSimulation',
-        Timestamp: Date.now(),
+        eventType: 'StartSimulation',
+        timestamp: now(),
       };
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
