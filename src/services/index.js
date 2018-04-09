@@ -5,3 +5,5 @@
 export * from './authService';
 export * from './httpClient';
 export * from './simulationService';
+export * from './configService';
+

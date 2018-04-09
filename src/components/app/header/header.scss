@@ -59,7 +59,7 @@ $imgSize: 30px;
       right: 0;
       top: 100%;
       border: 1px solid;
-      @include rem-fallback(width, 150px);
+      @include rem-fallback(width, 350px);
 
       > button {
         width: 100%;
