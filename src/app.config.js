@@ -2,8 +2,8 @@
 
 const Config = {
   // APIs
-  simulationApiUrl: 'http://localhost:9003/v1/',
-  diagnosticsApiUrl: 'http://localhost:9007/v1/',
+  simulationApiUrl: '/devicesimulation-svc/v1/',
+  diagnosticsApiUrl: '/diagnostics-svc/v1/',
 
   // Constants
   retryWaitTime: 2000, // On retryable error, retry after 2s

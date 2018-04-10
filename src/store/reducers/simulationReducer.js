@@ -7,7 +7,7 @@ import { toSimulationModel, toSimulationStatusModel } from 'services/models';
 import { getSimulation, getSimulationIsRunning } from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
-import { now } from 'moment';
+import diagnosticsEvent from '../logEventUtil';
 
 // Simulation reducer constants
 const EMPTY_SIMULATION = toSimulationModel();
@@ -58,13 +58,11 @@ export const epics = createEpicScenario({
     type: 'SIMULATION_TOGGLE',
     epic: ({ payload }, store) => {
       const { eTag } = getSimulation(store.getState());
-      const logEvent = {
-        eventType: 'StopSimulation',
-        timestamp: now()
-      };
+      const event = diagnosticsEvent('StopSimulation');
+      console.log("diag", event);
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(logEvent))
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
         .catch(simulationError);
     }
   },
@@ -88,10 +86,8 @@ export const epics = createEpicScenario({
       const isRunning = getSimulationIsRunning(state);
       const newModel = { ...payload, eTag };
       const statusIsOld = !isRunning && newModel.enabled;
-      const logEvent = {
-        eventType: 'StartSimulation',
-        timestamp: now(),
-      };
+      const event = diagnosticsEvent('StartSimulation');
+      console.log("diag", event);
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
@@ -101,7 +97,7 @@ export const epics = createEpicScenario({
           ] : [];
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(logEvent))
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
         .catch(simulationError);
     }
   }
