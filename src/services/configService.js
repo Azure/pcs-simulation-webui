@@ -15,8 +15,8 @@ export class ConfigService {
       );
   }
 
-  /* set solution settings */
-  static setSolutionSettings(model) {
+  /* update solution settings */
+  static updateSolutionSettings(model) {
     return HttpClient.put(
         `${ENDPOINT}solution-settings/theme`,
           model

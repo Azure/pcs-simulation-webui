@@ -3,7 +3,6 @@
 import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService, ConfigService } from 'services';
-
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import {
   epics as simulationEpics,
@@ -25,9 +24,7 @@ export const reducer = { app: redux.getReducer() };
 // ========================= Reducers - END
 
 // ========================= Selectors - START
-export const getdataInsightsConsentReducer = state => state.app;
-export const getSettings = state => getdataInsightsConsentReducer(state).settings;
-export const getdataInsightsConsent = state => getdataInsightsConsentReducer(state).settings.dataInsightsConsent;
+export const getSolutionSettings = state => state.app.settings;
 // ========================= Selectors - END
 
 // ========================= Epics - START
@@ -52,10 +49,10 @@ export const epics = createEpicScenario({
         .catch(_ => Observable.empty())
   },
 
-  setSolutionSettings: {
-    type: 'APP_SOLUTION_ADD_SETTINGS',
+  updateSolutionSettings: {
+    type: 'APP_SOLUTION_UPDATE_SETTINGS',
     epic: ({ payload }) =>
-    ConfigService.setSolutionSettings(payload)
+    ConfigService.updateSolutionSettings(payload)
         .map(redux.actions.updateSolutionSettings)
         .catch(_ => Observable.empty())
   },

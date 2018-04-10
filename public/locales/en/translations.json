@@ -3,7 +3,7 @@
     "appName": "Microsoft Azure IoT Device Simulation",
     "logout": "Logout",
     "dataInsightsConsentHeader": "Help us Improve",
-    "dataInsightsConsentText": "Device simulation can send anonymous information to Microsoft, such as error logs, configuration and information about how your use the application. No personal information is collected.",
+    "dataInsightsConsentText": "Device simulation can send anonymous information to Microsoft, such as error logs, configuration and information about how you use the application. No personal information is collected.",
     "dataInsightsConsentCheckbox": "Yes, Share information with Microsoft"
   },
   "tabs": {
