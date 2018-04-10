@@ -65,7 +65,7 @@ $imgSize: 30px;
         width: 100%;
         text-align: left;
         cursor: pointer;
-        @include rem-font-size(14px);
+        @include rem-font-size(18px);
         @include rem-fallback(padding, 5px, 8px);
       }
     }
