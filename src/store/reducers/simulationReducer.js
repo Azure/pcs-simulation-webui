@@ -59,7 +59,6 @@ export const epics = createEpicScenario({
     epic: ({ payload }, store) => {
       const { eTag } = getSimulation(store.getState());
       const event = diagnosticsEvent('StopSimulation');
-      console.log("diag", event);
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))

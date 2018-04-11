@@ -11,8 +11,8 @@ export class DiagnosticsService {
   /**Log event */
   static logEvent(model) {
     return HttpClient.post(
-        `${ENDPOINT}diagnosticsevents`,
-        logEventRequestModel(model),
-      );
+      `${ENDPOINT}diagnosticsevents`,
+      logEventRequestModel(model),
+    );
   }
 }

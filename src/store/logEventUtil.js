@@ -1,11 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import { now } from 'moment';
+const diagnosticsEvent = (eventType, eventProperties) => ({ eventType, eventProperties });
 
-export default function diagnosticsEvent(eventType, eventProperties) {
-    return {
-        eventType: eventType,
-        eventProperties: eventProperties
-      };
-  }
+export default diagnosticsEvent ;
   
