@@ -11,20 +11,20 @@ class Settings extends Component {
     super(props);
 
     this.state = {
-      optOutChecked: !((this.props || {}).settings || {}).diagnosticsOptOut
+      diagnosticsOptOutChecked: !((this.props || {}).settings || {}).diagnosticsOptOut
     };
   }
 
   componentWillReceiveProps(nextProps) {
     const { settings: {diagnosticsOptOut} } = nextProps;
-    this.setState({ optOutChecked: !diagnosticsOptOut });
+    this.setState({ diagnosticsOptOutChecked: !diagnosticsOptOut });
   }
 
   toggleCheckbox = () => {
-    this.setState({ optOutChecked: !this.state.optOutChecked },
+    this.setState({ diagnosticsOptOutChecked: !this.state.diagnosticsOptOutChecked },
       () => this.props.updateSolutionSettings({
         ...this.props.settings,
-        diagnosticsOptOut: !this.state.optOutChecked
+        diagnosticsOptOut: !this.state.diagnosticsOptOutChecked
       })
     );
   };
@@ -34,7 +34,7 @@ class Settings extends Component {
       <div className="consent">
         <h2 className="dropdown-item">{ this.props.t('header.sendDiagnosticsHeader') }</h2>
         <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsText') }</label><br/><br/>
-        <input type="checkbox" className="dropdown-item" checked={this.state.optOutChecked} onChange={this.toggleCheckbox}/>
+        <input type="checkbox" className="dropdown-item" checked={this.state.diagnosticsOptOutChecked} onChange={this.toggleCheckbox}/>
         <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsCheckbox') }</label>
       </div>
     );
