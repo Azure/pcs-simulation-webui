@@ -8,9 +8,9 @@ import {
     getSolutionSettings
 } from 'store/reducers/appReducer';
 
-const mapStateToProps = state => {
-    settings: getSolutionSettings(state)
-};
+const mapStateToProps = state => ({
+  settings: getSolutionSettings(state)
+});
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
