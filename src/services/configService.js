@@ -10,17 +10,11 @@ const ENDPOINT = Config.configApiUrl;
 export class ConfigService {
   /* get solution settings */
   static getSolutionSettings() {
-    return HttpClient.get(
-        `${ENDPOINT}solution-settings/theme`
-      );
+    return HttpClient.get(`${ENDPOINT}solution-settings/theme`);
   }
 
   /* update solution settings */
   static updateSolutionSettings(model) {
-    return HttpClient.put(
-        `${ENDPOINT}solution-settings/theme`,
-          model
-    )
-    .catch();
+    return HttpClient.put(`${ENDPOINT}solution-settings/theme`, model);
   }
 }

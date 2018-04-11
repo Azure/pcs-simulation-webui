@@ -3,13 +3,13 @@
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import Settings from './settings';
-import { 
+import {
     epics,
     getSolutionSettings
 } from 'store/reducers/appReducer';
 
 const mapStateToProps = state => {
-    return { settings: getSolutionSettings(state) };
+    settings: getSolutionSettings(state)
 };
 
 // Wrap the dispatch method

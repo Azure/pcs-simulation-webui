@@ -55,17 +55,11 @@ $headerHeight: 48px;
         background-color: themed('colorLowestFirst');
         border-color: themed('colorMidSecond');
 
-        > label {
-          color: themed('colorLightestFirst');
-        }
+        > label { color: themed('colorLightestFirst'); }
 
-        > input {
-          color: themed('colorLightestFirst');
-        }
+        > input { color: themed('colorLightestFirst'); }
 
-        > h2 {
-          color: themed('colorLightestFirst');
-        }
+        > h2 { color: themed('colorLightestFirst'); }
       }
     }
   }
