@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import Settings from './settings';
 import {
-    epics,
-    getSolutionSettings
+  epics,
+  getSolutionSettings
 } from 'store/reducers/appReducer';
 
 const mapStateToProps = state => ({

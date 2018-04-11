@@ -30,16 +30,16 @@ $headerHeight: 48px;
     position: relative;
 
     .consent {
-        text-align: left;
-        display: inline-block;
-        @include rem-font-size(14px);
-        @include rem-fallback(padding, 5px, 8px);
+      text-align: left;
+      display: inline-block;
+      @include rem-font-size(14px);
+      @include rem-fallback(padding, 5px, 8px);
 
-        > input {
-          cursor: pointer;
-          margin-right: 5px;
-          padding: padding;
-          vertical-align: middle;
+      > input {
+        cursor: pointer;
+        margin-right: 5px;
+        padding: padding;
+        vertical-align: middle;
         }
       }
   }

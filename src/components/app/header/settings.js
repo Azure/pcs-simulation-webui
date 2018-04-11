@@ -22,12 +22,12 @@ class Settings extends Component {
 
   toggleCheckbox = () => {
     this.setState({ optOutChecked: !this.state.optOutChecked },
-        () => this.props.updateSolutionSettings({
-            ...this.props.settings,
-            diagnosticsOptOut: !this.state.optOutChecked
-        })
-      );
-    };
+      () => this.props.updateSolutionSettings({
+        ...this.props.settings,
+        diagnosticsOptOut: !this.state.optOutChecked
+      })
+    );
+  };
 
   render() {
     return (
