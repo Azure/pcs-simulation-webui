@@ -31,12 +31,12 @@ class Settings extends Component {
 
   render() {
     return (
-        <div className="consent">
-            <h2 className="dropdown-item">{ this.props.t('header.sendDiagnosticsHeader') }</h2>
-            <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsText') }</label><br/><br/>
-            <input type="checkbox" className="dropdown-item" checked={this.state.optOutChecked} onChange={this.toggleCheckbox}/>
-            <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsCheckbox') }</label>
-        </div>
+      <div className="consent">
+        <h2 className="dropdown-item">{ this.props.t('header.sendDiagnosticsHeader') }</h2>
+        <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsText') }</label><br/><br/>
+        <input type="checkbox" className="dropdown-item" checked={this.state.optOutChecked} onChange={this.toggleCheckbox}/>
+        <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsCheckbox') }</label>
+      </div>
     );
   }
 };
