@@ -4,10 +4,57 @@
     "logout": "Logout"
   },
   "tabs": {
-    "simulation": "simulation"
+    "simulation": "simulation",
+    "deviceModels": "device models"
   },
   "simulation": {
     "currentSim": "Current Simulation",
     "simSetup": "Simulation setup"
+  },
+  "deviceModels": {
+    "noneFound": "No devices found.",
+    "refresh": "Refresh",
+    "grid": {
+      "id": "id",
+      "modelName": "Model Name",
+      "description": "Description",
+      "dataPoints": "Data points",
+      "version": "version",
+      "type": "type",
+      "no": "no",
+      "offline": "offline",
+      "simulated": "Simulated",
+      "status": "Status",
+      "telemetry": "Telemetry",
+      "yes": "yes"
+    },
+    "flyouts": {
+      "delete": {
+        "title": "Delete",
+        "header": "Delete device model",
+        "description": "This action will delete the devices permanently from the platform.",
+        "cancel": "Cancel",
+        "apply": "Delete",
+        "applySuccess": "device model deleted successfully!",
+        "close": "Close"
+      },
+      "new": {
+        "title": "New custom device model",
+        "name": "Device model name",
+        "namePlaceHolder": "",
+        "description": "Model description",
+        "version": "Version",
+        "frenquency": "Telemetry frequency",
+        "frenquencyDescription": "Set frequency of value changes",
+        "data": "Data",
+        "dataDescription": "Set parameters for telemetry sent for the data point",
+        "addDataPoint": "Add data point",
+        "dataPoint": "Data point",
+        "behavior": "behavior",
+        "min": "Min value",
+        "max": "Max value",
+        "unit": "Unit"
+      }
+    }
   }
 }
