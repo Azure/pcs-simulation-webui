@@ -2,7 +2,6 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSolutionSettingsRequestModel } from './models';
 
 const ENDPOINT = Config.configApiUrl;
 

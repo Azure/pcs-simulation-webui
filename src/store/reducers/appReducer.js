@@ -2,7 +2,7 @@
 
 import 'rxjs';
 import { Observable } from 'rxjs';
-import { SimulationService, ConfigService } from 'services';
+import { SimulationService, ConfigService, DiagnosticsService } from 'services';
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import {
   epics as simulationEpics,
@@ -41,6 +41,23 @@ export const epics = createEpicScenario({
     ]
   },
 
+  /** Log diagnostics data */
+  logEvent: {
+    type: 'APP_LOG_EVENT',
+    epic: ({ payload }, store) => {
+      const settings = getSolutionSettings(store.getState());
+      const diagnosticsOptOut = settings === undefined ? true : settings.diagnosticsOptOut;
+      if (!diagnosticsOptOut) {
+        return DiagnosticsService.logEvent(payload)
+          .flatMap(_ => Observable.empty())
+          .catch(_ => Observable.empty())
+      } else {
+        return Observable.empty()
+      }
+    }
+  },
+
+  /** Get solution settings */
   getSolutionSettings: {
     type: 'APP_SOLUTION_GET_SETTINGS',
     epic: () =>
@@ -49,6 +66,7 @@ export const epics = createEpicScenario({
         .catch(_ => Observable.empty())
   },
 
+  /** Update solution settings */
   updateSolutionSettings: {
     type: 'APP_SOLUTION_UPDATE_SETTINGS',
     epic: ({ payload }) =>

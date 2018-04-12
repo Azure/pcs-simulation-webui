@@ -6,6 +6,8 @@ import { SimulationService } from 'services';
 import { toSimulationModel, toSimulationStatusModel } from 'services/models';
 import { getSimulation, getSimulationIsRunning } from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
+import { epics as appEpics } from './appReducer';
+import diagnosticsEvent from '../logEventUtil';
 
 // Simulation reducer constants
 const EMPTY_SIMULATION = toSimulationModel();
@@ -55,10 +57,12 @@ export const epics = createEpicScenario({
   toggleSimulation: {
     type: 'SIMULATION_TOGGLE',
     epic: ({ payload }, store) => {
-      const { eTag } = getSimulation(store.getState());
+      const state = store.getState();
+      const { eTag } = getSimulation(state);
+      const event = diagnosticsEvent('StopSimulation');
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
-        .startWith(redux.actions.clearModel())
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
         .catch(simulationError);
     }
   },
@@ -82,6 +86,7 @@ export const epics = createEpicScenario({
       const isRunning = getSimulationIsRunning(state);
       const newModel = { ...payload, eTag };
       const statusIsOld = !isRunning && newModel.enabled;
+      const event = diagnosticsEvent('StartSimulation');
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
@@ -91,7 +96,7 @@ export const epics = createEpicScenario({
           ] : [];
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
-        .startWith(redux.actions.clearModel())
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
         .catch(simulationError);
     }
   }
