@@ -44,17 +44,17 @@ export const epics = createEpicScenario({
   getSolutionSettings: {
     type: 'APP_SOLUTION_GET_SETTINGS',
     epic: () =>
-    ConfigService.getSolutionSettings()
-      .map(redux.actions.updateSolutionSettings)
-      .catch(_ => Observable.empty())
+      ConfigService.getSolutionSettings()
+        .map(redux.actions.updateSolutionSettings)
+        .catch(_ => Observable.empty())
   },
 
   updateSolutionSettings: {
     type: 'APP_SOLUTION_UPDATE_SETTINGS',
     epic: ({ payload }) =>
-    ConfigService.updateSolutionSettings(payload)
-      .map(redux.actions.updateSolutionSettings)
-      .catch(_ => Observable.empty())
+      ConfigService.updateSolutionSettings(payload)
+        .map(redux.actions.updateSolutionSettings)
+        .catch(_ => Observable.empty())
   },
 
   /** Loads the available device models */
