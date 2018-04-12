@@ -57,11 +57,12 @@ export const epics = createEpicScenario({
   toggleSimulation: {
     type: 'SIMULATION_TOGGLE',
     epic: ({ payload }, store) => {
-      const { eTag } = getSimulation(store.getState());
+      const state = store.getState();
+      const { eTag } = getSimulation(state);
       const event = diagnosticsEvent('StopSimulation');
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
         .catch(simulationError);
     }
   },
@@ -96,7 +97,7 @@ export const epics = createEpicScenario({
           ] : [];
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
         .catch(simulationError);
     }
   }

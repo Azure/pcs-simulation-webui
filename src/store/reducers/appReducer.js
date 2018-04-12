@@ -43,11 +43,18 @@ export const epics = createEpicScenario({
 
   /** Log diagnostics data */
   logEvent: {
-        type: 'APP_LOG_EVENT',
-        epic: ({ payload }) =>
-        DiagnosticsService.logEvent(payload)
-            .flatMap(_ => Observable.empty())
-            .catch(_ => Observable.empty())
+    type: 'APP_LOG_EVENT',
+    epic: ({ payload }, store) => {
+      const settings = getSolutionSettings(store.getState());
+      const diagnosticsOptOut = settings === undefined ? true : settings.diagnosticsOptOut;
+      if (!diagnosticsOptOut) {
+        return DiagnosticsService.logEvent(payload)
+          .flatMap(_ => Observable.empty())
+          .catch(_ => Observable.empty())
+      } else {
+        return Observable.empty()
+      }
+    }
   },
 
   /** Get solution settings */
