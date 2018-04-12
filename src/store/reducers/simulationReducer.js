@@ -87,7 +87,6 @@ export const epics = createEpicScenario({
       const newModel = { ...payload, eTag };
       const statusIsOld = !isRunning && newModel.enabled;
       const event = diagnosticsEvent('StartSimulation');
-      console.log("diag", event);
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
