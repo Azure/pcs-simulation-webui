@@ -59,13 +59,13 @@ $imgSize: 30px;
       right: 0;
       top: 100%;
       border: 1px solid;
-      @include rem-fallback(width, 150px);
+      @include rem-fallback(width, 350px);
 
       > button {
         width: 100%;
         text-align: left;
         cursor: pointer;
-        @include rem-font-size(14px);
+        @include rem-font-size(18px);
         @include rem-fallback(padding, 5px, 8px);
       }
     }

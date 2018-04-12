@@ -10,9 +10,15 @@ export const toSimulationStatusModel = (response = {}) => ({
   simulationRunning: stringToBoolean((response.Properties || {}).SimulationRunning),
   preprovisionedIoTHub: stringToBoolean((response.Properties || {}).PreprovisionedIoTHub),
   preprovisionedIoTHubInUse: stringToBoolean((response.Properties || {}).PreprovisionedIoTHubInUse),
-  preprovisionedIoTHubMetricsUrl: (response.Properties || {}).PreprovisionedIoTHubMetricsUrl
+  preprovisionedIoTHubMetricsUrl: (response.Properties || {}).PreprovisionedIoTHubMetricsUrl,
+  activeDevicesCount: (response.Properties || {}).ActiveDevicesCount,
+  totalDevicesCount: (response.Properties || {}).TotalDevicesCount,
+  messagesPerSecond: (response.Properties || {}).MessagesPerSecond,
+  failedMessagesCount: (response.Properties || {}).FailedMessagesCount,
+  totalMessagesCount: (response.Properties || {}).TotalMessagesCount,
+  failedDeviceConnectionsCount: (response.Properties || {}).FailedDeviceConnectionsCount,
+  failedDeviceTwinUpdatesCount: (response.Properties || {}).FailedDeviceTwinUpdatesCount
 });
-
 
 export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,
