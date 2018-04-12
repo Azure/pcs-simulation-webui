@@ -4,7 +4,8 @@
     "logout": "Logout",
     "sendDiagnosticsHeader": "Help us Improve",
     "sendDiagnosticsText": "Device Simulation can send anonymous information to Microsoft, such as error logs, configuration, and information about how you use the application. No personal information is collected.",
-    "sendDiagnosticsCheckbox": "Yes, share information with Microsoft"
+    "sendDiagnosticsCheckbox": "Yes, share information with Microsoft",
+    "sendDiagnosticsMicrosoftPrivacyUrl": "Privacy Statement"
   },
   "tabs": {
     "simulation": "simulation"
