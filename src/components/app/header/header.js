@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-
 import ProfileImagePath from 'assets/images/profile.png';
+import { SettingsContainer } from './settingsContainer';
 
 import './header.css';
 
@@ -42,6 +42,7 @@ class Header extends Component {
           {
             this.state.dropdownExpanded &&
             <div className="profile-dropdown">
+              <SettingsContainer />
               <button className="dropdown-item" onClick={this.logout}>{ this.props.t('header.logout') }</button>
             </div>
           }

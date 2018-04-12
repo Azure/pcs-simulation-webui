@@ -2,7 +2,7 @@
 
 import 'rxjs';
 import { Observable } from 'rxjs';
-import { SimulationService } from 'services';
+import { SimulationService, ConfigService } from 'services';
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import {
   epics as simulationEpics,
@@ -12,17 +12,19 @@ import {
 // ========================= Reducers - START
 const deviceModelReducer = (state, action) => ({ ...state, deviceModels: action.payload });
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
+const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: action.payload});
 
 export const redux = createReducerScenario({
   updateDeviceModels: { type: 'DEVICE_MODELS_UPDATE', reducer: deviceModelReducer },
-  deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelErrorReducer }
+  deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelErrorReducer },
+  updateSolutionSettings: { type: 'APP_SOLUTION_ADD_SETTINGS', reducer: updateSolutionSettingsReducer}
 });
 
 export const reducer = { app: redux.getReducer() };
 // ========================= Reducers - END
 
 // ========================= Selectors - START
-// TODO: Migrate from selectors
+export const getSolutionSettings = state => state.app.settings;
 // ========================= Selectors - END
 
 // ========================= Epics - START
@@ -34,8 +36,25 @@ export const epics = createEpicScenario({
       simulationRedux.actions.revertToInitial(),
       simulationEpics.actions.fetchSimulationStatus(),
       simulationEpics.actions.fetchSimulation(),
-      epics.actions.fetchDeviceModels()
+      epics.actions.fetchDeviceModels(),
+      epics.actions.getSolutionSettings()
     ]
+  },
+
+  getSolutionSettings: {
+    type: 'APP_SOLUTION_GET_SETTINGS',
+    epic: () =>
+      ConfigService.getSolutionSettings()
+        .map(redux.actions.updateSolutionSettings)
+        .catch(_ => Observable.empty())
+  },
+
+  updateSolutionSettings: {
+    type: 'APP_SOLUTION_UPDATE_SETTINGS',
+    epic: ({ payload }) =>
+      ConfigService.updateSolutionSettings(payload)
+        .map(redux.actions.updateSolutionSettings)
+        .catch(_ => Observable.empty())
   },
 
   /** Loads the available device models */

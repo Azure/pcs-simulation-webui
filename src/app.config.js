@@ -3,6 +3,7 @@
 const Config = {
   // APIs
   simulationApiUrl: '/devicesimulation-svc/v1/',
+  configApiUrl: '/config/v1/',
 
   // Constants
   retryWaitTime: 2000, // On retryable error, retry after 2s
