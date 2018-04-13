@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 
 import './settings.css';
-import { win32 } from 'path';
 
 /** The settings component */
 class Settings extends Component {
@@ -35,7 +34,7 @@ class Settings extends Component {
       <div className="consent">
         <h2 className="dropdown-item">{ this.props.t('header.sendDiagnosticsHeader') }</h2>
         <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsText') }</label><br/>
-        <a className="dropdown-item" href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank">{ this.props.t('header.sendDiagnosticsMicrosoftPrivacyUrl') }</a><br/><br/>
+        <a className="dropdown-item" href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener noreferrer">{ this.props.t('header.sendDiagnosticsMicrosoftPrivacyUrl') }</a><br/><br/>
         <input type="checkbox" className="dropdown-item" checked={this.state.diagnosticsOptOutChecked} onChange={this.toggleCheckbox}/>
         <label className="dropdown-item">{ this.props.t('header.sendDiagnosticsCheckbox') }</label>
       </div>
