@@ -23,7 +23,7 @@ $headerHeight: 48px;
 
     .btn:hover {
       background-color: themed('colorLowestSecond');
-      color: #fff;
+      color: themed('colorHighest');
 
       svg { fill: themed('colorHighest'); }
     }
