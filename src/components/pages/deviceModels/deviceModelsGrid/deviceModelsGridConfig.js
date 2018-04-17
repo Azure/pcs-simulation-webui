@@ -21,7 +21,7 @@ export const checkboxParams = {
   checkboxSelection: true
 };
 
-/** A collection of column definitions for the devices grid */
+/** A collection of column definitions for the device models grid */
 export const deviceModelsColumnDefs = {
   id: {
     headerName: 'deviceModels.grid.id',

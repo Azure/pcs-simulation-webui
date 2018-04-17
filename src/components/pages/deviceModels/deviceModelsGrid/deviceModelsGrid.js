@@ -8,7 +8,7 @@ import { isFunc, svgs, translateColumnDefs } from 'utilities';
 const closedFlyoutState = { openFlyoutName: undefined };
 
 /**
- * A grid for displaying devices
+ * A grid for displaying device models
  *
  * Encapsulates the PcsGrid props
  */
@@ -101,7 +101,6 @@ export class DeviceModelsGrid extends Component {
   }
 
   render() {
-    console.log('this.columnDef', this.columnDefs)
     const gridProps = {
       /* Grid Properties */
       ...defaultDeviceGridProps,
@@ -117,7 +116,7 @@ export class DeviceModelsGrid extends Component {
       onGridReady: this.onGridReady
     };
     const openFlyout = (this.state.openFlyoutName === 'delete')
-      ? <div>not a flyout</div>//<DeviceDeleteContainer key="device-flyout-key" onClose={this.closeFlyout} devices={this.deviceModelsGridApi.getSelectedRows()} />
+      ? null // TODO: Pending design <DeviceDeleteContainer key="device-flyout-key" onClose={this.closeFlyout} devices={this.deviceModelsGridApi.getSelectedRows()} />
       : null;
     return ([
       <PcsGrid key="device-models-grid-key" {...gridProps} />,
