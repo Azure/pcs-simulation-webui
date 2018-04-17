@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceGridProps } from './deviceModelsGridConfig';
-import { NewDeviceModel } from '../flyouts';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
 
 const closedFlyoutState = { openFlyoutName: undefined };
@@ -36,9 +35,9 @@ export class DeviceModelsGrid extends Component {
 
     // TODO: This is a temporary example implementation. Remove with a better version
     this.contextBtns = [
-      <Btn key="delete" svg={svgs.trash} onClick={this.openDeleteFlyout}>{props.t('deviceModels.delete.apply')}</Btn>,
-      <Btn key="edit">Edit</Btn>,
-      <Btn key="clone">Clone</Btn>
+      <Btn key="delete" svg={svgs.trash} onClick={this.openDeleteFlyout}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
+      <Btn key="edit" svg={svgs.edit}>Edit</Btn>,
+      <Btn key="clone" svg={svgs.copy}>Clone</Btn>
     ];
   }
 
@@ -121,7 +120,7 @@ export class DeviceModelsGrid extends Component {
       ? <div>not a flyout</div>//<DeviceDeleteContainer key="device-flyout-key" onClose={this.closeFlyout} devices={this.deviceModelsGridApi.getSelectedRows()} />
       : null;
     return ([
-      <PcsGrid key="device-grid-key" {...gridProps} />,
+      <PcsGrid key="device-models-grid-key" {...gridProps} />,
       openFlyout
     ]);
   }

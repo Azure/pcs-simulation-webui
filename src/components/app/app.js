@@ -7,7 +7,7 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import Header from './header/header';
 import Navigation from './navigation/navigation';
 import Main from './main/main';
-import PageContent from './pageContent/pageContent';
+import { PageContent } from 'components/shared';
 
 // Page Components
 import  {

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { DeviceModelsGrid } from './deviceModelsGrid';
-import { Btn, RefreshBar, PageContent, ContextMenu } from 'components/shared';
+import { Btn, PageContent, ContextMenu } from 'components/shared';
 import { NewDeviceModel } from './flyouts';
 import { svgs } from 'utilities';
 
@@ -29,11 +29,6 @@ export class DeviceModels extends Component {
       this.setState(closedFlyoutState);
     }
   }
-
-  // changeDeviceGroup = () => {
-  //   const { changeDeviceGroup, deviceGroups } = this.props;
-  //   changeDeviceGroup(deviceGroups[1].id);
-  // }
 
   closeFlyout = () => this.setState(closedFlyoutState);
 

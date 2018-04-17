@@ -33,6 +33,9 @@
       "yes": "yes"
     },
     "flyouts": {
+      "cancel": "Cancel",
+      "clearAll": "Clear all",
+      "save": "Save",
       "delete": {
         "title": "Delete",
         "header": "Delete device model",
@@ -58,6 +61,11 @@
         "min": "Min value",
         "max": "Max value",
         "unit": "Unit"
+      },
+      "errorMsg": {
+        "nameCantBeEmpty": "Device model name is required",
+        "intervalCantLessThanOneSecond": "Telemetry interval must be no less than 1 seconds",
+        "frequencyCantLessThanTenSeconds": "Telemetry frequency must be no less than 10 seconds"
       }
     }
   }
