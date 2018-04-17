@@ -12,6 +12,7 @@ import PageContent from './pageContent/pageContent';
 // Page Components
 import  {
   SimulationContainer as SimulationPage,
+  DeviceModelsContainer as DeviceModelsPage,
   PageNotFound
 } from 'components/pages';
 
@@ -38,6 +39,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" render={this.redirectToSimulation} />
               <Route exact path="/simulation" component={SimulationPage} />
+              <Route exact path="/devicemodels" component={DeviceModelsPage} />
               <Route component={PageNotFound} />
             </Switch>
           </PageContent>
