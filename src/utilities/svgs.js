@@ -3,6 +3,8 @@
 import CaratIconPath from 'assets/icons/carat.svg';
 import ColonIconPath from 'assets/icons/colon.svg';
 import ContosoIconPath from 'assets/icons/contoso.svg';
+import CopyIconPath from 'assets/icons/copy.svg';
+import EditIconPath from 'assets/icons/edit.svg';
 import ErrorIconPath from 'assets/icons/errorAsterisk.svg';
 import HamburgerIconPath from 'assets/icons/hamburger.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
@@ -22,6 +24,8 @@ export const svgs = {
   carat: CaratIconPath,
   colon: ColonIconPath,
   contoso: ContosoIconPath,
+  copy: CopyIconPath,
+  edit: EditIconPath,
   error: ErrorIconPath,
   hamburger: HamburgerIconPath,
   infoBubble: InfoBubbleIconPath,
