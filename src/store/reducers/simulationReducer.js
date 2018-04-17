@@ -7,7 +7,8 @@ import { toSimulationModel, toSimulationStatusModel } from 'services/models';
 import {
   getSimulation,
   getSimulationIsRunning,
-  getSimulationWithDeviceModels } from 'store/selectors';
+  getSimulationWithDeviceModels
+} from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';
@@ -90,11 +91,12 @@ export const epics = createEpicScenario({
       const simulationWithModels = getSimulationWithDeviceModels(state);
       const newModel = { ...payload, eTag };
       const statusIsOld = !isRunning && newModel.enabled;
+      const hasDeviceModels = simulationWithModels.deviceModels.length > 0;
       const eventProps = {
-        "DeviceCount": simulationWithModels.deviceModels[0].count,
-        "DeviceName": simulationWithModels.deviceModels[0].name,
-        "Frequency": simulationWithModels.deviceModels[0].interval,
-        "StartTime": simulationWithModels.startTime,
+        DeviceCount: hasDeviceModels ? simulationWithModels.deviceModels[0].count : 0,
+        DeviceName: hasDeviceModels? simulationWithModels.deviceModels[0].name : "",
+        Frequency: hasDeviceModels? simulationWithModels.deviceModels[0].interval : "",
+        StartTime: simulationWithModels.startTime,
       };
       const event = diagnosticsEvent('StartSimulation', eventProps);
       // Force the simulation status to update if turned off
