@@ -19,3 +19,12 @@ export const stringToBoolean = value => {
   if (str === "true") return true;
   else if (str === "false") return false;
 };
+
+/** A helper method for translating headerNames of columnDefs */
+export const translateColumnDefs = (t, columnDefs) => {
+  return columnDefs.map(columnDef =>
+    columnDef.headerName
+      ? { ...columnDef, headerName: t(columnDef.headerName) }
+      : columnDef
+  );
+}
