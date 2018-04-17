@@ -20,6 +20,25 @@ $themes: (
     colorAlarm: $colorAlarm,
     colorWarning: $colorWarning,
     colorSystem: $colorSystem,
+
+    // Grid - START
+    colorGridScrollBar: $colorCharcoal,
+    colorGridRowBackground: $colorMidnight,
+    colorGridCellText: $colorWhite,
+    colorGridRowHoverBackground: $colorCharcoal,
+    colorGridSelectedRowBorder: $colorSystem,
+    colorGridHeaderText: $colorSmoke,
+
+    colorCellRendererSvgFill: $colorSmoke,
+    colorCellRendererSvgFillHighlight: $colorWhite,
+    colorCellRendererText: $colorSmoke,
+    colorCellRendererTextHighlight: $colorWhite,
+    // Grid - END
+
+    // Flyout - START
+    colorFlyoutBackground: $colorNoir,
+    colorFlyoutText: $colorSmoke,
+    // Flyout -END
   ),
   light: (
     // Lows
@@ -38,5 +57,18 @@ $themes: (
     colorAlarm: $colorAlarm,
     colorWarning: #F0D227,
     colorSystem: $colorSystem,
+    // Grid - START
+    colorGridScrollBar: $colorCharcoal,
+    colorGridRowBackground: $colorMidnight,
+    colorGridCellText: $colorWhite,
+    colorGridRowHoverBackground: $colorCharcoal,
+    colorGridSelectedRowBorder: $colorSystem,
+    colorGridHeaderText: $colorSmoke,
+
+    colorCellRendererSvgFill: $colorSmoke,
+    colorCellRendererSvgFillHighlight: $colorWhite,
+    colorCellRendererText: $colorSmoke,
+    colorCellRendererTextHighlight: $colorWhite,
+    // Grid - END
   ),
 );
