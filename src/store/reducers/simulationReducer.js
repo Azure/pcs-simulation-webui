@@ -94,8 +94,8 @@ export const epics = createEpicScenario({
       const hasDeviceModels = simulationWithModels.deviceModels.length > 0;
       const eventProps = {
         DeviceCount: hasDeviceModels ? simulationWithModels.deviceModels[0].count : 0,
-        DeviceName: hasDeviceModels? simulationWithModels.deviceModels[0].name : "",
-        Frequency: hasDeviceModels? simulationWithModels.deviceModels[0].interval : "",
+        DeviceName: hasDeviceModels ? simulationWithModels.deviceModels[0].name : "",
+        Frequency: hasDeviceModels ? simulationWithModels.deviceModels[0].interval : "",
         StartTime: simulationWithModels.startTime,
       };
       const event = diagnosticsEvent('StartSimulation', eventProps);
