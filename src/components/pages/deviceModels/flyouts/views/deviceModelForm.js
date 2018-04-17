@@ -52,7 +52,8 @@ class DeviceModelForm extends LinkedComponent {
     super(props);
 
     this.state = {
-      ...initialFormState
+      ...initialFormState,
+      formVersion: 0
     };
 
     const { t } = props;
@@ -88,7 +89,7 @@ class DeviceModelForm extends LinkedComponent {
   deleteSensor = (index) =>
     (evt) => this.sensorsLink.set(this.sensorsLink.value.filter((_, idx) => index !== idx));
 
-  clearAll = () => this.setState(initialFormState);
+  clearAll = () => this.setState({ ...initialFormState, formVersion: ++this.state.formVersion });
 
   render () {
     const { onClose, t } = this.props;
@@ -126,7 +127,7 @@ class DeviceModelForm extends LinkedComponent {
     ];
 
     return (
-      <form onSubmit={this.apply} className='device-model-form-container'>
+      <form key={`device-model-form-${this.state.formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
         <Section.Container>
           <Section.Content>
             <FormSection>
