@@ -4,7 +4,11 @@ import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
 import { toSimulationModel, toSimulationStatusModel } from 'services/models';
-import { getSimulation, getSimulationIsRunning } from 'store/selectors';
+import {
+  getSimulation,
+  getSimulationIsRunning,
+  getSimulationWithDeviceModels
+} from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';
@@ -84,9 +88,17 @@ export const epics = createEpicScenario({
       const state = store.getState();
       const { eTag } = getSimulation(state);
       const isRunning = getSimulationIsRunning(state);
+      const simulationWithModels = getSimulationWithDeviceModels(state);
       const newModel = { ...payload, eTag };
       const statusIsOld = !isRunning && newModel.enabled;
-      const event = diagnosticsEvent('StartSimulation');
+      const hasDeviceModels = simulationWithModels.deviceModels.length > 0;
+      const eventProps = {
+        DeviceCount: hasDeviceModels ? simulationWithModels.deviceModels[0].count : 0,
+        DeviceName: hasDeviceModels ? simulationWithModels.deviceModels[0].name : "",
+        Frequency: hasDeviceModels ? simulationWithModels.deviceModels[0].interval : "",
+        StartTime: simulationWithModels.startTime,
+      };
+      const event = diagnosticsEvent('StartSimulation', eventProps);
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
         .flatMap(model => {
