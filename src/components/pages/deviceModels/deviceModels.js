@@ -69,7 +69,6 @@ export class DeviceModels extends Component {
 
         <DeviceModelsGrid {...gridProps} />
         <Btn onClick={this.changeDeviceGroup}>Refresh Device Groups</Btn>
-        { /*this.state.flyoutOpen && <DeviceDetailsContainer onClose={this.closeFlyout} device={entities[this.state.selectedDeviceId]} /> */}
         { newDeviceModelFlyoutOpen && <NewDeviceModel onClose={this.closeFlyout}  t={t}/>}
       </PageContent>
     ];

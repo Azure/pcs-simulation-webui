@@ -79,17 +79,17 @@ class DeviceModelForm extends LinkedComponent {
 
   toSelectOption = ({ id, name }) => ({ value: id, label: name });
 
-  apply = (event) => {
-    event.preventDefault();
-    // TODO: calling new device group API
-  };
-
   addSensor = () => this.sensorsLink.set([ ...this.sensorsLink.value, newSensor() ]);
 
   deleteSensor = (index) =>
     (evt) => this.sensorsLink.set(this.sensorsLink.value.filter((_, idx) => index !== idx));
 
   clearAll = () => this.setState({ ...initialFormState, formVersion: ++this.state.formVersion });
+
+  apply = (event) => {
+    event.preventDefault();
+    // TODO: calling new device group API
+  };
 
   render () {
     const { t } = this.props;
@@ -152,10 +152,10 @@ class DeviceModelForm extends LinkedComponent {
               </FormGroup>
             </FormSection>
             <FormSection>
-              <SectionHeader>Telemetry data</SectionHeader>
-              <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>
+              <SectionHeader>{t('deviceModels.flyouts.new.telemetry')}</SectionHeader>
+              <SectionDesc>{t('deviceModels.flyouts.new.telemetryDescription')}</SectionDesc>
               { this.state.sensors.length < 10 &&
-                <Btn svg={svgs.plus} onClick={this.addSensor}>Add a data point</Btn>
+                <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
               }
               <div className="sensors-container">
                 { this.state.sensors.length > 0 &&
@@ -183,13 +183,13 @@ class DeviceModelForm extends LinkedComponent {
               </div>
             </FormSection>
             <FormSection>
-              <SectionDesc>Min/Max changes occur every:</SectionDesc>
+              <SectionDesc>{t('deviceModels.flyouts.new.interval')}</SectionDesc>
               <FormGroup>
-                <FormControl type="duration" name="frequency" link={this.intervalLink} />
+                <FormControl type="duration" name="interval" link={this.intervalLink} />
               </FormGroup>
             </FormSection>
             <FormSection>
-              <SectionDesc>Report Min/Max changes every:</SectionDesc>
+              <SectionDesc>{t('deviceModels.flyouts.new.frequency')}</SectionDesc>
               <FormGroup>
                 <FormControl type="duration" name="frequency" link={this.frequencyLink} />
               </FormGroup>

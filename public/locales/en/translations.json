@@ -52,11 +52,13 @@
         "namePlaceHolder": "",
         "description": "Model description",
         "version": "Version",
-        "frenquency": "Telemetry frequency",
-        "frenquencyDescription": "Set frequency of value changes",
+        "telemetry": "Telemetry data",
+        "telemetryDescription": "Set parameters for telemetry sent for the sensor.",
         "data": "Data",
         "dataDescription": "Set parameters for telemetry sent for the data point",
-        "addDataPoint": "Add data point"
+        "addDataPoint": "Add data point",
+        "interval": "Min/Max changes occur every:",
+        "frequency": "Report Min/Max changes every:"
       },
       "sensors" : {
         "dataPoint": "Data point",
