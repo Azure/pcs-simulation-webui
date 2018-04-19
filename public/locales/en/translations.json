@@ -16,6 +16,7 @@
     "simSetup": "Simulation setup"
   },
   "deviceModels": {
+    "title": "Device models",
     "noneFound": "No devices found.",
     "refresh": "Refresh",
     "grid": {
@@ -79,7 +80,7 @@
         "maxValueCantBeEmpty": "Max value is required",
         "minValueMustBeLessThanMax": "Min value must be less than the max value",
         "maxValueMustBeGreaterThanMin": "Max value must be greater than the min value",
-        "unitValueCantBeEmpty": "Unit value is required",
+        "unitValueCantBeEmpty": "Unit value is required"
       }
     }
   }

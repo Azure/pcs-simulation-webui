@@ -13,6 +13,8 @@ const closedFlyoutState = {
   selectedDeviceModelId: undefined
 };
 
+const newDeviceModelFlyout = 'new-device-model';
+
 export class DeviceModels extends Component {
 
   constructor(props) {
@@ -32,7 +34,7 @@ export class DeviceModels extends Component {
 
   closeFlyout = () => this.setState(closedFlyoutState);
 
-  openNewDeviceModelFlyout = () => this.setState({ flyoutOpen: 'new-device-model' });
+  openNewDeviceModelFlyout = () => this.setState({ flyoutOpen: newDeviceModelFlyout });
 
   onSoftSelectChange = ({ id }) => this.setState({
     flyoutOpen: true,
@@ -48,7 +50,6 @@ export class DeviceModels extends Component {
 
   render() {
     const { t, deviceModels } = this.props;
-    console.log('deviceModels',deviceModels)
     const gridProps = {
       rowData: deviceModels || [],
       onSoftSelectChange: this.onSoftSelectChange,
@@ -57,12 +58,12 @@ export class DeviceModels extends Component {
       getSoftSelectId: this.getSoftSelectId,
       t
     };
-    const newDeviceModelFlyoutOpen = this.state.flyoutOpen === 'new-device-model';
+    const newDeviceModelFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
 
     return [
       <ContextMenu key="context-menu">
         { this.state.contextBtns }
-        <Btn svg={svgs.plus} onClick={this.openNewDeviceModelFlyout}>Device models</Btn> { /* TODO: Translate */ }
+        <Btn svg={svgs.plus} onClick={this.openNewDeviceModelFlyout}>{t('deviceModels.title')}</Btn>
       </ContextMenu>,
       <PageContent className="devicemodels-container" key="page-content">
 

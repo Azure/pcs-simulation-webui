@@ -5,7 +5,7 @@ import { translate } from 'react-i18next';
 import { getDeviceModels } from 'store/selectors';
 import { DeviceModels } from './deviceModels';
 
-// Pass the simulation status
+// Pass the device models
 const mapStateToProps = state => ({
   deviceModels: getDeviceModels(state),
 });
