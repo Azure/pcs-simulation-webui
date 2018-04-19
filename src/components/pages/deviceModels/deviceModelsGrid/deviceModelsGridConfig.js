@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import Config from 'app.config';
-// import { IsSimulatedRenderer, ConnectionStatusRenderer, TimeRenderer } from 'components/shared/cellRenderers';
 import { gridValueFormatters } from 'components/shared/pcsGrid/pcsGridConfig';
 
 const { checkForEmpty } = gridValueFormatters;

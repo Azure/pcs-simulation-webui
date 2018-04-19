@@ -62,9 +62,9 @@ class DeviceModelForm extends LinkedComponent {
       .check(Validator.notEmpty, () => t('deviceModels.flyouts.errorMsg.nameCantBeEmpty'));
     this.descriptionLink = this.linkTo('description');
     this.intervalLink = this.linkTo('interval')
-      .check(({ ms }) => ms >= 1000, () => t('deviceModels.flyouts.errorMsg.intervalCantLessThanOneSecond'));
+      .check(({ ms }) => ms >= 1000, () => t('deviceModels.flyouts.errorMsg.intervalCantBeLessThanOneSecond'));
     this.frequencyLink = this.linkTo('frequency')
-      .check(({ ms }) => ms >= 10000, () => t('deviceModels.flyouts.errorMsg.frequencyCantLessThanTenSeconds'));
+      .check(({ ms }) => ms >= 10000, () => t('deviceModels.flyouts.errorMsg.frequencyCantBeLessThanTenSeconds'));
     this.sensorsLink = this.linkTo('sensors');
   }
 
@@ -92,24 +92,24 @@ class DeviceModelForm extends LinkedComponent {
   clearAll = () => this.setState({ ...initialFormState, formVersion: ++this.state.formVersion });
 
   render () {
-    const { onClose, t } = this.props;
+    const { t } = this.props;
 
     // Create the state link for the dynamic form elements
     const sensorLinks = this.sensorsLink.getLinkedChildren(sensorLink => {
       const name = sensorLink.forkTo('name')
-        .check(Validator.notEmpty, 'Name is required');
+        .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.dataPointNameCantBeEmpty'));
       const behavior = sensorLink.forkTo('behavior')
-        .check(Validator.notEmpty, 'Behavior is required');
+        .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.behaviorCantBeEmpty'));
       const minValue = sensorLink.forkTo('minValue')
         .reject(nonReal)
-        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), 'Min value is required')
-        .check(x => stringToFloat(x) < stringToFloat(maxValue.value), `Min value must be less than the max value`);
+        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), t('deviceModels.flyouts.errorMsg.minValueCantBeEmpty'))
+        .check(x => stringToFloat(x) < stringToFloat(maxValue.value), t('deviceModels.flyouts.errorMsg.minValueMustBeLessThanMax'));
       const maxValue = sensorLink.forkTo('maxValue')
         .reject(nonReal)
-        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), 'Max value is required')
-        .check(x => stringToFloat(x) > stringToFloat(minValue.value), 'Max value must be greater than the min value');
+        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), t('deviceModels.flyouts.errorMsg.maxValueCantBeEmpty'))
+        .check(x => stringToFloat(x) > stringToFloat(minValue.value),  t('deviceModels.flyouts.errorMsg.maxValueMustBeGreaterThanMin'));
       const unit = sensorLink.forkTo('unit')
-        .check(Validator.notEmpty, 'Unit is required');
+        .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.unitValueCantBeEmpty'));
       const edited = !(!name.value && !behavior.value && !minValue.value && !maxValue.value && !unit.value);
       const error = (edited && (name.error || behavior.error || minValue.error || maxValue.error || unit.error)) || '';
       return { name, behavior, minValue, maxValue, unit, edited, error };
@@ -119,11 +119,11 @@ class DeviceModelForm extends LinkedComponent {
     const hasErrors = editedSensors.some(({ error }) => !!error);
     const sensorsHaveErrors = (editedSensors.length === 0 || hasErrors);
     const sensorHeaders = [
-      t('deviceModels.flyouts.new.dataPoint'),
-      t('deviceModels.flyouts.new.behavior'),
-      t('deviceModels.flyouts.new.min'),
-      t('deviceModels.flyouts.new.max'),
-      t('deviceModels.flyouts.new.unit')
+      t('deviceModels.flyouts.sensors.dataPoint'),
+      t('deviceModels.flyouts.sensors.behavior'),
+      t('deviceModels.flyouts.sensors.min'),
+      t('deviceModels.flyouts.sensors.max'),
+      t('deviceModels.flyouts.sensors.unit')
     ];
 
     return (
@@ -169,11 +169,11 @@ class DeviceModelForm extends LinkedComponent {
                   sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
                     <div className="sensor-container" key={idx}>
                       <div className="sensor-row">
-                        { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
-                        { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
-                        { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
-                        { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
-                        { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }
+                        { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error) }
+                        { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), behaviorOptions, edited && !!behavior.error) }
+                        { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error) }
+                        { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error) }
+                        { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error) }
                         <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
                       </div>
                       { error && <ErrorMsg>{ error }</ErrorMsg>}

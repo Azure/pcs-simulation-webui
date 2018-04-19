@@ -55,17 +55,31 @@
         "frenquencyDescription": "Set frequency of value changes",
         "data": "Data",
         "dataDescription": "Set parameters for telemetry sent for the data point",
-        "addDataPoint": "Add data point",
+        "addDataPoint": "Add data point"
+      },
+      "sensors" : {
         "dataPoint": "Data point",
         "behavior": "behavior",
         "min": "Min value",
         "max": "Max value",
-        "unit": "Unit"
+        "unit": "Unit",
+        "dataPointPlaceHolder": "Enter data point name",
+        "behaviorPlaceHolder": "Select behavior",
+        "minPlaceHolder": "Enter min value",
+        "maxPlaceHolder": "Enter max value",
+        "unitPlaceHolder": "Enter unit value"
       },
       "errorMsg": {
         "nameCantBeEmpty": "Device model name is required",
-        "intervalCantLessThanOneSecond": "Telemetry interval must be no less than 1 seconds",
-        "frequencyCantLessThanTenSeconds": "Telemetry frequency must be no less than 10 seconds"
+        "dataPointNameCantBeEmpty": "Name is required",
+        "behaviorCantBeEmpty": "Behavior is required",
+        "intervalCantBeLessThanOneSecond": "Telemetry interval must be no less than 1 seconds",
+        "frequencyCantBeLessThanTenSeconds": "Telemetry frequency must be no less than 10 seconds",
+        "minValueCantBeEmpty": "Min value is required",
+        "maxValueCantBeEmpty": "Max value is required",
+        "minValueMustBeLessThanMax": "Min value must be less than the max value",
+        "maxValueMustBeGreaterThanMin": "Max value must be greater than the min value",
+        "unitValueCantBeEmpty": "Unit value is required",
       }
     }
   }
