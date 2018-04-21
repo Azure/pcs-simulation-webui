@@ -119,7 +119,7 @@ export class DeviceModelsGrid extends Component {
       ? null // TODO: Pending design <DeviceDeleteContainer key="device-flyout-key" onClose={this.closeFlyout} devices={this.deviceModelsGridApi.getSelectedRows()} />
       : null;
     return ([
-      <PcsGrid key="device-models-grid-key" {...gridProps} />,
+      <PcsGrid {...gridProps} key="device-models-grid-key" />,
       openFlyout
     ]);
   }

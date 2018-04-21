@@ -7,21 +7,14 @@ import DeviceModelForm from '../views/deviceModelForm';
 
 import './newDeviceModel.css';
 
-export class NewDeviceModel extends Component {
-
-  render() {
-    const { onClose, t } = this.props;
-
-    return (
-      <Flyout.Container className="new-rule-flyout-container">
-        <Flyout.Header>
-          <Flyout.Title>{t('deviceModels.flyouts.new.title')}</Flyout.Title>
-          <Flyout.CloseBtn onClick={onClose} />
-        </Flyout.Header>
-        <Flyout.Content >
-          <DeviceModelForm {...this.props} />
-        </Flyout.Content>
-      </Flyout.Container>
-    );
-  }
-}
+export const NewDeviceModel = (props) => (
+  <Flyout.Container className="new-rule-flyout-container">
+    <Flyout.Header>
+      <Flyout.Title>{props.t('deviceModels.flyouts.new.title')}</Flyout.Title>
+      <Flyout.CloseBtn onClick={props.onClose} />
+    </Flyout.Header>
+    <Flyout.Content >
+      <DeviceModelForm {...props} />
+    </Flyout.Content>
+  </Flyout.Container>
+);
