@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import React, { Component } from 'react';
+import React from 'react';
 
 import Flyout from 'components/shared/flyout';
 import DeviceModelForm from '../views/deviceModelForm';
