@@ -4,7 +4,7 @@ const Config = {
   // APIs
   simulationApiUrl: '/devicesimulation-svc/v1/',
   diagnosticsApiUrl: '/diagnostics-svc/v1/',
-  configApiUrl: '/config/v1/',
+  configApiUrl: '/config-svc/v1/',
 
 
   // Constants
