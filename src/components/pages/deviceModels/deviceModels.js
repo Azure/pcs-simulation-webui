@@ -66,10 +66,8 @@ export class DeviceModels extends Component {
         <Btn svg={svgs.plus} onClick={this.openNewDeviceModelFlyout}>{t('deviceModels.title')}</Btn>
       </ContextMenu>,
       <PageContent className="devicemodels-container" key="page-content">
-
         <DeviceModelsGrid {...gridProps} />
-        <Btn onClick={this.changeDeviceGroup}>Refresh Device Groups</Btn>
-        { newDeviceModelFlyoutOpen && <NewDeviceModel onClose={this.closeFlyout}  t={t}/>}
+        { newDeviceModelFlyoutOpen && <NewDeviceModel onClose={this.closeFlyout}  t={t} />}
       </PageContent>
     ];
   }
