@@ -7,11 +7,12 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import Header from './header/header';
 import Navigation from './navigation/navigation';
 import Main from './main/main';
-import PageContent from './pageContent/pageContent';
+import { PageContent } from 'components/shared';
 
 // Page Components
 import  {
   SimulationContainer as SimulationPage,
+  DeviceModelsContainer as DeviceModelsPage,
   PageNotFound
 } from 'components/pages';
 
@@ -38,6 +39,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" render={this.redirectToSimulation} />
               <Route exact path="/simulation" component={SimulationPage} />
+              <Route exact path="/devicemodels" component={DeviceModelsPage} />
               <Route component={PageNotFound} />
             </Switch>
           </PageContent>

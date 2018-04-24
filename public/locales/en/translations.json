@@ -8,10 +8,82 @@
     "sendDiagnosticsMicrosoftPrivacyUrl": "Privacy Statement"
   },
   "tabs": {
-    "simulation": "simulation"
+    "simulation": "simulation",
+    "deviceModels": "device models"
   },
   "simulation": {
     "currentSim": "Current Simulation",
     "simSetup": "Simulation setup"
+  },
+  "deviceModels": {
+    "title": "Device models",
+    "noneFound": "No devices found.",
+    "refresh": "Refresh",
+    "grid": {
+      "id": "id",
+      "modelName": "Model Name",
+      "description": "Description",
+      "dataPoints": "Data points",
+      "version": "version",
+      "type": "type",
+      "no": "no",
+      "offline": "offline",
+      "simulated": "Simulated",
+      "status": "Status",
+      "telemetry": "Telemetry",
+      "yes": "yes"
+    },
+    "flyouts": {
+      "cancel": "Cancel",
+      "clearAll": "Clear all",
+      "save": "Save",
+      "delete": {
+        "title": "Delete",
+        "header": "Delete device model",
+        "description": "This action will delete the devices permanently from the platform.",
+        "cancel": "Cancel",
+        "apply": "Delete",
+        "applySuccess": "device model deleted successfully!",
+        "close": "Close"
+      },
+      "new": {
+        "title": "New custom device model",
+        "name": "Device model name",
+        "namePlaceHolder": "",
+        "description": "Model description",
+        "version": "Version",
+        "telemetry": "Telemetry data",
+        "telemetryDescription": "Set parameters for telemetry sent for the sensor.",
+        "data": "Data",
+        "dataDescription": "Set parameters for telemetry sent for the data point",
+        "addDataPoint": "Add data point",
+        "interval": "Min/Max changes occur every:",
+        "frequency": "Report Min/Max changes every:"
+      },
+      "sensors" : {
+        "dataPoint": "Data point",
+        "behavior": "behavior",
+        "min": "Min value",
+        "max": "Max value",
+        "unit": "Unit",
+        "dataPointPlaceHolder": "Enter data point name",
+        "behaviorPlaceHolder": "Select behavior",
+        "minPlaceHolder": "Enter min value",
+        "maxPlaceHolder": "Enter max value",
+        "unitPlaceHolder": "Enter unit value"
+      },
+      "errorMsg": {
+        "nameCantBeEmpty": "Device model name is required",
+        "dataPointNameCantBeEmpty": "Name is required",
+        "behaviorCantBeEmpty": "Behavior is required",
+        "intervalCantBeLessThanOneSecond": "Telemetry interval must be no less than 1 seconds",
+        "frequencyCantBeLessThanTenSeconds": "Telemetry frequency must be no less than 10 seconds",
+        "minValueCantBeEmpty": "Min value is required",
+        "maxValueCantBeEmpty": "Max value is required",
+        "minValueMustBeLessThanMax": "Min value must be less than the max value",
+        "maxValueMustBeGreaterThanMin": "Max value must be greater than the min value",
+        "unitValueCantBeEmpty": "Unit value is required"
+      }
+    }
   }
 }
