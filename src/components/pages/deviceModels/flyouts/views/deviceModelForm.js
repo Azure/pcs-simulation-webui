@@ -154,32 +154,34 @@ class DeviceModelForm extends LinkedComponent {
             <FormSection>
               <SectionHeader>{t('deviceModels.flyouts.new.telemetry')}</SectionHeader>
               <SectionDesc>{t('deviceModels.flyouts.new.telemetryDescription')}</SectionDesc>
-              { this.state.sensors.length < 10 &&
-                <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
+              {
+                this.state.sensors.length < 10 &&
+                  <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
               }
               <div className="sensors-container">
-                { this.state.sensors.length > 0 &&
+              {
+                this.state.sensors.length > 0 &&
                   <div className="sensor-headers">
                     { sensorHeaders.map((header, idx) => (
                       <div className="sensor-header" key={idx}>{header}</div>
                     )) }
                   </div>
-                }
-                {
-                  sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
-                    <div className="sensor-container" key={idx}>
-                      <div className="sensor-row">
-                        { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error) }
-                        { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), behaviorOptions, edited && !!behavior.error) }
-                        { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error) }
-                        { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error) }
-                        { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error) }
-                        <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
-                      </div>
-                      { error && <ErrorMsg>{ error }</ErrorMsg>}
+              }
+              {
+                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
+                  <div className="sensor-container" key={idx}>
+                    <div className="sensor-row">
+                      { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error) }
+                      { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), behaviorOptions, edited && !!behavior.error) }
+                      { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error) }
+                      { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error) }
+                      { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error) }
+                      <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
                     </div>
-                  ))
-                }
+                    { error && <ErrorMsg>{ error }</ErrorMsg>}
+                  </div>
+                ))
+              }
               </div>
             </FormSection>
             <FormSection>
