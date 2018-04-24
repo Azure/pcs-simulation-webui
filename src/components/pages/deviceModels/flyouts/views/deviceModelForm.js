@@ -132,7 +132,7 @@ class DeviceModelForm extends LinkedComponent {
           <Section.Content>
             <FormSection>
               <FormGroup>
-                <FormLabel isRequired="true">
+                <FormLabel>
                   {t('deviceModels.flyouts.new.name')}
                 </FormLabel>
                 <FormControl
@@ -197,7 +197,6 @@ class DeviceModelForm extends LinkedComponent {
             <FormActions>
               <BtnToolbar>
                 <Btn
-                  primary
                   disabled={!this.formIsValid() || sensorsHaveErrors}
                   type="submit">
                   {t('deviceModels.flyouts.save')}
