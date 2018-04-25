@@ -16,8 +16,9 @@ import SettingsIconPath from 'assets/icons/settings.svg';
 import SimulationLogoPath from 'assets/icons/simulationLogo.svg';
 import StartSimIconPath from 'assets/icons/startSimulation.svg';
 import StopSimIconPath from 'assets/icons/stopSimulation.svg';
-import XIconPath from 'assets/icons/x.svg';
 import TrashPath from 'assets/icons/trash.svg';
+import TabDevicesPath from 'assets/icons/tabDevices.svg';
+import XIconPath from 'assets/icons/x.svg';
 
 /** A helper object mapping svg names to their paths */
 export const svgs = {
@@ -38,5 +39,6 @@ export const svgs = {
   startSimulation: StartSimIconPath,
   stopSimulation: StopSimIconPath,
   trash: TrashPath,
+  tabDeviceModels: TabDevicesPath,
   x: XIconPath
 };
