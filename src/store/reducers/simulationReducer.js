@@ -87,15 +87,16 @@ export const epics = createEpicScenario({
       const newModel = { ...payload, eTag };
       const statusIsOld = !isRunning && newModel.enabled;
       const hasDeviceModels = payload.deviceModels.length > 0;
-      const deviceModels = payload.deviceModels.length > 0 ? payload.deviceModels[0] : "";
+      const deviceModels = payload.deviceModels.length > 0 ? payload.deviceModels[0] : {};
       const eventProps = {
-        DeviceId: hasDeviceModels ? deviceModels.id: "",
-        DeviceName: hasDeviceModels ? deviceModels.defaultDeviceModel.name: "",
-        DeviceCount: hasDeviceModels ? deviceModels.count : 0,
-        Frequency: hasDeviceModels ? deviceModels.interval : "",
-        IsCustomDevice: hasDeviceModels ? payload.deviceModels[0].isCustomDevice : null,
-        Sensors: deviceModels.sensors,
-      };
+        DeviceModels: [{
+          Id: hasDeviceModels ? deviceModels.id: '',
+          Name: hasDeviceModels ? deviceModels.defaultDeviceModel.name: '',
+          Count: hasDeviceModels ? deviceModels.count : 0,
+          Frequency: hasDeviceModels ? deviceModels.interval : '',
+          IsCustomDevice: hasDeviceModels ? payload.deviceModels[0].isCustomDevice : null,
+          Sensors: deviceModels.sensors,
+      }]};
       const event = diagnosticsEvent('StartSimulation', eventProps);
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
