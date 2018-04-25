@@ -6,10 +6,7 @@ import { schema, normalize } from 'normalizr';
 import update from 'immutability-helper';
 import { createSelector } from 'reselect';
 import { DeviceModelsService } from 'services';
-import { toSimulationModel, toSimulationStatusModel } from 'services/models';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
-import { epics as appEpics } from './appReducer';
-import diagnosticsEvent from '../logEventUtil';
 
 // Device models reducer constants
 const initialState = { entities: {}, items: [] };
@@ -42,13 +39,12 @@ const deleteDeviceModelReducer = (state, { payload }) => {
   });
 };
 const deviceModelsErrorReducer = (state, action) => ({ error: action.payload });
-const initialStateReducer = (state, action) => initialState;
 
 
 export const redux = createReducerScenario({
   updateDeviceModels: { type: 'DEVICE_MODELS_UPDATE', reducer: updateDeviceModelsReducer },
   createDeviceModel: { type: 'CREATE_DEVICE_MODEL', reducer: createDeviceModelReducer },
-  deleteDeviceModel: { type: 'CREATE_DEVICE_MODEL', reducer: deleteDeviceModelReducer },
+  deleteDeviceModel: { type: 'DELETE_DEVICE_MODEL', reducer: deleteDeviceModelReducer },
   deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelsErrorReducer },
 });
 

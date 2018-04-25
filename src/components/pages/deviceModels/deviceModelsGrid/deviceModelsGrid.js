@@ -93,7 +93,7 @@ export class DeviceModelsGrid extends Component {
    * @param {Array} selectedDeviceModels A list of currently selected devices
    */
   onHardSelectChange = (selectedDeviceModels) => {
-    const [{ id }] = selectedDeviceModels
+    const [{ id } = {}] = selectedDeviceModels
     const { onContextMenuChange, onHardSelectChange } = this.props;
     this.setState({ hardSelectedDeviceModelId: id });
     if (isFunc(onContextMenuChange)) {

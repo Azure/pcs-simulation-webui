@@ -2,12 +2,12 @@
 
 import { createSelector } from 'reselect';
 import Config from 'app.config';
+import { getDeviceModels } from 'store/reducers/deviceModelsReducer';
 
 // Selectors
 export const getSimulation = state => state.simulation.model;
 export const getSimulationStatus = state => state.simulation.status;
 export const getSimulationError = state => state.simulation.error;
-export const getDeviceModels = state => state.app.deviceModels;
 
 export const getSimulationIsRunning = createSelector(
   getSimulationStatus,

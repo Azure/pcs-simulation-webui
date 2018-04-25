@@ -2,20 +2,19 @@
 
 import 'rxjs';
 import { Observable } from 'rxjs';
-import { SimulationService, ConfigService, DiagnosticsService } from 'services';
+import { ConfigService, DiagnosticsService } from 'services';
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import {
   epics as simulationEpics,
   redux as simulationRedux
 } from './simulationReducer';
+import { epics as deviceModelsEpics } from './deviceModelsReducer';
 
 // ========================= Reducers - START
-const deviceModelReducer = (state, action) => ({ ...state, deviceModels: action.payload });
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
 const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: action.payload});
 
 export const redux = createReducerScenario({
-  updateDeviceModels: { type: 'DEVICE_MODELS_UPDATE', reducer: deviceModelReducer },
   deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelErrorReducer },
   updateSolutionSettings: { type: 'APP_SOLUTION_ADD_SETTINGS', reducer: updateSolutionSettingsReducer}
 });
@@ -36,8 +35,9 @@ export const epics = createEpicScenario({
       simulationRedux.actions.revertToInitial(),
       simulationEpics.actions.fetchSimulationStatus(),
       simulationEpics.actions.fetchSimulation(),
-      epics.actions.fetchDeviceModels(),
-      epics.actions.getSolutionSettings()
+      //epics.actions.fetchDeviceModels(),
+      epics.actions.getSolutionSettings(),
+      deviceModelsEpics.actions.fetchDeviceModels(),
     ]
   },
 
@@ -73,15 +73,6 @@ export const epics = createEpicScenario({
       ConfigService.updateSolutionSettings(payload)
         .map(redux.actions.updateSolutionSettings)
         .catch(_ => Observable.empty())
-  },
-
-  /** Loads the available device models */
-  fetchDeviceModels: {
-    type: 'APP_DEVICE_MODELS_FETCH',
-    epic: () =>
-      SimulationService.getDeviceModels()
-        .map(redux.actions.updateDeviceModels)
-        .catch(({ message }) => Observable.of(redux.actions.deviceModelsError(message)))
   },
 
   /** Listen to route events and emit a route change event when the url changes */

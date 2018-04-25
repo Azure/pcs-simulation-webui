@@ -1,16 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-const mapToBehavior = path => {
-  switch (path) {
-    case 'Increasing':
-      return 'Increment';
-    case 'Decreasing':
-      return 'Decrement';
-    default:
-      return path;
-  }
-}
-
 // Map to deviceModel in simulation form view
 export const toDeviceModel = (response = {}) => ({
   id: response.Id,
@@ -40,41 +29,6 @@ export const toDeviceModelRequestModel = (request = {}) => {
     }]
   };
 };
-
-// Map to deviceModels in simulation request model
-const toDeviceModels = (deviceModels = []) =>
-  deviceModels.map(({ id, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
-    if (isCustomDevice) {
-      const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
-      return {
-        Id: id,
-        Count: count,
-        Override: {
-          Simulation: {
-              Interval: interval,
-              Scripts: script
-            },
-          Telemetry: [{
-            Interval: interval,
-            MessageTemplate: messageTemplate,
-            MessageSchema: messageSchema
-          }]
-        }
-      };
-    }
-    return {
-      Id: id,
-      Count: count,
-      Override: {
-        Simulation: {
-          Interval: interval
-        },
-        Telemetry: [{
-          Interval: interval
-        }]
-      }
-    };
-  });
 
 const toCustomSensorModel = (sensors = []) => {
   const behaviorMap = {};
