@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
-import { checkboxParams, deviceModelsColumnDefs, defaultDeviceGridProps } from './deviceModelsGridConfig';
+import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
 
 const closedFlyoutState = { openFlyoutName: undefined };
@@ -43,7 +43,9 @@ export class DeviceModelsGrid extends Component {
 
   closeFlyout = () => this.setState(closedFlyoutState);
 
-  openDeleteFlyout = () => this.setState({ openFlyoutName: 'delete' });
+  openDeleteFlyout = () => {
+    this.props.deleteDeviceModel(this.state.hardSelectedDeviceModelId);
+    this.setState({ openFlyoutName: 'delete' })};
 
   componentWillReceiveProps(nextProps) {
     const { hardSelectedDeviceModels } = nextProps;
@@ -74,36 +76,38 @@ export class DeviceModelsGrid extends Component {
   /**
    * Handles soft select props method
    *
-   * @param device The currently soft selected device
+   * @param deviceModel The currently soft selected deviceModel
    * @param rowEvent The rowEvent to pass on to the underlying grid
    */
-  onSoftSelectChange = (device, rowEvent) => {
+  onSoftSelectChange = (deviceModel, rowEvent) => {
     const { onSoftSelectChange } = this.props;
     this.setState(closedFlyoutState);
     if (isFunc(onSoftSelectChange)) {
-      onSoftSelectChange(device, rowEvent);
+      onSoftSelectChange(deviceModel, rowEvent);
     }
   }
 
   /**
    * Handles context filter changes and calls any hard select props method
    *
-   * @param {Array} selectedDevices A list of currently selected devices
+   * @param {Array} selectedDeviceModels A list of currently selected devices
    */
-  onHardSelectChange = (selectedDevices) => {
+  onHardSelectChange = (selectedDeviceModels) => {
+    const [{ id }] = selectedDeviceModels
     const { onContextMenuChange, onHardSelectChange } = this.props;
+    this.setState({ hardSelectedDeviceModelId: id });
     if (isFunc(onContextMenuChange)) {
-      onContextMenuChange(selectedDevices.length > 0 ? this.contextBtns : null);
+      onContextMenuChange(selectedDeviceModels.length > 0 ? this.contextBtns : null);
     }
     if (isFunc(onHardSelectChange)) {
-      onHardSelectChange(selectedDevices);
+      onHardSelectChange(selectedDeviceModels);
     }
   }
 
   render() {
     const gridProps = {
       /* Grid Properties */
-      ...defaultDeviceGridProps,
+      ...defaultDeviceModelGridProps,
       columnDefs: translateColumnDefs(this.props.t, this.columnDefs),
       onRowDoubleClicked: ({ node }) => node.setSelected(!node.isSelected()),
       ...this.props, // Allow default property overrides

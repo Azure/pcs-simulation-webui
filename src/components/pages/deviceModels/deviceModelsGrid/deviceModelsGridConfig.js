@@ -54,11 +54,11 @@ export const deviceModelsColumnDefs = {
   },
 };
 
-/** Given a device object, extract and return the device Id */
+/** Given a deviceModel object, extract and return the device Id */
 export const getSoftSelectId = ({ Id }) => Id;
 
-/** Shared device grid AgGrid properties */
-export const defaultDeviceGridProps = {
+/** Shared deviceModel grid AgGrid properties */
+export const defaultDeviceModelGridProps = {
   enableColResize: false,
   multiSelect: false,
   pagination: true,

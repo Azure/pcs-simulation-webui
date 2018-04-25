@@ -44,6 +44,7 @@ const initialFormState = {
   interval: {},
   frequency: {},
   sensors: [],
+  changesApplied: false,
 }
 
 class DeviceModelForm extends LinkedComponent {
@@ -86,13 +87,33 @@ class DeviceModelForm extends LinkedComponent {
 
   clearAll = () => this.setState({ ...initialFormState, formVersion: ++this.state.formVersion });
 
+  setFormChangesFlag = () => this.setState({ changesApplied: false });
+
   apply = (event) => {
     event.preventDefault();
-    // TODO: calling new device group API
+    const {
+      frequency,
+      interval,
+      description,
+      name,
+      sensors
+    } = this.state;
+    const simulationFrequency = frequency.ms > 0 ? { frequency: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
+    const telemetryInterval = interval.ms > 0 ? { interval: `${interval.hours}:${interval.minutes}:${interval.seconds}` } : {};
+    const model = {
+      name,
+      description,
+      sensors,
+      ...simulationFrequency,
+      ...telemetryInterval
+    };
+    this.props.createDeviceModel(model);
+    this.setState({ changesApplied: true });
   };
 
   render () {
     const { t } = this.props;
+    const { sensors, changesApplied, formVersion } = this.state;
 
     // Create the state link for the dynamic form elements
     const sensorLinks = this.sensorsLink.getLinkedChildren(sensorLink => {
@@ -127,7 +148,7 @@ class DeviceModelForm extends LinkedComponent {
     ];
 
     return (
-      <form key={`device-model-form-${this.state.formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
+      <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
         <Section.Container>
           <Section.Content>
             <FormSection>
@@ -139,6 +160,7 @@ class DeviceModelForm extends LinkedComponent {
                   type="text"
                   className="long"
                   placeholder={t('deviceModels.flyouts.new.name')}
+                  onChange={this.setFormChangesFlag}
                   link={this.nameLink} />
               </FormGroup>
               <FormGroup>
@@ -148,6 +170,7 @@ class DeviceModelForm extends LinkedComponent {
                 <FormControl
                   type="textarea"
                   placeholder="Description"
+                  onChange={this.setFormChangesFlag}
                   link={this.descriptionLink} />
               </FormGroup>
             </FormSection>
@@ -155,12 +178,12 @@ class DeviceModelForm extends LinkedComponent {
               <SectionHeader>{t('deviceModels.flyouts.new.telemetry')}</SectionHeader>
               <SectionDesc>{t('deviceModels.flyouts.new.telemetryDescription')}</SectionDesc>
               {
-                this.state.sensors.length < 10 &&
+                sensors.length < 10 &&
                   <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
               }
               <div className="sensors-container">
               {
-                this.state.sensors.length > 0 &&
+                sensors.length > 0 &&
                   <div className="sensor-headers">
                     { sensorHeaders.map((header, idx) => (
                       <div className="sensor-header" key={idx}>{header}</div>
@@ -171,11 +194,11 @@ class DeviceModelForm extends LinkedComponent {
                 sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
                   <div className="sensor-container" key={idx}>
                     <div className="sensor-row">
-                      { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error) }
-                      { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), behaviorOptions, edited && !!behavior.error) }
-                      { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error) }
-                      { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error) }
-                      { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error) }
+                      { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error, this.setFormChangesFlag) }
+                      { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), behaviorOptions, edited && !!behavior.error, this.setFormChangesFlag) }
+                      { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error, this.setFormChangesFlag) }
+                      { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error, this.setFormChangesFlag) }
+                      { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error, this.setFormChangesFlag) }
                       <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
                     </div>
                     { error && <ErrorMsg>{ error }</ErrorMsg>}
@@ -187,19 +210,19 @@ class DeviceModelForm extends LinkedComponent {
             <FormSection>
               <SectionDesc>{t('deviceModels.flyouts.new.interval')}</SectionDesc>
               <FormGroup>
-                <FormControl type="duration" name="interval" link={this.intervalLink} />
+                <FormControl type="duration" name="interval" link={this.intervalLink} onChange={this.setFormChangesFlag} />
               </FormGroup>
             </FormSection>
             <FormSection>
               <SectionDesc>{t('deviceModels.flyouts.new.frequency')}</SectionDesc>
               <FormGroup>
-                <FormControl type="duration" name="frequency" link={this.frequencyLink} />
+                <FormControl type="duration" name="frequency" link={this.frequencyLink} onChange={this.setFormChangesFlag} />
               </FormGroup>
             </FormSection>
             <FormActions>
               <BtnToolbar>
                 <Btn
-                  disabled={!this.formIsValid() || sensorsHaveErrors}
+                  disabled={!this.formIsValid() || sensorsHaveErrors || changesApplied}
                   type="submit">
                   {t('deviceModels.flyouts.save')}
                 </Btn>
