@@ -10,7 +10,7 @@ export const isObject = value => typeof value === 'object';
 export const int = (num) => parseInt(num, 10);
 
 /** Merges css classnames into a single string */
-export const joinClasses = (...classNames) => classNames.join(' ').trim();
+export const joinClasses = (...classNames) => classNames.filter(name => !!name).join(' ').trim();
 
 /** Convert a string of type 'true' or 'false' to its boolean equivalent */
 export const stringToBoolean = value => {
