@@ -91,10 +91,10 @@ export const epics = createEpicScenario({
       const eventProps = {
         DeviceModels: [{
           Id: hasDeviceModels ? deviceModels.id : '',
-          Name: hasDeviceModels ? deviceModels.defaultDeviceModel.name : '',
+          Name: hasDeviceModels && deviceModels.defaultDeviceModel ? deviceModels.defaultDeviceModel.name : '',
           Count: hasDeviceModels ? deviceModels.count : 0,
           Frequency: hasDeviceModels ? deviceModels.interval : '',
-          IsCustomDevice: hasDeviceModels ? payload.deviceModels[0].isCustomDevice : null,
+          IsCustomDevice: hasDeviceModels ? deviceModels.isCustomDevice : null,
           Sensors: hasDeviceModels ? deviceModels.sensors : {},
       }]};
       const event = diagnosticsEvent('StartSimulation', eventProps);
