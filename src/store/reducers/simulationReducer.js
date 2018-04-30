@@ -93,9 +93,7 @@ export const epics = createEpicScenario({
           Id: hasDeviceModels ? deviceModels.id : '',
           Name: hasDeviceModels && deviceModels.defaultDeviceModel ? deviceModels.defaultDeviceModel.name : '',
           Count: hasDeviceModels ? deviceModels.count : 0,
-          Frequency: hasDeviceModels ? deviceModels.interval : '',
           IsCustomDevice: hasDeviceModels ? deviceModels.isCustomDevice : null,
-          Sensors: hasDeviceModels ? deviceModels.sensors : {},
       }]};
       const event = diagnosticsEvent('StartSimulation', eventProps);
       // Force the simulation status to update if turned off
