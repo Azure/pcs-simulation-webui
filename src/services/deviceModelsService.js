@@ -4,7 +4,7 @@ import Config from 'app.config';
 import { HttpClient } from './httpClient';
 import { toDeviceModel, toDeviceModelRequestModel } from './models';
 
-const ENDPOINT = Config.deviceModelsApiUrl;
+const ENDPOINT = Config.simulationApiUrl + 'deviceModels';
 
 /** Contains methods for calling the simulation service */
 export class DeviceModelsService {

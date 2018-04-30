@@ -5,7 +5,6 @@ const Config = {
   simulationApiUrl: '/devicesimulation-svc/v1/',
   diagnosticsApiUrl: '/diagnostics-svc/v1/',
   configApiUrl: '/config-svc/v1/',
-  deviceModelsApiUrl: '/devicesimulation-svc/v2/deviceModels/',
 
   // Constants
   retryWaitTime: 2000, // On retryable error, retry after 2s
@@ -14,7 +13,7 @@ const Config = {
   maxSimulatedDevices: 20000,
   simulationStatusPollingInterval: 10000, // 10s
   customSensorValue: 'custom',
-  defaultAjaxTimeout: 10000, // 10s,
+  defaultAjaxTimeout: 10000, // 10s
   paginationPageSize: 15
 };
 
