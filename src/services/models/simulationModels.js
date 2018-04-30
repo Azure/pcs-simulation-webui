@@ -61,14 +61,7 @@ const mapToBehavior = path => {
   }
 }
 
-// Map to deviceModel in simulation form view
-export const toDeviceModel = (response = {}) => ({
-  id: response.Id,
-  name: response.Name,
-  description: response.Description,
-  simulation: response.Simulation,
-  telemetry: response.Telemetry
-});
+
 
 // Request models
 export const toSimulationRequestModel = (request = {}) => ({

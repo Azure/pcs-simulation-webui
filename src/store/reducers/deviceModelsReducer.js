@@ -6,10 +6,54 @@ import { schema, normalize } from 'normalizr';
 import update from 'immutability-helper';
 import { createSelector } from 'reselect';
 import { DeviceModelsService } from 'services';
-import { createReducerScenario, createEpicScenario } from 'store/utilities';
+import {
+  createReducerScenario,
+  createEpicScenario,
+  errorPendingInitialState,
+  errorReducer,
+  getError
+} from 'store/utilities';
+
+// ========================= Epics - START
+const handleError = fromAction => error =>
+  Observable.of(redux.actions.registerError(fromAction.type, { error, fromAction }));
+
+export const epics = createEpicScenario({
+  /** Loads the list of device models */
+  fetchDeviceModels: {
+    type: 'DEVICE_MODELS_FETCH',
+    epic: (fromAction) =>
+      DeviceModelsService.getDeviceModels()
+        .map(redux.actions.updateDeviceModels)
+        .catch(handleError(fromAction))
+  },
+
+  /** Create a device model */
+  createDeviceModel: {
+    type: 'DEVICE_MODEL_INSERT',
+    epic: (fromAction) =>
+      DeviceModelsService.createDeviceModel(fromAction.payload)
+        .map(redux.actions.createDeviceModel)
+        .catch(handleError(fromAction))
+  },
+
+  /** Delete a device model */
+  deleteDeviceModel: {
+    type: 'DEVICE_MODEL_DELETE',
+    epic: (fromAction) =>
+      DeviceModelsService.deleteDeviceModelById(fromAction.payload)
+        .map(redux.actions.deleteDeviceModel)
+        .catch(handleError(fromAction))
+  }
+});
+// ========================= Epics - END
 
 // Device models reducer constants
-const initialState = { entities: {}, items: [] };
+const initialState = {
+  ...errorPendingInitialState,
+  entities: {},
+  items: []
+};
 
 // ========================= Schemas - START
 const deviceModelSchema = new schema.Entity('deviceModels');
@@ -38,14 +82,12 @@ const deleteDeviceModelReducer = (state, { payload }) => {
     items: { $splice: [[itemIdx, 1]] }
   });
 };
-const deviceModelsErrorReducer = (state, action) => ({ error: action.payload });
-
 
 export const redux = createReducerScenario({
   updateDeviceModels: { type: 'DEVICE_MODELS_UPDATE', reducer: updateDeviceModelsReducer },
   createDeviceModel: { type: 'CREATE_DEVICE_MODEL', reducer: createDeviceModelReducer },
   deleteDeviceModel: { type: 'DELETE_DEVICE_MODEL', reducer: deleteDeviceModelReducer },
-  deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelsErrorReducer },
+  registerError: { type: 'DEVICE_MODELS_REDUCER_ERROR', reducer: errorReducer },
 });
 
 export const reducer = { deviceModels: redux.getReducer(initialState) };
@@ -59,36 +101,6 @@ export const getDeviceModels = createSelector(
   getEntities, getItems,
   (entities, items) => items.map(id => entities[id])
 );
+export const getDeleteDeviceModelError = state =>
+  getError(getDeviceModelsReducer(state), epics.actionTypes.deleteDeviceModel);
 // ========================= Selectors - END
-
-// ========================= Epics - START
-
-export const epics = createEpicScenario({
-  /** Loads the list of device models */
-  fetchDeviceModels: {
-    type: 'DEVICE_MODELS_FETCH',
-    epic: () =>
-      DeviceModelsService.getDeviceModels()
-        .map(redux.actions.updateDeviceModels)
-        .catch(({ message }) => Observable.of(redux.actions.deviceModelsError(message)))
-  },
-
-  /** Create a device model */
-  createDeviceModel: {
-    type: 'DEVICE_MODEL_INSERT',
-    epic: ({ payload }) =>
-      DeviceModelsService.createDeviceModel(payload)
-        .map(redux.actions.createDeviceModel)
-        .catch(({ message }) => Observable.of(redux.actions.deviceModelsError(message)))
-  },
-
-  /** Delete a device model */
-  deleteDeviceModel: {
-    type: 'DEVICE_MODEL_DELETE',
-    epic: ({ payload }) =>
-      DeviceModelsService.deleteDeviceModelById(payload)
-        .map(redux.actions.deleteDeviceModel)
-        .catch(({ message }) => Observable.of(redux.actions.deviceModelsError(message)))
-  }
-});
-// ========================= Epics - END

@@ -5,19 +5,26 @@ export const toDeviceModel = (response = {}) => ({
   id: response.Id,
   name: response.Name,
   description: response.Description,
+  eTag: response.Etag,
+  version: response.Version,
+  type: response.Type,
   simulation: response.Simulation,
-  telemetry: response.Telemetry
+  telemetry: response.Telemetry,
+  cloudToDeviceMethods: response.CloudToDeviceMethods,
+  properties: response.Properties,
 });
 
 // Request model
 export const toDeviceModelRequestModel = (request = {}) => {
-  const { id = "new", name, description, interval, sensors, frequency } = request;
+  const { id = 'new', name, description, version, interval, sensors, frequency } = request;
   const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
   return {
     Id: id,
     Name: name,
     Description: description,
-    Protocol: "MQTT",
+    Version: version,
+    Protocol: 'MQTT',
+    Type: 'CustomModel',
     Simulation: {
       Interval: frequency,
       Scripts: script
@@ -39,8 +46,8 @@ const toCustomSensorModel = (sensors = []) => {
     .forEach(({ name, behavior, minValue, maxValue, unit }) => {
       const _name = name.toLowerCase();
       const _unit = unit.toLowerCase();
-      const nameString = `"${_name}":$\{${_name}}`;
-      const unitString = `"${_name}_unit":"${_unit}"`;
+      const nameString = `'${_name}':$\{${_name}}`;
+      const unitString = `'${_name}_unit':'${_unit}'`;
       const path = behavior.value;
       messages = [...messages, nameString, unitString];
       Fields = { ...Fields, [_name]: 'double', [`${_name}_unit`]: 'text' };
@@ -57,7 +64,7 @@ const toCustomSensorModel = (sensors = []) => {
     });
 
     const script = Object.keys(behaviorMap).map(Path => ({
-      Type: "internal",
+      Type: 'internal',
       Path,
       Params: behaviorMap[Path]
     }));

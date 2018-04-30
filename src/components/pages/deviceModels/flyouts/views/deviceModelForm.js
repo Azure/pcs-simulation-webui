@@ -41,6 +41,7 @@ const stringToFloat = x => x === '' || x === '-' ? x : parseFloat(x);
 const initialFormState = {
   name: '',
   description: '',
+  version: '',
   interval: {},
   frequency: {},
   sensors: [],
@@ -62,6 +63,7 @@ class DeviceModelForm extends LinkedComponent {
     this.nameLink = this.linkTo('name')
       .check(Validator.notEmpty, () => t('deviceModels.flyouts.errorMsg.nameCantBeEmpty'));
     this.descriptionLink = this.linkTo('description');
+    this.versionLink = this.linkTo('version');
     this.intervalLink = this.linkTo('interval')
       .check(({ ms }) => ms >= 1000, () => t('deviceModels.flyouts.errorMsg.intervalCantBeLessThanOneSecond'));
     this.frequencyLink = this.linkTo('frequency')
@@ -96,6 +98,7 @@ class DeviceModelForm extends LinkedComponent {
       interval,
       description,
       name,
+      version,
       sensors
     } = this.state;
     const simulationFrequency = frequency.ms > 0 ? { frequency: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
@@ -103,6 +106,7 @@ class DeviceModelForm extends LinkedComponent {
     const model = {
       name,
       description,
+      version,
       sensors,
       ...simulationFrequency,
       ...telemetryInterval
@@ -172,6 +176,17 @@ class DeviceModelForm extends LinkedComponent {
                   placeholder="Description"
                   onChange={this.setFormChangesFlag}
                   link={this.descriptionLink} />
+              </FormGroup>
+              <FormGroup>
+                <FormLabel>
+                  {t('deviceModels.flyouts.new.version')}
+                </FormLabel>
+                <FormControl
+                  type="text"
+                  className="short"
+                  placeholder={t('deviceModels.flyouts.new.version')}
+                  onChange={this.setFormChangesFlag}
+                  link={this.versionLink} />
               </FormGroup>
             </FormSection>
             <FormSection>
