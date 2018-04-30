@@ -61,8 +61,6 @@ const mapToBehavior = path => {
   }
 }
 
-
-
 // Request models
 export const toSimulationRequestModel = (request = {}) => ({
   ETag: request.eTag,
