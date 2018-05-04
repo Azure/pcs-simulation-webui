@@ -57,6 +57,7 @@ export class DeviceModels extends Component {
       softSelectId: this.state.selectedDeviceId,
       getSoftSelectId: this.getSoftSelectId,
       deleteDeviceModel,
+      createDeviceModel,
       t
     };
     const newDeviceModelFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;

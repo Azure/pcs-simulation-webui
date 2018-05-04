@@ -25,7 +25,7 @@
       "description": "Description",
       "dataPoints": "Data points",
       "version": "version",
-      "type": "type",
+      "type": "type of model",
       "no": "no",
       "offline": "offline",
       "simulated": "Simulated",
@@ -45,6 +45,9 @@
         "apply": "Delete",
         "applySuccess": "device model deleted successfully!",
         "close": "Close"
+      },
+      "clone": {
+        "title": "Clone model"
       },
       "new": {
         "title": "New custom device model",

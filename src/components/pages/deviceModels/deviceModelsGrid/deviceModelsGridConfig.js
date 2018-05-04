@@ -50,7 +50,7 @@ export const deviceModelsColumnDefs = {
   type: {
     headerName: 'deviceModels.grid.type',
     field: 'type',
-    valueFormatter: ({ value }) => checkForEmpty(value)
+    valueFormatter: ({ value }) => value === 'CustomModel' ? 'Custom' : 'Standard'
   },
 };
 

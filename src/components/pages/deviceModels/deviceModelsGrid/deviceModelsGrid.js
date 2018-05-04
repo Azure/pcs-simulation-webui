@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
+import { CloneDeviceModel } from '../flyouts';
 
 const closedFlyoutState = { openFlyoutName: undefined };
 
@@ -37,8 +38,28 @@ export class DeviceModelsGrid extends Component {
     this.contextBtns = [
       <Btn key="delete" svg={svgs.trash} onClick={this.openDeleteFlyout}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
       <Btn key="edit" svg={svgs.edit}>Edit</Btn>,
-      <Btn key="clone" svg={svgs.copy}>Clone</Btn>
+      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout('clone')}>Clone</Btn>
     ];
+  }
+
+  openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
+
+  getOpenFlyout = (t, createDeviceModel, deleteDeviceModel) => {
+    switch (this.state.openFlyoutName) {
+      case 'delete':
+        return null;
+      case 'clone':
+        return (
+          <CloneDeviceModel
+            key="clone-device-mdeol-flyout"
+            onClose={this.closeFlyout}
+            deviceModels={this.deviceModelsGridApi.getSelectedRows()}
+            createDeviceModel={createDeviceModel}
+            t={t} />
+        );
+      default:
+        return null;
+    }
   }
 
   closeFlyout = () => this.setState(closedFlyoutState);
@@ -105,26 +126,23 @@ export class DeviceModelsGrid extends Component {
   }
 
   render() {
+    const { t, createDeviceModel, deleteDeviceModel } = this.props;
     const gridProps = {
       /* Grid Properties */
       ...defaultDeviceModelGridProps,
       columnDefs: translateColumnDefs(this.props.t, this.columnDefs),
       onRowDoubleClicked: ({ node }) => node.setSelected(!node.isSelected()),
       ...this.props, // Allow default property overrides
-      context: {
-        t: this.props.t
-      },
+      context: { t },
       /* Grid Events */
       onSoftSelectChange: this.onSoftSelectChange,
       onHardSelectChange: this.onHardSelectChange,
       onGridReady: this.onGridReady
     };
-    const openFlyout = (this.state.openFlyoutName === 'delete')
-      ? null // TODO: Pending design <DeviceDeleteContainer key="device-flyout-key" onClose={this.closeFlyout} devices={this.deviceModelsGridApi.getSelectedRows()} />
-      : null;
+
     return ([
       <PcsGrid {...gridProps} key="device-models-grid-key" />,
-      openFlyout
+      this.getOpenFlyout(t, createDeviceModel, deleteDeviceModel)
     ]);
   }
 }
