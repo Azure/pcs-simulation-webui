@@ -69,7 +69,7 @@ export class DeviceModels extends Component {
       </ContextMenu>,
       <PageContent className="devicemodels-container" key="page-content">
         <DeviceModelsGrid {...gridProps} />
-        { newDeviceModelFlyoutOpen && <NewDeviceModel onClose={this.closeFlyout}  t={t} createDeviceModel={createDeviceModel}/>}
+        { newDeviceModelFlyoutOpen && <NewDeviceModel onClose={this.closeFlyout} t={t} createDeviceModel={createDeviceModel}/>}
       </PageContent>
     ];
   }

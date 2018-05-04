@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toDeviceModel, toDeviceModelRequestModel } from './models';
+import { toDeviceModels, toDeviceModel, toDeviceModelRequestModel } from './models';
 
 const ENDPOINT = Config.simulationApiUrl + 'deviceModels';
 
@@ -12,8 +12,7 @@ export class DeviceModelsService {
   /** Returns a list of device models */
   static getDeviceModels() {
     return HttpClient.get(`${ENDPOINT}`)
-      .map(({ Items }) => Items)
-      .map(models => models.map(toDeviceModel));
+      .map(toDeviceModels);
   }
 
   /** Returns a device model by id */

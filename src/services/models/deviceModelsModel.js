@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-// Map to deviceModel in simulation form view
+// Map tp device mpde;s in device model tabs
+export const toDeviceModels = ({ Items = []}) => Items.map(toDeviceModel);
+
+// Map to deviceModel in device model form view
 export const toDeviceModel = (response = {}) => ({
   id: response.Id,
   name: response.Name,
@@ -73,7 +76,7 @@ const toCustomSensorModel = (sensors = []) => {
       Name: 'custom-sensors;v1',
       Format: 'JSON',
       Fields
-    }
+    };
 
     return {
       script,

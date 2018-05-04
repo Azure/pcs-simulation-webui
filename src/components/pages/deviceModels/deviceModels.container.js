@@ -13,7 +13,6 @@ const mapStateToProps = state => ({
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
-  // TODO: add device model related methods
   createDeviceModel: (payload) => dispatch(epics.actions.createDeviceModel(payload)),
   deleteDeviceModel: (id) => dispatch(epics.actions.deleteDeviceModel(id))
 });
