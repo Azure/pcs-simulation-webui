@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import React, { Component } from 'react';
-
+import React from 'react';
 import { svgs } from 'utilities';
 import Flyout from 'components/shared/flyout';
 import { Svg } from 'components/shared';

@@ -12,7 +12,7 @@ import './navigation.css';
 /** The navigation tab configurations */
 const navLinks = [
   { key: 0, to: '/simulation', svg: svgs.simulationLogo, labelId: 'tabs.simulation' },
-  /* { key: 1, to: '/devicemodels', svg: svgs.simulationLogo, labelId: 'tabs.deviceModels' } */
+  { key: 1, to: '/devicemodels', svg: svgs.simulationLogo, labelId: 'tabs.deviceModels' }
 ];
 
 /** A window size less than this will automatically collapse the left nav */

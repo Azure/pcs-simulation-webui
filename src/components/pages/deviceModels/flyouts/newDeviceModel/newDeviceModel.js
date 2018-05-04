@@ -7,8 +7,6 @@ import Flyout from 'components/shared/flyout';
 import { Svg } from 'components/shared';
 import DeviceModelForm from '../views/deviceModelForm';
 
-import './newDeviceModel.css';
-
 export const NewDeviceModel = (props) => (
   <Flyout.Container className="device-model-flyout-container">
     <Flyout.Header>
