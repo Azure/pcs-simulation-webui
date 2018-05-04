@@ -69,15 +69,12 @@ export class DeviceModelsGrid extends Component {
     this.setState({ openFlyoutName: 'delete' })};
 
   componentWillReceiveProps(nextProps) {
-    const { hardSelectedDeviceModels } = nextProps;
-    if (!hardSelectedDeviceModels || !this.deviceModelsGridApi) return;
-    const deviceModelsIdSet = new Set((hardSelectedDeviceModels || []).map(({ Id }) => Id));
-
-    this.deviceModelsGridApi.forEachNode(node => {
-      if (deviceModelsIdSet.has(node.data.Id) && !node.selected) {
-        node.setSelected(true);
+    const { onContextMenuChange, rowData = [] } = nextProps;
+    if (rowData.length !== (this.props.rowData || []).length) {
+      if (isFunc(onContextMenuChange)) {
+        onContextMenuChange(null);
       }
-    });
+    }
   }
 
   /**
@@ -114,7 +111,7 @@ export class DeviceModelsGrid extends Component {
    * @param {Array} selectedDeviceModels A list of currently selected devices
    */
   onHardSelectChange = (selectedDeviceModels) => {
-    const [{ id } = {}] = selectedDeviceModels
+    const [{ id } = {}] = selectedDeviceModels;
     const { onContextMenuChange, onHardSelectChange } = this.props;
     this.setState({ hardSelectedDeviceModelId: id });
     if (isFunc(onContextMenuChange)) {
