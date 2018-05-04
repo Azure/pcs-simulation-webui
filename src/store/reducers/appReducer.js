@@ -35,7 +35,6 @@ export const epics = createEpicScenario({
       simulationRedux.actions.revertToInitial(),
       simulationEpics.actions.fetchSimulationStatus(),
       simulationEpics.actions.fetchSimulation(),
-      //epics.actions.fetchDeviceModels(),
       epics.actions.getSolutionSettings(),
       deviceModelsEpics.actions.fetchDeviceModels(),
     ]

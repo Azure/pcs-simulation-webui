@@ -83,4 +83,4 @@ const toCustomSensorModel = (sensors = []) => {
       messageTemplate,
       messageSchema
     };
-}
+};
