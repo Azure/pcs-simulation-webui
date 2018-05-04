@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
-
+import moment from 'moment';
 import { svgs, LinkedComponent, Validator } from 'utilities';
 import {
   Btn,
@@ -77,6 +77,70 @@ class DeviceModelForm extends LinkedComponent {
     ].every(link => !link.error);
   }
 
+  componentDidMount() {
+    this.getFormState(this.props);
+  }
+
+  getFormState = (props) => {
+    if (!props.deviceModels || !props.deviceModels.length) return;
+
+    const {deviceModels: [{
+      description = '',
+      id,
+      type,
+      name = '',
+      simulation = {},
+      telemetry = [],
+      version = ''
+    }] = [{}]} = props;
+    const sensors = this.toSensors(simulation.Scripts);
+
+    this.setState({
+      name,
+      description,
+      version,
+      frequency: this.toDuration(simulation.Interval),
+      interval: this.toDuration((telemetry[0] || {}).Interval),
+      sensors: type === 'StockModel'
+        ? undefined
+        : sensors
+    });
+  }
+
+  toDuration = (interval = '00:00:00') => {
+    const [hours, minutes, seconds] = interval.split(':');
+    return {
+      ms: moment.duration(interval).asMilliseconds(),
+      hours,
+      minutes,
+      seconds
+    };
+  }
+
+  toSensors = (scripts = []) => scripts
+    .map(({ Params, Path, Type }) => Object.keys(Params || {}).map(key => {
+      const { Max = '', Min = '', Unit = '' } = Params[key];
+      return {
+        name: key,
+        minValue: Min,
+        maxValue: Max,
+        unit: Unit,
+        behavior: (Path => {
+          switch (Path) {
+            case 'Math.Increasing':
+              return { value: 'Math.Increasing', label: 'Increment' };
+            case 'Math.Random.WithinRange':
+              return { value: 'Math.Random.WithinRange', label: 'Random' };
+            case 'Math.Decreasing':
+              return { value: 'Math.Decreasing', label: 'Decrement' };
+            default:
+              return '';
+          }
+        })(Path)
+      };
+    }))
+    .reduce((acc, obj) => [...acc, ...obj], []);
+
   toSelectOption = ({ id, name }) => ({ value: id, label: name });
 
   addSensor = () => this.sensorsLink.set([ ...this.sensorsLink.value, newSensor() ]);
@@ -94,6 +158,7 @@ class DeviceModelForm extends LinkedComponent {
   render () {
     const { t } = this.props;
 
+    debugger;
     // Create the state link for the dynamic form elements
     const sensorLinks = this.sensorsLink.getLinkedChildren(sensorLink => {
       const name = sensorLink.forkTo('name')

@@ -4,6 +4,12 @@ import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
+import { EditDeviceModel } from '../flyouts';
+
+const editDeviceModelFlyout = 'edit-device-model';
+const EDIT_FLYOUT   = 'edit-flyout';
+const DELETE_FLYOUT = 'delete-flyout';
+const CLONE_FLYOUT  = 'clone-flyout';
 
 const closedFlyoutState = { openFlyoutName: undefined };
 
@@ -19,10 +25,6 @@ export class DeviceModelsGrid extends Component {
     // Set the initial state
     this.state = closedFlyoutState;
 
-    // Bind to this
-    this.closeFlyout = this.closeFlyout.bind(this);
-    this.openDeleteFlyout = this.openDeleteFlyout.bind(this);
-
     // Default device grid columns
     this.columnDefs = [
       { ...deviceModelsColumnDefs.id, ...checkboxParams },
@@ -35,15 +37,31 @@ export class DeviceModelsGrid extends Component {
 
     // TODO: This is a temporary example implementation. Remove with a better version
     this.contextBtns = [
-      <Btn key="delete" svg={svgs.trash} onClick={this.openDeleteFlyout}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
-      <Btn key="edit" svg={svgs.edit}>Edit</Btn>,
-      <Btn key="clone" svg={svgs.copy}>Clone</Btn>
+      <Btn key="delete" svg={svgs.trash} onClick={this.openFlyout(DELETE_FLYOUT)}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
+      <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>Edit</Btn>,
+      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(DELETE_FLYOUT)}>Clone</Btn>
     ];
   }
 
-  closeFlyout = () => this.setState(closedFlyoutState);
+  openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
 
-  openDeleteFlyout = () => this.setState({ openFlyoutName: 'delete' });
+  getOpenFlyout = (t, createDeviceModel, deleteDeviceModel) => {
+    switch (this.state.openFlyoutName) {
+      case EDIT_FLYOUT:
+        return(
+            <EditDeviceModel
+              onClose={this.closeFlyout}
+              deviceModels={this.deviceModelsGridApi.getSelectedRows()}
+              t={t} />
+          );
+      case DELETE_FLYOUT:
+      case CLONE_FLYOUT:
+      default:
+        return null;
+    }
+  }
+
+  closeFlyout = () => this.setState(closedFlyoutState);
 
   componentWillReceiveProps(nextProps) {
     const { hardSelectedDeviceModels } = nextProps;
@@ -100,27 +118,31 @@ export class DeviceModelsGrid extends Component {
     }
   }
 
+  /**
+   * Get the ID of the selected item
+   */
+
   render() {
+    const { t, createDeviceModel, deleteDeviceModel } = this.props;
     const gridProps = {
       /* Grid Properties */
       ...defaultDeviceGridProps,
       columnDefs: translateColumnDefs(this.props.t, this.columnDefs),
       onRowDoubleClicked: ({ node }) => node.setSelected(!node.isSelected()),
       ...this.props, // Allow default property overrides
-      context: {
-        t: this.props.t
-      },
+      t: this.props.t,
       /* Grid Events */
       onSoftSelectChange: this.onSoftSelectChange,
       onHardSelectChange: this.onHardSelectChange,
-      onGridReady: this.onGridReady
+      onGridReady: this.onGridReady,
     };
-    const openFlyout = (this.state.openFlyoutName === 'delete')
-      ? null // TODO: Pending design <DeviceDeleteContainer key="device-flyout-key" onClose={this.closeFlyout} devices={this.deviceModelsGridApi.getSelectedRows()} />
-      : null;
+
+    // Determine which flyout to add to the visual tree
+    const editDeviceModelFlyoutOpen = this.state.flyoutOpen === editDeviceModelFlyout;
+
     return ([
       <PcsGrid {...gridProps} key="device-models-grid-key" />,
-      openFlyout
+      this.getOpenFlyout(t, createDeviceModel, deleteDeviceModel)
     ]);
   }
 }
