@@ -2,11 +2,11 @@
 
 import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
-import { checkboxParams, deviceModelsColumnDefs, defaultDeviceGridProps } from './deviceModelsGridConfig';
+import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
-import { EditDeviceModel } from '../flyouts';
+import { EditDeviceModel, CloneDeviceModel } from '../flyouts';
+import { deviceModelFormModes } from '../flyouts/views/deviceModelForm'
 
-const editDeviceModelFlyout = 'edit-device-model';
 const EDIT_FLYOUT   = 'edit-flyout';
 const DELETE_FLYOUT = 'delete-flyout';
 const CLONE_FLYOUT  = 'clone-flyout';
@@ -39,23 +39,34 @@ export class DeviceModelsGrid extends Component {
     this.contextBtns = [
       <Btn key="delete" svg={svgs.trash} onClick={this.openFlyout(DELETE_FLYOUT)}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
       <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>Edit</Btn>,
-      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(DELETE_FLYOUT)}>Clone</Btn>
+      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(CLONE_FLYOUT)}>Clone</Btn>
     ];
   }
 
   openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
 
-  getOpenFlyout = (t, createDeviceModel, deleteDeviceModel) => {
+  getOpenFlyout = (t, createDeviceModel, deleteDeviceModel, editDeviceModel) => {
     switch (this.state.openFlyoutName) {
       case EDIT_FLYOUT:
         return(
-            <EditDeviceModel
-              onClose={this.closeFlyout}
-              deviceModels={this.deviceModelsGridApi.getSelectedRows()}
-              t={t} />
+          <EditDeviceModel
+            onClose={this.closeFlyout}
+            deviceModels={this.deviceModelsGridApi.getSelectedRows()}
+            editDeviceModel={editDeviceModel}
+            formMode={deviceModelFormModes.FORM_MODE_EDIT}
+            t={t} />
           );
-      case DELETE_FLYOUT:
       case CLONE_FLYOUT:
+        return (
+          <CloneDeviceModel
+            key="clone-device-mdeol-flyout"
+            onClose={this.closeFlyout}
+            deviceModels={this.deviceModelsGridApi.getSelectedRows()}
+            createDeviceModel={createDeviceModel}
+            formMode={deviceModelFormModes.FORM_MODE_CREATE}
+            t={t} />
+        );
+      case DELETE_FLYOUT:
       default:
         return null;
     }
@@ -63,16 +74,17 @@ export class DeviceModelsGrid extends Component {
 
   closeFlyout = () => this.setState(closedFlyoutState);
 
-  componentWillReceiveProps(nextProps) {
-    const { hardSelectedDeviceModels } = nextProps;
-    if (!hardSelectedDeviceModels || !this.deviceModelsGridApi) return;
-    const deviceModelsIdSet = new Set((hardSelectedDeviceModels || []).map(({ Id }) => Id));
+  openDeleteFlyout = () => {
+    this.props.deleteDeviceModel(this.state.hardSelectedDeviceModelId);
+    this.setState({ openFlyoutName: DELETE_FLYOUT })};
 
-    this.deviceModelsGridApi.forEachNode(node => {
-      if (deviceModelsIdSet.has(node.data.Id) && !node.selected) {
-        node.setSelected(true);
+  componentWillReceiveProps(nextProps) {
+    const { onContextMenuChange, rowData = [] } = nextProps;
+    if (rowData.length !== (this.props.rowData || []).length) {
+      if (isFunc(onContextMenuChange)) {
+        onContextMenuChange(null);
       }
-    });
+    }
   }
 
   /**
@@ -92,29 +104,31 @@ export class DeviceModelsGrid extends Component {
   /**
    * Handles soft select props method
    *
-   * @param device The currently soft selected device
+   * @param deviceModel The currently soft selected deviceModel
    * @param rowEvent The rowEvent to pass on to the underlying grid
    */
-  onSoftSelectChange = (device, rowEvent) => {
+  onSoftSelectChange = (deviceModel, rowEvent) => {
     const { onSoftSelectChange } = this.props;
     this.setState(closedFlyoutState);
     if (isFunc(onSoftSelectChange)) {
-      onSoftSelectChange(device, rowEvent);
+      onSoftSelectChange(deviceModel, rowEvent);
     }
   }
 
   /**
    * Handles context filter changes and calls any hard select props method
    *
-   * @param {Array} selectedDevices A list of currently selected devices
+   * @param {Array} selectedDeviceModels A list of currently selected devices
    */
-  onHardSelectChange = (selectedDevices) => {
+  onHardSelectChange = (selectedDeviceModels) => {
+    const [{ id } = {}] = selectedDeviceModels;
     const { onContextMenuChange, onHardSelectChange } = this.props;
+    this.setState({ hardSelectedDeviceModelId: id });
     if (isFunc(onContextMenuChange)) {
-      onContextMenuChange(selectedDevices.length > 0 ? this.contextBtns : null);
+      onContextMenuChange(selectedDeviceModels.length > 0 ? this.contextBtns : null);
     }
     if (isFunc(onHardSelectChange)) {
-      onHardSelectChange(selectedDevices);
+      onHardSelectChange(selectedDeviceModels);
     }
   }
 
@@ -123,26 +137,22 @@ export class DeviceModelsGrid extends Component {
    */
 
   render() {
-    const { t, createDeviceModel, deleteDeviceModel } = this.props;
+    const { t, createDeviceModel, deleteDeviceModel, editDeviceModel } = this.props;
     const gridProps = {
       /* Grid Properties */
-      ...defaultDeviceGridProps,
+      ...defaultDeviceModelGridProps,
       columnDefs: translateColumnDefs(this.props.t, this.columnDefs),
       onRowDoubleClicked: ({ node }) => node.setSelected(!node.isSelected()),
       ...this.props, // Allow default property overrides
-      t: this.props.t,
+      context: { t },
       /* Grid Events */
       onSoftSelectChange: this.onSoftSelectChange,
       onHardSelectChange: this.onHardSelectChange,
       onGridReady: this.onGridReady,
     };
-
-    // Determine which flyout to add to the visual tree
-    const editDeviceModelFlyoutOpen = this.state.flyoutOpen === editDeviceModelFlyout;
-
     return ([
       <PcsGrid {...gridProps} key="device-models-grid-key" />,
-      this.getOpenFlyout(t, createDeviceModel, deleteDeviceModel)
+      this.getOpenFlyout(t, createDeviceModel, deleteDeviceModel, editDeviceModel)
     ]);
   }
 }

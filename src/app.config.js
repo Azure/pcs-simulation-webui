@@ -6,7 +6,6 @@ const Config = {
   diagnosticsApiUrl: '/diagnostics-svc/v1/',
   configApiUrl: '/config-svc/v1/',
 
-
   // Constants
   retryWaitTime: 2000, // On retryable error, retry after 2s
   maxRetryAttempts: 2,
@@ -15,6 +14,7 @@ const Config = {
   simulationStatusPollingInterval: 10000, // 10s
   customSensorValue: 'custom',
   defaultAjaxTimeout: 10000, // 10s
+  paginationPageSize: 15
 };
 
 export default Config;

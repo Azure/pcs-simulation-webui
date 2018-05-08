@@ -61,15 +61,6 @@ const mapToBehavior = path => {
   }
 }
 
-// Map to deviceModel in simulation form view
-export const toDeviceModel = (response = {}) => ({
-  id: response.Id,
-  name: response.Name,
-  description: response.Description,
-  simulation: response.Simulation,
-  telemetry: response.Telemetry
-});
-
 // Request models
 export const toSimulationRequestModel = (request = {}) => ({
   ETag: request.eTag,
@@ -85,11 +76,12 @@ export const toSimulationRequestModel = (request = {}) => ({
 
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
-  deviceModels.map(({ id, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
+  deviceModels.map(({ id, eTag, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
     if (isCustomDevice) {
       const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
       return {
         Id: id,
+        ETag: eTag,
         Count: count,
         Override: {
           Simulation: {
