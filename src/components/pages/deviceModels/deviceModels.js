@@ -49,7 +49,7 @@ export class DeviceModels extends Component {
   getSoftSelectId = ({ id }) => id;
 
   render() {
-    const { t, deviceModels, createDeviceModel, deleteDeviceModel } = this.props;
+    const { t, deviceModels, createDeviceModel, deleteDeviceModel, editDeviceModel } = this.props;
     const gridProps = {
       rowData: deviceModels || [],
       onSoftSelectChange: this.onSoftSelectChange,
@@ -58,6 +58,7 @@ export class DeviceModels extends Component {
       getSoftSelectId: this.getSoftSelectId,
       deleteDeviceModel,
       createDeviceModel,
+      editDeviceModel,
       t
     };
     const newDeviceModelFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;

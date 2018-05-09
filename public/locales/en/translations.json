@@ -63,6 +63,9 @@
         "interval": "Min/Max changes occur every:",
         "frequency": "Report Min/Max changes every:"
       },
+      "edit":{
+        "title": "Edit a custom device model"
+      },
       "sensors" : {
         "dataPoint": "Data point",
         "behavior": "behavior",

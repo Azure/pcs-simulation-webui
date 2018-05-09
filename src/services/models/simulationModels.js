@@ -76,11 +76,12 @@ export const toSimulationRequestModel = (request = {}) => ({
 
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
-  deviceModels.map(({ id, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
+  deviceModels.map(({ id, eTag, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
     if (isCustomDevice) {
       const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
       return {
         Id: id,
+        ETag: eTag,
         Count: count,
         Override: {
           Simulation: {

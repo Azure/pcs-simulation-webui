@@ -28,8 +28,8 @@ export class DeviceModelsService {
   }
 
   /** Updates a device model */
-  static updateDeviceModel(id, model) {
-    return HttpClient.put(`${ENDPOINT}/${id}`, toDeviceModelRequestModel(model))
+  static updateSingleDeviceModel(model) {
+    return HttpClient.put(`${ENDPOINT}/${model.id}`, toDeviceModelRequestModel(model))
       .map(toDeviceModel);
   }
 

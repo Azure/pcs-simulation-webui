@@ -37,6 +37,15 @@ export const epics = createEpicScenario({
         .catch(handleError(fromAction))
   },
 
+  /** Edit a single device model */
+  editDeviceModel:{
+    type: 'DEVICE_MODEL_UPDATE',
+    epic: (fromAction) =>
+      DeviceModelsService.updateSingleDeviceModel(fromAction.payload)
+        .map(redux.actions.updateSingleDeviceModel)
+        .catch(handleError(fromAction))
+  },
+
   /** Delete a device model */
   deleteDeviceModel: {
     type: 'DEVICE_MODEL_DELETE',
@@ -61,6 +70,7 @@ const deviceModelsSchema = new schema.Array(deviceModelSchema);
 // ========================= Schemas - END
 
 // ========================= Reducers - START
+// Populate the store with multiple devices
 const updateDeviceModelsReducer = (state, { payload }) => {
   const { entities: { deviceModels }, result } = normalize(payload, deviceModelsSchema);
   return update(state, {
@@ -68,6 +78,12 @@ const updateDeviceModelsReducer = (state, { payload }) => {
     items: { $set: result }
   });
 };
+// Update a single device model
+const updateSingleDeviceModelReducer = (state, {payload}) => {
+  return update(state, {
+    entities: {[payload.id]: {$set: payload}}
+  });
+}
 const createDeviceModelReducer = (state, { payload }) => {
   const { entities: { deviceModels }, result } = normalize([payload], deviceModelsSchema);
   return update(state, {
@@ -85,6 +101,7 @@ const deleteDeviceModelReducer = (state, { payload }) => {
 
 export const redux = createReducerScenario({
   updateDeviceModels: { type: 'DEVICE_MODELS_UPDATE', reducer: updateDeviceModelsReducer },
+  updateSingleDeviceModel: { type: 'DEVICE_MODEL_SINGLE_UPDATE', reducer: updateSingleDeviceModelReducer },
   createDeviceModel: { type: 'CREATE_DEVICE_MODEL', reducer: createDeviceModelReducer },
   deleteDeviceModel: { type: 'DELETE_DEVICE_MODEL', reducer: deleteDeviceModelReducer },
   registerError: { type: 'DEVICE_MODELS_REDUCER_ERROR', reducer: errorReducer },

@@ -8,7 +8,7 @@ export const toDeviceModel = (response = {}) => ({
   id: response.Id,
   name: response.Name,
   description: response.Description,
-  eTag: response.Etag,
+  eTag: response.ETag,
   version: response.Version,
   type: response.Type,
   simulation: response.Simulation,
@@ -19,10 +19,11 @@ export const toDeviceModel = (response = {}) => ({
 
 // Request model
 export const toDeviceModelRequestModel = (request = {}) => {
-  const { id = 'new', name, description, version, interval, sensors, frequency } = request;
+  const { id = 'new', eTag, name, description, version, interval, sensors, frequency } = request;
   const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
   return {
     Id: id,
+    ETag: eTag,
     Name: name,
     Description: description,
     Version: version,

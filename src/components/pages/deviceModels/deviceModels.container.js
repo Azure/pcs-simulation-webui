@@ -14,7 +14,8 @@ const mapStateToProps = state => ({
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
   createDeviceModel: (payload) => dispatch(epics.actions.createDeviceModel(payload)),
-  deleteDeviceModel: (id) => dispatch(epics.actions.deleteDeviceModel(id))
+  deleteDeviceModel: (id) => dispatch(epics.actions.deleteDeviceModel(id)),
+  editDeviceModel: (payload) => dispatch(epics.actions.editDeviceModel(payload))
 });
 
 export const DeviceModelsContainer = translate()(connect(mapStateToProps, mapDispatchToProps)(DeviceModels));

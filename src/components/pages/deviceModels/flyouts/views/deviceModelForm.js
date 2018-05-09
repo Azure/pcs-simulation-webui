@@ -2,7 +2,6 @@
 
 import React from 'react';
 import moment from 'moment';
-
 import { svgs, LinkedComponent, Validator } from 'utilities';
 import {
   Btn,
@@ -25,6 +24,12 @@ import Flyout from 'components/shared/flyout';
 import stockModelSensors from './stockModelSensors';
 
 import './deviceModelForm.css'
+
+export const deviceModelFormModes = {
+  FORM_MODE_EDIT:   'edit',
+  FORM_MODE_DELETE: 'delete',
+  FORM_MODE_CREATE: 'create'
+}
 
 const Section = Flyout.Section;
 
@@ -49,6 +54,7 @@ const initialFormState = {
   frequency: {},
   sensors: [],
   changesApplied: false,
+  id: ''
 }
 
 class DeviceModelForm extends LinkedComponent {
@@ -72,6 +78,8 @@ class DeviceModelForm extends LinkedComponent {
     this.frequencyLink = this.linkTo('frequency')
       .check(({ ms }) => ms >= 10000, () => t('deviceModels.flyouts.errorMsg.frequencyCantBeLessThanTenSeconds'));
     this.sensorsLink = this.linkTo('sensors');
+
+    this.formMode = props.formMode;
   }
 
   formIsValid() {
@@ -93,6 +101,7 @@ class DeviceModelForm extends LinkedComponent {
     const {deviceModels: [{
       description = '',
       id,
+      eTag,
       type,
       name = '',
       simulation = {},
@@ -102,6 +111,8 @@ class DeviceModelForm extends LinkedComponent {
     const sensors = this.toSensors(simulation.Scripts);
 
     this.setState({
+      id,
+      eTag,
       name,
       description,
       version,
@@ -166,11 +177,15 @@ class DeviceModelForm extends LinkedComponent {
       description,
       name,
       version,
-      sensors
+      sensors,
+      id,
+      eTag
     } = this.state;
     const simulationFrequency = frequency.ms > 0 ? { frequency: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
     const telemetryInterval = interval.ms > 0 ? { interval: `${interval.hours}:${interval.minutes}:${interval.seconds}` } : {};
     const model = {
+      id,
+      eTag,
       name,
       description,
       version,
@@ -178,7 +193,18 @@ class DeviceModelForm extends LinkedComponent {
       ...simulationFrequency,
       ...telemetryInterval
     };
-    this.props.createDeviceModel(model);
+
+    // apply changes
+    switch(this.formMode){
+      case deviceModelFormModes.FORM_MODE_CREATE:
+        this.props.createDeviceModel(model);
+        break;
+      case deviceModelFormModes.FORM_MODE_EDIT:
+        this.props.editDeviceModel(model);
+        break;
+      case deviceModelFormModes.FORM_MODE_DELETE:
+      default:
+    }
     this.setState({ changesApplied: true });
   };
 

@@ -4,8 +4,13 @@ import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
-import { CloneDeviceModel } from '../flyouts';
+import { EditDeviceModel, CloneDeviceModel } from '../flyouts';
+import { deviceModelFormModes } from '../flyouts/views/deviceModelForm'
 import { DeleteModal } from '../deleteModal/deleteModal';
+
+const EDIT_FLYOUT   = 'edit-flyout';
+const DELETE_FLYOUT = 'delete-flyout';
+const CLONE_FLYOUT  = 'clone-flyout';
 
 const closedFlyoutState = { openFlyoutName: undefined };
 
@@ -33,32 +38,44 @@ export class DeviceModelsGrid extends Component {
 
     // TODO: This is a temporary example implementation. Remove with a better version
     this.contextBtns = [
-      <Btn key="delete" svg={svgs.trash} onClick={this.openFlyout('delete')}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
-      <Btn key="edit" svg={svgs.edit}>Edit</Btn>,
-      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout('clone')}>Clone</Btn>
+      <Btn key="delete" svg={svgs.trash} onClick={this.openFlyout(DELETE_FLYOUT)}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
+      <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>Edit</Btn>,
+      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(CLONE_FLYOUT)}>Clone</Btn>
     ];
   }
 
   openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
 
-  getOpenFlyout = (t, createDeviceModel, deleteDeviceModel) => {
+  getOpenFlyout = (t, createDeviceModel, deleteDeviceModel, editDeviceModel) => {
     switch (this.state.openFlyoutName) {
-      case 'delete':
-        return (
-          <DeleteModal
-            key="delete-device-model-modal"
+      case EDIT_FLYOUT:
+        return(
+          <EditDeviceModel
+            key="edit-device-model-flyout"
             onClose={this.closeFlyout}
-            onDelete={this.onDeleteDeviceModel}
-            deviceModelId={this.state.hardSelectedDeviceModelId}
+            deviceModels={this.deviceModelsGridApi.getSelectedRows()}
+            editDeviceModel={editDeviceModel}
+            formMode={deviceModelFormModes.FORM_MODE_EDIT}
             t={t} />
-        );
-      case 'clone':
+          );
+      case CLONE_FLYOUT:
         return (
           <CloneDeviceModel
             key="clone-device-model-flyout"
             onClose={this.closeFlyout}
             deviceModels={this.deviceModelsGridApi.getSelectedRows()}
             createDeviceModel={createDeviceModel}
+            formMode={deviceModelFormModes.FORM_MODE_CREATE}
+            t={t} />
+        );
+      case DELETE_FLYOUT:
+        return (
+          <DeleteModal
+            key="delete-device-model-modal"
+            onClose={this.closeFlyout}
+            onDelete={this.onDeleteDeviceModel}
+            deviceModelId={this.state.hardSelectedDeviceModelId}
+            formMode={deviceModelFormModes.FORM_MODE_DELETE}
             t={t} />
         );
       default:
@@ -131,8 +148,12 @@ export class DeviceModelsGrid extends Component {
     }
   }
 
+  /**
+   * Get the ID of the selected item
+   */
+
   render() {
-    const { t, createDeviceModel, deleteDeviceModel } = this.props;
+    const { t, createDeviceModel, deleteDeviceModel, editDeviceModel } = this.props;
     const gridProps = {
       /* Grid Properties */
       ...defaultDeviceModelGridProps,
@@ -143,12 +164,11 @@ export class DeviceModelsGrid extends Component {
       /* Grid Events */
       onSoftSelectChange: this.onSoftSelectChange,
       onHardSelectChange: this.onHardSelectChange,
-      onGridReady: this.onGridReady
+      onGridReady: this.onGridReady,
     };
-
     return ([
       <PcsGrid {...gridProps} key="device-models-grid-key" />,
-      this.getOpenFlyout(t, createDeviceModel, deleteDeviceModel)
+      this.getOpenFlyout(t, createDeviceModel, deleteDeviceModel, editDeviceModel)
     ]);
   }
 }
