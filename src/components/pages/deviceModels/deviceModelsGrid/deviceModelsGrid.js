@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
-import { EditDeviceModel, CloneDeviceModel, CloneDeviceModel } from '../flyouts';
+import { EditDeviceModel, CloneDeviceModel } from '../flyouts';
 import { deviceModelFormModes } from '../flyouts/views/deviceModelForm'
 import { DeleteModal } from '../deleteModal/deleteModal';
 
