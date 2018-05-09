@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 import { Btn, PcsGrid } from 'components/shared';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
-import { EditDeviceModel, CloneDeviceModel } from '../flyouts';
+import { EditDeviceModel, CloneDeviceModel, CloneDeviceModel } from '../flyouts';
 import { deviceModelFormModes } from '../flyouts/views/deviceModelForm'
+import { DeleteModal } from '../deleteModal/deleteModal';
 
 const EDIT_FLYOUT   = 'edit-flyout';
 const DELETE_FLYOUT = 'delete-flyout';
@@ -59,7 +60,7 @@ export class DeviceModelsGrid extends Component {
       case CLONE_FLYOUT:
         return (
           <CloneDeviceModel
-            key="clone-device-mdeol-flyout"
+            key="clone-device-model-flyout"
             onClose={this.closeFlyout}
             deviceModels={this.deviceModelsGridApi.getSelectedRows()}
             createDeviceModel={createDeviceModel}
@@ -67,6 +68,15 @@ export class DeviceModelsGrid extends Component {
             t={t} />
         );
       case DELETE_FLYOUT:
+        return (
+          <DeleteModal
+            key="delete-device-model-modal"
+            onClose={this.closeFlyout}
+            onDelete={this.onDeleteDeviceModel}
+            deviceModelId={this.state.hardSelectedDeviceModelId}
+            formMode={deviceModelFormModes.FORM_MODE_DELETE}
+            t={t} />
+        );
       default:
         return null;
     }
@@ -74,9 +84,10 @@ export class DeviceModelsGrid extends Component {
 
   closeFlyout = () => this.setState(closedFlyoutState);
 
-  openDeleteFlyout = () => {
+  onDeleteDeviceModel = () => {
     this.props.deleteDeviceModel(this.state.hardSelectedDeviceModelId);
-    this.setState({ openFlyoutName: DELETE_FLYOUT })};
+    this.closeFlyout();
+  };
 
   componentWillReceiveProps(nextProps) {
     const { onContextMenuChange, rowData = [] } = nextProps;
@@ -121,11 +132,15 @@ export class DeviceModelsGrid extends Component {
    * @param {Array} selectedDeviceModels A list of currently selected devices
    */
   onHardSelectChange = (selectedDeviceModels) => {
-    const [{ id } = {}] = selectedDeviceModels;
+    const [{ id, type } = {}] = selectedDeviceModels;
     const { onContextMenuChange, onHardSelectChange } = this.props;
     this.setState({ hardSelectedDeviceModelId: id });
     if (isFunc(onContextMenuChange)) {
-      onContextMenuChange(selectedDeviceModels.length > 0 ? this.contextBtns : null);
+      onContextMenuChange(selectedDeviceModels.length > 0
+        ? type === 'StockModel'
+            ? this.contextBtns.filter(btn => btn.key !== 'delete')
+            : this.contextBtns
+        : null);
     }
     if (isFunc(onHardSelectChange)) {
       onHardSelectChange(selectedDeviceModels);
