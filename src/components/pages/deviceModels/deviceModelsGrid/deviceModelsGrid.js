@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import isEqual from 'lodash/isEqual';
 import { Btn, PcsGrid } from 'components/shared';
+import Config from 'app.config';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
 import { isFunc, svgs, translateColumnDefs } from 'utilities';
 import { EditDeviceModel, CloneDeviceModel } from '../flyouts';
@@ -44,16 +46,30 @@ export class DeviceModelsGrid extends Component {
     ];
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { onContextMenuChange, rowData = [] } = nextProps;
+    if (!isEqual(rowData, this.props.rowData)) {
+      this.closeFlyout();
+
+      if (isFunc(onContextMenuChange)) {
+        onContextMenuChange(null);
+      }
+    }
+  }
+
   openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
 
   getOpenFlyout = (t, createDeviceModel, deleteDeviceModel, editDeviceModel) => {
+    if (!isFunc((this.deviceModelsGridApi || {}).getSelectedRows)) return;
+
+    const [ deviceModel ] = this.deviceModelsGridApi.getSelectedRows() || [];
     switch (this.state.openFlyoutName) {
       case EDIT_FLYOUT:
         return(
           <EditDeviceModel
             key="edit-device-model-flyout"
             onClose={this.closeFlyout}
-            deviceModels={this.deviceModelsGridApi.getSelectedRows()}
+            deviceModel={deviceModel}
             editDeviceModel={editDeviceModel}
             formMode={deviceModelFormModes.FORM_MODE_EDIT}
             t={t} />
@@ -63,7 +79,7 @@ export class DeviceModelsGrid extends Component {
           <CloneDeviceModel
             key="clone-device-model-flyout"
             onClose={this.closeFlyout}
-            deviceModels={this.deviceModelsGridApi.getSelectedRows()}
+            deviceModel={deviceModel}
             createDeviceModel={createDeviceModel}
             formMode={deviceModelFormModes.FORM_MODE_CREATE}
             t={t} />
@@ -89,15 +105,6 @@ export class DeviceModelsGrid extends Component {
     this.props.deleteDeviceModel(this.state.hardSelectedDeviceModelId);
     this.closeFlyout();
   };
-
-  componentWillReceiveProps(nextProps) {
-    const { onContextMenuChange, rowData = [] } = nextProps;
-    if (rowData.length !== (this.props.rowData || []).length) {
-      if (isFunc(onContextMenuChange)) {
-        onContextMenuChange(null);
-      }
-    }
-  }
 
   /**
    * Get the grid api options
@@ -138,8 +145,8 @@ export class DeviceModelsGrid extends Component {
     this.setState({ hardSelectedDeviceModelId: id });
     if (isFunc(onContextMenuChange)) {
       onContextMenuChange(selectedDeviceModels.length > 0
-        ? type === 'StockModel'
-            ? this.contextBtns.filter(btn => btn.key !== 'delete')
+        ? type === Config.deviceModelTypes.stockModel
+            ? this.contextBtns.filter(btn => btn.key === 'clone')
             : this.contextBtns
         : null);
     }

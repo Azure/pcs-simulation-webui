@@ -14,7 +14,11 @@ const Config = {
   simulationStatusPollingInterval: 10000, // 10s
   customSensorValue: 'custom',
   defaultAjaxTimeout: 10000, // 10s
-  paginationPageSize: 15
+  paginationPageSize: 15,
+  deviceModelTypes: {
+    customModel: 'CustomModel',
+    stockModel: 'StockModel'
+  }
 };
 
 export default Config;

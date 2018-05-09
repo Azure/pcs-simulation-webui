@@ -50,7 +50,10 @@ export const deviceModelsColumnDefs = {
   type: {
     headerName: 'deviceModels.grid.type',
     field: 'type',
-    valueFormatter: ({ value }) => value === 'CustomModel' ? 'Custom' : 'Standard'
+    valueFormatter: ({ value, context: { t } }) =>
+      value === Config.deviceModelTypes.customModel
+        ? t('deviceModels.grid.custom')
+        : t('deviceModels.grid.standard')
   },
 };
 

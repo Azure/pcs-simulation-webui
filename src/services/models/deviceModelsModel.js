@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
+import Config from 'app.config';
 
 // Map tp device mpde;s in device model tabs
 export const toDeviceModels = ({ Items = []}) => Items.map(toDeviceModel);
@@ -28,7 +29,7 @@ export const toDeviceModelRequestModel = (request = {}) => {
     Description: description,
     Version: version,
     Protocol: 'MQTT',
-    Type: 'CustomModel',
+    Type: Config.deviceModelTypes.customModel,
     Simulation: {
       Interval: frequency,
       Scripts: script

@@ -31,7 +31,9 @@
       "simulated": "Simulated",
       "status": "Status",
       "telemetry": "Telemetry",
-      "yes": "yes"
+      "yes": "yes",
+      "custom": "custom",
+      "standard": "standard"
     },
     "flyouts": {
       "cancel": "Cancel",

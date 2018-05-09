@@ -3,6 +3,7 @@
 import React from 'react';
 import moment from 'moment';
 import { svgs, LinkedComponent, Validator } from 'utilities';
+import Config from 'app.config';
 import {
   Btn,
   BtnToolbar,
@@ -41,6 +42,12 @@ const newSensor = () => ({
   maxValue: '',
   unit: ''
 });
+
+const sensorBehavior = {
+  increment: 'Math.Increasing',
+  random: 'Math.Random.WithinRange',
+  decrement: 'Math.Decreasing'
+}
 
 const isRealRegex = /^-?(([1-9][0-9]*)*|0?)\.?\d*$/;
 const nonReal = x => !x.match(isRealRegex);
@@ -96,9 +103,9 @@ class DeviceModelForm extends LinkedComponent {
   }
 
   getFormState = (props) => {
-    if (!props.deviceModels || !props.deviceModels.length) return;
+    if (!props.deviceModel) return;
 
-    const {deviceModels: [{
+    const {
       description = '',
       id,
       eTag,
@@ -107,7 +114,7 @@ class DeviceModelForm extends LinkedComponent {
       simulation = {},
       telemetry = [],
       version = ''
-    }] = [{}]} = props;
+    } = props.deviceModel;
     const sensors = this.toSensors(simulation.Scripts);
 
     this.setState({
@@ -118,7 +125,7 @@ class DeviceModelForm extends LinkedComponent {
       version,
       frequency: this.toDuration(simulation.Interval),
       interval: this.toDuration((telemetry[0] || {}).Interval),
-      sensors: type === 'StockModel'
+      sensors: type === Config.deviceModelTypes.stockModel
         ? stockModelSensors[id]
         : sensors
     });
@@ -144,11 +151,11 @@ class DeviceModelForm extends LinkedComponent {
         unit: Unit,
         behavior: (Path => {
           switch (Path) {
-            case 'Math.Increasing':
+            case sensorBehavior.increment:
               return { value: 'Math.Increasing', label: 'Increment' };
-            case 'Math.Random.WithinRange':
+            case sensorBehavior.random:
               return { value: 'Math.Random.WithinRange', label: 'Random' };
-            case 'Math.Decreasing':
+            case sensorBehavior.decrement:
               return { value: 'Math.Decreasing', label: 'Decrement' };
             default:
               return '';

@@ -12,7 +12,18 @@
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid;
-  box-shadow: 0px 6px #000000;
+
+  .delete-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .modal-icon { @include rem-fallback(padding, 0px); }
+  }
+
+  .delete-modal-content { display: flex; }
+
+  .btn-toolbar { justify-content: flex-end; }
 
   @include themify($themes) {
     color:  themed('colorHighest');
@@ -20,23 +31,14 @@
     border-color: themed('colorSystem');
 
     .delete-modal-header { color: themed('colorHighest'); }
-    .modal-icon { fill: themed('colorHighest'); }
-  }
-
-  .delete-modal-header {
-    display: flex;
-    justify-content: space-between;
 
     .modal-icon {
-      @include square-px-rem(14px);
-      @include rem-fallback(padding, 2px);
-      @include rem-fallback(margin-right, 2px);
+      fill: themed('colorHighest');
 
-      svg { @include square-px-rem(14px); }
+      &:hover {
+        background-color: themed('colorLowestSecond');
+        svg { fill: themed('colorHighest'); }
+      }
     }
   }
-
-  .delete-modal-content { display: flex; }
-
-  .btn-toolbar { justify-content: flex-end; }
 }

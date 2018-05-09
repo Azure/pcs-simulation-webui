@@ -1,9 +1,9 @@
 // Hardcoded sensors for stock models
 // TODO: Delete this file when sensors avaliable from service
 
-var stockModelSensors = {};
+const stockModelSensors = {};
 
-stockModelSensors["chiller-01"] = [
+stockModelSensors['chiller-01'] = [
   {
       name: 'temperature',
       minValue: 25,
@@ -27,7 +27,7 @@ stockModelSensors["chiller-01"] = [
   }
 ];
 
-stockModelSensors["chiller-02"] = [
+stockModelSensors['chiller-02'] = [
   {
       name: 'temperature',
       minValue: 25,
@@ -51,7 +51,7 @@ stockModelSensors["chiller-02"] = [
   }
 ];
 
-stockModelSensors["elevator-01"] = [
+stockModelSensors['elevator-01'] = [
   {
       name: 'temperature',
       minValue: 25,
@@ -75,7 +75,7 @@ stockModelSensors["elevator-01"] = [
   }
 ];
 
-stockModelSensors["elevator-02"] = [
+stockModelSensors['elevator-02'] = [
   {
       name: 'temperature',
       minValue: 25,
@@ -99,7 +99,7 @@ stockModelSensors["elevator-02"] = [
   }
 ];
 
-stockModelSensors["engine-01"] = [
+stockModelSensors['engine-01'] = [
   {
       name: 'fuellevel',
       minValue: 0,
@@ -123,7 +123,7 @@ stockModelSensors["engine-01"] = [
   }
 ];
 
-stockModelSensors["engine-02"] = [
+stockModelSensors['engine-02'] = [
   {
       name: 'fuellevel',
       minValue: 0,
@@ -147,7 +147,7 @@ stockModelSensors["engine-02"] = [
   }
 ];
 
-stockModelSensors["prototype-01"] = [
+stockModelSensors['prototype-01'] = [
   {
       name: 'temperature',
       minValue: 25,
@@ -164,7 +164,7 @@ stockModelSensors["prototype-01"] = [
   }
 ];
 
-stockModelSensors["prototype-02"] = [
+stockModelSensors['prototype-02'] = [
   {
       name: 'temperature',
       minValue: 25,
@@ -181,7 +181,7 @@ stockModelSensors["prototype-02"] = [
   }
 ];
 
-stockModelSensors["truck-01"] = [
+stockModelSensors['truck-01'] = [
   {
       name: 'temperature',
       minValue: 23,
@@ -198,7 +198,7 @@ stockModelSensors["truck-01"] = [
   }
 ];
 
-stockModelSensors["truck-02"] = [
+stockModelSensors['truck-02'] = [
   {
       name: 'temperature',
       minValue: 23,

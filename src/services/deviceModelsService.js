@@ -4,14 +4,14 @@ import Config from 'app.config';
 import { HttpClient } from './httpClient';
 import { toDeviceModels, toDeviceModel, toDeviceModelRequestModel } from './models';
 
-const ENDPOINT = Config.simulationApiUrl + 'deviceModels';
+const ENDPOINT = `${Config.simulationApiUrl}deviceModels`;
 
 /** Contains methods for calling the simulation service */
 export class DeviceModelsService {
 
   /** Returns a list of device models */
   static getDeviceModels() {
-    return HttpClient.get(`${ENDPOINT}`)
+    return HttpClient.get(ENDPOINT)
       .map(toDeviceModels);
   }
 
@@ -23,7 +23,7 @@ export class DeviceModelsService {
 
   /** Creates a device model */
   static createDeviceModel(model) {
-    return HttpClient.post(`${ENDPOINT}`, toDeviceModelRequestModel(model))
+    return HttpClient.post(ENDPOINT, toDeviceModelRequestModel(model))
       .map(toDeviceModel);
   }
 

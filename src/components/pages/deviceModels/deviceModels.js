@@ -5,6 +5,7 @@ import { DeviceModelsGrid } from './deviceModelsGrid';
 import { Btn, PageContent, ContextMenu } from 'components/shared';
 import { NewDeviceModel } from './flyouts';
 import { svgs } from 'utilities';
+import { deviceModelFormModes } from './flyouts/views/deviceModelForm'
 
 import './deviceModels.css';
 
@@ -70,7 +71,14 @@ export class DeviceModels extends Component {
       </ContextMenu>,
       <PageContent className="devicemodels-container" key="page-content">
         <DeviceModelsGrid {...gridProps} />
-        { newDeviceModelFlyoutOpen && <NewDeviceModel onClose={this.closeFlyout} t={t} createDeviceModel={createDeviceModel}/>}
+        {
+          newDeviceModelFlyoutOpen &&
+          <NewDeviceModel
+            onClose={this.closeFlyout}
+            formMode={deviceModelFormModes.FORM_MODE_CREATE}
+            createDeviceModel={createDeviceModel}
+            t={t} />
+        }
       </PageContent>
     ];
   }

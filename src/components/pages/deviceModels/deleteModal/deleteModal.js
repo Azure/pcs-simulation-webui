@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { svgs } from 'utilities';
-import { Svg } from 'components/shared';
 import { Btn, BtnToolbar, Modal } from 'components/shared';
 
 import './deleteModal.css';
@@ -13,7 +12,7 @@ export const DeleteModal = ({ t, onClose, deviceModelId, onDelete }) => (
     <div className="delete-modal-container">
       <div className="delete-modal-header">
         {t('deviceModels.flyouts.delete.header')}
-        <Svg path={svgs.x} className="modal-icon" onClick={onClose} />
+        <Btn svg={svgs.x} className="modal-icon" onClick={onClose} />
       </div>
       <div className="delete-modal-content">
       {t('deviceModels.flyouts.delete.description', { deviceModelId })}
