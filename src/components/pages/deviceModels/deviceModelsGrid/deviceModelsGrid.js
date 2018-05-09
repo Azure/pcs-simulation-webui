@@ -51,6 +51,7 @@ export class DeviceModelsGrid extends Component {
       case EDIT_FLYOUT:
         return(
           <EditDeviceModel
+            key="edit-device-model-flyout"
             onClose={this.closeFlyout}
             deviceModels={this.deviceModelsGridApi.getSelectedRows()}
             editDeviceModel={editDeviceModel}
