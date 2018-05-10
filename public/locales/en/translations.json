@@ -19,6 +19,11 @@
     "title": "Device models",
     "noneFound": "No devices found.",
     "refresh": "Refresh",
+    "behavior": {
+      "Random": "Random",
+      "Increment": "Increment",
+      "Decrement": "Decrement"
+    },
     "grid": {
       "id": "id",
       "modelName": "Model Name",

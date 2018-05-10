@@ -251,6 +251,11 @@ class DeviceModelForm extends LinkedComponent {
       t('deviceModels.flyouts.sensors.unit')
     ];
 
+    const tranlatedBehaviorOptions = behaviorOptions.map(({ label, value }) => ({
+      value,
+      label: t(`deviceModels.behavior.${label}`)
+    }));
+
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
         <Section.Container>
@@ -310,7 +315,7 @@ class DeviceModelForm extends LinkedComponent {
                   <div className="sensor-container" key={idx}>
                     <div className="sensor-row">
                       { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error, this.setFormChangesFlag) }
-                      { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), behaviorOptions, edited && !!behavior.error, this.setFormChangesFlag) }
+                      { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), tranlatedBehaviorOptions, edited && !!behavior.error, this.setFormChangesFlag) }
                       { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error, this.setFormChangesFlag) }
                       { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error, this.setFormChangesFlag) }
                       { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error, this.setFormChangesFlag) }
