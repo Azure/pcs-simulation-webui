@@ -20,9 +20,9 @@
     "noneFound": "No devices found.",
     "refresh": "Refresh",
     "behavior": {
-      "Random": "Random",
-      "Increment": "Increment",
-      "Decrement": "Decrement"
+      "random": "Random",
+      "increment": "Increment",
+      "decrement": "Decrement"
     },
     "grid": {
       "id": "id",

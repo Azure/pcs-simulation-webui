@@ -152,11 +152,11 @@ class DeviceModelForm extends LinkedComponent {
         behavior: (Path => {
           switch (Path) {
             case sensorBehavior.increment:
-              return { value: 'Math.Increasing', label: 'Increment' };
+              return { value: 'Math.Increasing', label: 'increment' };
             case sensorBehavior.random:
-              return { value: 'Math.Random.WithinRange', label: 'Random' };
+              return { value: 'Math.Random.WithinRange', label: 'random' };
             case sensorBehavior.decrement:
-              return { value: 'Math.Decreasing', label: 'Decrement' };
+              return { value: 'Math.Decreasing', label: 'decrement' };
             default:
               return '';
           }
@@ -251,7 +251,7 @@ class DeviceModelForm extends LinkedComponent {
       t('deviceModels.flyouts.sensors.unit')
     ];
 
-    const tranlatedBehaviorOptions = behaviorOptions.map(({ label, value }) => ({
+    const tranlatedBehaviorOptions = behaviorOptions.map(({ value, label }) => ({
       value,
       label: t(`deviceModels.behavior.${label}`)
     }));

@@ -182,11 +182,11 @@ class SimulationForm extends LinkedComponent {
     behavior: (path => {
       switch (path) {
         case 'Increment':
-          return { value: 'Math.Increasing', label: 'Increment' };
+          return { value: 'Math.Increasing', label: 'increment' };
         case 'Random':
-          return { value: 'Math.Random.WithinRange', label: 'Random' };
+          return { value: 'Math.Random.WithinRange', label: 'random' };
         case 'Decrement':
-          return { value: 'Math.Decreasing', label: 'Decrement' };
+          return { value: 'Math.Decreasing', label: 'decrement' };
         default:
           return '';
       }
@@ -249,6 +249,7 @@ class SimulationForm extends LinkedComponent {
   }
 
   render () {
+    const { t } = this.props;
     const usingCustomSensors = (this.state.deviceModel || {}).value === Config.customSensorValue;
     // Link these values in render because they need to update based on component state
     const sensorLinks = this.sensorLink.getLinkedChildren(sensorLink => {
@@ -283,6 +284,10 @@ class SimulationForm extends LinkedComponent {
         link={this.iotHubString}
         placeholder="Enter IoT Hub connection string" />
     );
+    const tranlatedBehaviorOptions = behaviorOptions.map(({ value, label }) => ({
+      value,
+      label: t(`deviceModels.behavior.${label}`)
+    }));
 
     return (
       <form onSubmit={this.apply}>
@@ -328,7 +333,7 @@ class SimulationForm extends LinkedComponent {
                   <div className="sensor-container" key={idx}>
                     <div className="sensor-row">
                       { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
-                      { toSensorSelect(behavior, 'select', 'Select behavior', behaviorOptions, edited && !!behavior.error) }
+                      { toSensorSelect(behavior, 'select', 'Select behavior', tranlatedBehaviorOptions, edited && !!behavior.error) }
                       { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
                       { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
                       { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }

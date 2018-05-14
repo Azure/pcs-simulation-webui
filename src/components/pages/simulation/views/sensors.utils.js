@@ -13,9 +13,9 @@ export const  SensorHeader = <div className="sensor-headers">
 </div>;
 
 export const behaviorOptions = [
-  { value: 'Math.Random.WithinRange', label: 'Random' },
-  { value: 'Math.Increasing', label: 'Increment' },
-  { value: 'Math.Decreasing', label: 'Decrement' }
+  { value: 'Math.Random.WithinRange', label: 'random' },
+  { value: 'Math.Increasing', label: 'increment' },
+  { value: 'Math.Decreasing', label: 'decrement' }
 ];
 
 export const toSensorInput = (link, placeholder, error, onChange) => (
