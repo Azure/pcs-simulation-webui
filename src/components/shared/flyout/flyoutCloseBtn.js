@@ -5,5 +5,5 @@ import { Btn } from 'components/shared';
 import { svgs } from 'utilities';
 
 export const FlyoutCloseBtn = (props) => (
-  <Btn {...props} svg={svgs.x} className="flyout-close-btn" />
+  <Btn {...props} svg={svgs.cancelX} className="flyout-close-btn" />
 );

@@ -5,6 +5,7 @@ import { DeviceModelsGrid } from './deviceModelsGrid';
 import { Btn, PageContent, ContextMenu } from 'components/shared';
 import { NewDeviceModel } from './flyouts';
 import { svgs } from 'utilities';
+import { deviceModelFormModes } from './flyouts/views/deviceModelForm'
 
 import './deviceModels.css';
 
@@ -49,13 +50,16 @@ export class DeviceModels extends Component {
   getSoftSelectId = ({ id }) => id;
 
   render() {
-    const { t, deviceModels } = this.props;
+    const { t, deviceModels, createDeviceModel, deleteDeviceModel, editDeviceModel } = this.props;
     const gridProps = {
       rowData: deviceModels || [],
       onSoftSelectChange: this.onSoftSelectChange,
       onContextMenuChange: this.onContextMenuChange,
       softSelectId: this.state.selectedDeviceId,
       getSoftSelectId: this.getSoftSelectId,
+      deleteDeviceModel,
+      createDeviceModel,
+      editDeviceModel,
       t
     };
     const newDeviceModelFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
@@ -67,7 +71,14 @@ export class DeviceModels extends Component {
       </ContextMenu>,
       <PageContent className="devicemodels-container" key="page-content">
         <DeviceModelsGrid {...gridProps} />
-        { newDeviceModelFlyoutOpen && <NewDeviceModel onClose={this.closeFlyout}  t={t} />}
+        {
+          newDeviceModelFlyoutOpen &&
+          <NewDeviceModel
+            onClose={this.closeFlyout}
+            formMode={deviceModelFormModes.FORM_MODE_CREATE}
+            createDeviceModel={createDeviceModel}
+            t={t} />
+        }
       </PageContent>
     ];
   }

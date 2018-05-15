@@ -9,3 +9,4 @@ export * from './pcsGrid/pcsGrid';
 export * from './pageContent/pageContent';
 export * from './contextMenu/contextMenu';
 export * from './flyout';
+export * from './modal/modal';

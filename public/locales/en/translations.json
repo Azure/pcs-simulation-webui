@@ -19,19 +19,26 @@
     "title": "Device models",
     "noneFound": "No devices found.",
     "refresh": "Refresh",
+    "behavior": {
+      "random": "Random",
+      "increment": "Increment",
+      "decrement": "Decrement"
+    },
     "grid": {
       "id": "id",
       "modelName": "Model Name",
       "description": "Description",
       "dataPoints": "Data points",
       "version": "version",
-      "type": "type",
+      "type": "type of model",
       "no": "no",
       "offline": "offline",
       "simulated": "Simulated",
       "status": "Status",
       "telemetry": "Telemetry",
-      "yes": "yes"
+      "yes": "yes",
+      "custom": "custom",
+      "standard": "standard"
     },
     "flyouts": {
       "cancel": "Cancel",
@@ -39,12 +46,15 @@
       "save": "Save",
       "delete": {
         "title": "Delete",
-        "header": "Delete device model",
-        "description": "This action will delete the devices permanently from the platform.",
+        "header": "Delete a device model",
+        "description": "Are you sure you want to delete {{deviceModelId}}?",
         "cancel": "Cancel",
         "apply": "Delete",
         "applySuccess": "device model deleted successfully!",
         "close": "Close"
+      },
+      "clone": {
+        "title": "Clone model"
       },
       "new": {
         "title": "New custom device model",
@@ -59,6 +69,9 @@
         "addDataPoint": "Add data point",
         "interval": "Min/Max changes occur every:",
         "frequency": "Report Min/Max changes every:"
+      },
+      "edit":{
+        "title": "Edit a custom device model"
       },
       "sensors" : {
         "dataPoint": "Data point",

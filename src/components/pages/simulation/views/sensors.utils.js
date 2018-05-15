@@ -13,23 +13,24 @@ export const  SensorHeader = <div className="sensor-headers">
 </div>;
 
 export const behaviorOptions = [
-  { value: 'Math.Random.WithinRange', label: 'Random' },
-  { value: 'Math.Increasing', label: 'Increment' },
-  { value: 'Math.Decreasing', label: 'Decrement' }
+  { value: 'Math.Random.WithinRange', label: 'random' },
+  { value: 'Math.Increasing', label: 'increment' },
+  { value: 'Math.Decreasing', label: 'decrement' }
 ];
 
-export const toSensorInput = (link, placeholder, error) => (
+export const toSensorInput = (link, placeholder, error, onChange) => (
   <FormGroup className="sensor-box">
     <FormControl
       className="short"
       type="text"
       link={link}
+      onChange={onChange}
       placeholder={placeholder}
       errorState={error} />
   </FormGroup>
 );
 
-export const toSensorSelect = (link, type, placeholder, options, error) => (
+export const toSensorSelect = (link, type, placeholder, options, error, onChange) => (
   <FormGroup className="sensor-box">
     <FormControl
       className="short"
@@ -38,6 +39,7 @@ export const toSensorSelect = (link, type, placeholder, options, error) => (
       options={options}
       clearable={false}
       searchable={true}
+      onChange={onChange}
       placeholder={placeholder}
       errorState={error} />
   </FormGroup>

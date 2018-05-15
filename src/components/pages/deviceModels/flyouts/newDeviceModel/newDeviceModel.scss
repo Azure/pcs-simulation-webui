@@ -1,6 +1,0 @@
-// Copyright (c) Microsoft. All rights reserved.
-
-@import 'styles/themes';
-@import 'styles/mixins';
-
-.new-rule-flyout-container { @include rem-fallback(min-width, 1500px); }

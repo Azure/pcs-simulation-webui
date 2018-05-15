@@ -50,15 +50,18 @@ export const deviceModelsColumnDefs = {
   type: {
     headerName: 'deviceModels.grid.type',
     field: 'type',
-    valueFormatter: ({ value }) => checkForEmpty(value)
+    valueFormatter: ({ value, context: { t } }) =>
+      value === Config.deviceModelTypes.customModel
+        ? t('deviceModels.grid.custom')
+        : t('deviceModels.grid.standard')
   },
 };
 
-/** Given a device object, extract and return the device Id */
+/** Given a deviceModel object, extract and return the device Id */
 export const getSoftSelectId = ({ Id }) => Id;
 
-/** Shared device grid AgGrid properties */
-export const defaultDeviceGridProps = {
+/** Shared deviceModel grid AgGrid properties */
+export const defaultDeviceModelGridProps = {
   enableColResize: false,
   multiSelect: false,
   pagination: true,

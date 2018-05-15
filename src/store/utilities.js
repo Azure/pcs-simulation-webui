@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { Observable } from 'rxjs';
+import update from 'immutability-helper';
 
 // A collection of helper objects for reducing store/redux-observable boilerplate
 
@@ -155,3 +156,34 @@ export function createReducerScenario(cases = {}) {
 
   return { actionTypes, actions, reducers, getReducer };
 }
+
+/*
+ * Many reducers need to track loading states and error states.
+ * These methods make managing these states easily replicable
+ * across reducers.
+ */
+export const errorPendingInitialState = { pending: {}, errors: {} };
+
+// setPending and setError are intended to be used inside immutability-helper update
+export const setPending = (type, flag) => ({
+  pending: { [type]: { $set: flag } }
+});
+
+export const setError = (type, error) => ({
+  errors: { [type]: { $set: error } }
+});
+
+export const pendingReducer = (state, { type }) => update(state, {
+  ...setPending(type, true),
+  ...setError(type)
+});
+
+export const errorReducer = (state, { payload, error }) => update(state, {
+  ...setPending(payload, false),
+  ...setError(payload, error)
+});
+
+export const getPending = (state, type) => state.pending[type];
+export const getError = (state, type) => state.errors[type];
+
+export const toActionCreator = (actionCreator, fromAction) => payload => actionCreator(payload, { fromAction });
