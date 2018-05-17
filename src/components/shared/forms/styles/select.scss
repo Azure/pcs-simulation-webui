@@ -192,6 +192,13 @@ $select-padding-horizontal: 8px;
 
   .Select-value { @include rem-fallback(margin-left, $select-padding-horizontal); }
 
+  .Select-value,
+  .Select-multi-value-wrapper {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   // fake-hide the input when the control is pseudo-focused
   .has-value.is-pseudo-focused .Select-input { opacity: 0; }
 
