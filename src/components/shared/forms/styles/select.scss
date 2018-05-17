@@ -192,7 +192,8 @@ $select-padding-horizontal: 8px;
 
   .Select-value { @include rem-fallback(margin-left, $select-padding-horizontal); }
 
-  .Select-value, .Select-multi-value-wrapper {
+  .Select-value,
+  .Select-multi-value-wrapper {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
