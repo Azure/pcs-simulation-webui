@@ -200,7 +200,7 @@ class SimulationForm extends LinkedComponent {
 
   inputOnFocus = () => this.setState({ connectionStrFocused: true })
 
-  toSelectOption = ({ id, name }) => ({ value: id, label: name });
+  toSelectOption = ({ id, name }) => ({ value: id, label: name || id });
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
