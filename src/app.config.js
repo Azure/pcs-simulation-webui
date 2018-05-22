@@ -16,8 +16,8 @@ const Config = {
   defaultAjaxTimeout: 10000, // 10s
   paginationPageSize: 15,
   deviceModelTypes: {
-    customModel: 'CustomModel',
-    stockModel: 'StockModel'
+    customModel: 'Custom',
+    stockModel: 'Stock'
   }
 };
 
