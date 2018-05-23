@@ -45,7 +45,7 @@ cd %APP_HOME%
     cd out\docker\
 
     :: note: images built in Windows don't contain a label with a datetime
-    docker build --squash --compress --tag %DOCKER_TAG% --label "%DOCKER_LABEL1%" --label "%DOCKER_LABEL2%" .
+    docker build --compress --tag %DOCKER_TAG% --label "%DOCKER_LABEL1%" --label "%DOCKER_LABEL2%" .
 
     IF %ERRORLEVEL% NEQ 0 GOTO FAIL
 
