@@ -76,81 +76,18 @@ export const toSimulationRequestModel = (request = {}) => ({
 
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
-  deviceModels.map(({ id, eTag, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
-    if (isCustomDevice) {
-      const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
-      return {
-        Id: id,
-        ETag: eTag,
-        Count: count,
-        Override: {
-          Simulation: {
-              Interval: interval,
-              Scripts: script
-            },
-          Telemetry: [{
-            Interval: interval,
-            MessageTemplate: messageTemplate,
-            MessageSchema: messageSchema
-          }]
-        }
-      };
-    }
+  deviceModels.map(({ name: Id, count: Count, interval }) => {
+    const Interval = `${interval.hours}:${interval.minutes}:${interval.seconds}`;
     return {
-      Id: id,
-      Count: count,
+      Id,
+      Count,
       Override: {
         Simulation: {
-          Interval: interval
+          Interval
         },
         Telemetry: [{
-          Interval: interval
+          Interval
         }]
       }
     };
   });
-
-const toCustomSensorModel = (sensors = []) => {
-  const behaviorMap = {};
-  let Fields = {};
-  let messages = [];
-
-  sensors
-    .forEach(({ name, behavior, minValue, maxValue, unit }) => {
-      const _name = name.toLowerCase();
-      const _unit = unit.toLowerCase();
-      const nameString = `"${_name}":$\{${_name}}`;
-      const unitString = `"${_name}_unit":"${_unit}"`;
-      const path = behavior.value;
-      messages = [...messages, nameString, unitString];
-      Fields = { ...Fields, [_name]: 'double', [`${_name}_unit`]: 'text' };
-      if(!behaviorMap[path]) behaviorMap[path] = {};
-      behaviorMap[path] = {
-        ...behaviorMap[path],
-        [_name]: {
-          Min: minValue,
-          Max: maxValue,
-          Step: 1,
-          Unit: unit
-        }
-      }
-    });
-
-    const script = Object.keys(behaviorMap).map(Path => ({
-      Type: "internal",
-      Path,
-      Params: behaviorMap[Path]
-    }));
-    const messageTemplate = `{${messages.join(',')}}`;
-    const messageSchema = {
-      Name: 'custom-sensors;v1',
-      Format: 'JSON',
-      Fields
-    }
-
-    return {
-      script,
-      messageTemplate,
-      messageSchema
-    };
-}

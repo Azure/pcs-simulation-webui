@@ -13,7 +13,7 @@ import {
 import { Simulation } from './simulation';
 import { epics as appEpics } from 'store/reducers/appReducer';
 import { epics as simulationEpics } from 'store/reducers/simulationReducer';
-import { getDeviceModels } from 'store/reducers/deviceModelsReducer';
+import { getDeviceModels, getEntities } from 'store/reducers/deviceModelsReducer';
 
 // Pass the simulation status
 const mapStateToProps = state => ({
@@ -23,6 +23,7 @@ const mapStateToProps = state => ({
   preprovisionedIoTHubInUse: getPreprovisionedIoTHubInUse(state),
   preprovisionedIoTHubMetricsUrl: getPreprovisionedIoTHubMetricsUrl(state),
   deviceModels: getDeviceModels(state),
+  deviceModelEntities: getEntities(state),
   error: getSimulationError(state)
 });
 

@@ -8,7 +8,6 @@ import { svgs, LinkedComponent, Validator, int } from 'utilities';
 import {
   Btn,
   BtnToolbar,
-  ErrorMsg,
   FormActions,
   FormControl,
   FormGroup,
@@ -18,39 +17,17 @@ import {
   SectionDesc,
   SectionHeader
 } from 'components/shared';
-import {
-  SensorHeader,
-  behaviorOptions,
-  toSensorInput,
-  toSensorSelect
-} from './sensors.utils';
 
-import './sensors.css';
-
-// Sensor validators
-const sensorNameValidator = (new Validator())
-  .check(Validator.notEmpty, 'Name is required');
-
-const sensorBehaviorValidator = (new Validator())
-  .check(Validator.notEmpty, 'Behavior is required');
-
-const sensorUnitValueValidator = (new Validator())
-  .check(Validator.notEmpty, 'Unit is required');
-
-const newSensor = () => ({
+const newDeviceModel = () => ({
   name: '',
-  behavior: '',
-  minValue: '',
-  maxValue: '',
-  unit: ''
+  count: 0,
+  messageThroughput: '',
+  interval: ''
 });
 
 const isIntRegex = /^-?\d*$/;
-const isRealRegex = /^-?(([1-9][0-9]*)*|0?)\.?\d*$/;
 const nonInteger = x => !x.match(isIntRegex);
-const nonReal = x => !x.match(isRealRegex);
 const stringToInt = x => x === '' || x === '-' ? x : int(x);
-const stringToFloat = x => x === '' || x === '-' ? x : parseFloat(x);
 
 class SimulationForm extends LinkedComponent {
 
@@ -67,8 +44,7 @@ class SimulationForm extends LinkedComponent {
       frequency: {},
       deviceModelOptions: [],
       deviceModel: '',
-      numDevices: '',
-      sensors: []
+      deviceModels: []
     };
 
     // State to input links
@@ -78,18 +54,9 @@ class SimulationForm extends LinkedComponent {
     this.deviceModel = this.linkTo('deviceModel')
       .check(Validator.notEmpty, 'A device model must be selected')
 
-    this.numDevices = this.linkTo('numDevices')
-      .reject(nonInteger)
-      .map(stringToInt)
-      .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Number of devices is required')
-      .check(num => num > 0, 'Number of devices must be greater than zero')
-      .check(num => num <= Config.maxSimulatedDevices, `Number of devices must be no greater than ${Config.maxSimulatedDevices}`);
 
     this.duration = this.linkTo('duration')
       .check(({ ms }) => ms > 0, 'Duration must be greater than zero');
-
-    this.frequency = this.linkTo('frequency')
-      .check(({ ms }) => ms >= 10000, 'Telemetry frequency must be no less than 10 seconds');
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
@@ -100,14 +67,12 @@ class SimulationForm extends LinkedComponent {
       .check(value => (value === 'endIn' && !this.duration.error) || value === 'indefinite');
 
     this.sensorLink = this.linkTo('sensors');
+    this.deviceModelsLink = this.linkTo('deviceModels');
   }
 
   formIsValid() {
     return [
       this.targetHub,
-      this.deviceModel,
-      this.numDevices,
-      this.frequency,
       this.durationRadio
     ].every(link => !link.error);
   }
@@ -120,6 +85,20 @@ class SimulationForm extends LinkedComponent {
     this.getFormState(nextProps);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { deviceModels: prevModels } = prevState;
+    const { deviceModels } = this.state;
+
+    // Populate telemetry interval for each device model
+    for (let index = 0; index < deviceModels.length; index++) {
+      const modelName = deviceModels[index].name;
+
+      if (modelName !== ((prevModels || [])[index] || {}).name) {
+        this.setTelemetryFrequncy(modelName, index);
+      }
+    }
+  }
+
   getFormState = (props) => {
     const {
       deviceModels,
@@ -128,24 +107,9 @@ class SimulationForm extends LinkedComponent {
       preprovisionedIoTHubInUse,
       preprovisionedIoTHubMetricsUrl
     } = props;
-    const deviceModelOptions = [
-      { value: Config.customSensorValue, label: 'Custom' },
-      ...(deviceModels || []).map(this.toSelectOption)
-    ];
-    const hasDeviceModels = simulation.deviceModels.length > 0;
-    const deviceModel = hasDeviceModels
-      ? this.toSelectOption(simulation.deviceModels[0])
-      : '';
-    const numDevices = hasDeviceModels
-      ? simulation.deviceModels[0].count
-      : 0;
-    const interval = (hasDeviceModels && simulation.deviceModels[0].interval) || '00:00:10';
-    const [hours, minutes, seconds] = interval.split(':');
+    const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = preprovisionedIoTHub && iotHubString === '' ? 'preProvisioned' : 'customString';
-    const sensors = hasDeviceModels
-      ? (simulation.deviceModels[0].sensors || []).map(this.toSensorReplicable)
-      : [];
     const { startTime, endTime } = simulation || {};
     const duration = (startTime && endTime)
       ? moment.duration(moment(endTime).diff(moment(startTime)))
@@ -154,10 +118,7 @@ class SimulationForm extends LinkedComponent {
     this.setState({
       iotHubString,
       deviceModelOptions,
-      deviceModel,
-      numDevices,
       preProvisionedRadio,
-      sensors: sensors.length === 0 ? [newSensor()] : sensors,
       preprovisionedIoTHub,
       preprovisionedIoTHubInUse,
       preprovisionedIoTHubMetricsUrl,
@@ -168,39 +129,46 @@ class SimulationForm extends LinkedComponent {
         minutes: duration.minutes(),
         seconds: duration.seconds()
       },
-      frequency: {
-        ms: moment.duration(interval).asMilliseconds(),
-        hours,
-        minutes,
-        seconds
-      }
+      deviceModels: (simulation.deviceModels || []).map(this.toDeviceModelReplicable)
     });
   }
 
-  toSensorReplicable = ({max, min, name, path, unit}) => ({
-    name,
-    behavior: (path => {
-      switch (path) {
-        case 'Increment':
-          return { value: 'Math.Increasing', label: 'increment' };
-        case 'Random':
-          return { value: 'Math.Random.WithinRange', label: 'random' };
-        case 'Decrement':
-          return { value: 'Math.Decreasing', label: 'decrement' };
-        default:
-          return '';
-      }
-    })(path),
-    minValue: typeof min === 'undefined' ? '' : min, // Pass empty string to avoid warnings for passing null values
-    maxValue: typeof max === 'undefined' ? '' : max,
-    unit
+  toDeviceModelReplicable = ({ id, count, interval }) => ({
+    name: id,
+    count,
+    interval: this.toTelemetryInterval(interval)
   })
+
+  setTelemetryFrequncy = (name, idx) => {
+    const { deviceModelEntities } = this.props;
+    const { deviceModels } = this.state;
+
+    if (!name || !deviceModelEntities) return;
+
+    const timespan = this.props.deviceModelEntities[name].simulation.Interval || '00:00:00';
+    const interval = this.toTelemetryInterval(timespan);
+
+    this.setState({
+      deviceModels: deviceModels.map((model, index) =>
+        (index === idx) ? { ...model, interval } : model)
+    });
+  }
+
+  toTelemetryInterval = timespan => {
+    const duration = moment.duration(timespan);
+    return {
+      ms: duration.asMilliseconds(),
+      hours: duration.hours(),
+      minutes: duration.minutes(),
+      seconds: duration.seconds()
+    };
+  }
 
   inputOnBlur = () => this.setState({ connectionStrFocused: false })
 
   inputOnFocus = () => this.setState({ connectionStrFocused: true })
 
-  toSelectOption = ({ id, name }) => ({ value: id, label: name || id });
+  toSelectOption = ({ id, name, simulation: { Interval = {} } = {}  }) => ({ value: id, label: name || id, interval: Interval });
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
@@ -209,72 +177,33 @@ class SimulationForm extends LinkedComponent {
     const {
       durationRadio,
       duration,
-      deviceModel,
+      deviceModels,
       iotHubString,
-      numDevices,
-      frequency,
       preProvisionedRadio,
-      sensors
     } = this.state;
     const simulationDuration = (durationRadio === 'endIn') ? {
       startTime: 'NOW',
       endTime: this.convertDurationToISO(duration)
     } : {};
-    const telemetryFrequency = frequency.ms > 0 ? { interval: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
-    const deviceModels = [{
-      id: deviceModel.value,
-      count: numDevices,
-      sensors,
-      isCustomDevice: deviceModel.value === Config.customSensorValue,
-      defaultDeviceModel: this.props.deviceModels.filter(({ id }) => id === deviceModel.value)[0],
-      ...telemetryFrequency
-    }];
+
     const modelUpdates = {
       enabled: true,
       connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString,
       deviceModels,
       ...simulationDuration
     };
+    console.log('devicemodels', deviceModels)
     this.props.updateSimulation(modelUpdates);
   };
 
-  addSensor = () => this.sensorLink.set([ ...this.sensorLink.value, newSensor() ]);
+  addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
 
-  deleteSensor = (index) =>
-    (evt) => this.sensorLink.set(this.sensorLink.value.filter((_, idx) => index !== idx));
-
-  changeDeviceModal = () => {
-    if ((this.state.deviceModel || {}).value === Config.customSensorValue && this.state.sensors.length === 0)
-      this.setState({ sensors: [newSensor()] });
-  }
+  deleteDeviceModel = (index) =>
+    (evt) => this.deviceModelsLink.set(this.deviceModelsLink.value.filter((_, idx) => index !== idx));
 
   render () {
     const { t } = this.props;
-    const usingCustomSensors = (this.state.deviceModel || {}).value === Config.customSensorValue;
-    // Link these values in render because they need to update based on component state
-    const sensorLinks = this.sensorLink.getLinkedChildren(sensorLink => {
-      const name = sensorLink.forkTo('name')
-        .withValidator(sensorNameValidator);
-      const behavior = sensorLink.forkTo('behavior')
-        .withValidator(sensorBehaviorValidator);
-      const minValue = sensorLink.forkTo('minValue')
-        .reject(nonReal)
-        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), 'Min value is required')
-        .check(x => stringToFloat(x) < stringToFloat(maxValue.value), `Min value must be less than the max value`);
-      const maxValue = sensorLink.forkTo('maxValue')
-        .reject(nonReal)
-        .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), 'Max value is required')
-        .check(x => stringToFloat(x) > stringToFloat(minValue.value), 'Max value must be greater than the min value');
-      const unit = sensorLink.forkTo('unit')
-        .withValidator(sensorUnitValueValidator);
-      const edited = !(!name.value && !behavior.value && !minValue.value && !maxValue.value && !unit.value);
-      const error = (edited && (name.error || behavior.error || minValue.error || maxValue.error || unit.error)) || '';
-      return { name, behavior, minValue, maxValue, unit, edited, error };
-    });
-
-    const editedSensors = sensorLinks.filter(({ edited }) => edited);
-    const hasErrors = editedSensors.some(({ error }) => !!error);
-    const sensorsHaveErrors = usingCustomSensors && (editedSensors.length === 0 || hasErrors);
+    const { deviceModels } = this.state;
     const connectStringInput = (
       <FormControl
         className="long"
@@ -284,10 +213,35 @@ class SimulationForm extends LinkedComponent {
         link={this.iotHubString}
         placeholder="Enter IoT Hub connection string" />
     );
-    const tranlatedBehaviorOptions = behaviorOptions.map(({ value, label }) => ({
-      value,
-      label: t(`deviceModels.behavior.${label}`)
-    }));
+
+    const deviceModelLinks = this.deviceModelsLink.getLinkedChildren(deviceModelLink => {
+      const name = deviceModelLink.forkTo('name')
+        .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
+      const count = deviceModelLink.forkTo('count')
+        .reject(nonInteger)
+        .map(stringToInt)
+        .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Number of devices is required')
+        .check(num => num > 0, 'Number of devices must be greater than zero')
+        .check(num => num <= Config.maxSimulatedDevices, `Number of devices must be no greater than ${Config.maxSimulatedDevices}`);
+
+      const interval = deviceModelLink.forkTo('interval')
+        .check(({ ms }) => ms >= 10000, 'Telemetry frequency must be no less than 10 seconds');
+
+      const edited = !(!name.value && !count.value);
+      const error = (edited && (name.error || count.error));
+
+      return { name, count, interval, edited, error };
+    });
+
+    const editedDeviceModel = deviceModelLinks.filter(({ edited }) => edited);
+    const someDeviceModelLinksHasErrors = editedDeviceModel.some(({ error }) => !!error);
+    const deviceModelsHaveError = (deviceModelLinks.length === 0 || someDeviceModelLinksHasErrors);
+    const deviceModelHeaders = [
+      t('simulation.form.deviceModels.name'),
+      t('simulation.form.deviceModels.count'),
+      t('simulation.form.deviceModels.throughput'),
+      t('simulation.form.deviceModels.duration')
+    ];
 
     return (
       <form onSubmit={this.apply}>
@@ -309,67 +263,78 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>Device model</SectionHeader>
           <SectionDesc>Choose type of device to simulate.</SectionDesc>
-          <FormGroup>
-            <FormLabel>Select</FormLabel>
-            <FormControl
-              className="long"
-              type="select"
-              options={this.state.deviceModelOptions}
-              link={this.deviceModel}
-              onChange={this.changeDeviceModal}
-              clearable={false}
-              searchable={true}
-              placeholder="Select model" />
-          </FormGroup>
-        </FormSection>
-        { (this.state.deviceModel || {}).value === Config.customSensorValue &&
-          <FormSection>
-            <SectionHeader>Sensors</SectionHeader>
-            <SectionDesc>Set parameters for telemetry sent for the sensor.</SectionDesc>
-            <div className="sensors-container">
-              { this.state.sensors.length > 0 && SensorHeader }
-              {
-                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
-                  <div className="sensor-container" key={idx}>
-                    <div className="sensor-row">
-                      { toSensorInput(name, 'Enter sensor name', edited && !!name.error) }
-                      { toSensorSelect(behavior, 'select', 'Select behavior', tranlatedBehaviorOptions, edited && !!behavior.error) }
-                      { toSensorInput(minValue, 'Enter min value', edited && !!minValue.error) }
-                      { toSensorInput(maxValue, 'Enter max value', edited && !!maxValue.error) }
-                      { toSensorInput(unit, 'Enter unit value', edited && !!unit.error) }
-                      <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
-                    </div>
-                    { error && <ErrorMsg>{ error }</ErrorMsg>}
-                  </div>
-                ))
+          <div className="device-models-container">
+          {
+            deviceModels.length > 0 &&
+              <div className="device-model-headers">
+                { deviceModelHeaders.map((header, idx) => (
+                    <div className="device-model-header" key={idx}>{header}</div>
+                  ))
+                }
+              </div>
+          }
+          {
+            deviceModelLinks.map(({ name, count, interval, edited, error }, idx) => {
+              let throughput = 0;
+              if (count.value && interval.value.ms) {
+                throughput = (count.value * 1000) / interval.value.ms
               }
-              {
-                this.state.sensors.length < 10 &&
-                <Btn svg={svgs.plus} onClick={this.addSensor}>Add sensor</Btn>
-              }
-            </div>
-          </FormSection>
-        }
-        <FormSection>
-          <SectionHeader>Number of devices</SectionHeader>
-          <SectionDesc>Number of devices to simulate (maximum { Config.maxSimulatedDevices } devices).</SectionDesc>
-          <FormGroup>
-            <FormLabel>Amount</FormLabel>
-            <FormControl
-              type="text"
-              placeholder="# devices"
-              className="small"
-              max={Config.maxSimulatedDevices}
-              link={this.numDevices} />
-          </FormGroup>
+
+              return (
+                <div className="device-model-row" key={idx}>
+                  <FormGroup className="device-model-box">
+                    <FormControl
+                      className="long"
+                      type="select"
+                      options={this.state.deviceModelOptions}
+                      link={name}
+                      clearable={false}
+                      searchable={true}
+                      simpleValue={true}
+                      placeholder="Select model" />
+                  </FormGroup>
+                  <FormGroup className="device-model-box">
+                    <FormControl
+                      className="short"
+                      type="text"
+                      link={count}
+                      max={Config.maxSimulatedDevices} />
+                  </FormGroup>
+                  <FormGroup className="device-model-box">
+                    <FormControl
+                      className="short"
+                      type="text"
+                      readOnly
+                      value={throughput} />
+                  </FormGroup>
+                  <FormGroup className="duration-box">
+                    <FormControl
+                      type="duration"
+                      name="frequency"
+                      link={interval}
+                      showHeaders={false} />
+                  </FormGroup>
+                  <Btn
+                    className="delete-device-model-btn"
+                    svg={svgs.trash}
+                    onClick={this.deleteDeviceModel(idx)} />
+                </div>
+              );
+            })
+          }
+          </div>
+          {
+            deviceModels.length < 10 &&
+              <Btn
+                svg={svgs.plus}
+                onClick={this.addDeviceModel}>
+                {t('simulation.form.deviceModels.addDeviceModel')}
+              </Btn>
+          }
         </FormSection>
-        <FormSection>
-          <SectionHeader>Telemetry frequency</SectionHeader>
-          <SectionDesc>Set how often to send telemetry from each device</SectionDesc>
-          <FormGroup>
-            <FormControl type="duration" name="frequency" link={this.frequency} />
-          </FormGroup>
-        </FormSection>
+
+
+
         <FormSection>
           <SectionHeader>Simulation duration</SectionHeader>
           <SectionDesc>Set how long the simulation will run.</SectionDesc>
@@ -387,7 +352,7 @@ class SimulationForm extends LinkedComponent {
               svg={svgs.startSimulation}
               type="submit"
               className="apply-btn"
-              disabled={!this.formIsValid() || sensorsHaveErrors}>
+              disabled={!this.formIsValid() || deviceModelsHaveError}>
                 Start Simulation
             </Btn>
           </BtnToolbar>

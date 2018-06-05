@@ -13,6 +13,35 @@
     @include rem-fallback(line-height, 48px);
   }
 
+  .device-models-container {
+    @include rem-fallback(min-width, 1000px);
+
+    .device-model-row,
+    .device-model-headers { display: flex; }
+
+    .device-model-box,
+    .device-model-header {
+      @include rem-fallback(width, 150px);
+      @include rem-fallback(margin, 6px, 32px, 6px, 0px);
+
+      .form-control { @include rem-fallback(width, 150px); }
+    }
+
+    .duration-box, { @include rem-fallback(margin-top, 6px); }
+    .throughput-box { @include rem-fallback(margin-top, 5px); }
+
+    .device-model-header {
+      text-transform: uppercase;
+      @include rem-font-size(14px);
+      @include themify($themes) { color: themed('colorLightestFirst'); }
+    }
+
+    .delete-device-model-btn {
+      @include rem-fallback(height, 26px);
+      @include rem-fallback(margin-top, 6px);
+    }
+  }
+
   // Apply theme properties
   @include themify($themes) {
     color: themed('colorLightestFirst');
@@ -21,7 +50,7 @@
       // The start simulation svg uses stroke rather than fill
       svg {
         fill: transparent;
-        stroke: themed('colorHighest'); 
+        stroke: themed('colorHighest');
       }
 
       &:hover svg {

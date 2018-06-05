@@ -13,7 +13,21 @@
   },
   "simulation": {
     "currentSim": "Current Simulation",
-    "simSetup": "Simulation setup"
+    "simSetup": "Simulation setup",
+    "form": {
+      "deviceModels": {
+        "name": "Name",
+        "count": "Amount",
+        "throughput": "Message/sec",
+        "duration": "HH MM SS",
+        "addDeviceModel": "Add a device type"
+      },
+      "errorMsg": {
+        "deviceModelNameCantBeEmpty": "Name is required",
+        "countCantBeLessThanZero": "Amount must be no less than zero"
+      },
+      "delete": "Delete"
+    }
   },
   "deviceModels": {
     "title": "Device models",
