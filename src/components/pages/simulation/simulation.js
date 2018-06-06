@@ -32,9 +32,9 @@ export class Simulation extends Component {
             {error}
           </ErrorMsg>
           <br />
-              <Btn onClick={refresh}>
-                  { t('common.ok') }
-              </Btn>
+            <Btn onClick={refresh}>
+              { t('common.ok') }
+            </Btn>
         </FormActions>
       );
     } else if (isRunning === true && enabled === true) {

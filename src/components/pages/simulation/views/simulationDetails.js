@@ -101,7 +101,7 @@ class SimulationDetails extends Component {
   * 1 day, 2 hours, 10 minutes and 50 seconds
   * @param {number} - time in milliseconds
   */
-    humanizeDuration = (time) => {
+   humanizeDuration = (time) => {
     const duration = moment.duration(time);
 
     return [
@@ -117,7 +117,7 @@ class SimulationDetails extends Component {
     .trim();
   }
 
-    getSimulationStatusBar(totalDevicesCount) {
+  getSimulationStatusBar(totalDevicesCount) {
     const { t } = this.props;
     const btnProps = {
       type: 'button',
@@ -139,10 +139,10 @@ class SimulationDetails extends Component {
     } else if (this.state.isRunning) {
       return (
         <FormActions className="details-form-actions">
-              <Indicator pattern="bar" />
-              {t('simulation.status.simulationRunning') }
-              { this.getSimulationStatus(totalDevicesCount) }
-              { this.getHubLink() }
+            <Indicator pattern="bar" />
+            { t('simulation.status.simulationRunning') }
+            { this.getSimulationStatus(totalDevicesCount) }
+            { this.getHubLink() }
           <BtnToolbar>
             <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
           </BtnToolbar>
@@ -151,11 +151,11 @@ class SimulationDetails extends Component {
     } else {
       return (
         <FormActions>
-          {t('simulation.status.simulationStopped')}
-          <BtnToolbar>
-              <Btn {...btnProps}>{t('common.ok')}</Btn>
-          </BtnToolbar>
-          { this.getHubLink() }
+        { t('simulation.status.simulationStopped') }
+        <BtnToolbar>
+          <Btn {...btnProps}>{ t('common.ok') }</Btn>
+        </BtnToolbar>
+        { this.getHubLink() }
         </FormActions>
       );
     }
@@ -219,7 +219,7 @@ class SimulationDetails extends Component {
     ));
 
     return (<FormSection className="simulation-status-section">
-      <SectionHeader>{t('simulation.status.header')}</SectionHeader>
+      <SectionHeader>{ t('simulation.status.header') }</SectionHeader>
       {statuses}
     </FormSection>);
   }
@@ -236,9 +236,9 @@ class SimulationDetails extends Component {
       }
       } = this.props;
     const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
-    const [deviceModel = {}] = deviceModels;
+    const [ deviceModel = {} ] = deviceModels;
     const { count = 0, name = 'N/A', sensors = [], interval = '' } = deviceModel;
-    const [hour = '00', minutes = '00', seconds = '00'] = interval.split(':');
+    const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
@@ -249,36 +249,36 @@ class SimulationDetails extends Component {
     return (
       <div className="simulation-details-container">
         <FormSection>
-          <SectionHeader>{t('simulation.form.targetHub.header')}</SectionHeader>
+          <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
           <div className="targetHub-content">{iotHubString}</div>
         </FormSection>
         <FormSection>
-            <SectionHeader>{t('simulation.form.deviceModels.header')}</SectionHeader>
-            <div className='device-models-container'>
-                <div className='device-model-headers'>
-                    <div className='device-model-header'>{t('simulation.form.deviceModels.name')}</div>
-                    <div className='device-model-header'>{t('simulation.form.deviceModels.count')}</div>
-                </div>
-                <div className='device-models-rows'>
-                        {deviceModels.map(deviceModelItem =>
-                            <div className='device-model-row'>
-                                <div className='device-model-box'>{deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}</div>
-                                <div className='device-model-box'>{deviceModelItem.count}</div>
-                            </div>
-                         )}
-                </div>
+          <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
+          <div className='device-models-container'>
+            <div className='device-model-headers'>
+              <div className='device-model-header'>{ t('simulation.form.deviceModels.name') }</div>
+              <div className='device-model-header'>{ t('simulation.form.deviceModels.count') }</div>
             </div>
+            <div className='device-models-rows'>
+              { deviceModels.map(deviceModelItem =>
+                <div className='device-model-row'>
+                  <div className='device-model-box'>{deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}</div>
+                  <div className='device-model-box'>{deviceModelItem.count}</div>
+                </div>
+              )}
+            </div>
+          </div>
         </FormSection>
         <FormSection>
-          <SectionHeader>{t('simulation.form.telemetry.header')}</SectionHeader>
+          <SectionHeader>{ t('simulation.form.telemetry.header') }</SectionHeader>
           <div className="duration-header">{`HH  MM  SS`}</div>
           <div className="duration-content">{`${hour} : ${minutes} : ${seconds}`}</div>
         </FormSection>
         <FormSection>
-          <SectionHeader>{t('simulation.form.duration.header')}</SectionHeader>
+          <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
           <div className="duration-content">{duration}</div>
         </FormSection>
-        {this.getSimulationStatusBar(totalDevices) }
+        { this.getSimulationStatusBar(totalDevices) }
       </div>
     );
   }

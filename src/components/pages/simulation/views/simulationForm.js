@@ -246,12 +246,12 @@ class SimulationForm extends LinkedComponent {
     return (
       <form onSubmit={this.apply}>
         <FormSection>
-          <SectionHeader>{t('simulation.form.targetHub.header')}</SectionHeader>
-          <SectionDesc>{t('simulation.form.targetHub.description')}</SectionDesc>
+          <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.targetHub.description') }</SectionDesc>
           { this.state.preprovisionedIoTHub
             ? <div>
                 <Radio link={this.targetHub} value="preProvisioned">
-                    {t('simulation.form.targetHub.usePreProvisionedBtn')}
+                    { t('simulation.form.targetHub.usePreProvisionedBtn') }
                 </Radio>
                 <Radio link={this.targetHub} value="customString">
                   {connectStringInput}
@@ -261,8 +261,8 @@ class SimulationForm extends LinkedComponent {
           }
         </FormSection>
         <FormSection>
-          <SectionHeader>{t('simulation.form.deviceModels.header')}</SectionHeader>
-          <SectionDesc>{t('simulation.form.deviceModels.description')}</SectionDesc>
+          <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.deviceModels.description') }</SectionDesc>
           <div className="device-models-container">
           {
             deviceModels.length > 0 &&
@@ -328,7 +328,7 @@ class SimulationForm extends LinkedComponent {
               <Btn
                 svg={svgs.plus}
                 onClick={this.addDeviceModel}>
-                {t('simulation.form.deviceModels.addDeviceModelBtn')}
+                { t('simulation.form.deviceModels.addDeviceModelBtn') }
               </Btn>
           }
         </FormSection>
@@ -336,14 +336,14 @@ class SimulationForm extends LinkedComponent {
 
 
         <FormSection>
-          <SectionHeader>{t('simulation.form.duration.header')}</SectionHeader>
-          <SectionDesc>{t('simulation.form.duration.description')}</SectionDesc>
+          <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.duration.description') }</SectionDesc>
           <Radio link={this.durationRadio} value="endIn">
-            <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
+            <FormLabel>{ t('simulation.form.duration.endsInBtn') }</FormLabel>
             <FormControl type="duration" link={this.duration} />
           </Radio>
           <Radio link={this.durationRadio} value="indefinite">
-              {t('simulation.form.duration.runIndefinitelyBtn')}
+              { t('simulation.form.duration.runIndefinitelyBtn') }
           </Radio>
         </FormSection>
         <FormActions>
