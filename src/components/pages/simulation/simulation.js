@@ -23,7 +23,7 @@ export class Simulation extends Component {
   };
 
   getView() {
-    const { simulation: { enabled }, isRunning, error, refresh } = this.props;
+    const { t, simulation: { enabled }, isRunning, error, refresh } = this.props;
     const isLoading = typeof enabled === 'undefined' || typeof isRunning === 'undefined';
     if (error) {
       return (
@@ -32,7 +32,9 @@ export class Simulation extends Component {
             {error}
           </ErrorMsg>
           <br />
-          <Btn onClick={refresh}>Ok</Btn>
+            <Btn onClick={refresh}>
+              { t('common.ok') }
+            </Btn>
         </FormActions>
       );
     } else if (isRunning === true && enabled === true) {

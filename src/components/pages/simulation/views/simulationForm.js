@@ -49,14 +49,13 @@ class SimulationForm extends LinkedComponent {
 
     // State to input links
     this.iotHubString = this.linkTo('iotHubString')
-      .check(Validator.notEmpty, 'IoT Hub connection string is required');
+      .check(Validator.notEmpty, props.t('simulation.form.errorMsg.hubNameCantBeEmpty'));
 
     this.deviceModel = this.linkTo('deviceModel')
-      .check(Validator.notEmpty, 'A device model must be selected')
-
+      .check(Validator.notEmpty, props.t('simulation.form.errorMsg.deviceModelIsRequired'))
 
     this.duration = this.linkTo('duration')
-      .check(({ ms }) => ms > 0, 'Duration must be greater than zero');
+      .check(({ ms }) => ms > 0, props.t('simulation.form.errorMsg.durationMustBeGTZero'));
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
@@ -216,16 +215,17 @@ class SimulationForm extends LinkedComponent {
 
     const deviceModelLinks = this.deviceModelsLink.getLinkedChildren(deviceModelLink => {
       const name = deviceModelLink.forkTo('name')
-        .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
+          .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
+      const maxSimulatedDevices = Config.maxSimulatedDevices;
       const count = deviceModelLink.forkTo('count')
         .reject(nonInteger)
         .map(stringToInt)
-        .check(x => Validator.notEmpty(x === '-' ? '' : x), 'Number of devices is required')
-        .check(num => num > 0, 'Number of devices must be greater than zero')
-        .check(num => num <= Config.maxSimulatedDevices, `Number of devices must be no greater than ${Config.maxSimulatedDevices}`);
+        .check(x => Validator.notEmpty(x === '-' ? '' : x), t('simulation.form.errorMsg.countCantBeEmpty'))
+        .check(num => num > 0, t('simulation.form.errorMsg.countShouldBeGTZero'))
+        .check(num => num <= Config.maxSimulatedDevices, t('simulation.form.errorMsg.countShouldBeLTMax', { maxSimulatedDevices}));
 
       const interval = deviceModelLink.forkTo('interval')
-        .check(({ ms }) => ms >= 10000, 'Telemetry frequency must be no less than 10 seconds');
+          .check(({ ms }) => ms >= 10000, t('frequencyCantBeLessThanTenSeconds'));
 
       const edited = !(!name.value && !count.value);
       const error = (edited && (name.error || count.error));
@@ -246,12 +246,12 @@ class SimulationForm extends LinkedComponent {
     return (
       <form onSubmit={this.apply}>
         <FormSection>
-          <SectionHeader>Target IoT Hub</SectionHeader>
-          <SectionDesc>Add the connection string for your IoT Hub</SectionDesc>
+          <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.targetHub.description') }</SectionDesc>
           { this.state.preprovisionedIoTHub
             ? <div>
                 <Radio link={this.targetHub} value="preProvisioned">
-                  Use pre-provisioned IoT Hub
+                    { t('simulation.form.targetHub.usePreProvisionedBtn') }
                 </Radio>
                 <Radio link={this.targetHub} value="customString">
                   {connectStringInput}
@@ -261,8 +261,8 @@ class SimulationForm extends LinkedComponent {
           }
         </FormSection>
         <FormSection>
-          <SectionHeader>Device model</SectionHeader>
-          <SectionDesc>Choose type of device to simulate.</SectionDesc>
+          <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.deviceModels.description') }</SectionDesc>
           <div className="device-models-container">
           {
             deviceModels.length > 0 &&
@@ -328,7 +328,7 @@ class SimulationForm extends LinkedComponent {
               <Btn
                 svg={svgs.plus}
                 onClick={this.addDeviceModel}>
-                {t('simulation.form.deviceModels.addDeviceModel')}
+                { t('simulation.form.deviceModels.addDeviceModelBtn') }
               </Btn>
           }
         </FormSection>
@@ -336,14 +336,14 @@ class SimulationForm extends LinkedComponent {
 
 
         <FormSection>
-          <SectionHeader>Simulation duration</SectionHeader>
-          <SectionDesc>Set how long the simulation will run.</SectionDesc>
+          <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.duration.description') }</SectionDesc>
           <Radio link={this.durationRadio} value="endIn">
-            <FormLabel>End in:</FormLabel>
+            <FormLabel>{ t('simulation.form.duration.endsInBtn') }</FormLabel>
             <FormControl type="duration" link={this.duration} />
           </Radio>
           <Radio link={this.durationRadio} value="indefinite">
-            Run indefinitely
+              { t('simulation.form.duration.runIndefinitelyBtn') }
           </Radio>
         </FormSection>
         <FormActions>
@@ -353,7 +353,7 @@ class SimulationForm extends LinkedComponent {
               type="submit"
               className="apply-btn"
               disabled={!this.formIsValid() || deviceModelsHaveError}>
-                Start Simulation
+                { t('simulation.start') }
             </Btn>
           </BtnToolbar>
         </FormActions>

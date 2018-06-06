@@ -101,7 +101,7 @@ class SimulationDetails extends Component {
   * 1 day, 2 hours, 10 minutes and 50 seconds
   * @param {number} - time in milliseconds
   */
-  humanizeDuration = (time) => {
+   humanizeDuration = (time) => {
     const duration = moment.duration(time);
 
     return [
@@ -118,6 +118,7 @@ class SimulationDetails extends Component {
   }
 
   getSimulationStatusBar(totalDevicesCount) {
+    const { t } = this.props;
     const btnProps = {
       type: 'button',
       className: 'apply-btn',
@@ -129,7 +130,7 @@ class SimulationDetails extends Component {
 
       return (
         <FormActions className="details-form-actions">
-          <ErrorMsg>Something went wrong and we weren't able to get the simulation status.</ErrorMsg>
+          <ErrorMsg>{ t('simulation.form.errorMsg.simulationStatusError') }</ErrorMsg>
           <BtnToolbar>
             <Btn { ...btnProps } onClick={refreshPage}>Refresh</Btn>
           </BtnToolbar>
@@ -138,10 +139,10 @@ class SimulationDetails extends Component {
     } else if (this.state.isRunning) {
       return (
         <FormActions className="details-form-actions">
-          <Indicator pattern="bar" />
-          Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.
-          { this.getSimulationStatus(totalDevicesCount) }
-          { this.getHubLink() }
+            <Indicator pattern="bar" />
+            { t('simulation.status.simulationRunning') }
+            { this.getSimulationStatus(totalDevicesCount) }
+            { this.getHubLink() }
           <BtnToolbar>
             <Btn { ...btnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
           </BtnToolbar>
@@ -150,17 +151,19 @@ class SimulationDetails extends Component {
     } else {
       return (
         <FormActions>
-          Your simulation has stopped running.
-          <BtnToolbar>
-            <Btn { ...btnProps }>Ok</Btn>
-          </BtnToolbar>
-          { this.getHubLink() }
+        { t('simulation.status.simulationStopped') }
+        <BtnToolbar>
+          <Btn {...btnProps}>{ t('common.ok') }</Btn>
+        </BtnToolbar>
+        { this.getHubLink() }
         </FormActions>
       );
     }
   }
 
-  getSimulationStatus(totalDevicesCount = 0) {
+    getSimulationStatus(totalDevicesCount = 0) {
+    const { t } = this.props;
+
     const {
       totalMessagesCount = 0,
       failedMessagesCount = 0,
@@ -172,37 +175,37 @@ class SimulationDetails extends Component {
 
     const simulationStatuses = [
       {
-        description: 'Active devices',
+        description: t('simulation.status.activeDevicesCount'),
         value: activeDevicesCount,
         className: 'active-devices-status'
       },
       {
-        description: 'Total devices',
+        description: t('simulation.status.totalDevicesCount'),
         value: totalDevicesCount,
         className: 'total-devices-status'
       },
       {
-        description: 'Total messages',
+        description: t('simulation.status.totalMessagesCount'),
         value: totalMessagesCount,
         className: 'status-value'
       },
       {
-        description: 'Messages per second',
+        description: t('simulation.status.messagesPerSec'),
         value: messagesPerSecond,
         className: 'status-value'
       },
       {
-        description: 'Failed messages',
+        description: t('simulation.status.failedMessagesCount'),
         value: failedMessagesCount,
         className: 'status-value'
       },
       {
-        description: 'Failed device connections',
+        description: t('simulation.status.failedDeviceConnectionsCount'),
         value: failedDeviceConnectionsCount,
         className: 'status-value'
       },
       {
-        description: 'Failed twin updates',
+        description: t('simulation.status.failedDeviceTwinUpdatesCount'),
         value: failedDeviceTwinUpdatesCount,
         className: 'status-value'
       }
@@ -216,20 +219,22 @@ class SimulationDetails extends Component {
     ));
 
     return (<FormSection className="simulation-status-section">
-      <SectionHeader>Simulation Status</SectionHeader>
+      <SectionHeader>{ t('simulation.status.header') }</SectionHeader>
       {statuses}
     </FormSection>);
   }
 
   render () {
-    const {
+      const {
+      t,
+      deviceModelEntities = {},
       simulation: {
         deviceModels,
         startTime,
         endTime,
         connectionString
       }
-    } = this.props;
+      } = this.props;
     const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
     const [ deviceModel = {} ] = deviceModels;
     const { count = 0, name = 'N/A', sensors = [], interval = '' } = deviceModel;
@@ -237,50 +242,43 @@ class SimulationDetails extends Component {
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
+    const totalDevices = deviceModels.reduce((total, obj) => {
+          return total + obj['count'];
+      }, 0); 
 
     return (
       <div className="simulation-details-container">
         <FormSection>
-          <SectionHeader>Target IoT Hub</SectionHeader>
-          <SectionHeader>{iotHubString}</SectionHeader>
+          <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
+          <div className="targetHub-content">{iotHubString}</div>
         </FormSection>
         <FormSection>
-          <SectionHeader>Device Model</SectionHeader>
-          <SectionHeader>{name}</SectionHeader>
-        </FormSection>
-        { sensors.length > 0 &&
-          <FormSection>
-            <SectionHeader>Sensors</SectionHeader>
-            <SectionHeader className="sensors-container">
-              { sensors.length > 0 && SensorHeader }
-              {
-                sensors.map((sensor, index) =>
-                  <div className="sensor-row" key={index}>
-                    <div className="sensor-box">{sensor.name}</div>
-                    <div className="sensor-box">{sensor.path}</div>
-                    <div className="sensor-box">{sensor.min}</div>
-                    <div className="sensor-box">{sensor.max}</div>
-                    <div className="sensor-box">{sensor.unit}</div>
-                  </div>
-                )
-              }
-            </SectionHeader>
-          </FormSection>
-        }
-        <FormSection>
-          <SectionHeader>Number of devices</SectionHeader>
-          <SectionHeader>{count}</SectionHeader>
+          <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
+          <div className='device-models-container'>
+            <div className='device-model-headers'>
+              <div className='device-model-header'>{ t('simulation.form.deviceModels.name') }</div>
+              <div className='device-model-header'>{ t('simulation.form.deviceModels.count') }</div>
+            </div>
+            <div className='device-models-rows'>
+              { deviceModels.map(deviceModelItem =>
+                <div className='device-model-row'>
+                  <div className='device-model-box'>{deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}</div>
+                  <div className='device-model-box'>{deviceModelItem.count}</div>
+                </div>
+              )}
+            </div>
+          </div>
         </FormSection>
         <FormSection>
-          <SectionHeader>Telemetry frequency</SectionHeader>
+          <SectionHeader>{ t('simulation.form.telemetry.header') }</SectionHeader>
           <div className="duration-header">{`HH  MM  SS`}</div>
           <div className="duration-content">{`${hour} : ${minutes} : ${seconds}`}</div>
         </FormSection>
         <FormSection>
-          <SectionHeader>Simulation duration</SectionHeader>
-          <SectionHeader>{duration}</SectionHeader>
+          <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
+          <div className="duration-content">{duration}</div>
         </FormSection>
-        { this.getSimulationStatusBar(count) }
+        { this.getSimulationStatusBar(totalDevices) }
       </div>
     );
   }
