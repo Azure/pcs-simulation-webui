@@ -11,22 +11,62 @@
     "simulation": "simulation",
     "deviceModels": "device models"
   },
+  "common": {
+    "ok": "Ok",
+    "cancel": "Cancel"
+  },
   "simulation": {
     "currentSim": "Current Simulation",
+    "delete": "Delete",
     "simSetup": "Simulation setup",
+    "start": "Start Simulation",
     "form": {
       "deviceModels": {
-        "name": "Name",
+        "addDeviceModelBtn": "Add a device type",
         "count": "Amount",
-        "throughput": "Message/sec",
+        "description": "Choose type of device to simulate.",
+        "header": "Device model",
+        "name": "Name",
         "duration": "HH MM SS",
-        "addDeviceModel": "Add a device type"
+        "throughput": "Message/sec"
+      },
+      "duration": {
+        "description": "Set how long the simulation will run.",
+        "header": "Simulation duration",
+        "endsInBtn": "End in:",
+        "runIndefinitelyBtn": "Run indefinitely"
       },
       "errorMsg": {
+        "deviceModelIsRequired": "A device model must be selected",
         "deviceModelNameCantBeEmpty": "Name is required",
-        "countCantBeLessThanZero": "Amount must be no less than zero"
+        "durationMustBeGTZero": "Duration must be greater than zero",
+        "countCantBeEmpty": "Number of devices is required",
+        "countCantBeLessThanZero": "Amount must be no less than zero",
+        "countShouldBeLTMax": "Number of devices must be no greater than {{maxSimulatedDevices}}",
+        "countShouldBeGTZero": "Number of devices must be greater than zero",
+        "hubNameCantBeEmpty": "IoT Hub connection string is required",
+        "simulationStatusError": "Something went wrong and we weren't able to get the simulation status."
       },
-      "delete": "Delete"
+      "targetHub": {
+        "description": "Add the connection string for your IoT Hub",
+        "header": "Target IoT Hub",
+        "usePreProvisionedBtn": "Use pre-provisioned IoT Hub"
+      },
+      "telemetry": {
+        "header": "Telemetry frequency"
+      }
+    },
+    "status": {
+      "activeDevicesCount": "Active devices",
+      "failedDeviceConnectionsCount": "Failed device connections",
+      "failedDeviceTwinUpdatesCount": "Failed twin updates",
+      "failedMessagesCount": "Failed messages",
+      "header": "Simulation Status",
+      "messagesPerSec": "Messages per second",
+      "simulationRunning": "Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.",
+      "simulationStopped": "Your simulation has stopped running.",
+      "totalDevicesCount": "Total devices",
+      "totalMessagesCount": "Total messages"
     }
   },
   "deviceModels": {
@@ -84,10 +124,10 @@
         "interval": "Min/Max changes occur every:",
         "frequency": "Report Min/Max changes every:"
       },
-      "edit":{
+      "edit": {
         "title": "Edit a custom device model"
       },
-      "sensors" : {
+      "sensors": {
         "dataPoint": "Data point",
         "behavior": "behavior",
         "min": "Min value",
