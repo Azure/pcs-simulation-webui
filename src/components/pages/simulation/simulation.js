@@ -2,14 +2,10 @@
 
 import React, { Component } from 'react';
 import SimulationDetails from './views/simulationDetails';
-import SimulationForm from './views/simulationForm';
+import { SimulationDashboard } from './views/simulationDashboard';
 import { FormActions, Indicator, ErrorMsg, Btn } from 'components/shared';
 
 import './simulation.css';
-
-const Header = (props) => (
-  <div className="page-header">{props.children}</div>
-);
 
 /**
  * TODO: Add the real component. Currently being used as a test bed for the
@@ -39,21 +35,16 @@ export class Simulation extends Component {
       );
     } else if (isRunning === true && enabled === true) {
       return <SimulationDetails {...this.props} />;
-    } else if ((isRunning === false && !isLoading) || (isRunning === true && enabled === false)) {
-      return <SimulationForm {...this.props} />;
+    } else if (isLoading) {
+      return <FormActions><Indicator pattern="bar" /></FormActions>;
     } else {
-      return <FormActions><Indicator pattern="bar" /></FormActions>
+      return <SimulationDashboard {...this.props} />;
     }
   }
 
   render () {
-    const { t, isRunning, simulation: { enabled } } = this.props;
-    const showRunningHeader = isRunning === true && enabled === true;
     return (
       <div className="simulation-container">
-        <Header>
-          { showRunningHeader ? t('simulation.currentSim') : t('simulation.simSetup') }
-        </Header>
         { this.getView() }
       </div>
     );
