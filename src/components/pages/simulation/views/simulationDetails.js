@@ -16,7 +16,6 @@ import {
   Indicator,
   SectionHeader
 } from 'components/shared';
-import { SensorHeader } from './sensors.utils';
 import { SimulationService } from 'services';
 
 const pollingInterval = Config.simulationStatusPollingInterval;
@@ -237,14 +236,14 @@ class SimulationDetails extends Component {
       } = this.props;
     const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
     const [ deviceModel = {} ] = deviceModels;
-    const { count = 0, name = 'N/A', sensors = [], interval = '' } = deviceModel;
+    const { interval = '' } = deviceModel;
     const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
     const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
       : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
     const totalDevices = deviceModels.reduce((total, obj) => {
           return total + obj['count'];
-      }, 0); 
+      }, 0);
 
     return (
       <div className="simulation-details-container">

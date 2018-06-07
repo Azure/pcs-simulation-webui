@@ -191,7 +191,7 @@ class SimulationForm extends LinkedComponent {
       deviceModels,
       ...simulationDuration
     };
-    console.log('devicemodels', deviceModels)
+    
     this.props.updateSimulation(modelUpdates);
   };
 

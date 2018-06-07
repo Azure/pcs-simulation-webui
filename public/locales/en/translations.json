@@ -20,6 +20,7 @@
     "delete": "Delete",
     "simSetup": "Simulation setup",
     "start": "Start Simulation",
+    "newSim": "New Simulation",
     "form": {
       "deviceModels": {
         "addDeviceModelBtn": "Add a device type",
