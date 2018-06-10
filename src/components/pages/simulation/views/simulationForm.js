@@ -130,7 +130,7 @@ class SimulationForm extends LinkedComponent {
     } = props;
     const deviceModelOptions = [
       { value: Config.customSensorValue, label: 'Custom' },
-      ...(deviceModels || []).map(this.toSelectOption)
+      ...(deviceModels || []).map(this.toSelectOption).sort((a,b) => a.label.localeCompare(b.label))
     ];
     const hasDeviceModels = simulation.deviceModels.length > 0;
     const deviceModel = hasDeviceModels
