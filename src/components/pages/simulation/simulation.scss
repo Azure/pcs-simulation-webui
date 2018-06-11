@@ -4,81 +4,227 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
-.simulation-container {
+.simulation-container
+{
   @include rem-fallback(padding, 24px, 32px);
 
-  .page-header {
+  .page-header
+  {
     font-family: $fontSelawikBold;
     @include rem-font-size(48px);
     @include rem-fallback(line-height, 48px);
   }
 
-  .device-models-container {
+  .device-models-container
+  {
     @include rem-fallback(min-width, 1000px);
 
     .device-model-row,
-    .device-model-headers { display: flex; }
+    .device-model-headers
+    {
+      display: flex;
+    }
 
     .device-model-box,
-    .device-model-header {
+    .device-model-header
+    {
       @include rem-fallback(width, 150px);
       @include rem-fallback(margin, 6px, 32px, 6px, 0px);
 
-      .form-control { @include rem-fallback(width, 150px); }
+      .form-control
+      {
+        @include rem-fallback(width, 150px);
+      }
     }
 
-    .duration-box, { @include rem-fallback(margin-top, 6px); }
-    .throughput-box { @include rem-fallback(margin-top, 5px); }
+    .duration-box
+    {
+      @include rem-fallback(margin-top, 6px);
+    }
 
-    .device-model-header {
+    .throughput-box
+    {
+      @include rem-fallback(margin-top, 5px);
+    }
+
+    .device-model-header
+    {
       text-transform: uppercase;
       @include rem-font-size(14px);
-      @include themify($themes) { color: themed('colorLightestFirst'); }
+
+      @include themify($themes)
+      {
+        color: themed('colorLightestFirst');
+      }
     }
 
-    .delete-device-model-btn {
+    .delete-device-model-btn
+    {
       @include rem-fallback(height, 26px);
       @include rem-fallback(margin-top, 6px);
     }
   }
-
   // Apply theme properties
-  @include themify($themes) {
+  @include themify($themes)
+  {
     color: themed('colorLightestFirst');
 
-    .apply-btn {
+    .apply-btn
+    {
       // The start simulation svg uses stroke rather than fill
-      svg {
+      svg
+      {
         fill: transparent;
         stroke: themed('colorHighest');
       }
 
-      &:hover svg {
+      &:hover svg
+      {
         fill: transparent;
         stroke: themed('colorLowestSecond');
       }
 
-      &:disabled svg {
+      &:disabled svg
+      {
         fill: transparent;
         stroke: themed('colorMidFirst');
       }
     }
   }
 
-  .simulation-details-container {
-    .simulation-status-section {
+  .simulation-details-container
+  {
+    .simulation-status-section
+    {
+      .status-description
+      {
+        @include rem-fallback(padding-left, 5px);
+      }
 
-      .status-description { @include rem-fallback(padding-left, 5px); }
+      .active-devices-status
+      {
+        @include rem-font-size(48px);
+      }
 
-      .active-devices-status { @include rem-font-size(48px); }
+      .status-value
+      {
+        @include rem-font-size(24px);
+      }
 
-      .status-value { @include rem-font-size(24px); }
+      @include themify($themes)
+      {
+        .status-description
+        {
+          color: themed('colorLightestFirst');
+        }
 
-      @include themify($themes) {
-        .status-description { color: themed('colorLightestFirst'); }
-
-        .active-devices-status, .status-value { color: themed('colorHighest'); }
+        .active-devices-status, .status-value
+        {
+          color: themed('colorHighest');
+        }
       }
     }
   }
+
+  .simulation-dashboard-container
+  {
+    color: $colorWhite;
+
+    .dashboard-header
+    {
+      @include rem-font-size(48px);
+      @include rem-fallback(line-height, 48px);
+    }
+
+    .simulation-tile-container
+    {
+      background: $colorCharcoal;
+      color: $colorWhite;
+      display: inline-block;
+      margin-top: 15px;
+      width: 500px;
+
+      .tile-header
+      {
+        border-bottom: solid .01rem $colorStone;
+        font-family: $fontSelawikBold;
+        padding: 12px;
+        @include rem-font-size(20px);
+        @include rem-fallback(line-height, 20px);
+      }
+
+      .tile-body
+      {
+        padding: 12px;
+
+        .active-devices
+        {
+          display: inline-block;
+          padding: 0 0 40px 10px;
+          width: 100%;
+
+          .active-devices-count, .active-devices-label
+          {
+            display: inline-block;
+            width: auto;
+          }
+
+          .active-devices-count
+          {
+            font-family: $fontSelawikLight;
+            @include rem-font-size(48px);
+            @include rem-fallback(line-height, 48px);
+          }
+
+          .active-devices-label
+          {
+            float: bottom;
+            margin-left: 20px;
+          }
+        }
+
+        .simulation-summary
+        {
+          display: inline-block;
+          width: 100%;
+
+          .device-model-rows,
+          .telemetry-container
+          {
+            display: inline-block;
+            width: 50%;
+          }
+
+          .messages-per-second
+          {
+            font-family: $fontSelawikLight;
+            @include rem-font-size(36px);
+            @include rem-fallback(line-height, 36px);
+          }
+        }
+
+        .messages-per-second-desc,
+        .time-container
+        {
+          color: $colorSmoke;
+          display: inline-block;
+          font-family: $fontSelawikSemilight;
+          @include rem-font-size(13px);
+          @include rem-fallback(line-height, 13px);
+          padding-bottom: 14px;
+          width: 50%;
+        }
+      }
+    }
+  }
+}
+
+.left
+{
+  text-align: left;
+}
+
+.right
+{
+  text-align: right;
 }

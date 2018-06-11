@@ -5,7 +5,8 @@
     "sendDiagnosticsHeader": "Help us Improve",
     "sendDiagnosticsText": "Device Simulation can send anonymous information to Microsoft, such as error logs, configuration, and information about how you use the application. No personal information is collected.",
     "sendDiagnosticsCheckbox": "Yes, share information with Microsoft",
-    "sendDiagnosticsMicrosoftPrivacyUrl": "Privacy Statement"
+    "sendDiagnosticsMicrosoftPrivacyUrl": "Privacy Statement",
+    "simulationsDashboard":  "Simulations"
   },
   "tabs": {
     "simulation": "simulation",
@@ -59,6 +60,7 @@
     },
     "status": {
       "activeDevicesCount": "Active devices",
+      "averageMessagesPerSec": "Average messages per second",
       "failedDeviceConnectionsCount": "Failed device connections",
       "failedDeviceTwinUpdatesCount": "Failed twin updates",
       "failedMessagesCount": "Failed messages",
@@ -67,7 +69,8 @@
       "simulationRunning": "Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.",
       "simulationStopped": "Your simulation has stopped running.",
       "totalDevicesCount": "Total devices",
-      "totalMessagesCount": "Total messages"
+      "totalMessagesCount": "Total messages",
+      "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}"
     }
   },
   "deviceModels": {

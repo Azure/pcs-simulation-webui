@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Btn, PageContent, ContextMenu } from 'components/shared';
+import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared';
 import { NewSimulation } from '../flyouts';
 import { svgs } from 'utilities';
+import SimulationTile from './simulationTile';
 
 const closedFlyoutState = {
   flyoutOpen: false,
@@ -51,8 +52,9 @@ export class SimulationDashboard extends Component {
           { t('simulation.newSim') }
         </Btn>
       </ContextMenu>,
-      <PageContent className="devicemodels-container" key="page-content">
-        <em>placeholder for simulation tiles</em>
+      <PageContent className="simulation-dashboard-container" key="page-content">
+        <SectionHeader className="dashboard-header">{ t('header.simulationsDashboard') }</SectionHeader>
+        <SimulationTile {...this.props} />
         {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
