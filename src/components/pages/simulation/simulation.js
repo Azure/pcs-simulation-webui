@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import SimulationDetails from './views/simulationDetails';
 import { SimulationDashboard } from './views/simulationDashboard';
 import { FormActions, Indicator, ErrorMsg, Btn } from 'components/shared';
@@ -33,8 +34,6 @@ export class Simulation extends Component {
             </Btn>
         </FormActions>
       );
-    } else if (isRunning === true && enabled === true) {
-      return <SimulationDetails {...this.props} />;
     } else if (isLoading) {
       return <FormActions><Indicator pattern="bar" /></FormActions>;
     } else {
@@ -45,7 +44,13 @@ export class Simulation extends Component {
   render () {
     return (
       <div className="simulation-container">
-        { this.getView() }
+        <Switch>
+          <Route exact path={'/simulation/:path(dashboard)'}
+            render={ () => this.getView() } />
+          <Route exact path={'/simulation/:id'}
+            render={ (routeProps) => <SimulationDetails {...routeProps} {...this.props} /> } />
+          <Redirect to='/simulation/dashboard' />
+        </Switch>
       </div>
     );
   }

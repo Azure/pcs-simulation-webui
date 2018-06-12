@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import { NavLink } from "react-router-dom";
 import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared';
 import { NewSimulation } from '../flyouts';
 import { svgs } from 'utilities';
@@ -42,7 +43,7 @@ export class SimulationDashboard extends Component {
   getSoftSelectId = ({ id }) => id;
 
   render() {
-    const { t } = this.props;
+    const { t, simulation } = this.props;
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
 
@@ -53,8 +54,13 @@ export class SimulationDashboard extends Component {
         </Btn>
       </ContextMenu>,
       <PageContent className="simulation-dashboard-container" key="page-content">
-        <SectionHeader className="dashboard-header">{ t('header.simulationsDashboard') }</SectionHeader>
-        <SimulationTile {...this.props} />
+        {
+          [simulation].map(sim =>
+            <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
+              <SimulationTile {...this.props} />
+            </NavLink>
+          )
+        }
         {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
