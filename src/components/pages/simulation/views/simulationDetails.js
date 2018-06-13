@@ -244,7 +244,7 @@ class SimulationDetails extends Component {
     const totalDevices = deviceModels.reduce((total, obj) => {
           return total + obj['count'];
       }, 0);
-
+    console.log("Details:", this.props);
     return (
       <div className="simulation-details-container">
         <FormSection>
@@ -259,8 +259,8 @@ class SimulationDetails extends Component {
               <div className='device-model-header'>{ t('simulation.form.deviceModels.count') }</div>
             </div>
             <div className='device-models-rows'>
-              { deviceModels.map(deviceModelItem =>
-                <div className='device-model-row'>
+              {deviceModels.map(deviceModelItem =>
+                <div className='device-model-row' key={ deviceModelItem.id }>
                   <div className='device-model-box'>{deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}</div>
                   <div className='device-model-box'>{deviceModelItem.count}</div>
                 </div>

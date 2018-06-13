@@ -142,7 +142,7 @@
       color: $colorWhite;
       display: inline-block;
       margin-top: 15px;
-      width: 500px;
+      width: 540px;
 
       .tile-header
       {
@@ -212,6 +212,10 @@
           @include rem-font-size(13px);
           @include rem-fallback(line-height, 13px);
           padding-bottom: 14px;
+        }
+
+        .time-container
+        {
           width: 50%;
         }
       }

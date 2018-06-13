@@ -9,7 +9,7 @@
     "simulationsDashboard":  "Simulations"
   },
   "tabs": {
-    "simulation": "simulation",
+    "simulation": "simulations",
     "deviceModels": "device models"
   },
   "common": {

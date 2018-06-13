@@ -133,7 +133,6 @@ class SimulationTile extends Component {
 
     const {
       totalMessagesCount = 0,
-      activeDevicesCount = 0,
       messagesPerSecond = 0,
     } = this.state;
 
@@ -178,7 +177,7 @@ class SimulationTile extends Component {
           <div className="simulation-summary">
             <div className='device-model-rows'>
               {deviceModels.map(deviceModelItem =>
-                <div className='device-model-row'>
+                <div className='device-model-row' key={ deviceModelItem.id }>
                   {deviceModelItem.count} {deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}
                 </div>
               )}
