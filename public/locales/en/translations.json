@@ -19,8 +19,10 @@
   "simulation": {
     "currentSim": "Current Simulation",
     "delete": "Delete",
+    "description": "Description",
     "simSetup": "Simulation setup",
     "start": "Start Simulation",
+    "name": "Name",
     "newSim": "New Simulation",
     "form": {
       "deviceModels": {

@@ -3,6 +3,7 @@
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import {
+  getSimulationListWithDeviceModels,
   getSimulationWithDeviceModels,
   getSimulationIsRunning,
   getPreprovisionedIoTHub,
@@ -17,6 +18,7 @@ import { getDeviceModels, getEntities } from 'store/reducers/deviceModelsReducer
 
 // Pass the simulation status
 const mapStateToProps = state => ({
+  simulationList: getSimulationListWithDeviceModels(state),
   simulation: getSimulationWithDeviceModels(state),
   isRunning: getSimulationIsRunning(state),
   preprovisionedIoTHub: getPreprovisionedIoTHub(state),

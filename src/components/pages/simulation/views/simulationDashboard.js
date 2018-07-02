@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { NavLink } from "react-router-dom";
-import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared';
+import { Btn, PageContent, ContextMenu } from 'components/shared';
 import { NewSimulation } from '../flyouts';
 import { svgs } from 'utilities';
 import SimulationTile from './simulationTile';
@@ -43,7 +43,7 @@ export class SimulationDashboard extends Component {
   getSoftSelectId = ({ id }) => id;
 
   render() {
-    const { t, simulation } = this.props;
+    const { t, simulationList } = this.props; console.log('simulationlist', simulationList)
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
 
@@ -55,7 +55,7 @@ export class SimulationDashboard extends Component {
       </ContextMenu>,
       <PageContent className="simulation-dashboard-container" key="page-content">
         {
-          [simulation].map(sim =>
+          [simulationList].map(sim =>
             <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
               <SimulationTile {...this.props} />
             </NavLink>

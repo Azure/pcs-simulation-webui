@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSimulationStatusModel, toSimulationModel, toDeviceModel, toSimulationRequestModel } from './models';
+import { toSimulationStatusModel, toSimulationModel, toSimulationListModel, toDeviceModel, toSimulationRequestModel } from './models';
 import { Observable } from 'rxjs/Observable';
 
 const ENDPOINT = Config.simulationApiUrl;
@@ -22,6 +22,18 @@ export class SimulationService {
       .map(({ Items }) => Items)
       .map(models => models.map(toDeviceModel));
   }
+
+  /** Returns list of simulations */
+  static getSimulationList() {
+    return HttpClient.get(`${ENDPOINT}simulations`)
+      .map(toSimulationListModel)
+      .catch(error => {
+        // A 404 from the GET request means that no simulation is configured, not an actual 404 error
+        if (error.status === 404) return Observable.of(toSimulationListModel({ Enabled: null }))
+        return Observable.throw(error);
+      });
+  }
+
 
   /** Returns any currently running simulation */
   static getSimulation() {

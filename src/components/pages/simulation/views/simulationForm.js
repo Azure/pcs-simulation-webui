@@ -246,20 +246,34 @@ class SimulationForm extends LinkedComponent {
     return (
       <form onSubmit={this.apply}>
         <FormSection>
-          <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
-          <SectionDesc>{ t('simulation.form.targetHub.description') }</SectionDesc>
-          { this.state.preprovisionedIoTHub
-            ? <div>
-                <Radio link={this.targetHub} value="preProvisioned">
-                    { t('simulation.form.targetHub.usePreProvisionedBtn') }
-                </Radio>
-                <Radio link={this.targetHub} value="customString">
-                  {connectStringInput}
-                </Radio>
-              </div>
-            : connectStringInput
-          }
+          <SectionHeader>{t('simulation.name')}</SectionHeader>
+          <FormGroup className="simulation-name-box">
+            <FormControl
+              className="short"
+              type="text"
+              value='sample title' />
+          </FormGroup>
+          <SectionHeader>{t('simulation.description')}</SectionHeader>
+          <FormGroup className="simulation-description-box">
+            <FormControl
+              className="short"
+              type="text"
+              value='add your description here' />
+          </FormGroup>
         </FormSection>
+
+        <FormSection>
+          <SectionHeader>{t('simulation.form.duration.header')}</SectionHeader>
+          <SectionDesc>{t('simulation.form.duration.description')}</SectionDesc>
+          <Radio link={this.durationRadio} value="endIn">
+            <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
+            <FormControl type="duration" link={this.duration} />
+          </Radio>
+          <Radio link={this.durationRadio} value="indefinite">
+            {t('simulation.form.duration.runIndefinitelyBtn')}
+          </Radio>
+        </FormSection>
+
         <FormSection>
           <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
           <SectionDesc>{ t('simulation.form.deviceModels.description') }</SectionDesc>
@@ -333,19 +347,22 @@ class SimulationForm extends LinkedComponent {
           }
         </FormSection>
 
-
-
         <FormSection>
-          <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
-          <SectionDesc>{ t('simulation.form.duration.description') }</SectionDesc>
-          <Radio link={this.durationRadio} value="endIn">
-            <FormLabel>{ t('simulation.form.duration.endsInBtn') }</FormLabel>
-            <FormControl type="duration" link={this.duration} />
-          </Radio>
-          <Radio link={this.durationRadio} value="indefinite">
-              { t('simulation.form.duration.runIndefinitelyBtn') }
-          </Radio>
+          <SectionHeader>{t('simulation.form.targetHub.header')}</SectionHeader>
+          <SectionDesc>{t('simulation.form.targetHub.description')}</SectionDesc>
+          {this.state.preprovisionedIoTHub
+            ? <div>
+              <Radio link={this.targetHub} value="preProvisioned">
+                {t('simulation.form.targetHub.usePreProvisionedBtn')}
+              </Radio>
+              <Radio link={this.targetHub} value="customString">
+                {connectStringInput}
+              </Radio>
+            </div>
+            : connectStringInput
+          }
         </FormSection>
+
         <FormActions>
           <BtnToolbar>
             <Btn

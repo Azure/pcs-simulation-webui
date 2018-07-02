@@ -8,6 +8,11 @@
 {
   @include rem-fallback(padding, 24px, 32px);
 
+  .flyout-container
+  {
+    width: 80%;
+  }
+
   .page-header
   {
     font-family: $fontSelawikBold;
@@ -148,9 +153,9 @@
       {
         border-bottom: solid .01rem $colorStone;
         font-family: $fontSelawikBold;
+        @include rem-font-size(18px);
+        @include rem-fallback(line-height, 22px);
         padding: 12px;
-        @include rem-font-size(20px);
-        @include rem-fallback(line-height, 20px);
       }
 
       .tile-body
@@ -179,6 +184,7 @@
           .active-devices-label
           {
             float: bottom;
+            @include rem-font-size(14px);
             margin-left: 20px;
           }
         }
@@ -192,14 +198,16 @@
           .telemetry-container
           {
             display: inline-block;
+            @include rem-font-size(14px);
+            @include rem-fallback(line-height, 17px);
             width: 50%;
           }
 
           .messages-per-second
           {
             font-family: $fontSelawikLight;
-            @include rem-font-size(36px);
-            @include rem-fallback(line-height, 36px);
+            @include rem-font-size(32px);
+            @include rem-fallback(line-height, 39px);
           }
         }
 
@@ -209,8 +217,8 @@
           color: $colorSmoke;
           display: inline-block;
           font-family: $fontSelawikSemilight;
-          @include rem-font-size(13px);
-          @include rem-fallback(line-height, 13px);
+          @include rem-font-size(12px);
+          @include rem-fallback(line-height, 15px);
           padding-bottom: 14px;
         }
 

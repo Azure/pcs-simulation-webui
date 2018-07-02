@@ -26,6 +26,8 @@ export const toSimulationModel = (response = {}) => ({
   startTime: response.StartTime,
   endTime: response.EndTime,
   id: response.Id,
+  name: response.Name,
+  totalMessages: response.TotalMsgs,
   deviceModels: (response.DeviceModels || []).map(({ Id, Count, Override }) => ({
     id: Id,
     count: Count,

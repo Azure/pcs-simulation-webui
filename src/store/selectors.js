@@ -5,6 +5,7 @@ import Config from 'app.config';
 import { getDeviceModels } from 'store/reducers/deviceModelsReducer';
 
 // Selectors
+export const getSimulationList = state => state.simulationList.model;
 export const getSimulation = state => state.simulation.model;
 export const getSimulationStatus = state => state.simulation.status;
 export const getSimulationError = state => state.simulation.error;
@@ -46,4 +47,17 @@ export const getSimulationWithDeviceModels = createSelector(
       .map(model => ({ ...model, name }));
     return { ...simulationModel, deviceModels };
   }
+);
+
+export const getSimulationListWithDeviceModels = createSelector(
+  [getSimulationList, getDeviceModelsAsMap],
+  (simulationModelList = [], deviceModelsMap) => [simulationModelList].map(simulationModel => {
+    const modelId = ((simulationModel.deviceModels || [])[0] || {}).id;
+    const name = modelId === Config.customSensorValue
+      ? 'Custom'
+      : (deviceModelsMap[modelId] || {}).name;
+    const deviceModels = (simulationModel.deviceModels || [])
+      .map(model => ({ ...model, name }));
+    return { ...simulationModel, deviceModels };
+  })
 );

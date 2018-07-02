@@ -3,36 +3,41 @@
 import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
-import { toSimulationModel, toSimulationStatusModel } from 'services/models';
+import { toSimulationListModel, toSimulationModel, toSimulationStatusModel } from 'services/models';
 import { getSimulation, getSimulationIsRunning } from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';
 
 // Simulation reducer constants
+const EMPTY_SIMULATION_LIST = toSimulationListModel();
 const EMPTY_SIMULATION = toSimulationModel();
 const EMPTY_STATUS = toSimulationStatusModel();
 const initialState = { model: undefined, status: undefined };
 
 // ========================= Reducers - START
+const simulationListModelReducer = (state, action) => ({ ...state, model: action.payload });
 const simulationModelReducer = (state, action) => ({ ...state, model: action.payload });
 const simulationStatusReducer = (state, action) => ({ ...state, status: action.payload });
 const simulationErrorReducer = (state, action) => ({ error: action.payload });
 const initialStateReducer = (state, action) => initialState;
 
+const updateListModel = { type: 'SIMULATION_LIST_UPDATE', reducer: simulationListModelReducer };
 const updateModel = { type: 'SIMULATION_UPDATE', reducer: simulationModelReducer };
 const updateStatus = { type: 'SIMULATION_STATUS_UPDATE', reducer: simulationStatusReducer };
 
 export const redux = createReducerScenario({
+  updateListModel,
   updateModel,
   updateStatus,
+  clearListModel: { ...updateModel, type: 'SIMULATION_LIST_CLEAR', staticPayload: EMPTY_SIMULATION_LIST },
   clearModel: { ...updateModel, type: 'SIMULATION_CLEAR', staticPayload: EMPTY_SIMULATION },
   clearStatus: { ...updateStatus, type: 'SIMULATION_STATUS_CLEAR', staticPayload: EMPTY_STATUS },
   registerError: { type: 'SIMULATION_ERROR', reducer: simulationErrorReducer },
   revertToInitial: { type: 'SIMULATION_REVERT_TO_INITIAL', reducer: initialStateReducer }
 });
 
-export const reducer = { simulation: redux.getReducer(initialState) };
+export const reducer = { simulationList: redux.getReducer(initialState) , simulation: redux.getReducer(initialState) };
 // ========================= Reducers - END
 
 // ========================= Selectors - START
@@ -43,6 +48,16 @@ export const reducer = { simulation: redux.getReducer(initialState) };
 const simulationError = error => Observable.of(redux.actions.registerError(error.message));
 
 export const epics = createEpicScenario({
+  /** Loads the simulation list*/
+  fetchSimulationList: {
+    type: 'SIMULATION_LIST_FETCH',
+    epic: () =>
+      SimulationService.getSimulationList()
+        .map(redux.actions.updateListModel)
+        .startWith(redux.actions.clearListModel())
+        .catch(simulationError)
+  },
+
   /** Loads the simulation */
   fetchSimulation: {
     type: 'SIMULATION_FETCH',
