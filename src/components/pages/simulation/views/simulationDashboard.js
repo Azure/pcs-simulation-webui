@@ -43,7 +43,7 @@ export class SimulationDashboard extends Component {
   getSoftSelectId = ({ id }) => id;
 
   render() {
-    const { t, simulationList } = this.props; console.log('simulationlist', simulationList)
+    const { t, simulationList, deviceModelEntities } = this.props;
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
 
@@ -55,9 +55,9 @@ export class SimulationDashboard extends Component {
       </ContextMenu>,
       <PageContent className="simulation-dashboard-container" key="page-content">
         {
-          [simulationList].map(sim =>
+          simulationList.map(sim =>
             <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
-              <SimulationTile {...this.props} />
+              <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
             </NavLink>
           )
         }

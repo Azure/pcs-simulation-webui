@@ -2,6 +2,8 @@
 
 import 'rxjs';
 import { Observable } from 'rxjs';
+import { schema, normalize } from 'normalizr';
+import update from 'immutability-helper';
 import { SimulationService } from 'services';
 import { toSimulationListModel, toSimulationModel, toSimulationStatusModel } from 'services/models';
 import { getSimulation, getSimulationIsRunning } from 'store/selectors';
@@ -13,10 +15,26 @@ import diagnosticsEvent from '../logEventUtil';
 const EMPTY_SIMULATION_LIST = toSimulationListModel();
 const EMPTY_SIMULATION = toSimulationModel();
 const EMPTY_STATUS = toSimulationStatusModel();
-const initialState = { model: undefined, status: undefined };
+const initialState = {
+  model: undefined,
+  status: undefined,
+  entities: {},
+  items: []
+};
+
+// ========================= Schemas - START
+const simulationSchema = new schema.Entity('simulations');
+const simulationsSchema = new schema.Array(simulationSchema);
+// ========================= Schemas - END
 
 // ========================= Reducers - START
-const simulationListModelReducer = (state, action) => ({ ...state, model: action.payload });
+const simulationListModelReducer = (state, { payload }) => {
+  const { entities: { simulations }, result } = normalize(payload, simulationsSchema);
+  return update(state, {
+    entities: { $set: simulations },
+    items: { $set: result }
+  });
+};
 const simulationModelReducer = (state, action) => ({ ...state, model: action.payload });
 const simulationStatusReducer = (state, action) => ({ ...state, status: action.payload });
 const simulationErrorReducer = (state, action) => ({ error: action.payload });
@@ -37,7 +55,7 @@ export const redux = createReducerScenario({
   revertToInitial: { type: 'SIMULATION_REVERT_TO_INITIAL', reducer: initialStateReducer }
 });
 
-export const reducer = { simulationList: redux.getReducer(initialState) , simulation: redux.getReducer(initialState) };
+export const reducer = { simulations: redux.getReducer(initialState) , simulation: redux.getReducer(initialState) };
 // ========================= Reducers - END
 
 // ========================= Selectors - START

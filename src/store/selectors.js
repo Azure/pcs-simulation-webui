@@ -5,7 +5,13 @@ import Config from 'app.config';
 import { getDeviceModels } from 'store/reducers/deviceModelsReducer';
 
 // Selectors
-export const getSimulationList = state => state.simulationList.model;
+export const getSimulationListReduer = state => state.simulations;
+export const getEntities = state => getSimulationListReduer(state).entities;
+export const getItems = state => getSimulationListReduer(state).items;
+export const getSimulations = createSelector(
+  getEntities, getItems,
+  (entities, items) => items.map(id => entities[id])
+);
 export const getSimulation = state => state.simulation.model;
 export const getSimulationStatus = state => state.simulation.status;
 export const getSimulationError = state => state.simulation.error;
@@ -50,8 +56,8 @@ export const getSimulationWithDeviceModels = createSelector(
 );
 
 export const getSimulationListWithDeviceModels = createSelector(
-  [getSimulationList, getDeviceModelsAsMap],
-  (simulationModelList = [], deviceModelsMap) => [simulationModelList].map(simulationModel => {
+  [getSimulations, getDeviceModelsAsMap],
+  (simulations = [], deviceModelsMap) => simulations.map(simulationModel => {
     const modelId = ((simulationModel.deviceModels || [])[0] || {}).id;
     const name = modelId === Config.customSensorValue
       ? 'Custom'

@@ -14,6 +14,11 @@ import './simulation.css';
  */
 export class Simulation extends Component {
 
+  componentDidMount() {
+  // Load the simulation list
+  if ((this.props.simulationList || []).length === 0) this.props.fetchSimulationList();
+  }
+
   apply = (event) => {
     event.preventDefault();
     this.props.toggleSimulation(!this.props.enabled);
@@ -46,7 +51,7 @@ export class Simulation extends Component {
       <div className="simulation-container">
         <Switch>
           <Route exact path={'/simulation/:path(dashboard)'}
-            render={ () => this.getView() } />
+            render={  (routeProps) => <SimulationDashboard {...routeProps} {...this.props} /> } />
           <Route exact path={'/simulation/:id'}
             render={ (routeProps) => <SimulationDetails {...routeProps} {...this.props} /> } />
           <Redirect to='/simulation/dashboard' />
