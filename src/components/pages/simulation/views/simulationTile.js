@@ -167,11 +167,11 @@ class SimulationTile extends Component {
         </div>
         <div className="tile-body">
           <div>
-            <div className="left time-container">Created 1/12/18 10:13:09 AM </div>
-            <div className="right time-container"> {this.state.isRunning ? 'Running' : 'Ended 1/12/18 12:13:09 AM'} </div>
+            <div className="left time-container"> { this.state.StartTime } Created 1/12/18 10:13:09 AM </div>
+            <div className="right time-container"> { this.state.isRunning ? 'Running' : 'Ended 1/12/18 12:13:09 AM'} </div>
           </div>
           <div className="active-devices">
-            <div className="active-devices-count"> {this.state.activeDevicesCount } </div>
+            <div className="active-devices-count"> { this.state.activeDevicesCount } </div>
             <div className="active-devices-label"> { t('simulation.status.activeDevicesCount') }</div>
           </div>
           <div className="simulation-summary">
