@@ -11,8 +11,8 @@ const ENDPOINT = Config.simulationApiUrl;
 export class SimulationService {
 
   /** Returns the device status */
-  static getStatus() {
-    return HttpClient.get(`${ENDPOINT}status`)
+  static getStatus(id) {
+    return HttpClient.get(`${ENDPOINT}status/${id}`)
       .map(toSimulationStatusModel);
   }
 
@@ -36,8 +36,8 @@ export class SimulationService {
 
 
   /** Returns any currently running simulation */
-  static getSimulation() {
-    return HttpClient.get(`${ENDPOINT}simulations/1`)
+  static getSimulation(id) {
+    return HttpClient.get(`${ENDPOINT}simulations/${id}`)
       .map(toSimulationModel)
       .catch(error => {
         // A 404 from the GET request means that no simulation is configured, not an actual 404 error
@@ -55,20 +55,20 @@ export class SimulationService {
 
   /** Enables or disables a simulation */
   // TODO: Create a mapping from UI Model to request object
-  static updateSimulation(model) {
+  static updateSimulation(id, model) {
     return HttpClient.put(
-        `${ENDPOINT}simulations/1`,
+        `${ENDPOINT}simulations/${id}`,
         toSimulationRequestModel(model)
       )
       .map(toSimulationModel)
-      .catch(resolveConflict);
+      .catch(resolveConflict(id));
   }
 }
 
 /** If the UI resource is out of sync with the service, update the UI resource */
-function resolveConflict(error) {
+function resolveConflict(error, id) {
   if (error.status === 409) {
-    return SimulationService.getSimulation();
+    return SimulationService.getSimulation(1);
   }
   return Observable.throw(error);
 }
