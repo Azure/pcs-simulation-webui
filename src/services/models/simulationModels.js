@@ -27,6 +27,7 @@ export const toSimulationModel = (response = {}) => ({
   endTime: response.EndTime,
   id: response.Id,
   name: response.Name,
+  description: response.Desc,
   totalMessages: response.TotalMsgs,
   deviceModels: (response.DeviceModels || []).map(({ Id, Count, Override }) => ({
     id: Id,
@@ -43,7 +44,7 @@ export const toSimulationModel = (response = {}) => ({
           step: Step,
           unit: Unit,
           path: mapToBehavior(path),
-          type: Type,
+          type: Type
         }
       }))
       .reduce((acc, obj) => [...acc, ...obj], [])
@@ -72,7 +73,9 @@ export const toSimulationRequestModel = (request = {}) => ({
   StartTime: request.startTime,
   EndTime: request.endTime,
   Id: request.id,
-  totalMessages: request.TotalMsgs,
+  Name: request.name,
+  Desc: request.description,
+  TotalMsgs: request.totalMessages,
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHub: {
     ConnectionString: request.connectionString

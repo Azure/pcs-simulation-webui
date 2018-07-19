@@ -37,7 +37,7 @@ export class SimulationService {
 
   /** Returns any currently running simulation */
   static getSimulation(id) {
-    id = id || '1';
+    id = id || '';
     return HttpClient.get(`${ENDPOINT}simulations/${id}`)
       .map(toSimulationModel)
       .catch(error => {
@@ -56,18 +56,20 @@ export class SimulationService {
 
   /** Enables or disables a simulation */
   // TODO: Create a mapping from UI Model to request object
-  static updateSimulation(id, model) {
-    return HttpClient.put(
-        `${ENDPOINT}simulations/${id}`,
+  static updateSimulation(model) {
+    console.log("Update ");
+    return HttpClient.post(
+        `${ENDPOINT}simulations`,
         toSimulationRequestModel(model)
       )
       .map(toSimulationModel)
-      .catch(resolveConflict(id));
+      .catch(resolveConflict);
   }
 }
 
 /** If the UI resource is out of sync with the service, update the UI resource */
-function resolveConflict(error, id) {
+function resolveConflict(error) {
+  console.log("error ", error);
   if (error.status === 409) {
     return SimulationService.getSimulation(1);
   }

@@ -223,11 +223,14 @@ class SimulationDetails extends Component {
     </FormSection>);
   }
 
-  render () {
+  render()
+{
       const {
       t,
       deviceModelEntities = {},
-      simulation: {
+        simulation: {
+        name,
+        description,
         deviceModels,
         startTime,
         endTime,
@@ -247,6 +250,12 @@ class SimulationDetails extends Component {
     console.log("Details:", this.props);
     return (
       <div className="simulation-details-container">
+        <FormSection>
+          <SectionHeader>{t('simulation.name')}</SectionHeader>
+          <div className="targetHub-content">{name}</div>
+          <SectionHeader>{t('simulation.description')}</SectionHeader>
+          <div className="targetHub-content">{description}</div>
+        </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
           <div className="targetHub-content">{iotHubString}</div>

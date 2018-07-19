@@ -41,6 +41,9 @@
         "runIndefinitelyBtn": "Run indefinitely"
       },
       "errorMsg": {
+        "nameCantBeEmpty": "Simulation name is required",
+        "nameGTMaxLength": "Name can't be greater than {{simulationNameMaxLength}} characters",
+        "descGTMaxLength": "Description can't be greater than {{simulationDescMaxLength}} characters",
         "deviceModelIsRequired": "A device model must be selected",
         "deviceModelNameCantBeEmpty": "Name is required",
         "durationMustBeGTZero": "Duration must be greater than zero",

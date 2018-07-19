@@ -48,11 +48,21 @@ class SimulationForm extends LinkedComponent {
     };
 
     // State to input links
+    const simulationNameMaxLength = Config.simulationNameMaxLength;
+    const simulationDescMaxLength = Config.simulationDescMaxLength;
+
+    this.name = this.linkTo('name')
+      .check(x => Validator.notEmpty(x === '-' ? '' : x), props.t('simulation.form.errorMsg.nameCantBeEmpty'))
+      .check(x => x.length < simulationNameMaxLength, props.t('simulation.form.errorMsg.nameGTMaxLength', { simulationNameMaxLength }));;
+
+    this.description = this.linkTo('description')
+      .check(x => x.length < simulationDescMaxLength, props.t('simulation.form.errorMsg.descGTMaxLength', { simulationDescMaxLength }));
+
     this.iotHubString = this.linkTo('iotHubString')
       .check(Validator.notEmpty, props.t('simulation.form.errorMsg.hubNameCantBeEmpty'));
 
     this.deviceModel = this.linkTo('deviceModel')
-      .check(Validator.notEmpty, props.t('simulation.form.errorMsg.deviceModelIsRequired'))
+      .check(Validator.notEmpty, props.t('simulation.form.errorMsg.deviceModelIsRequired'));
 
     this.duration = this.linkTo('duration')
       .check(({ ms }) => ms > 0, props.t('simulation.form.errorMsg.durationMustBeGTZero'));
@@ -107,6 +117,8 @@ class SimulationForm extends LinkedComponent {
       preprovisionedIoTHubMetricsUrl
     } = props;
     const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
+    const name = (simulation || {}).name || '';
+    const description = (simulation || {}).description || '';
     const iotHubString = (simulation || {}).connectionString || '';
     const preProvisionedRadio = preprovisionedIoTHub && iotHubString === '' ? 'preProvisioned' : 'customString';
     const { startTime, endTime } = simulation || {};
@@ -115,6 +127,8 @@ class SimulationForm extends LinkedComponent {
       : moment.duration('00:00:00');
 
     this.setState({
+      name,
+      description,
       iotHubString,
       deviceModelOptions,
       preProvisionedRadio,
@@ -174,6 +188,8 @@ class SimulationForm extends LinkedComponent {
   apply = (event) => {
     event.preventDefault();
     const {
+      name,
+      description,
       durationRadio,
       duration,
       deviceModels,
@@ -191,8 +207,9 @@ class SimulationForm extends LinkedComponent {
       deviceModels,
       ...simulationDuration
     };
-    
+    console.log("start ", modelUpdates);
     this.props.updateSimulation(modelUpdates);
+    console.log("finish ");
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
@@ -248,17 +265,11 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
           <FormGroup className="simulation-name-box">
-            <FormControl
-              className="short"
-              type="text"
-              value='sample title' />
+            <FormControl className="long" type="text" placeholder='Simulation name' link={this.name} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
           <FormGroup className="simulation-description-box">
-            <FormControl
-              className="short"
-              type="text"
-              value='add your description here' />
+            <FormControl className="long" type="text" placeholder='add description here' link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
         </FormSection>
 

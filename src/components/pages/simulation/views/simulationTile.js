@@ -34,15 +34,12 @@ class SimulationTile extends Component {
 
     // Poll until the simulation status is false
     this.pollingSubscriber = this.pollingStream
-      .do(a => {console.log('a:', a)
-        return a;
-      })
       .do(({ simulationRunning }) => {
         if (simulationRunning) {
           this.emitter.next(
             Rx.Observable.of('poll')
               .delay(pollingInterval)
-              .flatMap(SimulationService.getStatus(this.props.simulation.id))
+              .flatMap(() => SimulationService.getStatus(this.props.simulation.id))
           );
         }
       })
@@ -59,7 +56,6 @@ class SimulationTile extends Component {
         ({ errorMessage }) => this.setState({ pollingError: errorMessage })
       );
 
-    console.log("ID  ", this.props.simulation.id);
     // Start polling
     this.emitter.next(SimulationService.getStatus(this.props.simulation.id));
   }
@@ -95,8 +91,9 @@ class SimulationTile extends Component {
       }
     } = this.props;
 
+    var className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
     return (
-        <div className = "simulation-tile-container" >
+      <div className= { className } >
         <div className="tile-header">
           <SectionHeader> {name || id}</SectionHeader>
         </div>
