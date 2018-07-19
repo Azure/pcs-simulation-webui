@@ -2,13 +2,9 @@
 
 import React, { Component } from 'react';
 import Rx from 'rxjs';
-import moment from 'moment';
 
 import Config from 'app.config';
-import { svgs } from 'utilities';
-import { Svg } from 'components/shared/svg/svg';
 import {
-  ErrorMsg,
   SectionHeader
 } from 'components/shared';
 import { SimulationService } from 'services';
@@ -38,6 +34,9 @@ class SimulationTile extends Component {
 
     // Poll until the simulation status is false
     this.pollingSubscriber = this.pollingStream
+      .do(a => {console.log('a:', a)
+        return a;
+      })
       .do(({ simulationRunning }) => {
         if (simulationRunning) {
           this.emitter.next(
@@ -83,7 +82,6 @@ class SimulationTile extends Component {
   }
 
   render() {
-    console.log(this.props);
     const {
       t,
       deviceModelEntities = {},
@@ -91,9 +89,9 @@ class SimulationTile extends Component {
         deviceModels,
         id,
         name,
-        enabled,
         startTime,
-        endTime
+        endTime,
+        totalMessages
       }
     } = this.props;
 
@@ -120,7 +118,7 @@ class SimulationTile extends Component {
               <div className="simulation-status-section right">
                 <div className="messages-per-second">{this.state.messagesPerSecond}</div>
                 <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
-                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.totalMessagesCount}</div>
+                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} { totalMessages || this.state.totalMessagesCount}</div>
               </div>
             </div>
           </div>

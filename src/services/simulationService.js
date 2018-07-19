@@ -37,6 +37,7 @@ export class SimulationService {
 
   /** Returns any currently running simulation */
   static getSimulation(id) {
+    id = id || '1';
     return HttpClient.get(`${ENDPOINT}simulations/${id}`)
       .map(toSimulationModel)
       .catch(error => {
