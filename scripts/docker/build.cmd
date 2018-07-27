@@ -6,7 +6,7 @@ setlocal
 :: Note: use lowercase names for the Docker images
 SET DOCKER_IMAGE=azureiotpcs/device-simulation-webui
 :: "testing" is the latest dev build, usually matching the code in the "master" branch
-SET DOCKER_TAG=%DOCKER_IMAGE%:millennium-testing
+SET DOCKER_TAG=%DOCKER_IMAGE%:testing
 
 :: strlen("\scripts\docker\") => 16
 SET APP_HOME=%~dp0

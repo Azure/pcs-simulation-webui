@@ -6,7 +6,7 @@ set -e
 # Note: use lowercase names for the Docker images
 DOCKER_IMAGE="azureiotpcs/device-simulation-webui"
 # "testing" is the latest dev build, usually matching the code in the "master" branch
-DOCKER_TAG="$DOCKER_IMAGE:millennium-testing"
+DOCKER_TAG="$DOCKER_IMAGE:testing"
 
 APP_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && cd .. && pwd )/"
 source "$APP_HOME/scripts/.functions.sh"
