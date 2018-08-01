@@ -26,6 +26,7 @@ class SimulationDetails extends Component {
     super();
 
     this.state = {
+      simulationId: '',
       isRunning: true,
       showLink: false,
       hubUrl: '',
@@ -37,13 +38,16 @@ class SimulationDetails extends Component {
   }
 
   componentDidMount() {
+
+    var simulationId = this.props.location.pathname.split('/').pop();
+
     // Initialize state from the most recent status
     this.setState({
+      simulationId: this.props.location.pathname.split('/').pop(),
       isRunning: this.props.isRunning,
       hubUrl: this.props.preprovisionedIoTHubMetricsUrl,
       showLink: this.props.preprovisionedIoTHubInUse
     });
-
     // Poll until the simulation status is false
     this.pollingSubscriber = this.pollingStream
       .do(({ simulationRunning }) => {
@@ -51,7 +55,7 @@ class SimulationDetails extends Component {
           this.emitter.next(
             Rx.Observable.of('poll')
               .delay(pollingInterval)
-              .flatMap(SimulationService.getStatus)
+              .flatMap(() => SimulationService.getStatus(simulationId))
           );
         }
       })
@@ -74,7 +78,7 @@ class SimulationDetails extends Component {
       );
 
     // Start polling
-    this.emitter.next(SimulationService.getStatus());
+    this.emitter.next(SimulationService.getStatus(simulationId));
   }
 
   componentWillUnmount() {
@@ -229,21 +233,22 @@ class SimulationDetails extends Component {
       t,
       deviceModelEntities = {},
         simulation: {
-        name,
-        description,
-        deviceModels,
-        startTime,
-        endTime,
-        connectionString
+        deviceModels
       }
       } = this.props;
-    const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
-    const [ deviceModel = {} ] = deviceModels;
+
+    const mySimulation = this.props.simulationList.filter(({ id }) => id === this.state.simulationId)[0] || '';
+    console.log("mySimulation", mySimulation);
+
+    const iotHubString = (mySimulation.connectionString || 'Pre-provisioned').split(';')[0];
+
+    const [deviceModel = {}] = deviceModels;
     const { interval = '' } = deviceModel;
     const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
-    const duration = (!startTime || !endTime)
+    const duration = (!mySimulation.startTime || !mySimulation.endTime)
       ? 'Run indefinitely'
-      : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
+      : this.humanizeDuration(moment(mySimulation.endTime).diff(moment(mySimulation.startTime)));
+
     const totalDevices = deviceModels.reduce((total, obj) => {
           return total + obj['count'];
       }, 0);
@@ -252,9 +257,9 @@ class SimulationDetails extends Component {
       <div className="simulation-details-container">
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
-          <div className="targetHub-content">{name}</div>
+          <div className="targetHub-content">{mySimulation.name}</div>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
-          <div className="targetHub-content">{description}</div>
+          <div className="targetHub-content">{mySimulation.description}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>

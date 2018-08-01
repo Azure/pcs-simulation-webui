@@ -202,14 +202,14 @@ class SimulationForm extends LinkedComponent {
     } : {};
 
     const modelUpdates = {
+      name,
+      description,
       enabled: true,
       connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString,
       deviceModels,
       ...simulationDuration
     };
-    console.log("start ", modelUpdates);
     this.props.updateSimulation(modelUpdates);
-    console.log("finish ");
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
