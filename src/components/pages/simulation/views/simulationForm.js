@@ -8,6 +8,7 @@ import { svgs, LinkedComponent, Validator, int } from 'utilities';
 import {
   Btn,
   BtnToolbar,
+  ErrorMsg,
   FormActions,
   FormControl,
   FormGroup,
@@ -44,7 +45,8 @@ class SimulationForm extends LinkedComponent {
       frequency: {},
       deviceModelOptions: [],
       deviceModel: '',
-      deviceModels: []
+      deviceModels: [],
+      errorMessage: ''
     };
 
     // State to input links
@@ -177,6 +179,22 @@ class SimulationForm extends LinkedComponent {
     };
   }
 
+  getSimulationStatusBar() {
+    const { t } = this.props;
+
+    if (this.props.error) {
+      return (
+        <ErrorMsg> { this.props.error }</ErrorMsg>
+      );
+    } else {
+      return (
+        <FormActions>
+          Simulation created successfully
+        </FormActions>
+      );
+    }
+  }
+
   inputOnBlur = () => this.setState({ connectionStrFocused: false })
 
   inputOnFocus = () => this.setState({ connectionStrFocused: true })
@@ -209,7 +227,9 @@ class SimulationForm extends LinkedComponent {
       deviceModels,
       ...simulationDuration
     };
-    this.props.updateSimulation(modelUpdates);
+
+    this.props.updateSimulation (modelUpdates);
+      // .catch((error) => this.setState({ errorMessage: error }));
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
@@ -375,6 +395,7 @@ class SimulationForm extends LinkedComponent {
         </FormSection>
 
         <FormActions>
+          { this.getSimulationStatusBar() }
           <BtnToolbar>
             <Btn
               svg={svgs.startSimulation}

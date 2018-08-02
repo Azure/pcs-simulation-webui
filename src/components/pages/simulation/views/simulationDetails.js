@@ -230,36 +230,39 @@ class SimulationDetails extends Component {
   render()
 {
       const {
-      t,
-      deviceModelEntities = {},
-        simulation: {
-        deviceModels
-      }
+        t,
+        deviceModelEntities = {}
       } = this.props;
 
-    const mySimulation = this.props.simulationList.filter(({ id }) => id === this.state.simulationId)[0] || '';
-    console.log("mySimulation", mySimulation);
+    const simulation = this.props.simulationList.filter(({ id }) => id === this.state.simulationId)[0] || '';
 
-    const iotHubString = (mySimulation.connectionString || 'Pre-provisioned').split(';')[0];
+    const {
+      deviceModels = [],
+      startTime,
+      endTime,
+      connectionString
+    } = simulation;
+
+    const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
 
     const [deviceModel = {}] = deviceModels;
     const { interval = '' } = deviceModel;
     const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
-    const duration = (!mySimulation.startTime || !mySimulation.endTime)
+    const duration = (!startTime || !endTime)
       ? 'Run indefinitely'
-      : this.humanizeDuration(moment(mySimulation.endTime).diff(moment(mySimulation.startTime)));
+      : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
 
     const totalDevices = deviceModels.reduce((total, obj) => {
           return total + obj['count'];
       }, 0);
-    console.log("Details:", this.props);
-    return (
+
+  return (
       <div className="simulation-details-container">
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
-          <div className="targetHub-content">{mySimulation.name}</div>
+          <div className="targetHub-content">{simulation.name}</div>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
-          <div className="targetHub-content">{mySimulation.description}</div>
+          <div className="targetHub-content">{simulation.description}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
@@ -273,7 +276,7 @@ class SimulationDetails extends Component {
               <div className='device-model-header'>{ t('simulation.form.deviceModels.count') }</div>
             </div>
             <div className='device-models-rows'>
-              {deviceModels.map(deviceModelItem =>
+                { (deviceModels).map(deviceModelItem =>
                 <div className='device-model-row' key={ deviceModelItem.id }>
                   <div className='device-model-box'>{deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}</div>
                   <div className='device-model-box'>{deviceModelItem.count}</div>

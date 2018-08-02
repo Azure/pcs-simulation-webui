@@ -10,7 +10,7 @@ export const getEntities = state => getSimulationListReduer(state).entities;
 export const getItems = state => getSimulationListReduer(state).items;
 export const getSimulations = createSelector(
   getEntities, getItems,
-    (entities, items) => items.map(id => entities[id])
+    (entities, items = []) => items.map(id => entities[id])
 );
 export const getSimulation = state => state.simulation.model;
 export const getSimulationStatus = state => state.simulation.status;

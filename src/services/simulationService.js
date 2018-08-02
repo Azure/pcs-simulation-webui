@@ -34,7 +34,6 @@ export class SimulationService {
       });
   }
 
-
   /** Returns any currently running simulation */
   static getSimulation(id) {
     id = id || '';
