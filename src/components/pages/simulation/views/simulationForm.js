@@ -83,6 +83,8 @@ class SimulationForm extends LinkedComponent {
 
   formIsValid() {
     return [
+      this.name,
+      this.desc,
       this.targetHub,
       this.durationRadio
     ].every(link => !link.error);
@@ -180,8 +182,6 @@ class SimulationForm extends LinkedComponent {
   }
 
   getSimulationStatusBar() {
-    const { t } = this.props;
-
     if (this.props.error) {
       return (
         <ErrorMsg> { this.props.error }</ErrorMsg>
@@ -229,7 +229,6 @@ class SimulationForm extends LinkedComponent {
     };
 
     this.props.updateSimulation (modelUpdates);
-      // .catch((error) => this.setState({ errorMessage: error }));
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
@@ -289,7 +288,7 @@ class SimulationForm extends LinkedComponent {
           </FormGroup>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
           <FormGroup className="simulation-description-box">
-            <FormControl className="long" type="text" placeholder='add description here' link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
+            <FormControl className="long" type="textarea" rows='4' placeholder='add description here' link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
         </FormSection>
 
