@@ -14,7 +14,13 @@ $imgSize: 30px;
 
   @include rem-fallback(height, $headerHeight);
 
-  .breadcrumbs { flex-grow: 1; }
+  .breadcrumbs {
+    color: $colorWhite;
+    flex-grow: 1;
+    @include rem-font-size(16px);
+    @include rem-fallback(line-height, 21px);
+    @include rem-fallback(padding, 12px, 32px);
+  }
 
   .label {
     white-space: nowrap;

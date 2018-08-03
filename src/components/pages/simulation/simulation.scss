@@ -4,220 +4,217 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
-.simulation-container
-{
-  @include rem-fallback(padding, 24px, 32px);
-
-  .flyout-container
-  {
+.simulation-container {
+  .flyout-container {
     width: 80%;
   }
 
-  .page-header
-  {
+  .page-header {
     font-family: $fontSelawikBold;
     @include rem-font-size(48px);
     @include rem-fallback(line-height, 48px);
   }
 
-  .device-models-container
-  {
+  .device-models-container {
     @include rem-fallback(min-width, 1000px);
 
     .device-model-row,
-    .device-model-headers
-    {
+    .device-model-headers {
       display: flex;
     }
 
     .device-model-box,
-    .device-model-header
-    {
+    .device-model-header {
       @include rem-fallback(width, 150px);
       @include rem-fallback(margin, 6px, 32px, 6px, 0px);
 
-      .form-control
-      {
+      .form-control {
         @include rem-fallback(width, 150px);
       }
     }
 
-    .duration-box
-    {
+    .duration-box {
       @include rem-fallback(margin-top, 6px);
     }
 
-    .throughput-box
-    {
+    .throughput-box {
       @include rem-fallback(margin-top, 5px);
     }
 
-    .device-model-header
-    {
+    .device-model-header {
       text-transform: uppercase;
       @include rem-font-size(14px);
 
-      @include themify($themes)
-      {
+      @include themify($themes) {
         color: themed('colorLightestFirst');
       }
     }
 
-    .delete-device-model-btn
-    {
+    .delete-device-model-btn {
       @include rem-fallback(height, 26px);
       @include rem-fallback(margin-top, 6px);
     }
   }
   // Apply theme properties
-  @include themify($themes)
-  {
+  @include themify($themes) {
     color: themed('colorLightestFirst');
 
-    .apply-btn
-    {
+    .apply-btn {
       // The start simulation svg uses stroke rather than fill
-      svg
-      {
+      svg {
         fill: transparent;
         stroke: themed('colorHighest');
       }
 
-      &:hover svg
-      {
+      &:hover svg {
         fill: transparent;
         stroke: themed('colorLowestSecond');
       }
 
-      &:disabled svg
-      {
+      &:disabled svg {
         fill: transparent;
         stroke: themed('colorMidFirst');
       }
     }
   }
 
-  .simulation-details-container
-  {
-    .simulation-status-section
-    {
-      .status-description
-      {
+  .simulation-details-container {
+    @include rem-fallback(padding, 12px, 24px);
+
+    .simulation-status-section {
+      .status-description {
         @include rem-fallback(padding-left, 5px);
       }
 
-      .active-devices-status
-      {
+      .active-devices-status {
         @include rem-font-size(48px);
       }
 
-      .status-value
-      {
+      .status-value {
         @include rem-font-size(24px);
       }
 
-      @include themify($themes)
-      {
-        .status-description
-        {
+      @include themify($themes) {
+        .status-description {
           color: themed('colorLightestFirst');
         }
 
-        .active-devices-status, .status-value
-        {
+        .active-devices-status, .status-value {
           color: themed('colorHighest');
         }
       }
     }
   }
 
-  .simulation-dashboard-container
-  {
+  .simulation-dashboard-container {
     color: $colorWhite;
+    @include rem-fallback(padding, 24px, 32px);
 
-    > a
-    {
+    div > a {
       display: inline-block;
       vertical-align: top;
+      @include rem-fallback(margin-right, 12px);
+      @include rem-fallback(margin-top, 12px);
     }
 
-    .dashboard-header
-    {
-      @include rem-font-size(48px);
-      @include rem-fallback(line-height, 48px);
+    .dashboard-header {
+      font-family: $fontSelawikBold;
+      @include rem-font-size(34px);
+      @include rem-fallback(line-height, 41px);
     }
 
-    .simulation-tile-container
-    {
+    .simulation-containers {
+      display: table;
+
+      > div {
+        display: table-cell;
+      }
+    }
+
+    .simulation-tile-container {
       background: $colorCharcoal;
       color: $colorWhite;
       display: inline-block;
       height: 260px;
-      margin-right: 15px;
-      margin-top: 15px;
       width: 540px;
 
-      &.active
-      {
+      &.active {
         height: 530px;
+
+        .tile-body {
+          position: relative;
+
+          .simulation-summary {
+            bottom: 0;
+            @include rem-fallback(height, 100px);
+            position: absolute;
+            width: calc(100% - 24px);
+          }
+        }
       }
 
-      .tile-header
-      {
+      .tile-header {
         border-bottom: solid .01rem $colorStone;
         font-family: $fontSelawikBold;
         @include rem-font-size(18px);
         @include rem-fallback(line-height, 22px);
-        padding: 12px;
+        @include rem-fallback(padding, 12px);
       }
 
-      .tile-body
-      {
-        padding: 12px;
+      .tile-body {
+        height: calc(100% - 70px);
+        @include rem-fallback(padding, 12px);
 
-        .active-devices
-        {
+        .active-devices {
           display: inline-block;
           padding: 0 0 40px 10px;
           width: 100%;
 
-          .active-devices-count, .active-devices-label
-          {
+          .active-devices-count, .active-devices-label {
             display: inline-block;
             width: auto;
           }
 
-          .active-devices-count
-          {
+          .active-devices-count {
             font-family: $fontSelawikLight;
             @include rem-font-size(48px);
             @include rem-fallback(line-height, 48px);
           }
 
-          .active-devices-label
-          {
+          .active-devices-label {
             float: bottom;
             @include rem-font-size(14px);
-            margin-left: 20px;
+            @include rem-fallback(margin-left, 20px)
           }
         }
 
-        .simulation-summary
-        {
+        .simulation-summary {
           display: inline-block;
+          height: calc(100% - 40px);
+          @include rem-fallback(padding-top, 20px);
           width: 100%;
 
+          .device-model-rows {
+            vertical-align: top;
+          }
+
           .device-model-rows,
-          .telemetry-container
-          {
+          .telemetry-container {
             display: inline-block;
+            height: 100%;
             @include rem-font-size(14px);
             @include rem-fallback(line-height, 17px);
+            position: relative;
             width: 50%;
           }
 
-          .messages-per-second
-          {
+          .simulation-status-section {
+            @include rem-fallback(bottom, 12px);
+            right: 0;
+            position: absolute;
+          }
+
+          .messages-per-second {
             font-family: $fontSelawikLight;
             @include rem-font-size(32px);
             @include rem-fallback(line-height, 39px);
@@ -225,18 +222,16 @@
         }
 
         .messages-per-second-desc,
-        .time-container
-        {
+        .time-container {
           color: $colorSmoke;
           display: inline-block;
           font-family: $fontSelawikSemilight;
           @include rem-font-size(12px);
           @include rem-fallback(line-height, 15px);
-          padding-bottom: 14px;
+          @include rem-fallback(padding-bottom, 14px);
         }
 
-        .time-container
-        {
+        .time-container {
           width: 50%;
         }
       }
@@ -244,12 +239,10 @@
   }
 }
 
-.left
-{
+.left {
   text-align: left;
 }
 
-.right
-{
+.right {
   text-align: right;
 }

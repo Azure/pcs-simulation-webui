@@ -261,6 +261,8 @@ class SimulationDetails extends Component {
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
           <div className="targetHub-content">{simulation.name}</div>
+        </FormSection>
+        <FormSection>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
           <div className="targetHub-content">{simulation.description}</div>
         </FormSection>

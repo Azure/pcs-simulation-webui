@@ -83,8 +83,6 @@ class SimulationForm extends LinkedComponent {
 
   formIsValid() {
     return [
-      this.name,
-      this.desc,
       this.targetHub,
       this.durationRadio
     ].every(link => !link.error);
@@ -186,13 +184,7 @@ class SimulationForm extends LinkedComponent {
       return (
         <ErrorMsg> { this.props.error }</ErrorMsg>
       );
-    } else {
-      return (
-        <FormActions>
-          Simulation created successfully
-        </FormActions>
-      );
-    }
+    } 
   }
 
   inputOnBlur = () => this.setState({ connectionStrFocused: false })
@@ -234,7 +226,7 @@ class SimulationForm extends LinkedComponent {
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
 
   deleteDeviceModel = (index) =>
-    (evt) => this.deviceModelsLink.set(this.deviceModelsLink.value.filter((_, idx) => index !== idx));
+    () => this.deviceModelsLink.set(this.deviceModelsLink.value.filter((_, idx) => index !== idx));
 
   render () {
     const { t } = this.props;
@@ -286,6 +278,9 @@ class SimulationForm extends LinkedComponent {
           <FormGroup className="simulation-name-box">
             <FormControl className="long" type="text" placeholder='Simulation name' link={this.name} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
+        </FormSection>
+
+        <FormSection>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
           <FormGroup className="simulation-description-box">
             <FormControl className="long" type="textarea" rows='4' placeholder='add description here' link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />

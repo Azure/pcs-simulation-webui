@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { NavLink } from "react-router-dom";
-import { Btn, PageContent, ContextMenu } from 'components/shared';
+import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared';
 import { NewSimulation } from '../flyouts';
 import { svgs } from 'utilities';
 import SimulationTile from './simulationTile';
@@ -54,13 +54,31 @@ export class SimulationDashboard extends Component {
         </Btn>
       </ContextMenu>,
       <PageContent className="simulation-dashboard-container" key="page-content">
-        {
-          simulationList.map(sim =>
-            <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
-              <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
-            </NavLink>
-          )
-        }
+        <SectionHeader className="dashboard-header">{t('header.simulationsDashboard')}</SectionHeader>
+        <div className="simulation-containers">
+          <div className="active">
+            {
+              simulationList
+                .filter(sim => { return sim.enabled === true })
+                .map(sim =>
+                <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
+                  <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                </NavLink>
+              )
+            }
+          </div>
+          <div className="past">
+            {
+              simulationList
+                .filter(sim => { return sim.enabled !== true })
+                .map(sim =>
+                <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
+                  <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                </NavLink>
+              )
+            }
+          </div>
+        </div>
         {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
