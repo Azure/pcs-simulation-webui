@@ -92,7 +92,6 @@ class SimulationDetails extends Component {
     Rx.Observable.from([this.state.simulation])
       .flatMap(() => SimulationService.cloneSimulation(this.state.simulation)
       .catch(error => {
-        alert ("Fail");
       })
     )
     .subscribe(
