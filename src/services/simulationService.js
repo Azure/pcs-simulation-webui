@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSimulationStatusModel, toSimulationModel, toSimulationListModel, toDeviceModel, toSimulationRequestModel } from './models';
+import { toSimulationStatusModel, toSimulationModel, toSimulationListModel, toDeviceModel, toSimulationRequestModel, toCloneSimulationRequestModel } from './models';
 import { Observable } from 'rxjs/Observable';
 
 const ENDPOINT = Config.simulationApiUrl;
@@ -47,19 +47,31 @@ export class SimulationService {
   }
 
   /** Enables or disables a simulation */
-  static toggleSimulation(ETag, Enabled) {
-    return HttpClient.patch(`${ENDPOINT}simulations/1`, { ETag, Enabled })
+  static createSimulation(model) {
+    console.log("Model", toSimulationRequestModel(model));
+
+    return HttpClient.post(
+        `${ENDPOINT}simulations`,
+        toSimulationRequestModel(model)
+      )
+      .map(toSimulationModel)
+      .catch(resolveConflict);
+  }
+
+  /** Disable a simulation */
+  static stopSimulation(simulation) {
+    return HttpClient.patch(`${ENDPOINT}simulations/${simulation.id}`, { eTag:simulation.eTag, enabled:false })
       .map(toSimulationModel)
       .catch(resolveConflict);
   }
 
   /** Enables or disables a simulation */
   // TODO: Create a mapping from UI Model to request object
-  static updateSimulation(model) {
-    console.log("Update ");
+  static cloneSimulation(model) {
+    console.log("Model", toCloneSimulationRequestModel(model));
     return HttpClient.post(
         `${ENDPOINT}simulations`,
-        toSimulationRequestModel(model)
+        toCloneSimulationRequestModel(model)
       )
       .map(toSimulationModel)
       .catch(resolveConflict);

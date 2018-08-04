@@ -19,11 +19,6 @@ export class Simulation extends Component {
   if ((this.props.simulationList || []).length === 0) this.props.fetchSimulationList();
   }
 
-  apply = (event) => {
-    event.preventDefault();
-    this.props.toggleSimulation(!this.props.enabled);
-  };
-
   getView() {
     const { t, simulation: { enabled }, isRunning, error, refresh } = this.props;
     const isLoading = typeof enabled === 'undefined' || typeof isRunning === 'undefined';

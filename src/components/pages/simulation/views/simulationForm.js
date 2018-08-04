@@ -36,6 +36,8 @@ class SimulationForm extends LinkedComponent {
     super(props);
 
     this.state = {
+      name: '',
+      description: '',
       connectionStrFocused: false,
       preprovisionedIoTHub: false,
       preProvisionedRadio: '',
@@ -83,6 +85,8 @@ class SimulationForm extends LinkedComponent {
 
   formIsValid() {
     return [
+      this.name,
+      this.description,
       this.targetHub,
       this.durationRadio
     ].every(link => !link.error);
@@ -220,7 +224,7 @@ class SimulationForm extends LinkedComponent {
       ...simulationDuration
     };
 
-    this.props.updateSimulation (modelUpdates);
+    this.props.createSimulation (modelUpdates);
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);

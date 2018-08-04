@@ -31,8 +31,8 @@ const mapStateToProps = state => ({
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
-  toggleSimulation: enabled => dispatch(simulationEpics.actions.toggleSimulation(enabled)),
-  updateSimulation: modelUpdates => dispatch(simulationEpics.actions.updateSimulation(modelUpdates)),
+  stopSimulation: simulation => dispatch(simulationEpics.actions.stopSimulation(simulation)),
+  createSimulation: modelUpdates => dispatch(simulationEpics.actions.createSimulation(modelUpdates)),
   fetchSimulationList: () => dispatch(simulationEpics.actions.fetchSimulationList()),
   refresh: () => dispatch(appEpics.actions.initializeApp())
 });

@@ -86,14 +86,13 @@ export const epics = createEpicScenario({
         .catch(simulationError)
   },
 
-  /** Used to enable or disable the simulation */
-  toggleSimulation: {
-    type: 'SIMULATION_TOGGLE',
+  /** Used to disable the simulation */
+  stopSimulation: {
+    type: 'SIMULATION_STOP',
     epic: ({ payload }, store) => {
       const state = store.getState();
-      const { eTag } = getSimulation(state);
       const event = diagnosticsEvent('StopSimulation');
-      return SimulationService.toggleSimulation(eTag, payload)
+      return SimulationService.stopSimulation(payload, false)
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
         .catch(simulationError);
@@ -111,14 +110,10 @@ export const epics = createEpicScenario({
   },
 
   /** Updates the simulation */
-  updateSimulation: {
-    type: 'SIMULATION_UPDATE',
+  createSimulation: {
+    type: 'SIMULATION_CREATE',
     epic: ({ payload }, store) => {
       const state = store.getState();
-      const { eTag } = getSimulation(state);
-      const isRunning = getSimulationIsRunning(state);
-      const newModel = { ...payload, eTag };
-      const statusIsOld = !isRunning && newModel.enabled;
       const hasDeviceModels = payload.deviceModels.length > 0;
       const deviceModels = payload.deviceModels.length > 0 ? payload.deviceModels[0] : {};
       const eventProps = {
@@ -129,15 +124,7 @@ export const epics = createEpicScenario({
           IsCustomDevice: hasDeviceModels ? deviceModels.isCustomDevice : null,
       }]};
       const event = diagnosticsEvent('StartSimulation', eventProps);
-      // Force the simulation status to update if turned off
-      return SimulationService.updateSimulation(newModel)
-        .flatMap(model => {
-          const extraEvents = statusIsOld ? [
-            redux.actions.clearStatus(),
-            epics.actions.fetchSimulationStatus()
-          ] : [];
-          return [ ...extraEvents, redux.actions.updateModel(model) ];
-        })
+      return SimulationService.createSimulation(payload)
         .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
         .catch(simulationError);
     }
