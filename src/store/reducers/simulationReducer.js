@@ -79,8 +79,8 @@ export const epics = createEpicScenario({
   /** Loads the simulation */
   fetchSimulation: {
     type: 'SIMULATION_FETCH',
-      epic: () =>
-        SimulationService.getSimulation()
+    epic: ({ id }) =>
+        SimulationService.getSimulation(id)
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel())
         .catch(simulationError)

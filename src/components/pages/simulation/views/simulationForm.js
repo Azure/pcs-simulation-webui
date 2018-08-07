@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
+import Rx from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
@@ -18,6 +19,9 @@ import {
   SectionDesc,
   SectionHeader
 } from 'components/shared';
+
+import { SimulationService } from 'services';
+
 
 const newDeviceModel = () => ({
   name: '',
@@ -224,7 +228,20 @@ class SimulationForm extends LinkedComponent {
       ...simulationDuration
     };
 
-    this.props.createSimulation (modelUpdates);
+      Rx.Observable.from([modelUpdates])
+        .flatMap(() => SimulationService.createSimulation(modelUpdates)
+          .catch(error => {
+          console.log('Simulation creation failed', error);
+        })
+      )
+      .subscribe(
+        response => {
+          const id = response.id;
+          var path = this.props.location.pathname;
+          const newSimulationPath = path.replace ('dashboard', id);
+          window.location.replace(newSimulationPath);
+        }
+      )
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);

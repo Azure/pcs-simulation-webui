@@ -1,5 +1,4 @@
 // Copyright (c) Microsoft. All rights reserved.
-import moment from 'moment';
 import { stringToBoolean } from 'utilities';
 
 // Contains methods for converting service response
@@ -81,26 +80,6 @@ export const toSimulationRequestModel = (request = {}) => ({
     ConnectionString: request.connectionString
   }
 });
-
-// Request models
-export const toCloneSimulationRequestModel = (request = {}) => {
-  const duration = (request.startTime && request.endTime)
-    ? moment.duration(moment(request.endTime).diff(moment(request.startTime)))
-    : moment.duration('00:00:00');
-  const isoDuration = `NOW+PT${duration.hours()}H${duration.minutes()}M${duration.seconds()}S`;
-
-  return {
-    Enabled : true,
-    Name : request.name,
-    Desc : request.description,
-    StartTime : 'NOW',
-    EndTime: isoDuration,
-    DeviceModels : toDeviceModels (request.deviceModels),
-    IoTHub : {
-      ConnectionString : request.connectionString
-    }
-  }
-};
 
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>

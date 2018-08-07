@@ -30,7 +30,8 @@ class SimulationDetails extends Component {
       isRunning : true,
       showLink : false,
       hubUrl : '',
-      pollingError : ''
+      pollingError: '',
+      startError: ''
     };
 
     this.emitter = new Rx.Subject();
@@ -38,12 +39,33 @@ class SimulationDetails extends Component {
   }
 
   componentDidMount() {
-    const simulationId = this.props.location.pathname.split ('/').pop();
-    const simulation = this.props.simulationList.filter(({ id }) => id === simulationId)[0] || '';
+    const simulationId = this.props.location.pathname.split('/').pop();
+    Rx.Observable.from([simulationId])
+      .flatMap(() => SimulationService.getSimulation(simulationId)
+        .catch(error => {
+          console.log('Get simulation failed', error);
+        })
+      ).subscribe(
+        response => this.setState({ simulation: response })
+    );
+
+    // const simulation = this.props.simulationList.filter(({ id }) => id === simulationId)[0] || '';
+
+    //if(simulation === '') {
+    //  Rx.Observable.from ([simulationId])
+    //    .flatMap (() => SimulationService.getSimulation (simulationId)
+    //      .catch (error => {
+    //        console.log ('Get simulation failed', error);
+    //      })
+    //    ).subscribe (
+    //      response => this.setState ({ simulation : response })
+    //    );
+    //} else {
+    //  this.setState ({ simulation });
+    //}
 
     // Initialize state from the most recent status
     this.setState ({
-      simulation,
       isRunning : this.props.isRunning,
       hubUrl : this.props.preprovisionedIoTHubMetricsUrl,
       showLink : this.props.preprovisionedIoTHubInUse
@@ -85,20 +107,23 @@ class SimulationDetails extends Component {
     this.pollingSubscriber.unsubscribe();
   }
 
-  // startSimulation = () => SimulationService.updateSimulation(this.state.simulation);
-  stopSimulation = () => SimulationService.stopSimulation(this.state.simulation);
+  stopSimulation = () => this.props.stopSimulation(this.state.simulation);
 
-  startSimulation = () =>
+  startSimulation = (event) => {
+    event.preventDefault();
     Rx.Observable.from([this.state.simulation])
       .flatMap(() => SimulationService.cloneSimulation(this.state.simulation)
-      .catch(error => {
-      })
+        .catch(errorMessage => this.setState({ startError: errorMessage }))
     )
     .subscribe(
       response => {
-        console.log ('validation result', response);
+        const newId = response.id;
+        var path = this.props.location.pathname;
+        const newSimulationPath = path.replace(this.state.simulation.id, newId);
+        window.location.replace(newSimulationPath);
       }
     )
+  }
 
   getHubLink = (shouldPad = true) => {
     return this.state.showLink && (
