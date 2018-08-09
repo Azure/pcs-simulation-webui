@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 import { NavLink } from "react-router-dom";
+import moment from 'moment';
+
 import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared';
 import { NewSimulation } from '../flyouts';
 import { svgs } from 'utilities';
@@ -42,9 +44,20 @@ export class SimulationDashboard extends Component {
 
   getSoftSelectId = ({ id }) => id;
 
-  render() {
-    const { t, simulationList, deviceModelEntities } = this.props;
+  isRunning = (simulation) => {
+    const now = moment();
+    const startTime = moment(simulation.startTime);
+    const endTime = moment(simulation.endTime);
 
+    const isRunning = simulation.enabled
+      && (!startTime.isValid() || startTime.isBefore(now))
+      && (!endTime.isValid() || endTime.isAfter(now));
+
+    return isRunning;
+  }
+
+  render() {
+    const { t, simulationList = [], deviceModelEntities } = this.props;
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
 
     return [
@@ -59,7 +72,7 @@ export class SimulationDashboard extends Component {
           <div className="active">
             {
               simulationList
-                .filter(sim => { return sim.enabled === true })
+                .filter(sim => { return this.isRunning(sim) === true })
                 .map(sim =>
                 <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
                   <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />

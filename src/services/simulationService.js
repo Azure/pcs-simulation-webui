@@ -58,7 +58,7 @@ export class SimulationService {
 
   /** Disable a simulation */
   static stopSimulation(simulation) {
-    return HttpClient.patch(`${ENDPOINT}simulations/${simulation.id}`, { id:simulation.id, eTag:simulation.eTag, enabled:false })
+    return HttpClient.patch(`${ENDPOINT}simulations/${simulation.id}`, { id: simulation.id, eTag: simulation.eTag, enabled: false, totalMsgs: simulation.totalMessages, avgMsgs: simulation.averageMessages })
       .map(toSimulationModel)
       .catch(resolveConflict);
   }

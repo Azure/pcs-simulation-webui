@@ -28,6 +28,7 @@ export const toSimulationModel = (response = {}) => ({
   name: response.Name,
   description: response.Desc,
   totalMessages: response.TotalMsgs,
+  averageMessages: response.AvgMsgs,
   deviceModels: (response.DeviceModels || []).map(({ Id, Count, Override }) => ({
     id: Id,
     count: Count,
@@ -75,6 +76,7 @@ export const toSimulationRequestModel = (request = {}) => ({
   Name: request.name,
   Desc: request.description,
   TotalMsgs: request.totalMessages,
+  AvgMsgs: request.averageMessages,
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHub: {
     ConnectionString: request.connectionString

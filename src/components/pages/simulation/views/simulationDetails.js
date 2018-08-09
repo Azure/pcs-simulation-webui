@@ -107,7 +107,14 @@ class SimulationDetails extends Component {
     this.pollingSubscriber.unsubscribe();
   }
 
-  stopSimulation = () => this.props.stopSimulation(this.state.simulation);
+  stopSimulation = () => {
+    var currentSimulation = this.state.simulation;
+    currentSimulation.totalMessages = this.state.totalMessagesCount;
+    currentSimulation.averageMessages = this.state.messagesPerSecond;
+    this.setState({ simulation: currentSimulation });
+
+    this.props.stopSimulation (this.state.simulation);
+  };
 
   startSimulation = (event) => {
     event.preventDefault();

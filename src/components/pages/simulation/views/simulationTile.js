@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import Rx from 'rxjs';
+import moment from 'moment';
 
 import Config from 'app.config';
 import {
@@ -87,10 +88,12 @@ class SimulationTile extends Component {
         name,
         startTime,
         endTime,
-        totalMessages
+        totalMessages,
+        averageMessages
       }
     } = this.props;
 
+    const dateTimeFormat = "DD/MM/YY hh:mm:ss A";
     var className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
     return (
       <div className= { className } >
@@ -99,8 +102,8 @@ class SimulationTile extends Component {
         </div>
         <div className="tile-body">
           <div>
-            <div className="left time-container"> Created { startTime } </div>
-            <div className="right time-container"> {this.state.isRunning ? 'Running': endTime } </div>
+            <div className="left time-container"> Created { moment(startTime).format(dateTimeFormat) } </div>
+            <div className="right time-container"> {this.state.isRunning ? 'Running' : 'Ended ' + moment(endTime).format(dateTimeFormat) } </div>
           </div>
           { this.getActiveDevices() } 
           <div className="simulation-summary">
@@ -113,7 +116,7 @@ class SimulationTile extends Component {
             </div>
             <div className='telemetry-container'>
               <div className="simulation-status-section right">
-                <div className="messages-per-second">{this.state.messagesPerSecond}</div>
+                <div className="messages-per-second">{averageMessages || this.state.messagesPerSecond }</div>
                 <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
                 <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} { totalMessages || this.state.totalMessagesCount}</div>
               </div>
