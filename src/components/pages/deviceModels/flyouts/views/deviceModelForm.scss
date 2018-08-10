@@ -23,4 +23,19 @@
       @include themify($themes) { color: themed('colorLightestFirst'); }
     }
   }
+
+  .file-uploader-container {
+    position: relative;
+    display: inline-block;
+    @include rem-fallback(margin-left, 32px);
+
+    label { text-decoration: underline; }
+
+    .file-uploader {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+    }
+  }
 }

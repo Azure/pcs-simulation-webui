@@ -56,16 +56,31 @@ export class HttpClient {
   }
 
   /**
+   * Constructs a POST with form file ajax request
+   *
+   * @param {string} url The url path to the make the request to
+   * @param {file} file The file which be append to the body
+   */
+  static upload(url, file, options = {}, withAuth = true) {
+    let body = new FormData();
+    body.append('file', file);
+
+    return HttpClient.ajax(url, { ...options, body, method: 'POST' }, withAuth, false);
+  }
+
+  /**
    * Constructs an Ajax request
    *
    * @param {string} url The url path to the make the request to
    * @param {AjaxRequest} [options={}] See https://github.com/ReactiveX/rxjs/blob/master/src/observable/dom/AjaxObservable.ts
    * @param {boolean} withAuth Allows a backdoor to not avoid wrapping auth headers
+   * @param {boolean} withContentType Allows a backdoor to not avoid wrapping content type headers
    * @return an Observable of the AjaxReponse
    */
-  static ajax(url, options = {}, withAuth = true) {
+  static ajax(url, options = {}, withAuth = true, withContentType = true) {
     const { retryWaitTime, maxRetryAttempts } = Config;
-    const request = HttpClient.createAjaxRequest({ ...options, url }, withAuth);
+    const request = HttpClient.createAjaxRequest({ ...options, url }, withAuth, withContentType);
+
     return Observable.ajax(request)
       // If success, extract the response object
       .map(({ response }) => response)
@@ -78,11 +93,13 @@ export class HttpClient {
   /**
    * A helper method that adds "application/json" headers
    */
-  static withHeaders(request, withAuth) {
+  static withHeaders(request, withAuth, withContentType) {
     const headers = request.headers || {};
     // Add JSON headers
     headers['Accept'] = 'application/json';
-    headers['Content-Type'] = 'application/json';
+    if (withContentType) {
+        headers['Content-Type'] = 'application/json';
+    }
     // Add auth headers if needed
     if (withAuth) {
       // Required by the backend web services when the Authorization header is
@@ -99,9 +116,9 @@ export class HttpClient {
   /**
    * A helper method for constructing ajax request objects
    */
-  static createAjaxRequest(options, withAuth) {
+  static createAjaxRequest(options, withAuth, withContentType = true) {
     return {
-      ...HttpClient.withHeaders(options, withAuth),
+      ...HttpClient.withHeaders(options, withAuth, withContentType),
       timeout: options.timeout || Config.defaultAjaxTimeout
     };
   }

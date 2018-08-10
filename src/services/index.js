@@ -8,3 +8,4 @@ export * from './simulationService';
 export * from './diagnosticsService';
 export * from './configService';
 export * from './deviceModelsService';
+export * from './simulationScriptService';

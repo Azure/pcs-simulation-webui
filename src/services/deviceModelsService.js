@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toDeviceModels, toDeviceModel, toDeviceModelRequestModel } from './models';
+import { toDeviceModels, toDeviceModel, toDeviceModelRequestModel, toDeviceModelUploadRequestModel } from './models';
 
 const ENDPOINT = `${Config.simulationApiUrl}deviceModels`;
 
@@ -23,6 +23,7 @@ export class DeviceModelsService {
 
   /** Creates a device model */
   static createDeviceModel(model) {
+    console.log('createDeviceModel', model);
     return HttpClient.post(ENDPOINT, toDeviceModelRequestModel(model))
       .map(toDeviceModel);
   }
@@ -36,5 +37,12 @@ export class DeviceModelsService {
   /** Deletes a device model by id */
   static deleteDeviceModelById(id) {
     return HttpClient.delete(`${ENDPOINT}/${id}`);
+  }
+
+  /** Uploads a device model */
+  static uploadDeviceModel(model) {
+    console.log('uploadDeviceModel', model);
+    return HttpClient.post(ENDPOINT, toDeviceModelUploadRequestModel(model))
+      .map(toDeviceModel);
   }
 }

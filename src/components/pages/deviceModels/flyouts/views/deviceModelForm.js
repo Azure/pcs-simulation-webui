@@ -21,7 +21,6 @@ import {
   toSensorInput,
   toSensorSelect
 } from '../../../simulation/views/sensors.utils';
-import Flyout from 'components/shared/flyout';
 import stockModelSensors from './stockModelSensors';
 
 import './deviceModelForm.css'
@@ -31,8 +30,6 @@ export const deviceModelFormModes = {
   FORM_MODE_DELETE: 'delete',
   FORM_MODE_CREATE: 'create'
 }
-
-const Section = Flyout.Section;
 
 // Creates a state object for a sensor
 const newSensor = () => ({
@@ -258,99 +255,95 @@ class DeviceModelForm extends LinkedComponent {
 
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
-        <Section.Container>
-          <Section.Content>
-            <FormSection>
-              <FormGroup>
-                <FormLabel>
-                  {t('deviceModels.flyouts.new.name')}
-                </FormLabel>
-                <FormControl
-                  type="text"
-                  className="long"
-                  placeholder={t('deviceModels.flyouts.new.name')}
-                  onChange={this.setFormChangesFlag}
-                  link={this.nameLink} />
-              </FormGroup>
-              <FormGroup>
-                <FormLabel>
-                  {t('deviceModels.flyouts.new.description')}
-                </FormLabel>
-                <FormControl
-                  type="textarea"
-                  placeholder="Description"
-                  onChange={this.setFormChangesFlag}
-                  link={this.descriptionLink} />
-              </FormGroup>
-              <FormGroup>
-                <FormLabel>
-                  {t('deviceModels.flyouts.new.version')}
-                </FormLabel>
-                <FormControl
-                  type="text"
-                  className="short"
-                  placeholder={t('deviceModels.flyouts.new.version')}
-                  onChange={this.setFormChangesFlag}
-                  link={this.versionLink} />
-              </FormGroup>
-            </FormSection>
-            <FormSection>
-              <SectionHeader>{t('deviceModels.flyouts.new.telemetry')}</SectionHeader>
-              <SectionDesc>{t('deviceModels.flyouts.new.telemetryDescription')}</SectionDesc>
-              {
-                sensors.length < 10 &&
-                  <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
-              }
-              <div className="sensors-container">
-              {
-                sensors.length > 0 &&
-                  <div className="sensor-headers">
-                    { sensorHeaders.map((header, idx) => (
-                      <div className="sensor-header" key={idx}>{header}</div>
-                    )) }
-                  </div>
-              }
-              {
-                sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
-                  <div className="sensor-container" key={idx}>
-                    <div className="sensor-row">
-                      { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error, this.setFormChangesFlag) }
-                      { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), tranlatedBehaviorOptions, edited && !!behavior.error, this.setFormChangesFlag) }
-                      { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error, this.setFormChangesFlag) }
-                      { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error, this.setFormChangesFlag) }
-                      { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error, this.setFormChangesFlag) }
-                      <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
-                    </div>
-                    { error && <ErrorMsg>{ error }</ErrorMsg>}
-                  </div>
-                ))
-              }
+        <FormSection>
+          <FormGroup>
+            <FormLabel>
+              {t('deviceModels.flyouts.new.name')}
+            </FormLabel>
+            <FormControl
+              type="text"
+              className="long"
+              placeholder={t('deviceModels.flyouts.new.name')}
+              onChange={this.setFormChangesFlag}
+              link={this.nameLink} />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>
+              {t('deviceModels.flyouts.new.description')}
+            </FormLabel>
+            <FormControl
+              type="textarea"
+              placeholder="Description"
+              onChange={this.setFormChangesFlag}
+              link={this.descriptionLink} />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>
+              {t('deviceModels.flyouts.new.version')}
+            </FormLabel>
+            <FormControl
+              type="text"
+              className="short"
+              placeholder={t('deviceModels.flyouts.new.version')}
+              onChange={this.setFormChangesFlag}
+              link={this.versionLink} />
+          </FormGroup>
+        </FormSection>
+        <FormSection>
+          <SectionHeader>{t('deviceModels.flyouts.new.telemetry')}</SectionHeader>
+          <SectionDesc>{t('deviceModels.flyouts.new.telemetryDescription')}</SectionDesc>
+          {
+            sensors.length < 10 &&
+              <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
+          }
+          <div className="sensors-container">
+          {
+            sensors.length > 0 &&
+              <div className="sensor-headers">
+                { sensorHeaders.map((header, idx) => (
+                  <div className="sensor-header" key={idx}>{header}</div>
+                )) }
               </div>
-            </FormSection>
-            <FormSection>
-              <SectionDesc>{t('deviceModels.flyouts.new.interval')}</SectionDesc>
-              <FormGroup>
-                <FormControl type="duration" name="interval" link={this.intervalLink} onChange={this.setFormChangesFlag} />
-              </FormGroup>
-            </FormSection>
-            <FormSection>
-              <SectionDesc>{t('deviceModels.flyouts.new.frequency')}</SectionDesc>
-              <FormGroup>
-                <FormControl type="duration" name="frequency" link={this.frequencyLink} onChange={this.setFormChangesFlag} />
-              </FormGroup>
-            </FormSection>
-            <FormActions>
-              <BtnToolbar>
-                <Btn
-                  disabled={!this.formIsValid() || sensorsHaveErrors || changesApplied}
-                  type="submit">
-                  {t('deviceModels.flyouts.save')}
-                </Btn>
-                <Btn svg={svgs.cancelX} onClick={this.clearAll}>{t('deviceModels.flyouts.clearAll')}</Btn>
-              </BtnToolbar>
-            </FormActions>
-          </Section.Content>
-        </Section.Container>
+          }
+          {
+            sensorLinks.map(({ name, behavior, minValue, maxValue, unit, edited, error }, idx) => (
+              <div className="sensor-container" key={idx}>
+                <div className="sensor-row">
+                  { toSensorInput(name, t('deviceModels.flyouts.sensors.dataPointPlaceHolder'), edited && !!name.error, this.setFormChangesFlag) }
+                  { toSensorSelect(behavior, 'select', t('deviceModels.flyouts.sensors.behaviorPlaceHolder'), tranlatedBehaviorOptions, edited && !!behavior.error, this.setFormChangesFlag) }
+                  { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error, this.setFormChangesFlag) }
+                  { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error, this.setFormChangesFlag) }
+                  { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error, this.setFormChangesFlag) }
+                  <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
+                </div>
+                { error && <ErrorMsg>{ error }</ErrorMsg>}
+              </div>
+            ))
+          }
+          </div>
+        </FormSection>
+        <FormSection>
+          <SectionDesc>{t('deviceModels.flyouts.new.interval')}</SectionDesc>
+          <FormGroup>
+            <FormControl type="duration" name="interval" link={this.intervalLink} onChange={this.setFormChangesFlag} />
+          </FormGroup>
+        </FormSection>
+        <FormSection>
+          <SectionDesc>{t('deviceModels.flyouts.new.frequency')}</SectionDesc>
+          <FormGroup>
+            <FormControl type="duration" name="frequency" link={this.frequencyLink} onChange={this.setFormChangesFlag} />
+          </FormGroup>
+        </FormSection>
+        <FormActions>
+          <BtnToolbar>
+            <Btn
+              disabled={!this.formIsValid() || sensorsHaveErrors || changesApplied}
+              type="submit">
+              {t('deviceModels.flyouts.save')}
+            </Btn>
+            <Btn svg={svgs.cancelX} onClick={this.clearAll}>{t('deviceModels.flyouts.clearAll')}</Btn>
+          </BtnToolbar>
+        </FormActions>
       </form>
     );
   }
