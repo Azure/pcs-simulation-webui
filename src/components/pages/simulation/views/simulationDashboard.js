@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+// Copyright (c) Microso;ft. All rights reserved.
 
 import React, { Component } from 'react';
 import { NavLink } from "react-router-dom";
@@ -8,6 +8,7 @@ import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared'
 import { NewSimulation } from '../flyouts';
 import { svgs } from 'utilities';
 import SimulationTile from './simulationTile';
+import { SimulationsGrid } from './simulationsGrid';
 
 const closedFlyoutState = {
   flyoutOpen: false,
@@ -15,6 +16,7 @@ const closedFlyoutState = {
 };
 
 const newDeviceModelFlyout = 'new-device-model';
+const dateTimeFormat = "DD/MM/YY hh:mm:ss A";
 
 export class SimulationDashboard extends Component {
 
@@ -22,6 +24,7 @@ export class SimulationDashboard extends Component {
     super(props);
     this.state = {
       ...closedFlyoutState,
+      showAll: false,
       contextBtns: null
     };
   }
@@ -42,7 +45,34 @@ export class SimulationDashboard extends Component {
     flyoutOpen: false
   });
 
+  toggleDashboardView = contextBtns => this.setState({
+    contextBtns,
+    showAll: !this.state.showAll
+  });
+
   getSoftSelectId = ({ id }) => id;
+
+  toSimulationGridModel = (input = {}) => (input || []).map(
+    (simulation = {}) => {
+      const { deviceModelEntities } = this.props;
+      return ({
+        status : this.isRunning (simulation) ? "running" : "stopped",
+        startTime : moment (simulation.startTime).format (dateTimeFormat),
+        endTime : moment (simulation.endTime).format (dateTimeFormat),
+        duration : moment.duration ((moment (simulation.endTime)).diff (moment (simulation.startTime))),
+        id : simulation.id,
+        name : simulation.name,
+        totalMessages : simulation.totalMessages,
+        averageMessages : simulation.averageMessages,
+        deviceModels : (simulation.deviceModels || [])
+          .map (dm => (dm.count +
+            " " +
+            (deviceModelEntities && deviceModelEntities[dm.id] ? (deviceModelEntities[dm.id]).name : '-')))
+          .join ('; '),
+        totalDevices : (simulation.deviceModels || []).reduce ((total, obj) => { return total + obj['count']; }, 0)
+      });
+    }
+  );
 
   isRunning = (simulation) => {
     const now = moment();
@@ -58,6 +88,10 @@ export class SimulationDashboard extends Component {
 
   render() {
     const { t, simulationList = [], deviceModelEntities } = this.props;
+    const gridProps = {
+      rowData: this.toSimulationGridModel(simulationList || []),
+      t
+    };
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
 
     return [
@@ -68,30 +102,37 @@ export class SimulationDashboard extends Component {
       </ContextMenu>,
       <PageContent className="simulation-dashboard-container" key="page-content">
         <SectionHeader className="dashboard-header">{t('header.simulationsDashboard')}</SectionHeader>
-        <div className="simulation-containers">
-          <div className="active">
-            {
-              simulationList
-                .filter(sim => { return this.isRunning(sim) === true })
-                .map(sim =>
-                <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
-                  <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
-                </NavLink>
-              )
-            }
+        {!this.state.showAll ?
+          <div className="simulation-containers">
+            <div className="active">
+              {
+                simulationList
+                  .filter(sim => { return this.isRunning(sim) === true })
+                  .map(sim =>
+                  <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
+                    <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                  </NavLink>
+                )
+              }
+            </div>
+            <div className="past">
+              {
+                simulationList
+                  .filter(sim => { return this.isRunning(sim) === false })
+                  .map(sim =>
+                  <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
+                    <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                  </NavLink>
+                )
+              }
+            </div>
           </div>
-          <div className="past">
-            {
-              simulationList
-                .filter(sim => { return sim.enabled !== true })
-                .map(sim =>
-                <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
-                  <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
-                </NavLink>
-              )
-            }
-          </div>
-        </div>
+          :
+          <SimulationsGrid {...gridProps} />
+        }
+        <Btn onClick={this.toggleDashboardView}>
+          { !this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard') }
+        </Btn>
         {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />

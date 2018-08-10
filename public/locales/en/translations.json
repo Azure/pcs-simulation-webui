@@ -25,6 +25,8 @@
     "start": "Start Simulation",
     "name": "Name",
     "newSim": "New Simulation",
+    "showAll": "Show all simulations",
+    "showDashboard": "Show dashboard view",
     "form": {
       "deviceModels": {
         "addDeviceModelBtn": "Add a device type",
@@ -63,6 +65,18 @@
       "telemetry": {
         "header": "Telemetry frequency"
       }
+    },
+    "grid": {
+      "id": "id",
+      "name": "Simulation",
+      "deviceModels": "Device Definition",
+      "startTime": "Sim Date Created",
+      "totalDevices": "Total Devices",
+      "totalMessages": "Total Messages Sent",
+      "averageMessages": "Average Messages Per Second",
+      "status": "Status",
+      "endTime": "Sim End Date",
+      "duration": "Sim Duraton"
     },
     "status": {
       "activeDevicesCount": "Active devices",
