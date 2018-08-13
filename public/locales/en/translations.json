@@ -80,7 +80,7 @@
         "browse": "Browse",
         "errorMsg": "One or more of the files uploaded failed validation. Please verify selected files are valid and try again."
       },
-      "sensors" : {
+      "sensors": {
         "dataPoint": "Data point",
         "behavior": "behavior",
         "min": "Min value",
