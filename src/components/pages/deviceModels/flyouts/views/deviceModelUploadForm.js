@@ -196,12 +196,15 @@ class DeviceModelUploadForm extends Component {
     const { deviceModel, scripts, changesApplied, formVersion, fileMismatching } = this.state;
     const showError = fileMismatching && !deviceModel && scripts.length === 0;
     return (
-      <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
+      <form
+        key={`device-model-form-${formVersion}`}
+        onSubmit={this.apply}
+        className='device-model-form-container'>
         <FormSection>
-          <FormLabel>Create a new device definition by uploading a JSON file with your own device values and properties</FormLabel>
+          <FormLabel>{t('deviceModels.flyouts.upload.create')}</FormLabel>
         </FormSection>
         <FormSection>
-          <FormLabel>JSON file upload and parsing with javascript</FormLabel>
+          <FormLabel>{t('deviceModels.flyouts.upload.files')}</FormLabel>
           <div className="file-uploader-container">
             <input
               className="file-uploader"
@@ -211,7 +214,9 @@ class DeviceModelUploadForm extends Component {
               accept=".json, .js"
               multiple
               onChange={this.uploadFiles} />
-            <label htmlFor="fileUpload">Browse</label>
+            <label htmlFor="fileUpload">
+              { t('deviceModels.flyouts.upload.browse') }
+            </label>
           </div>
         </FormSection>
         <FormSection>
@@ -219,26 +224,36 @@ class DeviceModelUploadForm extends Component {
           this.state.deviceModel &&
           <FormGroup>
             <FormLabel>{t('deviceModels.flyouts.new.name')}</FormLabel>
-            <div>{this.state.deviceModel.Name}</div>
+            <div>{deviceModel.Name}</div>
           </FormGroup>
         }
         {
           scripts.length > 0 &&
           <FormGroup>
-            <FormLabel>Uploaded files:</FormLabel>
-
+            <FormLabel>
+              { t('deviceModels.flyouts.upload.uploadedFiles') }
+            </FormLabel>
             {
               this.state.scripts
                 .sort((a, b) => a.file.name.localeCompare(b.file.name))
                 .map(({ file, validationResult = {} }, idx) =>
-                  <div key={`script-${idx}`}>
-                    {file.name}
+                  <div key={`script-${idx}`} className="upload-results-container">
+                    <div className="file-name">{file.name}</div>
+                    <div className="validation-result">
                     {
                       validationResult.success === undefined
                       ? <Indicator size='mini' />
                       : validationResult.success ? '\u2714' : '\u2716'
                     }
-                    { (validationResult.messages || []).map((error, idx) => <ErrorMsg key={`script-error-${idx}`}>{ error }</ErrorMsg>) }
+                    </div>
+                    <div className="validation-message">
+                    {
+                      (validationResult.messages || []).map((error, idx) =>
+                        <ErrorMsg key={`script-error-${idx}`}>
+                          { error }
+                        </ErrorMsg>)
+                    }
+                    </div>
                   </div>
                 )
             }
@@ -247,17 +262,20 @@ class DeviceModelUploadForm extends Component {
         </FormSection>
         {
           showError &&
-          <ErrorMsg>One or more of the files uploaded failed validation. Please verify selected files are valid and try again.</ErrorMsg>
+          <ErrorMsg>{ t('deviceModels.flyouts.upload.errorMsg') }</ErrorMsg>
         }
-
         <FormActions>
           <BtnToolbar>
             <Btn
               disabled={!this.formIsValid() || changesApplied}
               type="submit">
-              {t('deviceModels.flyouts.save')}
+              { t('deviceModels.flyouts.save') }
             </Btn>
-            <Btn svg={svgs.cancelX} onClick={this.clearAll}>{t('deviceModels.flyouts.clearAll')}</Btn>
+            <Btn
+              svg={svgs.cancelX}
+              onClick={this.clearAll}>
+              { t('deviceModels.flyouts.clearAll') }
+            </Btn>
           </BtnToolbar>
         </FormActions>
       </form>

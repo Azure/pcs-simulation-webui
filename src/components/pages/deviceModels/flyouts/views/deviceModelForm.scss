@@ -38,4 +38,12 @@
       opacity: 0;
     }
   }
+
+  .upload-results-container {
+    display: flex;
+
+    .file-name { @include rem-fallback(width, 250px); }
+
+    .validation-result{ @include rem-fallback(width, 36px); }
+  }
 }
