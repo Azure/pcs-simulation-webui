@@ -41,9 +41,12 @@
 
   .upload-results-container {
     display: flex;
+    @include rem-fallback(margin-bottom, 8px);
 
     .file-name { @include rem-fallback(width, 250px); }
 
-    .validation-result{ @include rem-fallback(width, 36px); }
+    .validation-result { @include rem-fallback(width, 36px); }
+    .success-result { color: green }
+    .failed-result { color: red }
   }
 }

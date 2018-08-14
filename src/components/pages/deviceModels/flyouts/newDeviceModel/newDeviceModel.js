@@ -13,7 +13,7 @@ export class NewDeviceModel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      basic: false
+      basic: true
     };
   }
 

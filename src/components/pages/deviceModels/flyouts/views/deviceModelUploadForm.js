@@ -232,7 +232,7 @@ class DeviceModelUploadForm extends Component {
                 .map(({ file, validationResult = {} }, idx) => (
                   <div key={`script-${idx}`} className="upload-results-container">
                     <div className="file-name">{file.name}</div>
-                    <div className="validation-result">
+                    <div className={`validation-result ${validationResult.success ? 'success-result' : 'failed-result'}`}>
                       {validationResult.success === undefined ? (
                         <Indicator size="mini" />
                       ) : validationResult.success ? (
