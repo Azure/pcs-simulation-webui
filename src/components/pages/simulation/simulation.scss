@@ -121,10 +121,16 @@
       font-family: $fontSelawikBold;
       @include rem-font-size(34px);
       @include rem-fallback(line-height, 41px);
+
+      .btn {
+        float: right;
+      }
     }
 
     .simulation-containers {
       display: table;
+      @include rem-fallback(max-width, 1676px);
+
 
       > div {
         display: table-cell;

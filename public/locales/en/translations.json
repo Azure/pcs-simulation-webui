@@ -90,7 +90,11 @@
       "simulationStopped": "Your simulation has stopped running.",
       "totalDevicesCount": "Total devices",
       "totalMessagesCount": "Total messages",
-      "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}"
+      "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}",
+      "running": "Running",
+      "stopped": "Stopped",
+      "created": "Created {{startDateTime}}",
+      "ended": "Ended {{endDateTime}}"
     }
   },
   "deviceModels": {

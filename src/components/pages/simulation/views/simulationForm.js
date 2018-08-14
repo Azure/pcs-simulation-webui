@@ -214,10 +214,10 @@ class SimulationForm extends LinkedComponent {
       iotHubString,
       preProvisionedRadio,
     } = this.state;
-    const simulationDuration = (durationRadio === 'endIn') ? {
+    const simulationDuration = {
       startTime: 'NOW',
-      endTime: this.convertDurationToISO(duration)
-    } : {};
+      endTime: (durationRadio === 'endIn') ? this.convertDurationToISO(duration) : ''
+    };
 
     const modelUpdates = {
       name,

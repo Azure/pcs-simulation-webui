@@ -83,6 +83,21 @@ export const toSimulationRequestModel = (request = {}) => ({
   }
 });
 
+// Request models
+export const toSimulationCloneModel = (request = {}) => ({
+  Enabled: true,
+  StartTime: request.startTime,
+  EndTime: request.endTime,
+  Name: request.name,
+  Desc: request.description,
+  TotalMsgs: request.totalMessages,
+  AvgMsgs: request.averageMessages,
+  DeviceModels: toCloneDeviceModels(request.deviceModels),
+  IoTHub: {
+    ConnectionString: request.connectionString
+  }
+});
+
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
   deviceModels.map(({ name: Id, count: Count, interval }) => {
@@ -96,6 +111,23 @@ const toDeviceModels = (deviceModels = []) =>
         },
         Telemetry: [{
           Interval
+        }]
+      }
+    };
+  });
+
+// Map to deviceModels in simulation request model
+const toCloneDeviceModels = (deviceModels = []) =>
+  deviceModels.map(({ id, count: Count, interval }) => {
+    return {
+      Id: id,
+      Count,
+      Override: {
+        Simulation: {
+          Interval: interval
+        },
+        Telemetry: [{
+          Interval: interval
         }]
       }
     };

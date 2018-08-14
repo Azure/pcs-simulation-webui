@@ -5,9 +5,7 @@ import Rx from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
-import {
-  SectionHeader
-} from 'components/shared';
+import { SectionHeader } from 'components/shared';
 import { SimulationService } from 'services';
 
 
@@ -95,6 +93,8 @@ class SimulationTile extends Component {
 
     const dateTimeFormat = "DD/MM/YY hh:mm:ss A";
     var className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
+    const startDateTime = moment(startTime).format(dateTimeFormat);
+    const endDateTime = moment(endTime).format(dateTimeFormat);
     return (
       <div className= { className } >
         <div className="tile-header">
@@ -102,8 +102,9 @@ class SimulationTile extends Component {
         </div>
         <div className="tile-body">
           <div>
-            <div className="left time-container"> Created { moment(startTime).format(dateTimeFormat) } </div>
-            <div className="right time-container"> {this.state.isRunning ? 'Running' : 'Ended ' + moment(endTime).format(dateTimeFormat) } </div>
+            <div className="left time-container"> {t('simulation.status.created', { startDateTime }) } </div>
+            <div className="right time-container"> {this.state.isRunning ? t('simulation.status.running')
+              : t('simulation.status.ended', { endDateTime }) } </div>
           </div>
           { this.getActiveDevices() } 
           <div className="simulation-summary">

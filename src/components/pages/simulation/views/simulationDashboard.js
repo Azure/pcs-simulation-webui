@@ -15,7 +15,7 @@ const closedFlyoutState = {
   selectedDeviceModelId: undefined
 };
 
-const newDeviceModelFlyout = 'new-device-model';
+const newSimulationFlyout = 'new-simulation';
 const dateTimeFormat = "DD/MM/YY hh:mm:ss A";
 
 export class SimulationDashboard extends Component {
@@ -33,7 +33,7 @@ export class SimulationDashboard extends Component {
 
   closeFlyout = () => this.setState(closedFlyoutState);
 
-  openNewDeviceModelFlyout = () => this.setState({ flyoutOpen: newDeviceModelFlyout });
+  opennewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout });
 
   onSoftSelectChange = ({ id }) => this.setState({
     flyoutOpen: true,
@@ -54,9 +54,9 @@ export class SimulationDashboard extends Component {
 
   toSimulationGridModel = (input = {}) => (input || []).map(
     (simulation = {}) => {
-      const { deviceModelEntities } = this.props;
+      const { t, deviceModelEntities } = this.props;
       return ({
-        status : this.isRunning (simulation) ? "running" : "stopped",
+        status: this.isRunning(simulation) ? t('simulation.status.running') : t('simulation.status.stopped'),
         startTime : moment (simulation.startTime).format (dateTimeFormat),
         endTime : moment (simulation.endTime).format (dateTimeFormat),
         duration : moment.duration ((moment (simulation.endTime)).diff (moment (simulation.startTime))),
@@ -92,23 +92,31 @@ export class SimulationDashboard extends Component {
       rowData: this.toSimulationGridModel(simulationList || []),
       t
     };
-    const newSimulationFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
+    const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
+    const activeSimulationsList = simulationList.filter(sim => { return this.isRunning(sim) === true });
+    var maxCount = activeSimulationsList.length > 0 ? 6 : 9;
+    const pastSimulationsList = simulationList.filter(sim => { return this.isRunning(sim) === false }).slice(0, maxCount);
     return [
       <ContextMenu key="context-menu">
-        <Btn svg={svgs.plus} onClick={this.openNewDeviceModelFlyout}>
+        <Btn svg={svgs.plus} onClick={this.opennewSimulationFlyout}>
           { t('simulation.newSim') }
         </Btn>
       </ContextMenu>,
       <PageContent className="simulation-dashboard-container" key="page-content">
-        <SectionHeader className="dashboard-header">{t('header.simulationsDashboard')}</SectionHeader>
+        <SectionHeader className="dashboard-header">
+          {t('header.simulationsDashboard')}
+          <Btn onClick={this.toggleDashboardView}>
+            {!this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard')}
+          </Btn>
+        </SectionHeader>
+        
+
         {!this.state.showAll ?
           <div className="simulation-containers">
             <div className="active">
               {
-                simulationList
-                  .filter(sim => { return this.isRunning(sim) === true })
-                  .map(sim =>
+                activeSimulationsList.map(sim =>
                   <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
                     <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
                   </NavLink>
@@ -117,9 +125,7 @@ export class SimulationDashboard extends Component {
             </div>
             <div className="past">
               {
-                simulationList
-                  .filter(sim => { return this.isRunning(sim) === false })
-                  .map(sim =>
+                  pastSimulationsList.map(sim =>
                   <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
                     <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
                   </NavLink>
@@ -130,9 +136,6 @@ export class SimulationDashboard extends Component {
           :
           <SimulationsGrid {...gridProps} />
         }
-        <Btn onClick={this.toggleDashboardView}>
-          { !this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard') }
-        </Btn>
         {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />

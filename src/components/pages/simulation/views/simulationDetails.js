@@ -5,7 +5,7 @@ import Rx from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
-import { svgs } from 'utilities';
+import { svgs, humanizeDuration } from 'utilities';
 import { Svg } from 'components/shared/svg/svg';
 import {
   Btn,
@@ -19,6 +19,7 @@ import {
 import { SimulationService } from 'services';
 
 const pollingInterval = Config.simulationStatusPollingInterval;
+const maxDate = '12/31/9999 11:59:59 PM +00:00';
 
 class SimulationDetails extends Component {
 
@@ -48,21 +49,6 @@ class SimulationDetails extends Component {
       ).subscribe(
         response => this.setState({ simulation: response })
     );
-
-    // const simulation = this.props.simulationList.filter(({ id }) => id === simulationId)[0] || '';
-
-    //if(simulation === '') {
-    //  Rx.Observable.from ([simulationId])
-    //    .flatMap (() => SimulationService.getSimulation (simulationId)
-    //      .catch (error => {
-    //        console.log ('Get simulation failed', error);
-    //      })
-    //    ).subscribe (
-    //      response => this.setState ({ simulation : response })
-    //    );
-    //} else {
-    //  this.setState ({ simulation });
-    //}
 
     // Initialize state from the most recent status
     this.setState ({
@@ -107,6 +93,8 @@ class SimulationDetails extends Component {
     this.pollingSubscriber.unsubscribe();
   }
 
+  convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
+
   stopSimulation = () => {
     var currentSimulation = this.state.simulation;
     currentSimulation.totalMessages = this.state.totalMessagesCount;
@@ -118,8 +106,22 @@ class SimulationDetails extends Component {
 
   startSimulation = (event) => {
     event.preventDefault();
+    const timespan = moment.duration(moment (this.state.simulation.endTime).diff (moment (this.state.simulation.startTime)));
+    const duration = {
+      ms : timespan.asMilliseconds(),
+      hours : timespan.hours(),
+      minutes : timespan.minutes(),
+      seconds : timespan.seconds()
+    };
+
+    const requestModel = {
+      ...this.state.simulation,
+      endTime: this.convertDurationToISO(duration),
+      startTime: 'Now'
+    }
+
     Rx.Observable.from([this.state.simulation])
-      .flatMap(() => SimulationService.cloneSimulation(this.state.simulation)
+      .flatMap(() => SimulationService.cloneSimulation(requestModel)
         .catch(errorMessage => this.setState({ startError: errorMessage }))
     )
     .subscribe(
@@ -139,30 +141,6 @@ class SimulationDetails extends Component {
         <a href={this.state.hubUrl} target="_blank">View IoT Hub metrics in the Azure portal</a>
       </div>
     )
-  }
-
-  /*
-  * Return human readable time format.
-  * Examples:
-  * 1 day and 30 seconds
-  * 2 days and 2 hours
-  * 1 day, 2 hours, 10 minutes and 50 seconds
-  * @param {number} - time in milliseconds
-  */
-   humanizeDuration = (time) => {
-    const duration = moment.duration(time);
-
-    return [
-      [ duration.days(), 'day', 'days' ],
-      [ duration.hours(), 'hour', 'hours' ],
-      [ duration.minutes(), 'minute', 'minutes' ],
-      [ duration.seconds(), 'second', 'seconds' ]
-    ]
-    .filter(([ value ]) => value)
-    .map(([ value, singular, plurals ]) => `${value} ${value === 1 ? singular : plurals}`)
-    .join(', ')
-    .replace(/,(?=[^,]*$)/, ' and')
-    .trim();
   }
 
   getSimulationStatusBar( totalDevicesCount) {
@@ -302,10 +280,11 @@ class SimulationDetails extends Component {
 
     const [deviceModel = {}] = deviceModels;
     const { interval = '' } = deviceModel;
-    const [ hour = '00', minutes = '00', seconds = '00' ] = interval.split(':');
-    const duration = (!startTime || !endTime)
+    const [hour = '00', minutes = '00', seconds = '00'] = interval.split(':');
+
+    const duration = (!startTime || !endTime || endTime === maxDate)
       ? 'Run indefinitely'
-      : this.humanizeDuration(moment(endTime).diff(moment(startTime)));
+      : humanizeDuration(moment(endTime).diff(moment(startTime)));
     const totalDevices = deviceModels.reduce((total, obj) => {
           return total + obj['count'];
       }, 0);

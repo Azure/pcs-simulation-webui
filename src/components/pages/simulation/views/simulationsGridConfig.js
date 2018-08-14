@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import Config from 'app.config';
-import moment from 'moment';
 
 import { gridValueFormatters } from 'components/shared/pcsGrid/pcsGridConfig';
+import { humanizeDuration } from 'utilities';
 
 const { checkForEmpty } = gridValueFormatters;
 
@@ -74,19 +74,3 @@ export const defaultSimulationsGridProps = {
   paginationPageSize: Config.paginationPageSize,
   rowSelection: 'single'
 };
-
-const humanizeDuration = (time) => {
-  const duration = moment.duration(time);
-
-  return [
-      [duration.days(), 'day', 'days'],
-      [duration.hours(), 'hr', 'hrs'],
-      [duration.minutes(), 'min', 'mins'],
-      [duration.seconds(), 'sec', 'secs']
-    ]
-    .filter(([value]) => value)
-    .map(([value, singular, plurals]) => `${value} ${value === 1 ? singular : plurals}`)
-    .join(', ')
-    .replace(/,(?=[^,]*$)/, ' and')
-    .trim();
-}
