@@ -24,6 +24,7 @@ export const toSimulationModel = (response = {}) => ({
   enabled: response.Enabled,
   startTime: response.StartTime,
   endTime: response.EndTime,
+  stopTime: response.StopTime,
   id: response.Id,
   name: response.Name,
   description: response.Desc,

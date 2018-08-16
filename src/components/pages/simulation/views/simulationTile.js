@@ -86,6 +86,7 @@ class SimulationTile extends Component {
         name,
         startTime,
         endTime,
+        stopTime,
         totalMessages,
         averageMessages
       }
@@ -94,7 +95,7 @@ class SimulationTile extends Component {
     const dateTimeFormat = "DD/MM/YY hh:mm:ss A";
     var className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
     const startDateTime = moment(startTime).format(dateTimeFormat);
-    const endDateTime = moment(endTime).format(dateTimeFormat);
+    const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
     return (
       <div className= { className } >
         <div className="tile-header">
