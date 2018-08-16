@@ -6,7 +6,7 @@ setlocal
 :: Note: use lowercase names for the Docker images
 SET DOCKER_IMAGE=azureiotpcs/device-simulation-webui
 :: "testing" is the latest dev build, usually matching the code in the "master" branch
-SET DOCKER_TAG=%DOCKER_IMAGE%:millennium-testing
+SET DOCKER_TAG=%DOCKER_IMAGE%:testing
 
 :: strlen("\scripts\docker\") => 16
 SET APP_HOME=%~dp0
@@ -45,7 +45,7 @@ cd %APP_HOME%
     cd out\docker\
 
     :: note: images built in Windows don't contain a label with a datetime
-    docker build --squash --compress --tag %DOCKER_TAG% --label "%DOCKER_LABEL1%" --label "%DOCKER_LABEL2%" .
+    docker build --compress --tag %DOCKER_TAG% --label "%DOCKER_LABEL1%" --label "%DOCKER_LABEL2%" .
 
     IF %ERRORLEVEL% NEQ 0 GOTO FAIL
 
