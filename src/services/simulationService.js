@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSimulationStatusModel, toSimulationModel, toSimulationListModel, toDeviceModel, toSimulationRequestModel, toSimulationCloneModel } from './models';
+import { toSimulationStatusModel, toSimulationModel, toSimulationListModel, toDeviceModel, toSimulationRequestModel, toSimulationCloneModel, toSimulationPatchModel } from './models';
 import { Observable } from 'rxjs/Observable';
 
 const ENDPOINT = Config.simulationApiUrl;
@@ -68,7 +68,9 @@ export class SimulationService {
 
   /** Disable a simulation */
   static stopSimulation(simulation) {
-    return HttpClient.patch(`${ENDPOINT}simulations/${simulation.id}`, { id: simulation.id, eTag: simulation.eTag, enabled: false, totalMsgs: simulation.totalMessages, avgMsgs: simulation.averageMessages })
+    return HttpClient.patch(
+        `${ENDPOINT}simulations/${simulation.id}`,
+        toSimulationPatchModel(simulation, false))
       .map(toSimulationModel)
       .catch(resolveConflict);
   }

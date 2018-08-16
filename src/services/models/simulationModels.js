@@ -99,6 +99,17 @@ export const toSimulationCloneModel = (request = {}) => ({
   }
 });
 
+
+// Request models
+export const toSimulationPatchModel = (request = {}, enabled) => ({
+  ETag: request.eTag,
+  Id: request.id,
+  Enabled: enabled,
+  TotalMsgs: request.totalMessages,
+  AvgMsgs: request.averageMessages
+});
+
+
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
   deviceModels.map(({ name: Id, count: Count, interval }) => {

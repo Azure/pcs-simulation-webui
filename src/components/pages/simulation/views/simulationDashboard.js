@@ -10,6 +10,8 @@ import { svgs } from 'utilities';
 import SimulationTile from './simulationTile';
 import { SimulationsGrid } from './simulationsGrid';
 
+import './simulationDashboard.css';
+
 const closedFlyoutState = {
   flyoutOpen: false,
   selectedDeviceModelId: undefined

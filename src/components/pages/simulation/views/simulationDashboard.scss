@@ -1,0 +1,35 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/variables';
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.simulation-dashboard-container {
+  color: $colorWhite;
+  @include rem-fallback(padding, 24px, 32px);
+
+  div > a {
+    display: inline-block;
+    vertical-align: top;
+    @include rem-fallback(margin-right, 12px);
+    @include rem-fallback(margin-top, 12px);
+  }
+
+  .dashboard-header {
+    font-family: $fontSelawikBold;
+    @include rem-font-size(34px);
+    @include rem-fallback(line-height, 41px);
+
+    .btn { float: right; }
+  }
+
+  .simulation-containers {
+    display: table;
+    @include rem-fallback(max-width, 1676px);
+
+
+    > div {
+      display: table-cell;
+    }
+  }
+}

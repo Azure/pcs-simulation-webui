@@ -8,6 +8,7 @@ import Config from 'app.config';
 import { SectionHeader } from 'components/shared';
 import { SimulationService } from 'services';
 
+import './simulationTile.css';
 
 const pollingInterval = Config.simulationStatusPollingInterval;
 
@@ -93,7 +94,7 @@ class SimulationTile extends Component {
     } = this.props;
 
     const dateTimeFormat = "DD/MM/YY hh:mm:ss A";
-    var className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
+    const className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
     const startDateTime = moment(startTime).format(dateTimeFormat);
     const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
     return (

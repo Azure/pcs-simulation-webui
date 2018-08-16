@@ -5,7 +5,6 @@ import { PcsGrid } from 'components/shared';
 import { checkboxParams, simulationsColumnDefs, defaultSimulationsGridProps } from './simulationsGridConfig';
 import { isFunc, translateColumnDefs } from 'utilities';
 
-
 /**
  * A grid for displaying list of simulations
  *
@@ -16,7 +15,6 @@ export class SimulationsGrid extends Component {
     super(props);
 
     // Default device grid columns
-
     this.columnDefs = [
       { ...simulationsColumnDefs.name, ...checkboxParams },
       simulationsColumnDefs.deviceModels,
@@ -29,7 +27,7 @@ export class SimulationsGrid extends Component {
       simulationsColumnDefs.duration
     ];
   }
-  
+
   /**
    * Get the grid api options
    *

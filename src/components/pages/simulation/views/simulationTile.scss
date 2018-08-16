@@ -1,0 +1,107 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/variables';
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.simulation-tile-container {
+  background: $colorCharcoal;
+  color: $colorWhite;
+  display: inline-block;
+  height: 260px;
+  width: 540px;
+
+  &.active {
+    height: 530px;
+
+    .tile-body {
+      position: relative;
+
+      .simulation-summary {
+        bottom: 0;
+        @include rem-fallback(height, 100px);
+        position: absolute;
+        width: calc(100% - 24px);
+      }
+    }
+  }
+
+  .tile-header {
+    border-bottom: solid .01rem $colorStone;
+    font-family: $fontSelawikBold;
+    @include rem-font-size(18px);
+    @include rem-fallback(line-height, 22px);
+    @include rem-fallback(padding, 12px);
+  }
+
+  .tile-body {
+    height: calc(100% - 70px);
+    @include rem-fallback(padding, 12px);
+
+    .active-devices {
+      display: inline-block;
+      padding: 0 0 40px 10px;
+      width: 100%;
+
+      .active-devices-count, .active-devices-label {
+        display: inline-block;
+        width: auto;
+      }
+
+      .active-devices-count {
+        font-family: $fontSelawikLight;
+        @include rem-font-size(48px);
+        @include rem-fallback(line-height, 48px);
+      }
+
+      .active-devices-label {
+        float: bottom;
+        @include rem-font-size(14px);
+        @include rem-fallback(margin-left, 20px)
+      }
+    }
+
+    .simulation-summary {
+      display: inline-block;
+      height: calc(100% - 40px);
+      @include rem-fallback(padding-top, 20px);
+      width: 100%;
+
+      .device-model-rows { vertical-align: top; }
+
+      .device-model-rows,
+      .telemetry-container {
+        display: inline-block;
+        height: 100%;
+        @include rem-font-size(14px);
+        @include rem-fallback(line-height, 17px);
+        position: relative;
+        width: 50%;
+      }
+
+      .simulation-status-section {
+        @include rem-fallback(bottom, 12px);
+        right: 0;
+        position: absolute;
+      }
+
+      .messages-per-second {
+        font-family: $fontSelawikLight;
+        @include rem-font-size(32px);
+        @include rem-fallback(line-height, 39px);
+      }
+    }
+
+    .messages-per-second-desc,
+    .time-container {
+      color: $colorSmoke;
+      display: inline-block;
+      font-family: $fontSelawikSemilight;
+      @include rem-font-size(12px);
+      @include rem-fallback(line-height, 15px);
+      @include rem-fallback(padding-bottom, 14px);
+    }
+
+    .time-container { width: 50%; }
+  }
+}
