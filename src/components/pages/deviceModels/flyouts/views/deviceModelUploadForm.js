@@ -36,7 +36,6 @@ class DeviceModelUploadForm extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { scripts } = this.state;
-    console.log('scripts', scripts);
 
     if (scripts.length > 0 && scripts.some(({ validationResult }) => !validationResult)) {
       Observable.from(scripts)
@@ -46,7 +45,7 @@ class DeviceModelUploadForm extends Component {
             .map(validationResult => ({ file, validationResult }))
             .catch(error => {
               const { ajaxError: { response: { Messages = [] } } = { response: {} } } = error;
-              console.log('ERRER', error);
+
               return Observable.of({
                 file,
                 validationResult: {
@@ -75,7 +74,6 @@ class DeviceModelUploadForm extends Component {
     for (let i = 0; i < value.files.length; i++) files.push(value.files[i]);
     this.filesSanityCheck(files).subscribe(
       ({ deviceModel, scriptFiles }) => {
-        console.log('uploaded scripts', scriptFiles, deviceModel);
         this.setState({
           deviceModel,
           scripts: scriptFiles.map(file => ({
@@ -84,7 +82,7 @@ class DeviceModelUploadForm extends Component {
           }))
         });
       },
-      error => this.setState({ fileMismatching: true }),
+      error => this.setState({ ...initialFormState, fileMismatching: true }),
       () => console.log('observerble complete')
     );
   };
