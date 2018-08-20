@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { isEqual, isEmpty } from 'lodash';
 import { Observable } from 'rxjs';
-import { SimulationScriptsService } from 'services';
+import { DeviceModelScriptsService } from 'services';
 import { svgs } from 'utilities';
 import {
   Btn,
@@ -36,28 +36,31 @@ class DeviceModelUploadForm extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { scripts } = this.state;
+    console.log('scripts', scripts);
 
     if (scripts.length > 0 && scripts.some(({ validationResult }) => !validationResult)) {
       Observable.from(scripts)
-        .filter(({ validation = {} }) => !validation.success)
-        .flatMap(({ file }) =>
-          SimulationScriptsService.validateSimulationScript(file)
+        .filter(({ validation = {} }) => !validation.isValid)
+        .concatMap(({ file }) =>
+          DeviceModelScriptsService.validateDeviceModelScript(file)
             .map(validationResult => ({ file, validationResult }))
             .catch(error => {
+              const { ajaxError: { response: { Messages = [] } } = { response: {} } } = error;
+              console.log('ERRER', error);
               return Observable.of({
                 file,
                 validationResult: {
-                  success: false,
-                  messages: [error.ajaxError.response.Messages]
+                  isValid: false,
+                  messages: [Messages]
                 }
               });
             })
         )
-        .reduce((scripts, script) => [...scripts, script], [])
+        .toArray()
         .subscribe(scripts => {
           this.setState({
             scripts: [
-              ...this.state.scripts.filter(({ validationResult }) => (validationResult || {}).success),
+              ...this.state.scripts.filter(({ validationResult }) => (validationResult || {}).isValid),
               ...scripts
             ]
           });
@@ -65,64 +68,74 @@ class DeviceModelUploadForm extends Component {
     }
   }
 
-  uploadFiles = ({ target: value }) => {
+  uploadFiles = e => {
+    e.preventDefault();
+    const { target: value } = e;
     const files = [];
     for (let i = 0; i < value.files.length; i++) files.push(value.files[i]);
-    const result = this.filesSanityCheck(files);
-    this.setState({ ...initialFormState, fileMismatching: !result });
+    this.filesSanityCheck(files).subscribe(
+      ({ deviceModel, scriptFiles }) => {
+        console.log('uploaded scripts', scriptFiles, deviceModel);
+        this.setState({
+          deviceModel,
+          scripts: scriptFiles.map(file => ({
+            file,
+            validationResult: undefined
+          }))
+        });
+      },
+      error => this.setState({ fileMismatching: true }),
+      () => console.log('observerble complete')
+    );
   };
 
-  filesSanityCheck = (files = []) => {
-    if (files.length === 0) return false;
-    const jsonFiles = files.filter(file => file.type === 'application/json');
-
-    // Allow one json file only per device model
-    if (jsonFiles.length !== 1) return false;
-    const [jsonFile] = jsonFiles;
-    const scripts = files.filter(file => file.type === 'application/javascript');
-    // Require at least one js file from user
-    if (scripts.length < 1) return false;
-
-    const uploadedScriptNames = new Set(scripts.map(({ name }) => name));
-
-    // Parse json file
-    this.readFileAsText(jsonFile)
-      .then(content => {
-        const deviceModel = JSON.parse(content);
-        const { CloudToDeviceMethods = {}, Simulation: { Scripts } = { Scripts: [] } } = deviceModel;
-        const requiredScripts = [...Object.values(CloudToDeviceMethods), ...Scripts];
-        const requiredScriptNames = new Set(requiredScripts.map(({ Path }) => Path));
-        if (!isEqual(requiredScriptNames, uploadedScriptNames)) {
-          this.setState({
-            fileMismatching: true
-          });
-        } else {
-          this.setState({
-            deviceModel,
-            scripts: scripts.map(file => ({
-              file,
-              validationResult: undefined
-            }))
-          });
+  filesSanityCheck = (files = []) =>
+    Observable.from(files)
+      .reduce(
+        (acc, file) => {
+          if (file.type === 'application/json') {
+            acc['jsonFiles'].push(file);
+          } else if (file.type === 'application/javascript') {
+            acc['scriptFiles'].push(file);
+          }
+          return acc;
+        },
+        { jsonFiles: [], scriptFiles: [] }
+      )
+      .flatMap(({ jsonFiles, scriptFiles }) => {
+        if (jsonFiles.length !== 1 || scriptFiles.length < 1) {
+          return Observable.throw('Files do not match requirements');
         }
-      })
-      .catch(e => {
-        // TODO: show error message to user
-        console.warn(e.message);
+
+        return this.readFileAsText(jsonFiles[0]).map(content => {
+          const deviceModel = JSON.parse(content);
+          const { CloudToDeviceMethods = {}, Simulation: { Scripts } = { Scripts: [] } } = deviceModel;
+          const requiredScripts = [...Object.values(CloudToDeviceMethods), ...Scripts];
+          const requiredScriptNames = new Set(requiredScripts.map(({ Path }) => Path));
+          const uploadedScriptNames = new Set(scriptFiles.map(({ name }) => name));
+          if (!isEqual(requiredScriptNames, uploadedScriptNames)) {
+            return Observable.throw('Files do not match requirements');
+          }
+
+          return {
+            deviceModel,
+            scriptFiles
+          };
+        });
       });
-  };
 
   readFileAsText = file => {
     const reader = new FileReader();
 
-    return new Promise((resolve, reject) => {
+    return Observable.create(observer => {
       reader.onerror = () => {
         reader.abort();
-        reject(new DOMException('Problem parsing input file.'));
+        observer.error(new DOMException('Problem parsing input file.'));
       };
 
       reader.onload = () => {
-        resolve(reader.result);
+        observer.next(reader.result);
+        observer.complete();
       };
 
       reader.readAsText(file);
@@ -131,7 +144,7 @@ class DeviceModelUploadForm extends Component {
 
   formIsValid() {
     const { deviceModel, scripts } = this.state;
-    return !isEmpty(deviceModel) && scripts.every(({ validationResult }) => (validationResult || {}).success);
+    return !isEmpty(deviceModel) && scripts.every(({ validationResult }) => (validationResult || {}).isValid);
   }
 
   apply = event => {
@@ -140,7 +153,7 @@ class DeviceModelUploadForm extends Component {
 
     // Uploading scripts
     Observable.from(scripts)
-      .flatMap(({ file }) => SimulationScriptsService.uploadsSimulationScript(file).catch(error => console.log(error)))
+      .flatMap(({ file }) => DeviceModelScriptsService.uploadsDeviceModelScript(file).catch(error => console.log(error)))
       .reduce((scripts, script) => ({ ...scripts, [script.name]: script }), {})
       .map(scripts => {
         const {
@@ -232,10 +245,11 @@ class DeviceModelUploadForm extends Component {
                 .map(({ file, validationResult = {} }, idx) => (
                   <div key={`script-${idx}`} className="upload-results-container">
                     <div className="file-name">{file.name}</div>
-                    <div className={`validation-result ${validationResult.success ? 'success-result' : 'failed-result'}`}>
-                      {validationResult.success === undefined ? (
+                    <div
+                      className={`validation-result ${validationResult.isValid ? 'success-result' : 'failed-result'}`}>
+                      {validationResult.isValid === undefined ? (
                         <Indicator size="mini" />
-                      ) : validationResult.success ? (
+                      ) : validationResult.isValid ? (
                         '\u2714'
                       ) : (
                         '\u2716'
