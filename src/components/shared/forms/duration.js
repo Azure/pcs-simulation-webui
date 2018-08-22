@@ -88,6 +88,7 @@ export class Duration extends Component {
       disabled,
       onBlur: this.onBlur
     };
+
     const { hours, minutes, seconds } = this.state;
     return showHeaders
       ? (<div className={joinClasses('duration-control-container', className)}>

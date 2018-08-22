@@ -89,8 +89,7 @@ class SimulationTile extends Component {
         startTime,
         endTime,
         stopTime,
-        totalMessages,
-        averageMessages
+        statistics
       }
     } = this.props;
 
@@ -121,9 +120,9 @@ class SimulationTile extends Component {
             </div>
             <div className='telemetry-container'>
               <div className="simulation-status-section right">
-                <div className="messages-per-second">{this.state.isRunning ? this.state.messagesPerSecond : averageMessages}</div>
+                <div className="messages-per-second">{this.state.isRunning ? this.state.messagesPerSecond : statistics.averageMessagesPerSecond}</div>
                 <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
-                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : totalMessages}</div>
+                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : statistics.totalMessagesSent}</div>
               </div>
             </div>
           </div>

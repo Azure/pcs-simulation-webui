@@ -100,8 +100,10 @@ class SimulationDetails extends Component {
   stopSimulation = () => {
     this.props.stopSimulation({
       ...this.state.simulation,
-      totalMessages: this.state.totalMessagesCount,
-      averageMessages: this.state.messagesPerSecond
+      statistics: {
+        averageMessagesPerSecond: this.state.messagesPerSecond,
+        totalMessagesSent: this.state.totalMessagesCount
+      }
     });
   };
 

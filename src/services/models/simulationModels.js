@@ -28,8 +28,10 @@ export const toSimulationModel = (response = {}) => ({
   id: response.Id,
   name: response.Name,
   description: response.Desc,
-  totalMessages: response.TotalMsgs,
-  averageMessages: response.AvgMsgs,
+  statistics: {
+    averageMessagesPerSecond: (response.Statistics || {}).AverageMessagesPerSecond,
+    totalMessagesSent: (response.Statistics || {}).TotalMessagesSent
+  },
   deviceModels: (response.DeviceModels || []).map(({ Id, Count, Override }) => ({
     id: Id,
     count: Count,
@@ -76,8 +78,6 @@ export const toSimulationRequestModel = (request = {}) => ({
   Id: request.id,
   Name: request.name,
   Desc: request.description,
-  TotalMsgs: request.totalMessages,
-  AvgMsgs: request.averageMessages,
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHub: {
     ConnectionString: request.connectionString
@@ -91,24 +91,22 @@ export const toSimulationCloneModel = (request = {}) => ({
   EndTime: request.endTime,
   Name: request.name,
   Desc: request.description,
-  TotalMsgs: 0,
-  AvgMsgs: 0,
   DeviceModels: toCloneDeviceModels(request.deviceModels),
   IoTHub: {
     ConnectionString: request.connectionString
   }
 });
 
-
 // Request models
 export const toSimulationPatchModel = (request = {}, enabled) => ({
   ETag: request.eTag,
   Id: request.id,
   Enabled: enabled,
-  TotalMsgs: request.totalMessages,
-  AvgMsgs: request.averageMessages
+  Statistics: {
+    AverageMessagesPerSecond: (request.statistics || {}).averageMessagesPerSecond,
+    TotalMessagesSent: (request.statistics || {}).totalMessagesSent
+  }
 });
-
 
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
