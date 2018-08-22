@@ -89,54 +89,33 @@ export class Duration extends Component {
       onBlur: this.onBlur
     };
     const { hours, minutes, seconds } = this.state;
-    return showHeaders
-      ? (<div className={joinClasses('duration-control-container', className)}>
-          <FormGroup>
-            <FormLabel>HH</FormLabel>
-            <FormControl
-              {...genericProps}
-              name="hours"
-              value={this.format(hours)} />
-          </FormGroup>
-          <Svg path={svgs.colon} className="duration-colon-icon" />
-          <FormGroup>
-            <FormLabel>MM</FormLabel>
-            <FormControl
-              {...genericProps}
-              name="minutes"
-              value={this.format(minutes)} />
-          </FormGroup>
-          <Svg path={svgs.colon} className="duration-colon-icon" />
-          <FormGroup>
-            <FormLabel>SS</FormLabel>
-            <FormControl
-              {...genericProps}
-              name="seconds"
-              value={this.format(seconds)} />
-          </FormGroup>
-        </div>)
-      : (<div className={joinClasses('duration-control-container', className)}>
-          <FormGroup>
-            <FormControl
-              {...genericProps}
-              name="hours"
-              value={this.format(hours)} />
-          </FormGroup>
-          <Svg path={svgs.colon} className="duration-colon-icon" />
-          <FormGroup>
-            <FormControl
-              {...genericProps}
-              name="minutes"
-              value={this.format(minutes)} />
-          </FormGroup>
-          <Svg path={svgs.colon} className="duration-colon-icon" />
-          <FormGroup>
-            <FormControl
-              {...genericProps}
-              name="seconds"
-              value={this.format(seconds)} />
-          </FormGroup>
-        </div>);
+    return (
+      <div className={joinClasses('duration-control-container', className)}>
+        <FormGroup>
+          {showHeaders && <FormLabel>HH</FormLabel>}
+          <FormControl
+            {...genericProps}
+            name="hours"
+            value={this.format(hours)} />
+        </FormGroup>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
+        <FormGroup>
+          {showHeaders && <FormLabel>MM</FormLabel>}
+          <FormControl
+            {...genericProps}
+            name="minutes"
+            value={this.format(minutes)} />
+        </FormGroup>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
+        <FormGroup>
+          {showHeaders && <FormLabel>SS</FormLabel>}
+          <FormControl
+            {...genericProps}
+            name="seconds"
+            value={this.format(seconds)} />
+        </FormGroup>
+      </div>
+    );
   }
 }
 

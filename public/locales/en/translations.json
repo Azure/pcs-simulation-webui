@@ -34,6 +34,8 @@
         "description": "Choose type of device to simulate.",
         "header": "Device model",
         "name": "Name",
+        "namePlaceholderText": "Simulation Name",
+        "descPlaceholderText": "Add description about Simulation",
         "duration": "HH MM SS",
         "throughput": "Message/sec"
       },
@@ -60,7 +62,8 @@
       "targetHub": {
         "description": "Add the connection string for your IoT Hub",
         "header": "Target IoT Hub",
-        "usePreProvisionedBtn": "Use pre-provisioned IoT Hub"
+        "usePreProvisionedBtn": "Use pre-provisioned IoT Hub",
+        "preProvisionedLbl": "Pre-provisioned"
       },
       "telemetry": {
         "header": "Telemetry frequency"

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { NavLink } from "react-router-dom";
 import moment from 'moment';
+import Config from 'app.config';
 
 import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared';
 import { NewSimulation } from '../flyouts';
@@ -18,12 +19,13 @@ const closedFlyoutState = {
 };
 
 const newSimulationFlyout = 'new-simulation';
-const dateTimeFormat = "DD/MM/YY hh:mm:ss A";
+const dateTimeFormat = Config.dateTimeFormat;
 
 export class SimulationDashboard extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       ...closedFlyoutState,
       showAll: false,
@@ -59,18 +61,17 @@ export class SimulationDashboard extends Component {
       const { t, deviceModelEntities } = this.props;
       return ({
         status: this.isRunning(simulation) ? t('simulation.status.running') : t('simulation.status.stopped'),
-        startTime : moment (simulation.startTime).format (dateTimeFormat),
-        endTime : moment (simulation.endTime).format (dateTimeFormat),
-        duration : moment.duration ((moment (simulation.endTime)).diff (moment (simulation.startTime))),
+        startTime : moment(simulation.startTime).format(dateTimeFormat),
+        endTime : moment(simulation.endTime).format(dateTimeFormat),
+        duration : moment.duration((moment(simulation.endTime)).diff(moment(simulation.startTime))),
         id : simulation.id,
         name : simulation.name,
         totalMessages : simulation.totalMessages,
         averageMessages : simulation.averageMessages,
         deviceModels : (simulation.deviceModels || [])
-          .map (dm => (dm.count +
-            " " +
-            (deviceModelEntities && deviceModelEntities[dm.id] ? (deviceModelEntities[dm.id]).name : '-')))
-          .join ('; '),
+          .map(dm =>
+              (dm.count + ' ' + (deviceModelEntities && deviceModelEntities[dm.id] ? (deviceModelEntities[dm.id]).name : '-')))
+              .join ('; '),
         totalDevices : (simulation.deviceModels || []).reduce ((total, obj) => { return total + obj['count']; }, 0)
       });
     }
@@ -96,9 +97,9 @@ export class SimulationDashboard extends Component {
     };
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
-    const activeSimulationsList = simulationList.filter(sim => { return this.isRunning(sim) === true });
-    var maxCount = activeSimulationsList.length > 0 ? 6 : 9;
-    const pastSimulationsList = simulationList.filter(sim => { return this.isRunning(sim) === false }).slice(0, maxCount);
+    const activeSimulationsList = simulationList.filter(this.isRunning);
+    const maxCount = activeSimulationsList.length > 0 ? 6 : 9;
+    const pastSimulationsList = simulationList.filter(sim => !this.isRunning(sim)).slice(0, maxCount);
     return [
       <ContextMenu key="context-menu">
         <Btn svg={svgs.plus} onClick={this.opennewSimulationFlyout}>
@@ -112,27 +113,26 @@ export class SimulationDashboard extends Component {
             {!this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard')}
           </Btn>
         </SectionHeader>
-        
 
         {!this.state.showAll ?
           <div className="simulation-containers">
-            <div className="active">
-              {
-                activeSimulationsList.map(sim =>
-                  <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
-                    <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
-                  </NavLink>
-                )
-              }
+            <div className="active-simulations">
+            {
+              activeSimulationsList.map(sim =>
+                <NavLink className="simulation-tile-link" to={`/simulation/${sim.id}`} key={sim.id}>
+                  <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                </NavLink>
+              )
+            }
             </div>
-            <div className="past">
-              {
-                  pastSimulationsList.map(sim =>
-                  <NavLink to={`/simulation/${sim.id}`} key={`${sim.id}`}>
-                    <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
-                  </NavLink>
-                )
-              }
+            <div className="past-simulations">
+            {
+                pastSimulationsList.map(sim =>
+                <NavLink className="simulation-tile-link" to={`/simulation/${sim.id}`} key={sim.id}>
+                  <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                </NavLink>
+              )
+            }
             </div>
           </div>
           :

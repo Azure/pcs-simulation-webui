@@ -78,12 +78,12 @@ export const epics = createEpicScenario({
 
   /** Loads the simulation */
   fetchSimulation: {
-    type : 'SIMULATION_FETCH',
-    epic : ({ id }) =>
+    type: 'SIMULATION_FETCH',
+    epic: ({ id }) =>
       SimulationService.getSimulation (id)
-      .map (redux.actions.updateModel)
-      .startWith (redux.actions.clearModel())
-      .catch (simulationError)
+        .map(redux.actions.updateModel)
+        .startWith (redux.actions.clearModel())
+        .catch (simulationError)
   },
 
   /** Used to disable the simulation */

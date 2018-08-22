@@ -34,8 +34,6 @@
     .device-model-header {
       text-transform: uppercase;
       @include rem-font-size(14px);
-
-      @include themify($themes) { color: themed('colorLightestFirst'); }
     }
 
     .delete-device-model-btn {
@@ -43,9 +41,12 @@
       @include rem-fallback(margin-top, 6px);
     }
   }
+
   // Apply theme properties
   @include themify($themes) {
     color: themed('colorLightestFirst');
+
+    .device-model-header { color: themed('colorLightestFirst'); }
 
     .apply-btn {
       // The start simulation svg uses stroke rather than fill

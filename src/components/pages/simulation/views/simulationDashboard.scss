@@ -5,10 +5,9 @@
 @import 'styles/mixins';
 
 .simulation-dashboard-container {
-  color: $colorWhite;
   @include rem-fallback(padding, 24px, 32px);
 
-  div > a {
+  .simulation-tile-link {
     display: inline-block;
     vertical-align: top;
     @include rem-fallback(margin-right, 12px);
@@ -27,9 +26,10 @@
     display: table;
     @include rem-fallback(max-width, 1676px);
 
+    .active-simulations, .past-simulations { display: table-cell; }
+  }
 
-    > div {
-      display: table-cell;
-    }
+  @include themify($themes) {
+    .simulation-dashboard-container { color: themed('colorLightestFirst'); }
   }
 }

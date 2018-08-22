@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import Rx from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
@@ -16,6 +16,7 @@ import {
   Indicator,
   SectionHeader
 } from 'components/shared';
+
 import { SimulationService } from 'services';
 
 const pollingInterval = Config.simulationStatusPollingInterval;
@@ -35,83 +36,84 @@ class SimulationDetails extends Component {
       startError: ''
     };
 
-    this.emitter = new Rx.Subject();
+    this.emitter = new Subject();
     this.pollingStream = this.emitter.switch();
+    this.subscriptions = [];
   }
 
   componentDidMount() {
     const simulationId = this.props.location.pathname.split('/').pop();
-    Rx.Observable.from([simulationId])
-      .flatMap(() => SimulationService.getSimulation(simulationId)
-        .catch(error => {
-          console.log('Get simulation failed', error);
-        })
-      ).subscribe(
-        response => this.setState({ simulation: response })
+    this.subscriptions.push(SimulationService.getSimulation(simulationId)
+      .subscribe(
+        simulation => this.setState({ simulation }),
+        error => this.setState({ pollingError: error })
+      )
     );
 
     // Initialize state from the most recent status
-    this.setState ({
-      isRunning : this.props.isRunning,
-      hubUrl : this.props.preprovisionedIoTHubMetricsUrl,
-      showLink : this.props.preprovisionedIoTHubInUse
-    });
+    this.setState({
+      isRunning: this.props.isRunning,
+      hubUrl: this.props.preprovisionedIoTHubMetricsUrl,
+      showLink: this.props.preprovisionedIoTHubInUse
+      });
+
     // Poll until the simulation status is false
-    this.pollingSubscriber = this.pollingStream
-      .do (({ simulationRunning }) => {
-        if(simulationRunning) {
-          this.emitter.next (
-            Rx.Observable.of ('poll')
-            .delay (pollingInterval)
+    this.subscriptions.push(this.pollingStream
+      .do(({ simulationRunning }) => {
+        if (simulationRunning) {
+          this.emitter.next(
+            Observable.of('poll')
+              .delay(pollingInterval)
               .flatMap(() => SimulationService.getStatus(simulationId))
           );
         }
       })
-      .subscribe (
+      .subscribe(
         response => {
-          this.setState ({
-            isRunning : response.simulationRunning,
-            hubUrl : response.preprovisionedIoTHubMetricsUrl,
-            showLink : response.preprovisionedIoTHubInUse,
-            totalMessagesCount : response.totalMessagesCount,
-            failedMessagesCount : response.failedMessagesCount,
-            activeDevicesCount : response.activeDevicesCount,
-            totalDevicesCount : response.totalDevicesCount,
-            messagesPerSecond : response.messagesPerSecond,
-            failedDeviceConnectionsCount : response.failedDeviceConnectionsCount,
-            failedDeviceTwinUpdatesCount : response.failedDeviceTwinUpdatesCount
+          this.setState({
+            isRunning: response.simulationRunning,
+            hubUrl: response.preprovisionedIoTHubMetricsUrl,
+            showLink: response.preprovisionedIoTHubInUse,
+            totalMessagesCount: response.totalMessagesCount,
+            failedMessagesCount: response.failedMessagesCount,
+            activeDevicesCount: response.activeDevicesCount,
+            totalDevicesCount: response.totalDevicesCount,
+            messagesPerSecond: response.messagesPerSecond,
+            failedDeviceConnectionsCount: response.failedDeviceConnectionsCount,
+            failedDeviceTwinUpdatesCount: response.failedDeviceTwinUpdatesCount
           });
         },
-        ({ errorMessage }) => this.setState ({ pollingError : errorMessage })
-      );
+        ({ errorMessage }) => this.setState({ pollingError: errorMessage })
+      )
+    );
 
     // Start polling
-    this.emitter.next (SimulationService.getStatus(simulationId));
+    this.emitter.next(SimulationService.getStatus(simulationId));
   }
 
   componentWillUnmount() {
-    this.pollingSubscriber.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
   stopSimulation = () => {
-    var currentSimulation = this.state.simulation;
-    currentSimulation.totalMessages = this.state.totalMessagesCount;
-    currentSimulation.averageMessages = this.state.messagesPerSecond;
-    this.setState({ simulation: currentSimulation });
-
-    this.props.stopSimulation (this.state.simulation);
+    this.props.stopSimulation({
+      ...this.state.simulation,
+      totalMessages: this.state.totalMessagesCount,
+      averageMessages: this.state.messagesPerSecond
+    });
   };
 
   startSimulation = (event) => {
     event.preventDefault();
-    const timespan = moment.duration(moment (this.state.simulation.endTime).diff (moment (this.state.simulation.startTime)));
+    const { simulation } = this.state;
+    const timespan = moment.duration(moment(simulation.endTime).diff(moment(simulation.startTime)));
     const duration = {
-      ms : timespan.asMilliseconds(),
-      hours : timespan.hours(),
-      minutes : timespan.minutes(),
-      seconds : timespan.seconds()
+      ms: timespan.asMilliseconds(),
+      hours: timespan.hours(),
+      minutes: timespan.minutes(),
+      seconds: timespan.seconds()
     };
 
     const requestModel = {
@@ -120,18 +122,16 @@ class SimulationDetails extends Component {
       startTime: 'Now'
     }
 
-    Rx.Observable.from([this.state.simulation])
-      .flatMap(() => SimulationService.cloneSimulation(requestModel)
-        .catch(errorMessage => this.setState({ startError: errorMessage }))
-    )
-    .subscribe(
-      response => {
-        const newId = response.id;
-        var path = this.props.location.pathname;
-        const newSimulationPath = path.replace(this.state.simulation.id, newId);
-        window.location.replace(newSimulationPath);
-      }
-    )
+    this.subscriptions.push(SimulationService.cloneSimulation(requestModel)
+      .subscribe(
+        response => {
+          const newId = response.id;
+          var path = this.props.location.pathname;
+          const newSimulationPath = path.replace(this.state.simulation.id, newId);
+          window.location.replace(newSimulationPath);
+        }),
+      errorMessage => this.setState({ startError: errorMessage })
+    );
   }
 
   getHubLink = (shouldPad = true) => {
@@ -276,32 +276,30 @@ class SimulationDetails extends Component {
       connectionString
     } = simulation;
 
-    const iotHubString = (connectionString || 'Pre-provisioned').split(';')[0];
+    const iotHubString = (connectionString || t('simulation.form.targetHub.preProvisionedLbl')).split(';')[0];
 
-    const [deviceModel = {}] = deviceModels;
+    const [ deviceModel = {} ] = deviceModels;
     const { interval = '' } = deviceModel;
     const [hour = '00', minutes = '00', seconds = '00'] = interval.split(':');
 
     const duration = (!startTime || !endTime || endTime === maxDate)
-      ? 'Run indefinitely'
+      ? t('simulation.form.duration.runIndefinitelyBtn')
       : humanizeDuration(moment(endTime).diff(moment(startTime)));
-    const totalDevices = deviceModels.reduce((total, obj) => {
-          return total + obj['count'];
-      }, 0);
+    const totalDevices = deviceModels.reduce((total, { count }) => total + count, 0);
 
     return (
       <div className="simulation-details-container">
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
-          <div className="targetHub-content">{simulation.name}</div>
+          <div className="target-hub-content">{simulation.name}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
-          <div className="targetHub-content">{simulation.description}</div>
+          <div className="target-hub-content">{simulation.description}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
-          <div className="targetHub-content">{iotHubString}</div>
+          <div className="target-hub-content">{iotHubString}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
@@ -311,7 +309,7 @@ class SimulationDetails extends Component {
               <div className='device-model-header'>{ t('simulation.form.deviceModels.count') }</div>
             </div>
             <div className='device-models-rows'>
-                { (deviceModels).map(deviceModelItem =>
+              { (deviceModels).map(deviceModelItem =>
                 <div className='device-model-row' key={ deviceModelItem.id }>
                   <div className='device-model-box'>{deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}</div>
                   <div className='device-model-box'>{deviceModelItem.count}</div>

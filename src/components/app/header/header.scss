@@ -15,7 +15,6 @@ $imgSize: 30px;
   @include rem-fallback(height, $headerHeight);
 
   .breadcrumbs {
-    color: $colorWhite;
     flex-grow: 1;
     @include rem-font-size(16px);
     @include rem-fallback(line-height, 21px);
@@ -80,6 +79,8 @@ $imgSize: 30px;
   // Apply theme properties
   @include themify($themes) {
     border-bottom: 1px solid themed('colorMidSecond');
+
+    .breadcrumbs { color: $colorWhite; }
 
     .label { color: themed('colorLightestFirst'); }
 

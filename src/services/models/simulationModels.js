@@ -91,8 +91,8 @@ export const toSimulationCloneModel = (request = {}) => ({
   EndTime: request.endTime,
   Name: request.name,
   Desc: request.description,
-  TotalMsgs: request.totalMessages,
-  AvgMsgs: request.averageMessages,
+  TotalMsgs: 0,
+  AvgMsgs: 0,
   DeviceModels: toCloneDeviceModels(request.deviceModels),
   IoTHub: {
     ConnectionString: request.connectionString

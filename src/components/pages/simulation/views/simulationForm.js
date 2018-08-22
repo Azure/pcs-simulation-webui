@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
-import Rx from 'rxjs';
+import { Observable } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
@@ -21,7 +21,6 @@ import {
 } from 'components/shared';
 
 import { SimulationService } from 'services';
-
 
 const newDeviceModel = () => ({
   name: '',
@@ -60,8 +59,8 @@ class SimulationForm extends LinkedComponent {
     const simulationDescMaxLength = Config.simulationDescMaxLength;
 
     this.name = this.linkTo('name')
-      .check(x => Validator.notEmpty(x === '-' ? '' : x), props.t('simulation.form.errorMsg.nameCantBeEmpty'))
-      .check(x => x.length < simulationNameMaxLength, props.t('simulation.form.errorMsg.nameGTMaxLength', { simulationNameMaxLength }));;
+      .check(x => Validator.notEmpty(x === '-' ? '' : x), () => this.props.t('simulation.form.errorMsg.nameCantBeEmpty'))
+      .check(x => x.length < simulationNameMaxLength, props.t('simulation.form.errorMsg.nameGTMaxLength', { simulationNameMaxLength }));
 
     this.description = this.linkTo('description')
       .check(x => x.length < simulationDescMaxLength, props.t('simulation.form.errorMsg.descGTMaxLength', { simulationDescMaxLength }));
@@ -109,13 +108,11 @@ class SimulationForm extends LinkedComponent {
     const { deviceModels } = this.state;
 
     // Populate telemetry interval for each device model
-    for (let index = 0; index < deviceModels.length; index++) {
-      const modelName = deviceModels[index].name;
-
-      if (modelName !== ((prevModels || [])[index] || {}).name) {
-        this.setTelemetryFrequncy(modelName, index);
+    deviceModels.forEach(({ name }, index) => {
+      if (name !== ((prevModels || [])[index] || {}).name) {
+        this.setTelemetryFrequency(name, index);
       }
-    }
+    });
   }
 
   getFormState = (props) => {
@@ -162,7 +159,7 @@ class SimulationForm extends LinkedComponent {
     interval: this.toTelemetryInterval(interval)
   })
 
-  setTelemetryFrequncy = (name, idx) => {
+  setTelemetryFrequency = (name, idx) => {
     const { deviceModelEntities } = this.props;
     const { deviceModels } = this.state;
 
@@ -185,14 +182,6 @@ class SimulationForm extends LinkedComponent {
       minutes: duration.minutes(),
       seconds: duration.seconds()
     };
-  }
-
-  getSimulationStatusBar() {
-    if (this.props.error) {
-      return (
-        <ErrorMsg> { this.props.error }</ErrorMsg>
-      );
-    } 
   }
 
   inputOnBlur = () => this.setState({ connectionStrFocused: false })
@@ -228,17 +217,15 @@ class SimulationForm extends LinkedComponent {
       ...simulationDuration
     };
 
-      Rx.Observable.from([modelUpdates])
+      Observable.from([modelUpdates])
         .flatMap(() => SimulationService.createSimulation(modelUpdates)
-          .catch(error => {
-          console.log('Simulation creation failed', error);
-        })
+          .catch(error => this.setState({ error }))
       )
       .subscribe(
         response => {
           const id = response.id;
-          var path = this.props.location.pathname;
-          const newSimulationPath = path.replace ('dashboard', id);
+          const path = this.props.location.pathname;
+          const newSimulationPath = path.replace('dashboard', id);
           window.location.replace(newSimulationPath);
         }
       )
@@ -264,7 +251,7 @@ class SimulationForm extends LinkedComponent {
 
     const deviceModelLinks = this.deviceModelsLink.getLinkedChildren(deviceModelLink => {
       const name = deviceModelLink.forkTo('name')
-          .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
+        .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
       const maxSimulatedDevices = Config.maxSimulatedDevices;
       const count = deviceModelLink.forkTo('count')
         .reject(nonInteger)
@@ -274,7 +261,7 @@ class SimulationForm extends LinkedComponent {
         .check(num => num <= Config.maxSimulatedDevices, t('simulation.form.errorMsg.countShouldBeLTMax', { maxSimulatedDevices}));
 
       const interval = deviceModelLink.forkTo('interval')
-          .check(({ ms }) => ms >= 10000, t('frequencyCantBeLessThanTenSeconds'));
+        .check(({ ms }) => ms >= 10000, t('frequencyCantBeLessThanTenSeconds'));
 
       const edited = !(!name.value && !count.value);
       const error = (edited && (name.error || count.error));
@@ -297,14 +284,14 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
           <FormGroup className="simulation-name-box">
-            <FormControl className="long" type="text" placeholder='Simulation name' link={this.name} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
+            <FormControl className="long" type="text" placeholder={t('simulation.namePlaceholderText')} link={this.name} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
         </FormSection>
 
         <FormSection>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
           <FormGroup className="simulation-description-box">
-            <FormControl className="long" type="textarea" rows='4' placeholder='add description here' link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
+            <FormControl className="long" type="textarea" rows='4' placeholder={t('simulation.descPlaceholderText')} link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
         </FormSection>
 
@@ -327,7 +314,8 @@ class SimulationForm extends LinkedComponent {
           {
             deviceModels.length > 0 &&
               <div className="device-model-headers">
-                { deviceModelHeaders.map((header, idx) => (
+                {
+                  deviceModelHeaders.map((header, idx) => (
                     <div className="device-model-header" key={idx}>{header}</div>
                   ))
                 }
@@ -338,7 +326,7 @@ class SimulationForm extends LinkedComponent {
               let throughput = 0;
               if (count.value && interval.value.ms) {
                 throughput = (count.value * 1000) / interval.value.ms
-              }
+           }
 
               return (
                 <div className="device-model-row" key={idx}>
@@ -396,7 +384,8 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>{t('simulation.form.targetHub.header')}</SectionHeader>
           <SectionDesc>{t('simulation.form.targetHub.description')}</SectionDesc>
-          {this.state.preprovisionedIoTHub
+          {
+            this.state.preprovisionedIoTHub
             ? <div>
               <Radio link={this.targetHub} value="preProvisioned">
                 {t('simulation.form.targetHub.usePreProvisionedBtn')}
@@ -410,7 +399,9 @@ class SimulationForm extends LinkedComponent {
         </FormSection>
 
         <FormActions>
-          { this.getSimulationStatusBar() }
+          {
+            (this.props.error) ? <ErrorMsg> {this.props.error}</ErrorMsg> : ''
+          }
           <BtnToolbar>
             <Btn
               svg={svgs.startSimulation}
