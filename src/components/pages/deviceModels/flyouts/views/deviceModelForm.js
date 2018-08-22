@@ -300,9 +300,11 @@ class DeviceModelForm extends LinkedComponent {
           {
             sensors.length > 0 &&
               <div className="sensor-headers">
-                { sensorHeaders.map((header, idx) => (
-                  <div className="sensor-header" key={idx}>{header}</div>
-                )) }
+                {
+                  sensorHeaders.map((header, idx) => (
+                    <div className="sensor-header" key={idx}>{header}</div>
+                  ))
+                }
               </div>
           }
           {

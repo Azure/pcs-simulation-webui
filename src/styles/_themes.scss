@@ -39,6 +39,11 @@ $themes: (
     colorFlyoutBackground: $colorNoir,
     colorFlyoutText: $colorSmoke,
     // Flyout -END
+
+    // Symbols - START
+    colorSuccess: $colorGreen,
+    colorFailure: $colorRed,
+    // Symbols - END
   ),
   light: (
     // Lows

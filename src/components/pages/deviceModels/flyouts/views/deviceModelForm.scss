@@ -20,7 +20,6 @@
     .sensor-header {
       text-transform: uppercase;
       @include rem-font-size(14px);
-      @include themify($themes) { color: themed('colorLightestFirst'); }
     }
   }
 
@@ -46,7 +45,13 @@
     .file-name { @include rem-fallback(width, 250px); }
 
     .validation-result { @include rem-fallback(width, 36px); }
-    .success-result { color: green }
-    .failed-result { color: red }
+  }
+
+  @include themify($themes) {
+    .sensors-container .sensor-header { color: themed('colorLightestFirst'); }
+    .upload-results-container {
+      .success-result { color: themed('colorSuccess'); }
+      .failed-result { color: themed('colorFailure'); }
+    }
   }
 }

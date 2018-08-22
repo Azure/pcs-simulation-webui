@@ -62,7 +62,7 @@ export class HttpClient {
    * @param {file} file The file which be append to the body
    */
   static upload(url, file, options = {}, withAuth = true) {
-    let body = new FormData();
+    const body = new FormData();
     body.append('file', file);
 
     return HttpClient.ajax(url, { ...options, body, method: 'POST' }, withAuth, false);

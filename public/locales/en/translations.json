@@ -68,7 +68,9 @@
         "dataDescription": "Set parameters for telemetry sent for the data point",
         "addDataPoint": "Add data point",
         "interval": "Min/Max changes occur every:",
-        "frequency": "Report Min/Max changes every:"
+        "frequency": "Report Min/Max changes every:",
+        "basic": "Basic",
+        "advanced": "Advanced"
       },
       "edit": {
         "title": "Edit a custom device model"

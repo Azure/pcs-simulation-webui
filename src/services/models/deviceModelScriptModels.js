@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 // Map to simulation scripts
-export const toDeviceModelScripts = ({ Items = []}) => Items.map(toDeviceModelScript);
+export const toDeviceModelScripts = ({ Items = [] }) => Items.map(toDeviceModelScript);
 
 // Map to simulation script in device model
 export const toDeviceModelScript = (response = {}) => ({

@@ -13,17 +13,17 @@ export class NewDeviceModel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      basic: true
+      isBasic: true
     };
   }
 
-  onClickBasic = () => this.setState({ basic: true });
+  onClickBasic = () => this.setState({ isBasic: true });
 
-  onClickAdvanced = () => this.setState({ basic: false });
+  onClickAdvanced = () => this.setState({ isBasic: false });
 
   render() {
     const { t, onClose } = this.props;
-    const { basic } = this.state;
+    const { isBasic } = this.state;
 
     return (
       <Flyout.Container className="device-model-flyout-container">
@@ -36,11 +36,19 @@ export class NewDeviceModel extends Component {
         </Flyout.Header>
         <Flyout.Content >
           <div className='tab-container'>
-            <div className={basic ? 'tab active' : 'tab'} onClick={this.onClickBasic}>Basic</div>
-            <div className={basic ? 'tab' : 'tab active'} onClick={this.onClickAdvanced}>Advanced</div>
+            <div
+              className={isBasic ? 'tab active' : 'tab'}
+              onClick={this.onClickBasic}>
+              { t('deviceModels.flyouts.new.basic') }
+            </div>
+            <div
+              className={isBasic ? 'tab' : 'tab active'}
+              onClick={this.onClickAdvanced}>
+              { t('deviceModels.flyouts.new.advanced') }
+            </div>
           </div>
           {
-            basic
+            isBasic
               ? <DeviceModelForm {...this.props} />
               : <DeviceModelUploadForm {...this.props} />
           }

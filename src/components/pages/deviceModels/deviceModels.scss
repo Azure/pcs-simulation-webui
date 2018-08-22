@@ -29,14 +29,14 @@
 
       .tab {
         text-decoration: none;
-        @include rem-fallback(padding, 5px 0px);
-        @include rem-fallback(padding-bottom, 10px);
-        @include rem-fallback(margin-right, 72px);
-        @include rem-fallback(border-bottom-width, 2px);
         background: none;
         border: none;
         cursor: pointer;
         @include rem-font-size(32px);
+        @include rem-fallback(padding, 5px 0px);
+        @include rem-fallback(padding-bottom, 10px);
+        @include rem-fallback(margin-right, 72px);
+        @include rem-fallback(border-bottom-width, 2px);
       }
 
       .active {
@@ -49,7 +49,8 @@
   @include themify($themes) {
     .status { color: themed('colorHighest'); }
     .flyout-title-icon { fill: themed('colorHighest'); }
-    .tab { color: themed('colorLightestFirst');
+    .tab {
+      color: themed('colorLightestFirst');
       border-bottom-color: themed('colorLowestFirst');
     }
     .active { color: themed('colorHighest'); }
