@@ -108,11 +108,18 @@ class SimulationForm extends LinkedComponent {
     const { deviceModels } = this.state;
 
     // Populate telemetry interval for each device model
-    deviceModels.forEach(({ name }, index) => {
-      if (name !== ((prevModels || [])[index] || {}).name) {
-        this.setTelemetryFrequency(name, index);
+    //deviceModels.forEach(({ name }, index) => {
+    //  if (name !== ((prevModels || [])[index] || {}).name) {
+    //    this.setTelemetryFrequency(name, index);
+    //  }
+    //});
+    for (let index = 0; index < deviceModels.length; index++) {
+      const modelName = deviceModels[index].name;
+
+      if (modelName !== ((prevModels || [])[index] || {}).name) {
+        this.setTelemetryFrequency(modelName, index);
       }
-    });
+    }
   }
 
   getFormState = (props) => {
@@ -326,7 +333,7 @@ class SimulationForm extends LinkedComponent {
               let throughput = 0;
               if (count.value && interval.value.ms) {
                 throughput = (count.value * 1000) / interval.value.ms
-           }
+              }
 
               return (
                 <div className="device-model-row" key={idx}>
@@ -369,16 +376,16 @@ class SimulationForm extends LinkedComponent {
                 </div>
               );
             })
-          }
-          </div>
-          {
-            deviceModels.length < 10 &&
-              <Btn
-                svg={svgs.plus}
-                onClick={this.addDeviceModel}>
-                { t('simulation.form.deviceModels.addDeviceModelBtn') }
-              </Btn>
-          }
+        }
+        </div>
+        {
+          deviceModels.length < 10 &&
+            <Btn
+              svg={svgs.plus}
+              onClick={this.addDeviceModel}>
+              { t('simulation.form.deviceModels.addDeviceModelBtn') }
+            </Btn>
+        }
         </FormSection>
 
         <FormSection>
@@ -400,7 +407,7 @@ class SimulationForm extends LinkedComponent {
 
         <FormActions>
           {
-            (this.props.error) ? <ErrorMsg> {this.props.error}</ErrorMsg> : ''
+            this.props.error ? <ErrorMsg> {this.props.error}</ErrorMsg> : ''
           }
           <BtnToolbar>
             <Btn

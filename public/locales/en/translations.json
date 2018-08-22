@@ -27,6 +27,8 @@
     "newSim": "New Simulation",
     "showAll": "Show all simulations",
     "showDashboard": "Show dashboard view",
+    "namePlaceholderText": "Simulation Name",
+    "descPlaceholderText": "Add description about Simulation",
     "form": {
       "deviceModels": {
         "addDeviceModelBtn": "Add a device type",
@@ -34,8 +36,6 @@
         "description": "Choose type of device to simulate.",
         "header": "Device model",
         "name": "Name",
-        "namePlaceholderText": "Simulation Name",
-        "descPlaceholderText": "Add description about Simulation",
         "duration": "HH MM SS",
         "throughput": "Message/sec"
       },
