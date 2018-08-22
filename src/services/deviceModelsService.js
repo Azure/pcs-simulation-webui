@@ -23,7 +23,6 @@ export class DeviceModelsService {
 
   /** Creates a device model */
   static createDeviceModel(model) {
-    console.log('createDeviceModel', model);
     return HttpClient.post(ENDPOINT, toDeviceModelRequestModel(model))
       .map(toDeviceModel);
   }
@@ -41,7 +40,6 @@ export class DeviceModelsService {
 
   /** Uploads a device model */
   static uploadDeviceModel(model) {
-    console.log('uploadDeviceModel', model);
     return HttpClient.post(ENDPOINT, toDeviceModelUploadRequestModel(model))
       .map(toDeviceModel);
   }
