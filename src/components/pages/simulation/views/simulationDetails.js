@@ -59,36 +59,34 @@ class SimulationDetails extends Component {
 
     // Poll until the simulation status is false
     this.subscriptions.push(this.pollingStream
-      .do(({ simulationRunning }) => {
-        if (simulationRunning) {
+      .do(({ isRunning }) => {
+        if (isRunning) {
           this.emitter.next(
             Observable.of('poll')
               .delay(pollingInterval)
-              .flatMap(() => SimulationService.getStatus(simulationId))
+              .flatMap(() => SimulationService.getSimulation(simulationId))
           );
         }
       })
       .subscribe(
         response => {
           this.setState({
-            isRunning: response.simulationRunning,
-            hubUrl: response.preprovisionedIoTHubMetricsUrl,
-            showLink: response.preprovisionedIoTHubInUse,
-            totalMessagesCount: response.totalMessagesCount,
-            failedMessagesCount: response.failedMessagesCount,
-            activeDevicesCount: response.activeDevicesCount,
-            totalDevicesCount: response.totalDevicesCount,
-            messagesPerSecond: response.messagesPerSecond,
-            failedDeviceConnectionsCount: response.failedDeviceConnectionsCount,
-            failedDeviceTwinUpdatesCount: response.failedDeviceTwinUpdatesCount
+            isRunning: response.isRunning,
+            totalMessagesSent: response.statistics.totalMessagesSent,
+            failedMessagesCount: response.statistics.failedMessagesCount,
+            activeDevicesCount: response.statistics.activeDevicesCount,
+            averageMessagesPerSecond: response.statistics.averageMessagesPerSecond,
+            failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
+            failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount
           });
         },
         ({ errorMessage }) => this.setState({ pollingError: errorMessage })
       )
     );
 
+    
     // Start polling
-    this.emitter.next(SimulationService.getStatus(simulationId));
+    this.emitter.next(SimulationService.getSimulation(simulationId));
   }
 
   componentWillUnmount() {
@@ -99,11 +97,7 @@ class SimulationDetails extends Component {
 
   stopSimulation = () => {
     this.props.stopSimulation({
-      ...this.state.simulation,
-      statistics: {
-        averageMessagesPerSecond: this.state.messagesPerSecond,
-        totalMessagesSent: this.state.totalMessagesCount
-      }
+      ...this.state.simulation
     });
   };
 
@@ -204,10 +198,10 @@ class SimulationDetails extends Component {
     const { t } = this.props;
 
     const {
-      totalMessagesCount = 0,
+      totalMessagesSent = 0,
       failedMessagesCount = 0,
       activeDevicesCount = 0,
-      messagesPerSecond = 0,
+      averageMessagesPerSecond = 0,
       failedDeviceConnectionsCount = 0,
       failedDeviceTwinUpdatesCount = 0
     } = this.state;
@@ -225,12 +219,12 @@ class SimulationDetails extends Component {
       },
       {
         description: t('simulation.status.totalMessagesCount'),
-        value: totalMessagesCount,
+        value: totalMessagesSent,
         className: 'status-value'
       },
       {
         description: t('simulation.status.messagesPerSec'),
-        value: messagesPerSecond,
+        value: averageMessagesPerSecond,
         className: 'status-value'
       },
       {

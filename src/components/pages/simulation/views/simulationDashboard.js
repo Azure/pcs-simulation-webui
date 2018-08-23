@@ -60,14 +60,14 @@ export class SimulationDashboard extends Component {
     (simulation = {}) => {
       const { t, deviceModelEntities } = this.props;
       return ({
-        status: this.isRunning(simulation) ? t('simulation.status.running') : t('simulation.status.stopped'),
+        status: simulation.isRunning ? t('simulation.status.running') : t('simulation.status.stopped'),
         startTime : moment(simulation.startTime).format(dateTimeFormat),
         endTime : moment(simulation.endTime).format(dateTimeFormat),
         duration : moment.duration((moment(simulation.endTime)).diff(moment(simulation.startTime))),
         id : simulation.id,
         name : simulation.name,
-        totalMessages : simulation.totalMessages,
-        averageMessages : simulation.averageMessages,
+        totalMessages: simulation.statistics.totalMessagesCount,
+        averageMessages: simulation.statistics.averageMessagesPerSecond,
         deviceModels : (simulation.deviceModels || [])
           .map(dm =>
               (dm.count + ' ' + (deviceModelEntities && deviceModelEntities[dm.id] ? (deviceModelEntities[dm.id]).name : '-')))
@@ -97,9 +97,9 @@ export class SimulationDashboard extends Component {
     };
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
-    const activeSimulationsList = simulationList.filter(this.isRunning);
+    const activeSimulationsList = simulationList.filter(sim => sim.isRunning);
     const maxCount = activeSimulationsList.length > 0 ? 6 : 9;
-    const pastSimulationsList = simulationList.filter(sim => !this.isRunning(sim)).slice(0, maxCount);
+    const pastSimulationsList = simulationList.filter(sim => !sim.isRunning).slice(0, maxCount);
     return [
       <ContextMenu key="context-menu">
         <Btn svg={svgs.plus} onClick={this.opennewSimulationFlyout}>

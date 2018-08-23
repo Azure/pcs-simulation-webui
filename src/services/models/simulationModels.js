@@ -22,15 +22,22 @@ export const toSimulationStatusModel = (response = {}) => ({
 export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,
   enabled: response.Enabled,
+  isRunning: response.Running,
   startTime: response.StartTime,
   endTime: response.EndTime,
-  stopTime: response.StopTime,
+  stopTime: response.StoppedTime,
   id: response.Id,
   name: response.Name,
   description: response.Desc,
   statistics: {
     averageMessagesPerSecond: (response.Statistics || {}).AverageMessagesPerSecond,
-    totalMessagesSent: (response.Statistics || {}).TotalMessagesSent
+    totalMessagesSent: (response.Statistics || {}).TotalMessagesSent,
+    failedMessagesCount: (response.Statistics || {}).FailedMessagesCount,
+    totalDevicesCount: (response.Statistics || {}).TotalDevicesCount,
+    activeDevicesCount: (response.Statistics || {}).ActiveDevicesCount,
+    failedDeviceConnectionsCount: (response.Statistics || {}).FailedDeviceConnectionsCount,
+    failedDeviceTwinUpdatesCount: (response.Statistics || {}).FailedDeviceTwinUpdatesCount,
+    simulationErrorsCount: (response.Statistics || {}).SimulationErrorsCount
   },
   deviceModels: (response.DeviceModels || []).map(({ Id, Count, Override }) => ({
     id: Id,
@@ -101,11 +108,7 @@ export const toSimulationCloneModel = (request = {}) => ({
 export const toSimulationPatchModel = (request = {}, enabled) => ({
   ETag: request.eTag,
   Id: request.id,
-  Enabled: enabled,
-  Statistics: {
-    AverageMessagesPerSecond: (request.statistics || {}).averageMessagesPerSecond,
-    TotalMessagesSent: (request.statistics || {}).totalMessagesSent
-  }
+  Enabled: enabled
 });
 
 // Map to deviceModels in simulation request model

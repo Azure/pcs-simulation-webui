@@ -11,8 +11,8 @@ const ENDPOINT = Config.simulationApiUrl;
 export class SimulationService {
 
   /** Returns the device status */
-  static getStatus(id) {
-    return HttpClient.get(`${ENDPOINT}status/${id}`)
+  static getStatus() {
+    return HttpClient.get(`${ENDPOINT}status`)
       .map(toSimulationStatusModel);
   }
 

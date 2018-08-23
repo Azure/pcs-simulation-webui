@@ -40,25 +40,24 @@ class SimulationTile extends Component {
           this.emitter.next(
             Observable.of('poll')
               .delay(pollingInterval)
-              .flatMap(() => SimulationService.getStatus(this.props.simulation.id))
+              .flatMap(() => SimulationService.getSimulation(this.props.simulation.id))
           );
         }
       })
       .subscribe(
         response => {
           this.setState({
-            isRunning: response.simulationRunning,
-            totalMessagesCount: response.totalMessagesCount,
-            activeDevicesCount: response.activeDevicesCount,
-            totalDevicesCount: response.totalDevicesCount,
-            messagesPerSecond: response.messagesPerSecond
+            isRunning: response.isRunning,
+            totalMessagesCount: response.statistics.totalMessagesCount,
+            activeDevicesCount: response.statistics.activeDevicesCount,
+            averageMessagesPerSecond: response.statistics.averageMessagesPerSecond
           });
         },
         ({ errorMessage }) => this.setState({ pollingError: errorMessage })
       );
 
     // Start polling
-    this.emitter.next(SimulationService.getStatus(this.props.simulation.id));
+    this.emitter.next(SimulationService.getSimulation(this.props.simulation.id));
   }
 
   componentWillUnmount() {
@@ -104,8 +103,11 @@ class SimulationTile extends Component {
         <div className="tile-body">
           <div>
             <div className="left time-container"> {t('simulation.status.created', { startDateTime }) } </div>
-            <div className="right time-container"> {this.state.isRunning ? t('simulation.status.running')
-              : t('simulation.status.ended', { endDateTime }) } </div>
+            <div className="right time-container"> {
+              this.state.isRunning
+              ? t('simulation.status.running')
+              : t('simulation.status.ended', { endDateTime })}
+            </div>
           </div>
           { this.getActiveDevices() } 
           <div className="simulation-summary">
@@ -120,7 +122,7 @@ class SimulationTile extends Component {
             </div>
             <div className='telemetry-container'>
               <div className="simulation-status-section right">
-                <div className="messages-per-second">{this.state.isRunning ? this.state.messagesPerSecond : statistics.averageMessagesPerSecond}</div>
+                <div className="messages-per-second">{this.state.isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
                 <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
                 <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : statistics.totalMessagesSent}</div>
               </div>

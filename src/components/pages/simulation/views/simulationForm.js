@@ -108,18 +108,11 @@ class SimulationForm extends LinkedComponent {
     const { deviceModels } = this.state;
 
     // Populate telemetry interval for each device model
-    //deviceModels.forEach(({ name }, index) => {
-    //  if (name !== ((prevModels || [])[index] || {}).name) {
-    //    this.setTelemetryFrequency(name, index);
-    //  }
-    //});
-    for (let index = 0; index < deviceModels.length; index++) {
-      const modelName = deviceModels[index].name;
-
-      if (modelName !== ((prevModels || [])[index] || {}).name) {
-        this.setTelemetryFrequency(modelName, index);
+    deviceModels.forEach(({ name }, index) => {
+      if (name !== ((prevModels || [])[index] || {}).name) {
+        this.setTelemetryFrequency(name, index);
       }
-    }
+    });
   }
 
   getFormState = (props) => {
