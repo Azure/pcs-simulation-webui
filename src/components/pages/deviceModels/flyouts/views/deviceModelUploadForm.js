@@ -66,6 +66,7 @@ class DeviceModelUploadForm extends Component {
             ]
           });
         });
+      
       this.subscriptions.push(
         validationSubscrition
       );
