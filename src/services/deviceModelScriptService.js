@@ -11,6 +11,13 @@ import {
 
 const ENDPOINT = `${Config.simulationApiUrl}devicemodelscripts`;
 
+const uploadOptions = {
+  headers: {
+    'Accept': undefined,
+    'Content-Type': undefined
+  }
+};
+
 /** Contains methods for calling the device model service */
 export class DeviceModelScriptsService {
 
@@ -28,13 +35,13 @@ export class DeviceModelScriptsService {
 
   /** Creates a device model script */
   static uploadsDeviceModelScript(script) {
-    return HttpClient.upload(ENDPOINT, script)
+    return HttpClient.upload(ENDPOINT, toDeviceModelScriptRequestModel(script), uploadOptions)
       .map(toDeviceModelScript);
   }
 
   /** Updates a device model script */
   static updateSingleDeviceModelScript(script) {
-    return HttpClient.put(`${ENDPOINT}/${script.id}`, toDeviceModelScriptRequestModel(script))
+    return HttpClient.put(`${ENDPOINT}/${script.id}`, toDeviceModelScriptRequestModel(script), uploadOptions)
       .map(toDeviceModelScript);
   }
 
@@ -45,7 +52,7 @@ export class DeviceModelScriptsService {
 
   /** Validate a device model script */
   static validateDeviceModelScript(script) {
-    return HttpClient.upload(`${ENDPOINT}!validate`, script)
+    return HttpClient.post(`${ENDPOINT}!validate`, toDeviceModelScriptRequestModel(script), uploadOptions)
       .map(toValidationModel);
   }
 }

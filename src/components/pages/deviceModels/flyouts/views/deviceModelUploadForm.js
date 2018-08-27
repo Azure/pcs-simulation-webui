@@ -32,15 +32,17 @@ class DeviceModelUploadForm extends Component {
       ...initialFormState,
       formVersion: 0
     };
+
+    this.subscriptions = [];
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { scripts } = this.state;
 
     if (scripts.length > 0 && scripts.some(({ validationResult }) => !validationResult)) {
-      Observable.from(scripts)
+      const validationSubscrition = Observable.from(scripts)
         .filter(({ validation = {} }) => !validation.isValid)
-        .concatMap(({ file }) =>
+        .flatMap(({ file }) =>
           DeviceModelScriptsService.validateDeviceModelScript(file)
             .map(validationResult => ({ file, validationResult }))
             .catch(error => {
@@ -64,15 +66,21 @@ class DeviceModelUploadForm extends Component {
             ]
           });
         });
+      this.subscriptions.push(
+        validationSubscrition
+      );
     }
+  }
+
+  componentWillUnmount() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   uploadFiles = e => {
     e.preventDefault();
     const { target: value } = e;
-    const files = [];
-    for (let i = 0; i < value.files.length; i++) files.push(value.files[i]);
-    this.filesSanityCheck(files).subscribe(
+
+    this.filesSanityCheck(value.files).subscribe(
       ({ deviceModel, scriptFiles }) => {
         this.setState({
           deviceModel,
@@ -82,8 +90,7 @@ class DeviceModelUploadForm extends Component {
           }))
         });
       },
-      error => this.setState({ ...initialFormState, fileMismatching: true }),
-      () => console.log('observerble complete')
+      error => this.setState({ ...initialFormState, fileMismatching: true })
     );
   };
 
@@ -92,9 +99,9 @@ class DeviceModelUploadForm extends Component {
       .reduce(
         (acc, file) => {
           if (file.type === 'application/json') {
-            acc['jsonFiles'].push(file);
+            acc.jsonFiles.push(file);
           } else if (file.type === 'application/javascript') {
-            acc['scriptFiles'].push(file);
+            acc.scriptFiles.push(file);
           }
           return acc;
         },
@@ -126,9 +133,9 @@ class DeviceModelUploadForm extends Component {
     const reader = new FileReader();
 
     return Observable.create(observer => {
-      reader.onerror = () => {
+      reader.onerror = ({ target: error }) => {
         reader.abort();
-        observer.error(new DOMException('Problem parsing input file.'));
+        observer.throw(error);
       };
 
       reader.onload = () => {
@@ -151,7 +158,7 @@ class DeviceModelUploadForm extends Component {
 
     // Uploading scripts
     Observable.from(scripts)
-      .flatMap(({ file }) => DeviceModelScriptsService.uploadsDeviceModelScript(file).catch(error => console.log(error)))
+      .flatMap(({ file }) => DeviceModelScriptsService.uploadsDeviceModelScript(file))
       .reduce((scripts, script) => ({ ...scripts, [script.name]: script }), {})
       .map(scripts => {
         const {
@@ -229,13 +236,16 @@ class DeviceModelUploadForm extends Component {
           </div>
         </FormSection>
         <FormSection>
-          {this.state.deviceModel && (
+        {
+          this.state.deviceModel && (
             <FormGroup>
               <FormLabel>{t('deviceModels.flyouts.new.name')}</FormLabel>
               <div>{deviceModel.Name}</div>
             </FormGroup>
-          )}
-          {scripts.length > 0 && (
+          )
+        }
+        {
+          scripts.length > 0 && (
             <FormGroup>
               <FormLabel>{t('deviceModels.flyouts.upload.uploadedFiles')}</FormLabel>
               {this.state.scripts
@@ -261,7 +271,8 @@ class DeviceModelUploadForm extends Component {
                   </div>
                 ))}
             </FormGroup>
-          )}
+          )
+        }
         </FormSection>
         {showError && <ErrorMsg>{t('deviceModels.flyouts.upload.errorMsg')}</ErrorMsg>}
         <FormActions>

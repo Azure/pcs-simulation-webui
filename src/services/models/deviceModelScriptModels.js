@@ -14,8 +14,11 @@ export const toDeviceModelScript = (response = {}) => ({
 });
 
 //  Map to simulation script request model
-export const toDeviceModelScriptRequestModel = (request = {}) => {
-  // TODO: add mapping
+export const toDeviceModelScriptRequestModel = (file) => {
+  const data = new FormData();
+  data.append('file', file);
+  
+  return data;
 }
 
 // Map to validation models
