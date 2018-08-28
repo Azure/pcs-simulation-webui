@@ -130,7 +130,7 @@ export const epics = createEpicScenario({
           ] : [];
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
-        .startWith(redux.actions.clearModel()/*, appEpics.actions.logEvent(event, state)*/)
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
         .catch(simulationError);
     }
   }
