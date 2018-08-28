@@ -38,9 +38,15 @@ $twoColWidth: calc(100% *2 / 3);
   .toggle-view-button {
     justify-content: flex-end;
     @include rem-fallback(margin-top, 24px);
+
+    &:hover {
+      background: inherit;
+      text-decoration: underline;
+    }
   }
 
   @include themify($themes) {
     .simulation-dashboard-container { color: themed('colorHighest'); }
+    .toggle-view-button:hover { color: themed('colorActive'); }
   }
 }
