@@ -54,8 +54,8 @@ export class SimulationsGrid extends Component {
       /* Grid Events */
       onGridReady: this.onGridReady
     };
-    return ([
+    return (
       <PcsGrid {...gridProps} key="simulation-grid-key" />
-    ]);
+    );
   }
 }

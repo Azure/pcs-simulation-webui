@@ -43,10 +43,11 @@ class SimulationDetails extends Component {
 
   componentDidMount() {
     const simulationId = this.props.location.pathname.split('/').pop();
-    this.subscriptions.push(SimulationService.getSimulation(simulationId)
+    this.subscriptions.push(
+      SimulationService.getSimulation(simulationId)
       .subscribe(
         simulation => this.setState({ simulation }),
-        error => this.setState({ pollingError: error })
+        pollingError => this.setState({ pollingError })
       )
     );
 
@@ -58,33 +59,32 @@ class SimulationDetails extends Component {
       });
 
     // Poll until the simulation status is false
-    this.subscriptions.push(this.pollingStream
-      .do(({ isRunning }) => {
-        if (isRunning) {
-          this.emitter.next(
-            Observable.of('poll')
-              .delay(pollingInterval)
-              .flatMap(() => SimulationService.getSimulation(simulationId))
-          );
-        }
-      })
-      .subscribe(
-        response => {
-          this.setState({
-            isRunning: response.isRunning,
-            totalMessagesSent: response.statistics.totalMessagesSent,
-            failedMessagesCount: response.statistics.failedMessagesCount,
-            activeDevicesCount: response.statistics.activeDevicesCount,
-            averageMessagesPerSecond: response.statistics.averageMessagesPerSecond,
-            failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
-            failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount
-          });
-        },
-        ({ errorMessage }) => this.setState({ pollingError: errorMessage })
-      )
+    this.subscriptions.push(
+      SimulationService.getSimulation(simulationId)
+        .subscribe(
+          simulation => {
+            if (simulation.isRunning) {
+              this.emitter.next(
+                Observable.of('poll')
+                  .delay(pollingInterval)
+                  .flatMap(() => SimulationService.getSimulation(simulationId))
+              );
+            }
+
+            this.setState({
+              isRunning: simulation.isRunning,
+              totalMessagesSent: simulation.statistics.totalMessagesSent,
+              failedMessagesCount: simulation.statistics.failedMessagesCount,
+              activeDevicesCount: simulation.statistics.activeDevicesCount,
+              averageMessagesPerSecond: simulation.statistics.averageMessagesPerSecond,
+              failedDeviceConnectionsCount: simulation.statistics.failedDeviceConnectionsCount,
+              failedDeviceTwinUpdatesCount: simulation.statistics.failedDeviceTwinUpdatesCount
+            });
+          },
+          pollingError => this.setState({ pollingError })
+        )
     );
 
-    
     // Start polling
     this.emitter.next(SimulationService.getSimulation(simulationId));
   }
@@ -122,11 +122,11 @@ class SimulationDetails extends Component {
       .subscribe(
         response => {
           const newId = response.id;
-          var path = this.props.location.pathname;
+          const path = this.props.location.pathname;
           const newSimulationPath = path.replace(this.state.simulation.id, newId);
-          window.location.replace(newSimulationPath);
+          window.location.replace(newSimulationPath)
         }),
-      errorMessage => this.setState({ startError: errorMessage })
+      startError => this.setState({ startError })
     );
   }
 

@@ -60,10 +60,10 @@ class SimulationForm extends LinkedComponent {
 
     this.name = this.linkTo('name')
       .check(x => Validator.notEmpty(x === '-' ? '' : x), () => this.props.t('simulation.form.errorMsg.nameCantBeEmpty'))
-      .check(x => x.length < simulationNameMaxLength, props.t('simulation.form.errorMsg.nameGTMaxLength', { simulationNameMaxLength }));
+      .check(x => x.length < simulationNameMaxLength, () => this.props.t('simulation.form.errorMsg.nameGTMaxLength', { simulationNameMaxLength }));
 
     this.description = this.linkTo('description')
-      .check(x => x.length < simulationDescMaxLength, props.t('simulation.form.errorMsg.descGTMaxLength', { simulationDescMaxLength }));
+      .check(x => x.length < simulationDescMaxLength, () => this.props.t('simulation.form.errorMsg.descGTMaxLength', { simulationDescMaxLength }));
 
     this.iotHubString = this.linkTo('iotHubString')
       .check(Validator.notEmpty, props.t('simulation.form.errorMsg.hubNameCantBeEmpty'));

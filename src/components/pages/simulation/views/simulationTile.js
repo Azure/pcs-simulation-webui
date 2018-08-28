@@ -24,7 +24,6 @@ class SimulationTile extends Component {
     };
 
     this.emitter = new Subject();
-    this.pollingStream = this.emitter.switch();
   }
 
   componentDidMount() {
@@ -33,31 +32,30 @@ class SimulationTile extends Component {
       isRunning: this.props.isRunning
     });
 
-    // Poll until the simulation status is false
-    this.pollingSubscriber = this.pollingStream
-      .do(({ simulationRunning }) => {
-        if (simulationRunning) {
-          this.emitter.next(
-            Observable.of('poll')
-              .delay(pollingInterval)
-              .flatMap(() => SimulationService.getSimulation(this.props.simulation.id))
-          );
-        }
-      })
+    const simulationId = this.props.simulation.id;
+
+    this.pollingSubscriber = SimulationService.getSimulation(simulationId)
       .subscribe(
-        response => {
+        simulation => {
+          if (simulation.isRunning) {
+            this.emitter.next(
+              Observable.of('poll')
+                .delay(pollingInterval)
+                .flatMap(() => SimulationService.getSimulation(simulationId))
+            );
+          }
           this.setState({
-            isRunning: response.isRunning,
-            totalMessagesCount: response.statistics.totalMessagesCount,
-            activeDevicesCount: response.statistics.activeDevicesCount,
-            averageMessagesPerSecond: response.statistics.averageMessagesPerSecond
+            isRunning: simulation.isRunning,
+            totalMessagesCount: simulation.statistics.totalMessagesCount,
+            activeDevicesCount: simulation.statistics.activeDevicesCount,
+            averageMessagesPerSecond: simulation.statistics.averageMessagesPerSecond
           });
         },
-        ({ errorMessage }) => this.setState({ pollingError: errorMessage })
+        pollingError => this.setState({ pollingError })
       );
 
     // Start polling
-    this.emitter.next(SimulationService.getSimulation(this.props.simulation.id));
+    this.emitter.next(SimulationService.getSimulation(simulationId));
   }
 
   componentWillUnmount() {
@@ -69,9 +67,9 @@ class SimulationTile extends Component {
 
     if (this.state.isRunning) {
       return (
-        <div className="active-devices">
-          <div className="active-devices-count"> {this.state.activeDevicesCount} </div>
-          <div className="active-devices-label"> {t('simulation.status.activeDevicesCount')}</div>
+        <div className='active-devices'>
+          <div className='active-devices-count'> {this.state.activeDevicesCount} </div>
+          <div className='active-devices-label'> {t('simulation.status.activeDevicesCount')}</div>
         </div>
       );
     }
@@ -97,20 +95,24 @@ class SimulationTile extends Component {
     const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
     return (
       <div className= { className } >
-        <div className="tile-header">
+        <div className='tile-header'>
           <SectionHeader>{name || id}</SectionHeader>
         </div>
-        <div className="tile-body">
-          <div>
-            <div className="left time-container"> {t('simulation.status.created', { startDateTime }) } </div>
-            <div className="right time-container"> {
-              this.state.isRunning
+        <div className='time-containers'>
+          <div className='left time-container'> {t('simulation.status.created', { startDateTime })} </div>
+          <div className='right time-container'> {
+            this.state.isRunning
               ? t('simulation.status.running')
               : t('simulation.status.ended', { endDateTime })}
-            </div>
           </div>
-          { this.getActiveDevices() } 
-          <div className="simulation-summary">
+        </div>
+        <div className='tile-body'>
+          {this.getActiveDevices()}
+          {
+            this.state.isRunning &&
+            <div className='chart-div'></div>
+          }
+          <div className='simulation-summary'>
             <div className='device-model-rows'>
               {
                 deviceModels.map(deviceModelItem =>
@@ -121,10 +123,10 @@ class SimulationTile extends Component {
               }
             </div>
             <div className='telemetry-container'>
-              <div className="simulation-status-section right">
-                <div className="messages-per-second">{this.state.isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
-                <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
-                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : statistics.totalMessagesSent}</div>
+              <div className='simulation-status-section right'>
+                <div className='messages-per-second'>{this.state.isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
+                <div className='messages-per-second-desc'>{t('simulation.status.averageMessagesPerSec')}</div>
+                <div className='total -messages'>{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : statistics.totalMessagesSent}</div>
               </div>
             </div>
           </div>

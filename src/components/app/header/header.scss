@@ -80,7 +80,7 @@ $imgSize: 30px;
   @include themify($themes) {
     border-bottom: 1px solid themed('colorMidSecond');
 
-    .breadcrumbs { color: $colorWhite; }
+    .breadcrumbs {  color: themed('colorHighest'); }
 
     .label { color: themed('colorLightestFirst'); }
 

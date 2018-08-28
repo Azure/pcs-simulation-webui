@@ -56,7 +56,7 @@ export class SimulationDashboard extends Component {
 
   getSoftSelectId = ({ id }) => id;
 
-  toSimulationGridModel = (input = {}) => (input || []).map(
+  toSimulationGridModel = (input = []) => input.map(
     (simulation = {}) => {
       const { t, deviceModelEntities } = this.props;
       return ({
@@ -77,18 +77,6 @@ export class SimulationDashboard extends Component {
     }
   );
 
-  isRunning = (simulation) => {
-    const now = moment();
-    const startTime = moment(simulation.startTime);
-    const endTime = moment(simulation.endTime);
-
-    const isRunning = simulation.enabled
-      && (!startTime.isValid() || startTime.isBefore(now))
-      && (!endTime.isValid() || endTime.isAfter(now));
-
-    return isRunning;
-  }
-
   render() {
     const { t, simulationList = [], deviceModelEntities } = this.props;
     const gridProps = {
@@ -100,6 +88,8 @@ export class SimulationDashboard extends Component {
     const activeSimulationsList = simulationList.filter(sim => sim.isRunning);
     const maxCount = activeSimulationsList.length > 0 ? 6 : 9;
     const pastSimulationsList = simulationList.filter(sim => !sim.isRunning).slice(0, maxCount);
+    const className = activeSimulationsList.length > 0 ? 'simulation-tile-link twoCol' : 'simulation-tile-link threeCol';
+
     return [
       <ContextMenu key="context-menu">
         <Btn svg={svgs.plus} onClick={this.opennewSimulationFlyout}>
@@ -109,26 +99,27 @@ export class SimulationDashboard extends Component {
       <PageContent className="simulation-dashboard-container" key="page-content">
         <SectionHeader className="dashboard-header">
           {t('header.simulationsDashboard')}
-          <Btn onClick={this.toggleDashboardView}>
-            {!this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard')}
-          </Btn>
         </SectionHeader>
 
-        {!this.state.showAll ?
+        {
+          !this.state.showAll ?
           <div className="simulation-containers">
-            <div className="active-simulations">
-            {
-              activeSimulationsList.map(sim =>
-                <NavLink className="simulation-tile-link" to={`/simulation/${sim.id}`} key={sim.id}>
-                  <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
-                </NavLink>
-              )
+              {
+                activeSimulationsList.length > 0 &&
+                <div className="active-simulations">
+                  {
+                    activeSimulationsList.map(sim =>
+                      <NavLink className="simulation-tile-link oneCol" to={`/simulation/${sim.id}`} key={sim.id}>
+                        <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                      </NavLink>
+                    )
+                  }
+                </div>
             }
-            </div>
             <div className="past-simulations">
             {
                 pastSimulationsList.map(sim =>
-                <NavLink className="simulation-tile-link" to={`/simulation/${sim.id}`} key={sim.id}>
+                <NavLink className={className} to={`/simulation/${sim.id}`} key={sim.id}>
                   <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
                 </NavLink>
               )
@@ -142,6 +133,11 @@ export class SimulationDashboard extends Component {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
         }
+
+        <Btn className="toggle-view-button" onClick={this.toggleDashboardView}>
+          {!this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard')}
+        </Btn>
+
       </PageContent>
     ];
   }

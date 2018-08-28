@@ -4,6 +4,9 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
+$oneColWidth: calc(100% / 3);
+$twoColWidth: calc(100% *2 / 3);
+
 .simulation-dashboard-container {
   @include rem-fallback(padding, 24px, 32px);
 
@@ -18,18 +21,24 @@
     font-family: $fontSelawikBold;
     @include rem-font-size(34px);
     @include rem-fallback(line-height, 41px);
-
-    .btn { float: right; }
   }
 
   .simulation-containers {
-    display: table;
-    @include rem-fallback(max-width, 1676px);
+    display: flex;
 
-    .active-simulations, .past-simulations { display: table-cell; }
+    .active-simulations{ width: $oneColWidth }
+
+    .past-simulations {  width: 100% }
+
+    .active-simulations + .past-simulations {  width: $twoColWidth }
+  }
+
+  .toggle-view-button {
+    float: right;
+    @include rem-fallback(margin-top, 24px);
   }
 
   @include themify($themes) {
-    .simulation-dashboard-container { color: themed('colorLightestFirst'); }
+    .simulation-dashboard-container { color: themed('colorHighest'); }
   }
 }
