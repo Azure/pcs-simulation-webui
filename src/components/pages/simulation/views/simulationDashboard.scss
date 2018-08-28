@@ -8,6 +8,8 @@ $oneColWidth: calc(100% / 3);
 $twoColWidth: calc(100% *2 / 3);
 
 .simulation-dashboard-container {
+  display: flex;
+  flex-direction: column;
   @include rem-fallback(padding, 24px, 32px);
 
   .simulation-tile-link {
@@ -34,7 +36,7 @@ $twoColWidth: calc(100% *2 / 3);
   }
 
   .toggle-view-button {
-    float: right;
+    justify-content: flex-end;
     @include rem-fallback(margin-top, 24px);
   }
 
