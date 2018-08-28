@@ -13,6 +13,8 @@ import { epics as deviceModelsEpics } from './deviceModelsReducer';
 // ========================= Reducers - START
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
 const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: action.payload});
+var sessionId = 0;
+var isSessionActive = false;
 
 export const redux = createReducerScenario({
   deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelErrorReducer },
@@ -32,20 +34,36 @@ export const epics = createEpicScenario({
   initializeApp: {
     type: 'APP_INITIALIZE',
     epic: () => [
-      simulationRedux.actions.revertToInitial(),
-      simulationEpics.actions.fetchSimulationStatus(),
-      simulationEpics.actions.fetchSimulation(),
-      epics.actions.getSolutionSettings(),
-      deviceModelsEpics.actions.fetchDeviceModels(),
-    ]
+        simulationRedux.actions.revertToInitial(),
+        simulationEpics.actions.fetchSimulationStatus(),
+        simulationEpics.actions.fetchSimulation(),
+        epics.actions.getSolutionSettings(),
+        deviceModelsEpics.actions.fetchDeviceModels(),
+      ]
+    },
+
+  updateSession: {
+    type: 'UPDATE_SESSION',
+    epic: (sessionStatus) => {
+      if(sessionStatus === true){
+        isSessionActive = true;
+      }
+
+      else{
+        isSessionActive = false;
+        sessionId = sessionId+1;
+      }
+
+      return Observable.empty()
+    }
   },
 
   /** Log diagnostics data */
   logEvent: {
     type: 'APP_LOG_EVENT',
     epic: ({ payload }, store) => {
-      const settings = getSolutionSettings(store.getState());
-      const diagnosticsOptOut = settings === undefined ? true : settings.diagnosticsOptOut;
+      payload.eventProperties.sessionId = sessionId;
+      const diagnosticsOptOut = false;
       if (!diagnosticsOptOut) {
         return DiagnosticsService.logEvent(payload)
           .flatMap(_ => Observable.empty())
@@ -56,7 +74,7 @@ export const epics = createEpicScenario({
     }
   },
 
-  /** Get solution settings */
+    /** Get solution settings */
   getSolutionSettings: {
     type: 'APP_SOLUTION_GET_SETTINGS',
     epic: () =>

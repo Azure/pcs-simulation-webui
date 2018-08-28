@@ -3,13 +3,15 @@
 import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
-import { toSimulationModel, toSimulationStatusModel } from 'services/models';
+import { toSimulationModel, toSimulationStatusModel, toSimulationRequestModel} from 'services/models';
 import { getSimulation, getSimulationIsRunning } from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';
+import moment from 'moment';
 
 // Simulation reducer constants
+const SIMULATION_ID = 1;
 const EMPTY_SIMULATION = toSimulationModel();
 const EMPTY_STATUS = toSimulationStatusModel();
 const initialState = { model: undefined, status: undefined };
@@ -59,7 +61,15 @@ export const epics = createEpicScenario({
     epic: ({ payload }, store) => {
       const state = store.getState();
       const { eTag } = getSimulation(state);
-      const event = diagnosticsEvent('StopSimulation');
+      const event = diagnosticsEvent('StopSimulation', eventProps);
+      const eventProps = {
+          Id: SIMULATION_ID,
+          TotalMessages: state.simulation.status.totalMessagesCount,
+          TotalFailedMessages: state.simulation.status.failedMessagesCount,
+          TotalFailedDeviceConnections: state.simulation.status.failedDeviceConnectionsCount,
+          TotalFailedTwinUpdates: state.simulation.status.failedDeviceTwinUpdatesCount
+        };
+
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
@@ -88,13 +98,28 @@ export const epics = createEpicScenario({
       const statusIsOld = !isRunning && newModel.enabled;
       const hasDeviceModels = payload.deviceModels.length > 0;
       const deviceModels = payload.deviceModels.length > 0 ? payload.deviceModels[0] : {};
+      const newModelSimulationRequest = toSimulationRequestModel(newModel);
+      const startTime = 'NOW';
+      const duration = moment.duration(moment(newModelSimulationRequest.EndTime).diff(moment(startTime)));
       const eventProps = {
         DeviceModels: [{
           Id: hasDeviceModels ? deviceModels.id : '',
           Name: hasDeviceModels && deviceModels.defaultDeviceModel ? deviceModels.defaultDeviceModel.name : '',
           Count: hasDeviceModels ? deviceModels.count : 0,
+          Frequency: hasDeviceModels ? deviceModels.interval : '',
           IsCustomDevice: hasDeviceModels ? deviceModels.isCustomDevice : null,
-      }]};
+          Sensors: hasDeviceModels ? deviceModels.sensors : {}
+        }],
+
+        SimulationDetails: [{
+          Id: SIMULATION_ID,
+          StartTime: startTime,
+          EndTime: newModelSimulationRequest.EndTime,
+          IoTHubType: newModelSimulationRequest.IoTHub.ConnectionString===""? 'Preprovisioned': 'Custom',
+          duration: duration
+        }]
+      };
+
       const event = diagnosticsEvent('StartSimulation', eventProps);
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
@@ -105,7 +130,7 @@ export const epics = createEpicScenario({
           ] : [];
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
+        .startWith(redux.actions.clearModel()/*, appEpics.actions.logEvent(event, state)*/)
         .catch(simulationError);
     }
   }
