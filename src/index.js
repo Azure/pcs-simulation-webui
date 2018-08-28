@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import configureStore from 'store/configureStore';
+import diagnosticsEvent from 'store/logEventUtil';
 import AppContainer from 'components/app/app.container';
 import registerServiceWorker from 'registerServiceWorker';
 import { AuthService } from 'services';
@@ -21,12 +22,11 @@ import './polyfills';
 
 // Include base page css
 import './index.css';
-import diagnosticsEvent from 'store/logEventUtil';
 
 // Initialize the user authentication
 AuthService.onLoad(() => {
   // Session timeout constant
-  const SESSION_TIMEOUT = 5000;
+  const SESSION_TIMEOUT = 1200000;
 
   // Create the redux store and redux-observable streams
   const store = configureStore();

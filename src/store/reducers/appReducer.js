@@ -34,12 +34,12 @@ export const epics = createEpicScenario({
   initializeApp: {
     type: 'APP_INITIALIZE',
     epic: () => [
-        simulationRedux.actions.revertToInitial(),
-        simulationEpics.actions.fetchSimulationStatus(),
-        simulationEpics.actions.fetchSimulation(),
-        epics.actions.getSolutionSettings(),
-        deviceModelsEpics.actions.fetchDeviceModels(),
-      ]
+      simulationRedux.actions.revertToInitial(),
+      simulationEpics.actions.fetchSimulationStatus(),
+      simulationEpics.actions.fetchSimulation(),
+      epics.actions.getSolutionSettings(),
+      deviceModelsEpics.actions.fetchDeviceModels(),
+    ]
     },
 
   updateSession: {
@@ -62,8 +62,9 @@ export const epics = createEpicScenario({
   logEvent: {
     type: 'APP_LOG_EVENT',
     epic: ({ payload }, store) => {
+      const settings = getSolutionSettings(store.getState());
+      const diagnosticsOptOut = settings === undefined ? true : settings.diagnosticsOptOut;
       payload.eventProperties.sessionId = sessionId;
-      const diagnosticsOptOut = false;
       if (!diagnosticsOptOut) {
         return DiagnosticsService.logEvent(payload)
           .flatMap(_ => Observable.empty())
@@ -74,7 +75,7 @@ export const epics = createEpicScenario({
     }
   },
 
-    /** Get solution settings */
+  /** Get solution settings */
   getSolutionSettings: {
     type: 'APP_SOLUTION_GET_SETTINGS',
     epic: () =>
