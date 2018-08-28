@@ -20,7 +20,38 @@
     .sensor-header {
       text-transform: uppercase;
       @include rem-font-size(14px);
-      @include themify($themes) { color: themed('colorLightestFirst'); }
+    }
+  }
+
+  .file-uploader-container {
+    position: relative;
+    display: inline-block;
+    @include rem-fallback(margin-left, 32px);
+
+    label { text-decoration: underline; }
+
+    .file-uploader {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+    }
+  }
+
+  .upload-results-container {
+    display: flex;
+    @include rem-fallback(margin-bottom, 8px);
+
+    .file-name { @include rem-fallback(width, 250px); }
+
+    .validation-result { @include rem-fallback(width, 36px); }
+  }
+
+  @include themify($themes) {
+    .sensors-container .sensor-header { color: themed('colorLightestFirst'); }
+    .upload-results-container {
+      .success-result { color: themed('colorSuccess'); }
+      .failed-result { color: themed('colorFailure'); }
     }
   }
 }

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 import Config from 'app.config';
 
-// Map tp device mpde;s in device model tabs
+// Map to deviceModes in device model tabs
 export const toDeviceModels = ({ Items = []}) => Items.map(toDeviceModel);
 
 // Map to deviceModel in device model form view
@@ -86,3 +86,9 @@ const toCustomSensorModel = (sensors = []) => {
       messageSchema
     };
 };
+
+// Upload request model
+export const toDeviceModelUploadRequestModel = (request = {}) => ({
+    ...request,
+    Type: Config.deviceModelTypes.customModel,
+});
