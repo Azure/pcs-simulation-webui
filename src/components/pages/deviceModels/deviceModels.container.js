@@ -14,6 +14,7 @@ const mapStateToProps = state => ({
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
   createDeviceModel: (payload) => dispatch(epics.actions.createDeviceModel(payload)),
+  uploadDeviceModel: (payload) => dispatch(epics.actions.uploadDeviceModel(payload)),
   deleteDeviceModel: (id) => dispatch(epics.actions.deleteDeviceModel(id)),
   editDeviceModel: (payload) => dispatch(epics.actions.editDeviceModel(payload))
 });

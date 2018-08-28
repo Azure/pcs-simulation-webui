@@ -67,33 +67,42 @@ export class HttpClient {
     const { retryWaitTime, maxRetryAttempts } = Config;
     const request = HttpClient.createAjaxRequest({ ...options, url }, withAuth);
     return Observable.ajax(request)
-      // If success, extract the response object
-      .map(({ response }) => response)
+      // If success, extract the response object and enforce camelCase keys if json response
+      .map(ajaxResponse =>
+        ajaxResponse.responseType === 'json'
+          ? ajaxResponse.response
+          : ajaxResponse
+      )
       // Classify errors as retryable or not
       .catch(ajaxError => Observable.throw(classifyError(ajaxError)))
       // Retry any retryable errors
       .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
   }
-
   /**
-   * A helper method that adds "application/json" headers
+   * A helper method that adds "application/json" and auth headers if necessary
    */
   static withHeaders(request, withAuth) {
-    const headers = request.headers || {};
-    // Add JSON headers
-    headers['Accept'] = 'application/json';
-    headers['Content-Type'] = 'application/json';
-    // Add auth headers if needed
+    const authHeaders = {};
     if (withAuth) {
-      // Required by the backend web services when the Authorization header is
-      // not valid, to tell the CSRF protection to allow this request through
-      // (assuming that Auth is not mandatory, e.g. during development).
-      headers['Csrf-Token'] = 'nocheck';
+      authHeaders['Csrf-Token'] = 'nocheck';
       AuthService.getAccessToken(accessToken => {
-        if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
+        if (accessToken) authHeaders['Authorization'] = `Bearer ${accessToken}`;
       });
     }
-    return { ...request, headers };
+    const options = {
+      ...request,
+      headers: {
+        ...jsonHeaders,
+        ...request.headers,
+        ...authHeaders
+      }
+    };
+
+    if (options.headers && options.headers.hasOwnProperty('Content-Type') && options.headers['Content-Type'] === undefined) {
+      delete options.headers['Content-Type'];
+    }
+
+    return options;
   }
 
   /**
@@ -114,7 +123,7 @@ export class HttpClient {
 export const retryHandler = (retryAttempts, retryDelay) =>
   error$ =>
     error$.zip(Observable.range(0, retryAttempts + 1)) // Plus 1 to not count initial call
-      .flatMap(([ error, attempt ]) =>
+      .flatMap(([error, attempt]) =>
         (!isRetryable(error) || attempt === retryAttempts)
           ? Observable.throw(error)
           : Observable.of(error)
@@ -125,9 +134,15 @@ export const retryHandler = (retryAttempts, retryDelay) =>
 const isRetryable = error => error instanceof RetryableAjaxError;
 
 /** A helper function for classifying errors as retryable or not */
-function classifyError(error) {
+export function classifyError(error) {
   if (Config.retryableStatusCodes.has(error.status)) {
     return RetryableAjaxError.from(error);
   }
   return AjaxError.from(error);
 }
+
+/** Headers for a json request */
+const jsonHeaders = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+};

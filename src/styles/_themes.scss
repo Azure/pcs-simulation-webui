@@ -20,6 +20,7 @@ $themes: (
     colorAlarm: $colorAlarm,
     colorWarning: $colorWarning,
     colorSystem: $colorSystem,
+    colorActive: $colorBlue,
 
     // Grid - START
     colorGridScrollBar: $colorCharcoal,
@@ -39,6 +40,11 @@ $themes: (
     colorFlyoutBackground: $colorNoir,
     colorFlyoutText: $colorSmoke,
     // Flyout -END
+
+    // Symbols - START
+    colorSuccess: $colorGreen,
+    colorFailure: $colorRed,
+    // Symbols - END
   ),
   light: (
     // Lows
