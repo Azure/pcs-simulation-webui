@@ -19,7 +19,7 @@ export class FormGroup extends Component {
   render() {
     // Attach the formGroupId to allow automatic focus when a label is clicked
     const childrenWithProps = React.Children.map(this.props.children,
-      child => React.cloneElement(child, { formGroupId: this.formGroupId })
+      child => React.cloneElement(child, { formgroupid: this.formGroupId })
     );
     return <div className={joinClasses('form-group', this.props.className)}>{childrenWithProps}</div>;
   }

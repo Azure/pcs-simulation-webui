@@ -46,7 +46,7 @@ class SimulationTile extends Component {
           }
           this.setState({
             isRunning: simulation.isRunning,
-            totalMessagesCount: simulation.statistics.totalMessagesCount,
+            totalMessagesCount: simulation.statistics.totalMessagesSent,
             activeDevicesCount: simulation.statistics.activeDevicesCount,
             averageMessagesPerSecond: simulation.statistics.averageMessagesPerSecond
           });

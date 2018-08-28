@@ -37,6 +37,15 @@ export const epics = createEpicScenario({
         .catch(handleError(fromAction))
   },
 
+  /** Upload a device model */
+  uploadDeviceModel: {
+    type: 'DEVICE_MODEL_UPLOAD',
+    epic: (fromAction) =>
+      DeviceModelsService.uploadDeviceModel(fromAction.payload)
+        .map(redux.actions.uploadDeviceModel)
+        .catch(handleError(fromAction))
+  },
+
   /** Edit a single device model */
   editDeviceModel:{
     type: 'DEVICE_MODEL_UPDATE',
@@ -91,6 +100,13 @@ const createDeviceModelReducer = (state, { payload }) => {
     items: { $splice: [[state.items.length, 0, result]] }
   });
 };
+const uploadDeviceModelReducer = (state, { payload }) => {
+  const { entities: { deviceModels }, result } = normalize([payload], deviceModelsSchema);
+  return update(state, {
+    entities: { $merge: deviceModels },
+    items: { $splice: [[state.items.length, 0, result]] }
+  });
+};
 const deleteDeviceModelReducer = (state, { payload }) => {
   const itemIdx = state.items.indexOf(payload);
   return update(state, {
@@ -103,6 +119,7 @@ export const redux = createReducerScenario({
   updateDeviceModels: { type: 'DEVICE_MODELS_UPDATE', reducer: updateDeviceModelsReducer },
   updateSingleDeviceModel: { type: 'DEVICE_MODEL_SINGLE_UPDATE', reducer: updateSingleDeviceModelReducer },
   createDeviceModel: { type: 'CREATE_DEVICE_MODEL', reducer: createDeviceModelReducer },
+  uploadDeviceModel: { type: 'UPLOAD_DEVICE_MODEL', reducer: uploadDeviceModelReducer },
   deleteDeviceModel: { type: 'DELETE_DEVICE_MODEL', reducer: deleteDeviceModelReducer },
   registerError: { type: 'DEVICE_MODELS_REDUCER_ERROR', reducer: errorReducer },
 });

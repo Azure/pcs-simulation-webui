@@ -153,10 +153,19 @@
         "dataDescription": "Set parameters for telemetry sent for the data point",
         "addDataPoint": "Add data point",
         "interval": "Min/Max changes occur every:",
-        "frequency": "Report Min/Max changes every:"
+        "frequency": "Report Min/Max changes every:",
+        "basic": "Basic",
+        "advanced": "Advanced"
       },
       "edit": {
         "title": "Edit a custom device model"
+      },
+      "upload": {
+        "create": "Create a new device definition by uploading a JSON file with your own device values and properties",
+        "files": "JSON file upload and parsing with javascript",
+        "uploadedFiles": "Uploaded files:",
+        "browse": "Browse",
+        "errorMsg": "One or more of the files uploaded failed validation. Please verify selected files are valid and try again."
       },
       "sensors": {
         "dataPoint": "Data point",

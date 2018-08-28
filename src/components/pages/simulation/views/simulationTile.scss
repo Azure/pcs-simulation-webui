@@ -11,7 +11,9 @@ $oneColWidth: calc(100% - #{$padding});
 $twoColWidth: calc((100% - #{$twoSidedPadding}) / 2);
 $threeColWidth: calc((100% - #{$padding} * 3) / 3);
 
-.simulation-tile-link { 
+.simulation-tile-link {
+
+  text-decoration: none; 
   @include rem-fallback(min-width, $minWidth);
 
   &.oneCol{ @include rem-fallback(width, $oneColWidth); }
