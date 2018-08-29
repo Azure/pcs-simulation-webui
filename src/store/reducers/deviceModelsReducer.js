@@ -35,10 +35,10 @@ export const epics = createEpicScenario({
     type: 'DEVICE_MODEL_INSERT',
     epic: (fromAction, store) =>{
       const state = store.getState();
-      const event = diagnosticsEvent('CreateDeviceModel', eventProps);
       const eventProps = {
         DeviceModelId: fromAction.payload.id
       };
+      const event = diagnosticsEvent('CreateDeviceModel', eventProps);
 
       return DeviceModelsService.createDeviceModel(fromAction.payload)
       .map(redux.actions.createDeviceModel)
@@ -61,10 +61,10 @@ export const epics = createEpicScenario({
     type: 'DEVICE_MODEL_UPDATE',
     epic: (fromAction, store) =>{
       const state = store.getState();
-      const event = diagnosticsEvent('UpdateDeviceModel', eventProps);
       const eventProps = {
         DeviceModelId: fromAction.payload.id
       };
+      const event = diagnosticsEvent('UpdateDeviceModel', eventProps);
 
       return DeviceModelsService.updateSingleDeviceModel(fromAction.payload)
       .map(redux.actions.updateSingleDeviceModel)
@@ -78,11 +78,10 @@ export const epics = createEpicScenario({
     type: 'DEVICE_MODEL_DELETE',
     epic: (fromAction, store) => {
       const state = store.getState();
-      const event = diagnosticsEvent('DeleteDeviceModel', eventProps);
       const eventProps = {
         DeviceModelId: fromAction.payload
       };
-
+      const event = diagnosticsEvent('DeleteDeviceModel', eventProps);
       return DeviceModelsService.deleteDeviceModelById(fromAction.payload)
       .map(redux.actions.deleteDeviceModel)
       .startWith(appEpics.actions.logEvent(event, state))
