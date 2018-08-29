@@ -3,7 +3,6 @@
 import Config from 'app.config';
 
 import { gridValueFormatters } from 'components/shared/pcsGrid/pcsGridConfig';
-import { humanizeDuration } from 'utilities';
 
 const { checkForEmpty } = gridValueFormatters;
 
@@ -59,7 +58,7 @@ export const simulationsColumnDefs = {
   duration: {
     headerName: 'simulation.grid.duration',
     field: 'duration',
-    valueFormatter: ({ value }) => humanizeDuration(value)
+    valueFormatter: ({ value }) => checkForEmpty(value)
   }
 };
 

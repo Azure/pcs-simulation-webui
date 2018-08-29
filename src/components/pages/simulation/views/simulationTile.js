@@ -63,12 +63,11 @@ class SimulationTile extends Component {
             failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount
           },
-            () => {
-              if (response.isRunning) {
-                this.simulationRefresh$.next({ simulationId: response.id });
-              }
+          () => {
+            if (response.isRunning) {
+              this.simulationRefresh$.next({ simulationId: response.id });
             }
-          );
+          });
         },
         pollingError => this.setState({ pollingError })
       )

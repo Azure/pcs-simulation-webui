@@ -134,8 +134,8 @@ class SimulationDetails extends Component {
   getHubLink = (shouldPad = true) => {
     return this.state.showLink && (
       <div className={`portal-link ${shouldPad && 'padded'}`}>
-        <Svg path={svgs.linkTo} className="link-svg" />
-        <a href={this.state.hubUrl} target="_blank">View IoT Hub metrics in the Azure portal</a>
+        <Svg path={svgs.linkTo} className='link-svg' />
+        <a href={this.state.hubUrl} target='_blank'>View IoT Hub metrics in the Azure portal</a>
       </div>
     )
   }
@@ -163,7 +163,7 @@ class SimulationDetails extends Component {
       const refreshPage = () => window.location.reload(true);
 
       return (
-        <FormActions className="details-form-actions">
+        <FormActions className='details-form-actions'>
           <ErrorMsg>{ t('simulation.form.errorMsg.simulationStatusError') }</ErrorMsg>
           <BtnToolbar>
             <Btn { ...btnProps } onClick={refreshPage}>Refresh</Btn>
@@ -172,8 +172,8 @@ class SimulationDetails extends Component {
       );
     } else if (this.state.isRunning) {
       return (
-        <FormActions className="details-form-actions">
-            <Indicator pattern="bar" />
+        <FormActions className='details-form-actions'>
+            <Indicator pattern='bar' />
             { t('simulation.status.simulationRunning') }
             { this.getSimulationStatus(totalDevicesCount) }
             { this.getHubLink() }
@@ -248,11 +248,11 @@ class SimulationDetails extends Component {
     const statuses = simulationStatuses.map(({description, value, className}, index) => (
       <SectionHeader key={index}>
         <span className={className}>{value}</span>
-        <span className="status-description">{description}</span>
+        <span className='status-description'>{description}</span>
       </SectionHeader>
     ));
 
-    return (<FormSection className="simulation-status-section">
+    return (<FormSection className='simulation-status-section'>
       <SectionHeader>{ t('simulation.status.header') }</SectionHeader>
       {statuses}
     </FormSection>);
@@ -285,18 +285,18 @@ class SimulationDetails extends Component {
     const totalDevices = deviceModels.reduce((total, { count }) => total + count, 0);
 
     return (
-      <div className="simulation-details-container">
+      <div className='simulation-details-container'>
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
-          <div className="target-hub-content">{simulation.name}</div>
+          <div className='target-hub-content'>{simulation.name}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{t('simulation.description')}</SectionHeader>
-          <div className="target-hub-content">{simulation.description}</div>
+          <div className='target-hub-content'>{simulation.description}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
-          <div className="target-hub-content">{iotHubString}</div>
+          <div className='target-hub-content'>{iotHubString}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
@@ -317,12 +317,12 @@ class SimulationDetails extends Component {
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.telemetry.header') }</SectionHeader>
-          <div className="duration-header">{`HH  MM  SS`}</div>
-          <div className="duration-content">{`${hour} : ${minutes} : ${seconds}`}</div>
+          <div className='duration-header'>{`HH  MM  SS`}</div>
+          <div className='duration-content'>{`${hour} : ${minutes} : ${seconds}`}</div>
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
-          <div className="duration-content">{duration}</div>
+          <div className='duration-content'>{duration}</div>
         </FormSection>
         {this.getSimulationStatusBar(totalDevices) }
       </div>
