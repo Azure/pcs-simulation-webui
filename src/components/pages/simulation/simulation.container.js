@@ -2,30 +2,22 @@
 
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import {
-  getSimulationListWithDeviceModels,
-  getSimulationWithDeviceModels,
-  getSimulationIsRunning,
-  getPreprovisionedIoTHub,
-  getPreprovisionedIoTHubInUse,
-  getPreprovisionedIoTHubMetricsUrl,
-  getSimulationError
-} from 'store/selectors';
 import { Simulation } from './simulation';
 import { epics as appEpics } from 'store/reducers/appReducer';
-import { epics as simulationEpics } from 'store/reducers/simulationReducer';
+import {
+  epics as simulationEpics,
+  getSimulationListWithDeviceModels,
+  getPreprovisionedIoTHub,
+  getSimulationError
+} from 'store/reducers/simulationReducer';
 import { getDeviceModels, getDeviceModelEntities } from 'store/reducers/deviceModelsReducer';
 
 // Pass the simulation status
 const mapStateToProps = state => ({
   simulationList: getSimulationListWithDeviceModels(state),
-  simulation: getSimulationWithDeviceModels(state),
-  isRunning: getSimulationIsRunning(state),
-  preprovisionedIoTHub: getPreprovisionedIoTHub(state),
-  preprovisionedIoTHubInUse: getPreprovisionedIoTHubInUse(state),
-  preprovisionedIoTHubMetricsUrl: getPreprovisionedIoTHubMetricsUrl(state),
   deviceModels: getDeviceModels(state),
   deviceModelEntities: getDeviceModelEntities(state),
+  preprovisionedIoTHub: getPreprovisionedIoTHub(state),
   error: getSimulationError(state)
 });
 

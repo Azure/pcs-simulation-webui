@@ -4,6 +4,9 @@ import 'rxjs';
 import { Observable } from 'rxjs';
 import { schema, normalize } from 'normalizr';
 import update from 'immutability-helper';
+import { createSelector } from 'reselect';
+import Config from 'app.config';
+import { getDeviceModelEntities } from 'store/reducers/deviceModelsReducer';
 import { SimulationService } from 'services';
 import { toSimulationListModel, toSimulationModel, toSimulationStatusModel } from 'services/models';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
@@ -15,10 +18,10 @@ const EMPTY_SIMULATION_LIST = toSimulationListModel();
 const EMPTY_SIMULATION = toSimulationModel();
 const EMPTY_STATUS = toSimulationStatusModel();
 const initialState = {
-  model: undefined,
-  status: undefined,
   entities: {},
-  items: []
+  items: [],
+  status: undefined,
+  errors: {}
 };
 
 // ========================= Schemas - START
@@ -34,13 +37,20 @@ const simulationListModelReducer = (state, { payload }) => {
     items: { $set: result }
   });
 };
-const simulationModelReducer = (state, action) => ({ ...state, model: action.payload });
+// const simulationModelReducer = (state, action) => ({ ...state, model: action.payload });
+const updateSimulationModelReducer = (state, { payload }) => {
+  const { entities: { simulations }, result } = normalize([payload], simulationsSchema);
+  return update(state, {
+    entities: { $merge: simulations },
+    items: { $splice: [[state.items.length, 0, result]] }
+  });
+};
 const simulationStatusReducer = (state, action) => ({ ...state, status: action.payload });
 const simulationErrorReducer = (state, action) => ({ error: action.payload });
 const initialStateReducer = (state, action) => initialState;
 
 const updateListModel = { type: 'SIMULATION_LIST_UPDATE', reducer: simulationListModelReducer };
-const updateModel = { type: 'SIMULATION_UPDATE', reducer: simulationModelReducer };
+const updateModel = { type: 'SIMULATION_UPDATE', reducer: updateSimulationModelReducer };
 const updateStatus = { type: 'SIMULATION_STATUS_UPDATE', reducer: simulationStatusReducer };
 
 export const redux = createReducerScenario({
@@ -54,7 +64,7 @@ export const redux = createReducerScenario({
   revertToInitial: { type: 'SIMULATION_REVERT_TO_INITIAL', reducer: initialStateReducer }
 });
 
-export const reducer = { simulations: redux.getReducer(initialState) , simulation: redux.getReducer(initialState) };
+export const reducer = { simulations: redux.getReducer(initialState) };
 // ========================= Reducers - END
 
 // ========================= Selectors - START
@@ -68,10 +78,9 @@ export const epics = createEpicScenario({
   /** Loads the simulation list*/
   fetchSimulationList: {
     type: 'SIMULATION_LIST_FETCH',
-    epic: () =>
+    epic: (fromAction) =>
       SimulationService.getSimulationList()
         .map(redux.actions.updateListModel)
-        .startWith(redux.actions.clearListModel())
         .catch(simulationError)
   },
 
@@ -79,7 +88,7 @@ export const epics = createEpicScenario({
   fetchSimulation: {
     type: 'SIMULATION_FETCH',
     epic: ({ id }) =>
-      SimulationService.getSimulation (id)
+      SimulationService.getSimulation(id)
         .map(redux.actions.updateModel)
         .startWith (redux.actions.clearModel())
         .catch (simulationError)
@@ -93,12 +102,12 @@ export const epics = createEpicScenario({
       const event = diagnosticsEvent('StopSimulation');
       return SimulationService.stopSimulation(payload, false)
         .map(redux.actions.updateModel)
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
+        .startWith(appEpics.actions.logEvent(event, state))
         .catch(simulationError);
     }
   },
 
-  /** Loads the simulation status */
+  /** Loads the simulation sevice status */
   fetchSimulationStatus: {
     type: 'SIMULATION_STATUS_FETCH',
     epic: () =>
@@ -130,3 +139,36 @@ export const epics = createEpicScenario({
   }
 });
 // ========================= Epics - END
+
+// ========================= Selectors - START
+export const getSimulationListReduer = state => state.simulations;
+export const getEntities = state => getSimulationListReduer(state).entities;
+export const getItems = state => getSimulationListReduer(state).items;
+export const getSimulationStatus = state => getSimulationListReduer(state).status;
+export const getSimulationError = state => getSimulationListReduer(state).error;
+export const getSimulations = createSelector(
+  getEntities, getItems,
+    (entities, items = []) => items.map(id => entities[id])
+);
+
+export const getPreprovisionedIoTHub = createSelector(
+  getSimulationStatus,
+  status => !status ? undefined : status.preprovisionedIoTHub
+);
+
+export const getSimulationListWithDeviceModels = createSelector(
+  [getSimulations, getDeviceModelEntities],
+  (simulations = [], deviceModelsMap) => simulations.map(simulationModel => {
+
+    const modelId = ((simulationModel.deviceModels || [])[0] || {}).id;
+    const name = modelId === Config.customSensorValue
+      ? 'Custom'
+      : (deviceModelsMap[modelId] || {}).name;
+    const deviceModels = (simulationModel.deviceModels || [])
+      .map(model => ({ ...model, name }));
+    return { ...simulationModel, deviceModels };
+  })
+);
+
+
+// ========================= Selectors - END
