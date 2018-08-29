@@ -61,7 +61,6 @@ export const epics = createEpicScenario({
     epic: ({ payload }, store) => {
       const state = store.getState();
       const { eTag } = getSimulation(state);
-      const event = diagnosticsEvent('StopSimulation', eventProps);
       const eventProps = {
           Id: SIMULATION_ID,
           TotalMessages: state.simulation.status.totalMessagesCount,
@@ -70,6 +69,7 @@ export const epics = createEpicScenario({
           TotalFailedTwinUpdates: state.simulation.status.failedDeviceTwinUpdatesCount
         };
 
+      const event = diagnosticsEvent('StopSimulation', eventProps);
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
