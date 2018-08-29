@@ -17,7 +17,6 @@ export const simulationsColumnDefs = {
   name: {
     headerName: 'simulation.grid.name',
     field: 'name',
-    sort: 'asc',
     valueFormatter: ({ value }) => checkForEmpty(value)
   },
   deviceModels: {
@@ -28,7 +27,8 @@ export const simulationsColumnDefs = {
   startTime: {
     headerName: 'simulation.grid.startTime',
     field: 'startTime',
-    valueFormatter: ({ value }) => checkForEmpty(value)
+    valueFormatter: ({ value }) => checkForEmpty(value),
+    sort: 'desc'
   },
   totalDevices: {
     headerName: 'simulation.grid.totalDevices',
