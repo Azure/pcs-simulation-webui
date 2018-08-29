@@ -1,17 +1,22 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
 import { SectionHeader } from 'components/shared';
-import { SimulationService } from 'services';
+import { SimulationService, retryHandler } from 'services';
 
 import './simulationTile.css';
 
-const pollingInterval = Config.simulationStatusPollingInterval;
-const dateTimeFormat = Config.dateFormat;
+
+const {
+  simulationStatusPollingInterval,
+  maxRetryAttempts,
+  retryWaitTime,
+  dateTimeFormat
+} = Config;
 
 class SimulationTile extends Component {
 
@@ -24,6 +29,8 @@ class SimulationTile extends Component {
     };
 
     this.emitter = new Subject();
+    this.simulationRefresh$ = new Subject();
+    this.subscriptions = [];
   }
 
   componentDidMount() {
@@ -34,32 +41,45 @@ class SimulationTile extends Component {
 
     const simulationId = this.props.simulation.id;
 
-    this.pollingSubscriber = SimulationService.getSimulation(simulationId)
+    const getSimulationStream = _ => SimulationService.getSimulation(simulationId)
+      .merge(
+        this.simulationRefresh$
+          .delay(simulationStatusPollingInterval)
+          .flatMap(_ => SimulationService.getSimulation(simulationId))
+      )
+      .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
+
+    this.subscriptions.push(this.emitter
+      .switchMap(getSimulationStream)
       .subscribe(
-        simulation => {
-          if (simulation.isRunning) {
-            this.emitter.next(
-              Observable.of('poll')
-                .delay(pollingInterval)
-                .flatMap(() => SimulationService.getSimulation(simulationId))
-            );
-          }
+         response => {
           this.setState({
-            isRunning: simulation.isRunning,
-            totalMessagesCount: simulation.statistics.totalMessagesSent,
-            activeDevicesCount: simulation.statistics.activeDevicesCount,
-            averageMessagesPerSecond: simulation.statistics.averageMessagesPerSecond
-          });
+            simulation: response,
+            isRunning: response.isRunning,
+            totalMessagesSent: response.statistics.totalMessagesSent,
+            failedMessagesCount: response.statistics.failedMessagesCount,
+            activeDevicesCount: response.statistics.activeDevicesCount,
+            averageMessagesPerSecond: response.statistics.averageMessagesPerSecond,
+            failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
+            failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount
+          },
+            () => {
+              if (response.isRunning) {
+                this.simulationRefresh$.next({ simulationId: response.id });
+              }
+            }
+          );
         },
         pollingError => this.setState({ pollingError })
-      );
+      )
+    );
 
     // Start polling
     this.emitter.next(SimulationService.getSimulation(simulationId));
   }
 
   componentWillUnmount() {
-    this.pollingSubscriber.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   getActiveDevices() {

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
@@ -17,10 +17,15 @@ import {
   SectionHeader
 } from 'components/shared';
 
-import { SimulationService } from 'services';
+import { SimulationService, retryHandler } from 'services';
 
-const pollingInterval = Config.simulationStatusPollingInterval;
 const maxDate = '12/31/9999 11:59:59 PM +00:00';
+
+const {
+  simulationStatusPollingInterval,
+  maxRetryAttempts,
+  retryWaitTime
+} = Config;
 
 class SimulationDetails extends Component {
 
@@ -33,56 +38,48 @@ class SimulationDetails extends Component {
       showLink : false,
       hubUrl : '',
       pollingError: '',
-      startError: ''
+      serviceError: ''
     };
 
     this.emitter = new Subject();
-    this.pollingStream = this.emitter.switch();
+    this.simulationRefresh$ = new Subject();
     this.subscriptions = [];
   }
 
   componentDidMount() {
     const simulationId = this.props.location.pathname.split('/').pop();
-    this.subscriptions.push(
-      SimulationService.getSimulation(simulationId)
+
+    const getSimulationStream= _ => SimulationService.getSimulation(simulationId)
+      .merge(
+        this.simulationRefresh$
+        .delay(simulationStatusPollingInterval)
+          .flatMap(_ => SimulationService.getSimulation(simulationId))
+      )
+      .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
+
+    this.subscriptions.push(this.emitter
+      .switchMap(getSimulationStream)
       .subscribe(
-        simulation => this.setState({ simulation }),
+        response => {
+          this.setState({
+            simulation: response,
+            isRunning: response.isRunning,
+            totalMessagesSent: response.statistics.totalMessagesSent,
+            failedMessagesCount: response.statistics.failedMessagesCount,
+            activeDevicesCount: response.statistics.activeDevicesCount,
+            averageMessagesPerSecond: response.statistics.averageMessagesPerSecond,
+            failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
+            failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount
+          },
+            () => {
+              if (response.isRunning) {
+                this.simulationRefresh$.next({ simulationId: response.id });
+              }
+            }
+          );
+        },
         pollingError => this.setState({ pollingError })
       )
-    );
-
-    // Initialize state from the most recent status
-    this.setState({
-      isRunning: this.props.isRunning,
-      hubUrl: this.props.preprovisionedIoTHubMetricsUrl,
-      showLink: this.props.preprovisionedIoTHubInUse
-      });
-
-    // Poll until the simulation status is false
-    this.subscriptions.push(
-      SimulationService.getSimulation(simulationId)
-        .subscribe(
-          simulation => {
-            if (simulation.isRunning) {
-              this.emitter.next(
-                Observable.of('poll')
-                  .delay(pollingInterval)
-                  .flatMap(() => SimulationService.getSimulation(simulationId))
-              );
-            }
-
-            this.setState({
-              isRunning: simulation.isRunning,
-              totalMessagesSent: simulation.statistics.totalMessagesSent,
-              failedMessagesCount: simulation.statistics.failedMessagesCount,
-              activeDevicesCount: simulation.statistics.activeDevicesCount,
-              averageMessagesPerSecond: simulation.statistics.averageMessagesPerSecond,
-              failedDeviceConnectionsCount: simulation.statistics.failedDeviceConnectionsCount,
-              failedDeviceTwinUpdatesCount: simulation.statistics.failedDeviceTwinUpdatesCount
-            });
-          },
-          pollingError => this.setState({ pollingError })
-        )
     );
 
     // Start polling
@@ -96,9 +93,13 @@ class SimulationDetails extends Component {
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
   stopSimulation = () => {
-    this.props.stopSimulation({
-      ...this.state.simulation
-    });
+    this.subscriptions.push(SimulationService.stopSimulation(this.state.simulation)
+      .subscribe(
+        simulation => {
+          this.setState({ isRunning: simulation.isRunning })
+        }),
+      serviceError => this.setState({ serviceError })
+    );
   };
 
   startSimulation = (event) => {
@@ -126,7 +127,7 @@ class SimulationDetails extends Component {
           const newSimulationPath = path.replace(this.state.simulation.id, newId);
           window.location.replace(newSimulationPath)
         }),
-      startError => this.setState({ startError })
+      serviceError => this.setState({ serviceError })
     );
   }
 
