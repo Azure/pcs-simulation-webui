@@ -35,7 +35,7 @@ export class DeviceModelScriptsService {
 
   /** Creates a device model script */
   static uploadsDeviceModelScript(script) {
-    return HttpClient.upload(ENDPOINT, toDeviceModelScriptRequestModel(script), uploadOptions)
+    return HttpClient.post(ENDPOINT, toDeviceModelScriptRequestModel(script), uploadOptions)
       .map(toDeviceModelScript);
   }
 
