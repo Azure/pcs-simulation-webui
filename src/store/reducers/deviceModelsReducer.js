@@ -82,6 +82,7 @@ export const epics = createEpicScenario({
         DeviceModelId: fromAction.payload
       };
       const event = diagnosticsEvent('DeleteDeviceModel', eventProps);
+      
       return DeviceModelsService.deleteDeviceModelById(fromAction.payload)
       .map(redux.actions.deleteDeviceModel)
       .startWith(appEpics.actions.logEvent(event, state))
