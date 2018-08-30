@@ -42,7 +42,10 @@ export const reducer = { simulation: redux.getReducer(initialState) };
 // ========================= Selectors - END
 
 // ========================= Epics - START
-const simulationError = error => Observable.of(redux.actions.registerError(error.message));
+const simulationError = state => error => {
+  const errorEvent = diagnosticsEvent('SimulationUXError');
+  return Observable.of(redux.actions.registerError(error.message))
+            .startWith(appEpics.actions.logEvent(errorEvent, state))};
 
 export const epics = createEpicScenario({
   /** Loads the simulation */
@@ -52,7 +55,7 @@ export const epics = createEpicScenario({
       SimulationService.getSimulation()
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel())
-        .catch(simulationError)
+        .catch(simulationError(null))
   },
 
   /** Used to enable or disable the simulation */
@@ -61,8 +64,12 @@ export const epics = createEpicScenario({
     epic: ({ payload }, store) => {
       const state = store.getState();
       const { eTag } = getSimulation(state);
+      const startTime = state.simulation.model.startTime;
+      const endTime = new Date();
+      const duration = moment.duration(moment(endTime).diff(moment(startTime)));
       const eventProps = {
           Id: SIMULATION_ID,
+          ActualDuration: duration,
           TotalMessages: state.simulation.status.totalMessagesCount,
           TotalFailedMessages: state.simulation.status.failedMessagesCount,
           TotalFailedDeviceConnections: state.simulation.status.failedDeviceConnectionsCount,
@@ -73,7 +80,7 @@ export const epics = createEpicScenario({
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
-        .catch(simulationError);
+        .catch(simulationError(state));
     }
   },
 
@@ -84,7 +91,7 @@ export const epics = createEpicScenario({
       SimulationService.getStatus()
         .map(redux.actions.updateStatus)
         .startWith(redux.actions.clearStatus())
-        .catch(simulationError)
+        .catch(simulationError(null))
   },
 
   /** Updates the simulation */
@@ -99,8 +106,9 @@ export const epics = createEpicScenario({
       const hasDeviceModels = payload.deviceModels.length > 0;
       const deviceModels = payload.deviceModels.length > 0 ? payload.deviceModels[0] : {};
       const newModelSimulationRequest = toSimulationRequestModel(newModel);
-      const startTime = 'NOW';
-      const duration = moment.duration(moment(newModelSimulationRequest.EndTime).diff(moment(startTime)));
+      const startTime = state.simulation.model.startTime;
+      const endTime = state.simulation.model.endTime;
+      const duration = moment.duration(moment(endTime).diff(moment(startTime)));
       const eventProps = {
         DeviceModels: [{
           Id: hasDeviceModels ? deviceModels.id : '',
@@ -131,7 +139,7 @@ export const epics = createEpicScenario({
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
         .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
-        .catch(simulationError);
+        .catch(simulationError(state));
     }
   }
 });

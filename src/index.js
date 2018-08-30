@@ -47,9 +47,9 @@ AuthService.onLoad(() => {
   window.addEventListener('keydown', () => useEvent.next('u'))
 
   useEvent.subscribe(count => {
-    store.dispatch(appEpics.actions.updateSession(true))
     if(logSessionStart === true){
       const sessionStartEvent = diagnosticsEvent('SessionStart', {});
+      store.dispatch(appEpics.actions.updateSession(true))
       store.dispatch(appEpics.actions.logEvent(sessionStartEvent, state))
       logSessionStart = false;
     }
@@ -58,7 +58,6 @@ AuthService.onLoad(() => {
   })
 
   useEvent.debounceTime(SESSION_TIMEOUT).subscribe(count => {
-    store.dispatch(appEpics.actions.updateSession(false))
     logSessionStart = true;
     return Observable.empty()
   })

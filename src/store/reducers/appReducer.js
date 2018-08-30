@@ -13,7 +13,7 @@ import { epics as deviceModelsEpics } from './deviceModelsReducer';
 // ========================= Reducers - START
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
 const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: action.payload});
-var sessionId = 0;
+var sessionId = new Date();
 var isSessionActive = false;
 
 export const redux = createReducerScenario({
@@ -45,15 +45,7 @@ export const epics = createEpicScenario({
   updateSession: {
     type: 'UPDATE_SESSION',
     epic: (sessionStatus) => {
-      if(sessionStatus === true){
-        isSessionActive = true;
-      }
-
-      else{
-        isSessionActive = false;
-        sessionId = sessionId+1;
-      }
-
+      sessionId = new Date();
       return Observable.empty()
     }
   },
