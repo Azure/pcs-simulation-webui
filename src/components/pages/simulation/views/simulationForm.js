@@ -149,7 +149,7 @@ class SimulationForm extends LinkedComponent {
         minutes: duration.minutes(),
         seconds: duration.seconds()
       },
-      deviceModels: (simulation.deviceModels || []).map(this.toDeviceModelReplicable)
+      deviceModels: ((simulation || {}).deviceModels || []).map(this.toDeviceModelReplicable)
     });
   }
 
