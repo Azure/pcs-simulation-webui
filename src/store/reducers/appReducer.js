@@ -13,6 +13,9 @@ import { epics as deviceModelsEpics } from './deviceModelsReducer';
 // ========================= Reducers - START
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
 const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: action.payload});
+
+// session management variables declaration
+// using 'Timestamp as session id'
 let sessionId = new Date();
 let isSessionActive = false;
 
