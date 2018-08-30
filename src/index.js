@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Rx from 'rxjs';
+import Config from 'app.config';
 import { Observable } from 'rxjs';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -26,7 +27,7 @@ import './index.css';
 // Initialize the user authentication
 AuthService.onLoad(() => {
   // Session timeout constant
-  const SESSION_TIMEOUT = 1200000;
+  const sessionTimeout = Config.sessionTimeout;
 
   // Create the redux store and redux-observable streams
   const store = configureStore();
@@ -57,7 +58,7 @@ AuthService.onLoad(() => {
     return Observable.empty()
   })
 
-  useEvent.debounceTime(SESSION_TIMEOUT).subscribe(count => {
+  useEvent.debounceTime(sessionTimeout).subscribe(count => {
     logSessionStart = true;
     return Observable.empty()
   })
