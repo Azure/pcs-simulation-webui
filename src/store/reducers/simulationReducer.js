@@ -3,7 +3,7 @@
 import 'rxjs';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
-import { toSimulationModel, toSimulationStatusModel, toSimulationRequestModel} from 'services/models';
+import { toSimulationModel, toSimulationStatusModel, toSimulationRequestModel } from 'services/models';
 import { getSimulation, getSimulationIsRunning } from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';

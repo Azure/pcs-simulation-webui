@@ -13,8 +13,8 @@ import { epics as deviceModelsEpics } from './deviceModelsReducer';
 // ========================= Reducers - START
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
 const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: action.payload});
-var sessionId = new Date();
-var isSessionActive = false;
+let sessionId = new Date();
+let isSessionActive = false;
 
 export const redux = createReducerScenario({
   deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelErrorReducer },

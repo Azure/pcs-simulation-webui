@@ -34,8 +34,8 @@ AuthService.onLoad(() => {
   const userLoginEvent = diagnosticsEvent('UserLogInSuccess', {});
 
   // Creating variables for Session Management
-  var useEvent = new Rx.Subject();
-  var logSessionStart = true;
+  let useEvent = new Rx.Subject();
+  let logSessionStart = true;
 
   // Logging 'Successful user login' to diagnostics
   store.dispatch(appEpics.actions.logEvent(userLoginEvent, state))
@@ -47,7 +47,7 @@ AuthService.onLoad(() => {
   window.addEventListener('keydown', () => useEvent.next('u'))
 
   useEvent.subscribe(count => {
-    if(logSessionStart === true){
+    if (logSessionStart === true) {
       const sessionStartEvent = diagnosticsEvent('SessionStart', {});
       store.dispatch(appEpics.actions.updateSession(true))
       store.dispatch(appEpics.actions.logEvent(sessionStartEvent, state))
