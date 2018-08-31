@@ -170,6 +170,4 @@ export const getSimulationListWithDeviceModels = createSelector(
     return { ...simulationModel, deviceModels };
   })
 );
-
-
 // ========================= Selectors - END
