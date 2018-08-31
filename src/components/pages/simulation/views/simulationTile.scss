@@ -16,11 +16,11 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
   text-decoration: none; 
   @include rem-fallback(min-width, $minWidth);
 
-  &.oneCol{ @include rem-fallback(width, $oneColWidth); }
+  &.oneCol { @include rem-fallback(width, $oneColWidth); }
 
-  &.twoCol{ @include rem-fallback(width, $twoColWidth); }
+  &.twoCol { @include rem-fallback(width, $twoColWidth); }
 
-  &.threeCol{ @include rem-fallback(width, $threeColWidth); }
+  &.threeCol { @include rem-fallback(width, $threeColWidth); }
 }
 
 .simulation-tile-container {
