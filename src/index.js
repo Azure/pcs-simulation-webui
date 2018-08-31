@@ -32,7 +32,7 @@ AuthService.onLoad(() => {
   const store = configureStore();
 
   // Creating variables for Session Management
-  let useEvent = new Rx.Subject();
+  let useEvent = new Subject();
   let logSessionStart = true;
 
   // Initialize the app redux data

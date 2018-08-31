@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import 'rxjs';
+import diagnosticsEvent from 'store/logEventUtil';
 import { Observable } from 'rxjs';
 import { ConfigService, DiagnosticsService } from 'services';
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';

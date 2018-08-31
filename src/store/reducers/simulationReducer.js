@@ -55,7 +55,7 @@ export const epics = createEpicScenario({
       SimulationService.getSimulation()
         .map(redux.actions.updateModel)
         .startWith(redux.actions.clearModel())
-        .catch(simulationError(null))
+        .catch(simulationError)
   },
 
   /** Used to enable or disable the simulation */
@@ -91,7 +91,7 @@ export const epics = createEpicScenario({
       SimulationService.getStatus()
         .map(redux.actions.updateStatus)
         .startWith(redux.actions.clearStatus())
-        .catch(simulationError(null))
+        .catch(simulationError)
   },
 
   /** Updates the simulation */
