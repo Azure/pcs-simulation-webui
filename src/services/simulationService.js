@@ -35,8 +35,7 @@ export class SimulationService {
   }
 
   /** Returns any currently running simulation */
-  static getSimulation(id) {
-    id = id || '';
+  static getSimulation(id = '') {
     return HttpClient.get(`${ENDPOINT}simulations/${id}`)
       .map(toSimulationModel)
       .catch(error => {
@@ -70,7 +69,8 @@ export class SimulationService {
   static stopSimulation(simulation) {
     return HttpClient.patch(
         `${ENDPOINT}simulations/${simulation.id}`,
-        toSimulationPatchModel(simulation, false))
+        toSimulationPatchModel(simulation, false)
+      )
       .map(toSimulationModel)
       .catch(resolveConflict);
   }
@@ -78,6 +78,5 @@ export class SimulationService {
 
 /** If the UI resource is out of sync with the service, update the UI resource */
 function resolveConflict(error) {
-  console.log("error ", error);
   return Observable.throw(error);
 }

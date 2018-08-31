@@ -95,32 +95,32 @@ export class SimulationDashboard extends Component {
     const className = isRunning ? 'simulation-tile-link twoCol' : 'simulation-tile-link threeCol';
 
     return [
-      <ContextMenu key='context-menu'>
-        <Btn className='new-simulation-btn' svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning}>
+      <ContextMenu key="context-menu">
+        <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning}>
           { t('simulation.newSim') }
         </Btn>
       </ContextMenu>,
-      <PageContent className='simulation-dashboard-container' key='page-content'>
-        <SectionHeader className='dashboard-header'>
+      <PageContent className="simulation-dashboard-container" key="page-content">
+        <SectionHeader className="dashboard-header">
           {t('header.simulationsDashboard')}
         </SectionHeader>
 
         {
           !this.state.showAll ?
-          <div className='simulation-containers'>
+          <div className="simulation-containers">
               {
                 activeSimulationsList.length > 0 &&
-                <div className='active-simulations'>
+                <div className="active-simulations">
                   {
                     activeSimulationsList.map(sim =>
-                      <NavLink className='simulation-tile-link oneCol' to={`/simulation/${sim.id}`} key={sim.id}>
+                      <NavLink className="simulation-tile-link oneCol" to={`/simulation/${sim.id}`} key={sim.id}>
                         <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
                       </NavLink>
                     )
                   }
                 </div>
             }
-            <div className='past-simulations'>
+            <div className="past-simulations">
             {
                 pastSimulationsList.map(sim =>
                 <NavLink className={className} to={`/simulation/${sim.id}`} key={sim.id}>
@@ -137,7 +137,7 @@ export class SimulationDashboard extends Component {
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
         }
 
-        <Btn className='toggle-view-button' onClick={this.toggleDashboardView}>
+        <Btn className="toggle-view-button" onClick={this.toggleDashboardView}>
           {!this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard')}
         </Btn>
 

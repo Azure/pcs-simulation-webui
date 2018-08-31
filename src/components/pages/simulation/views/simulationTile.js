@@ -86,9 +86,9 @@ class SimulationTile extends Component {
 
     if (this.state.isRunning) {
       return (
-        <div className='active-devices'>
-          <div className='active-devices-count'> {this.state.activeDevicesCount} </div>
-          <div className='active-devices-label'> {t('simulation.status.activeDevicesCount')}</div>
+        <div className="active-devices">
+          <div className="active-devices-count"> {this.state.activeDevicesCount} </div>
+          <div className="active-devices-label"> {t('simulation.status.activeDevicesCount')}</div>
         </div>
       );
     }
@@ -114,38 +114,38 @@ class SimulationTile extends Component {
     const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
     return (
       <div className= { className } >
-        <div className='tile-header'>
+        <div className="tile-header">
           <SectionHeader>{name || id}</SectionHeader>
         </div>
-        <div className='time-containers'>
-          <div className='left time-container'> {t('simulation.status.created', { startDateTime })} </div>
-          <div className='right time-container'> {
+        <div className="time-containers">
+          <div className="left time-container"> {t('simulation.status.created', { startDateTime })} </div>
+          <div className="right time-container"> {
             this.state.isRunning
               ? t('simulation.status.running')
               : t('simulation.status.ended', { endDateTime })}
           </div>
         </div>
-        <div className='tile-body'>
+        <div className="tile-body">
           {this.getActiveDevices()}
           {
             this.state.isRunning &&
-            <div className='chart-div'></div>
+            <div className="chart-div"></div>
           }
-          <div className='simulation-summary'>
-            <div className='device-model-rows'>
+          <div className="simulation-summary">
+            <div className="device-model-rows">
               {
                 deviceModels.map(deviceModelItem =>
-                  <div className='device-model-row' key={ deviceModelItem.id }>
+                  <div className="device-model-row" key={ deviceModelItem.id }>
                     {deviceModelItem.count} {deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}
                   </div>
                 )
               }
             </div>
-            <div className='telemetry-container'>
-              <div className='simulation-status-section right'>
-                <div className='messages-per-second'>{this.state.isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
-                <div className='messages-per-second-desc'>{t('simulation.status.averageMessagesPerSec')}</div>
-                <div className='total -messages'>{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : statistics.totalMessagesSent}</div>
+            <div className="telemetry-container">
+              <div className="simulation-status-section right">
+                <div className="messages-per-second">{this.state.isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
+                <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
+                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : statistics.totalMessagesSent}</div>
               </div>
             </div>
           </div>
