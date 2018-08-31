@@ -93,17 +93,10 @@ class SimulationDetails extends Component {
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
-  stopSimulation = () => {
-    this.subscriptions.push(
-      SimulationService.stopSimulation(this.state.simulation)
-      .subscribe(
-        simulation => {
-          this.setState({ isRunning: simulation.isRunning })
-        },
-        serviceError => this.setState({ serviceError: serviceError.message })
-      )
-    );
-  };
+  stopSimulation = () => this.setState(
+    { isRunning: false },
+    () => this.props.stopSimulation(this.state.simulation)
+  );
 
   startSimulation = (event) => {
     event.preventDefault();
@@ -156,6 +149,7 @@ class SimulationDetails extends Component {
       className: 'apply-btn',
       onClick: this.stopSimulation
     };
+
     const startBtnProps = {
       type: 'button',
       className: 'apply-btn',

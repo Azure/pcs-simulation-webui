@@ -8,7 +8,7 @@ import { Svg } from 'components/shared';
 import SimulationForm from '../../views/simulationForm';
 
 export const NewSimulation = (props) => (
-  <Flyout.Container className="device-model-flyout-container">
+  <Flyout.Container>
     <Flyout.Header>
       <Flyout.Title>
         <Svg path={svgs.plus} className="flyout-title-icon" />
