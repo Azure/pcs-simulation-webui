@@ -37,8 +37,7 @@ export class SimulationDashboard extends Component {
 
   closeFlyout = () => this.setState(closedFlyoutState);
 
-  opennewSimulationFlyout = (isRunning) => {
-    if (isRunning) { return; }
+  openNewSimulationFlyout = () => {
     this.setState({ flyoutOpen: newSimulationFlyout })
   };
 
@@ -97,7 +96,7 @@ export class SimulationDashboard extends Component {
 
     return [
       <ContextMenu key='context-menu'>
-        <Btn className='new-simulation-btn' svg={svgs.plus} onClick={() => this.opennewSimulationFlyout(isRunning)} disabled={isRunning}>
+        <Btn className='new-simulation-btn' svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning}>
           { t('simulation.newSim') }
         </Btn>
       </ContextMenu>,
