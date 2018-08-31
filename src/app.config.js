@@ -7,6 +7,7 @@ const Config = {
   configApiUrl: '/config-svc/v1/',
 
   // Constants
+  simulationId: 1,
   retryWaitTime: 2000, // On retryable error, retry after 2s
   maxRetryAttempts: 2,
   retryableStatusCodes: new Set([ 0, 502, 503 ]),

@@ -25,9 +25,6 @@ import './index.css';
 
 // Initialize the user authentication
 AuthService.onLoad(() => {
-  // Session timeout constant
-  const sessionTimeout = Config.sessionTimeout;
-
   // Create the redux store and redux-observable streams
   const store = configureStore();
 
@@ -52,7 +49,7 @@ AuthService.onLoad(() => {
     return Observable.empty()
   })
 
-  useEvent.debounceTime(sessionTimeout).subscribe(count => {
+  useEvent.debounceTime(Config.sessionTimeout).subscribe(count => {
     logSessionStart = true;
     return Observable.empty()
   })

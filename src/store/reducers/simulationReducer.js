@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import 'rxjs';
+import Config from 'app.config';
 import { Observable } from 'rxjs';
 import { SimulationService } from 'services';
 import { toSimulationModel, toSimulationStatusModel, toSimulationRequestModel } from 'services/models';
@@ -11,7 +12,7 @@ import diagnosticsEvent from '../logEventUtil';
 import moment from 'moment';
 
 // Simulation reducer constants
-const SIMULATION_ID = 1;
+const SIMULATION_ID = Config.simulationId;
 const EMPTY_SIMULATION = toSimulationModel();
 const EMPTY_STATUS = toSimulationStatusModel();
 const initialState = { model: undefined, status: undefined };
