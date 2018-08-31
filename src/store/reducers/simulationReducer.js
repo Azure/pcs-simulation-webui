@@ -79,9 +79,9 @@ export const epics = createEpicScenario({
 
       const event = diagnosticsEvent('StopSimulation', eventProps);
       return SimulationService.toggleSimulation(eTag, payload)
-        .map(redux.actions.updateModel)
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
-        .catch(simulationError);
+              .map(redux.actions.updateModel)
+              .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+              .catch(simulationError);
     }
   },
 
@@ -132,15 +132,15 @@ export const epics = createEpicScenario({
       const event = diagnosticsEvent('StartSimulation', eventProps);
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
-        .flatMap(model => {
-          const extraEvents = statusIsOld ? [
-            redux.actions.clearStatus(),
-            epics.actions.fetchSimulationStatus()
-          ] : [];
-          return [ ...extraEvents, redux.actions.updateModel(model) ];
-        })
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
-        .catch(simulationError);
+              .flatMap(model => {
+                const extraEvents = statusIsOld ? [
+                  redux.actions.clearStatus(),
+                  epics.actions.fetchSimulationStatus()
+                ] : [];
+                return [ ...extraEvents, redux.actions.updateModel(model) ];
+              })
+              .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+              .catch(simulationError);
     }
   }
 });

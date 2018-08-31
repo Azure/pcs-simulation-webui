@@ -30,7 +30,7 @@ export const epics = createEpicScenario({
     epic: (fromAction) =>
       DeviceModelsService.getDeviceModels()
         .map(redux.actions.updateDeviceModels)
-        .catch(handleError(fromAction, null))
+        .catch(handleError(fromAction))
   },
 
   /** Create a device model */
@@ -55,7 +55,7 @@ export const epics = createEpicScenario({
     epic: (fromAction) =>
       DeviceModelsService.uploadDeviceModel(fromAction.payload)
         .map(redux.actions.uploadDeviceModel)
-        .catch(handleError(fromAction, null))
+        .catch(handleError(fromAction))
   },
 
   /** Edit a single device model */

@@ -35,24 +35,25 @@ AuthService.onLoad(() => {
   // Initialize the app redux data
   store.dispatch(appEpics.actions.initializeApp());
 
-  window.addEventListener('mousemove', () => useEvent.next('u')); // might need other listeners
-  window.addEventListener('keydown', () => useEvent.next('u'))
+  const userActivityEvents = ['mousemove', 'keydown']; // The list of all window events that would constitute user activity
+  Observable.from(userActivityEvents)
+    .flatMap(event => Observable.fromEvent(window, event))
+    .map(_ => {
+      if (logSessionStart === true) {
+        const sessionStartEvent = diagnosticsEvent('SessionStart', {});
+        store.dispatch(appEpics.actions.updateSession(true))
+        store.dispatch(appEpics.actions.logEvent(sessionStartEvent))
+        logSessionStart = false;
+      }
 
-  useEvent.subscribe(count => {
-    if (logSessionStart === true) {
-      const sessionStartEvent = diagnosticsEvent('SessionStart', {});
-      store.dispatch(appEpics.actions.updateSession(true))
-      store.dispatch(appEpics.actions.logEvent(sessionStartEvent))
-      logSessionStart = false;
-    }
+      return Observable.empty()
+    })
+    .debounceTime(Config.sessionTimeout)
+    .subscribe(() => {console.log(`User has been inactive for ${Config.sessionTimeout} milliseconds`)
+      logSessionStart = true;
+      return Observable.empty()
+  });
 
-    return Observable.empty()
-  })
-
-  useEvent.debounceTime(Config.sessionTimeout).subscribe(count => {
-    logSessionStart = true;
-    return Observable.empty()
-  })
 
   // Create the React app
   ReactDOM.render(
