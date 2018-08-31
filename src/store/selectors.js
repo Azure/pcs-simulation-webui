@@ -5,9 +5,9 @@ import Config from 'app.config';
 import { getDeviceModels } from 'store/reducers/deviceModelsReducer';
 
 // Selectors
-export const getSimulationListReduer = state => state.simulations;
-export const getEntities = state => getSimulationListReduer(state).entities;
-export const getItems = state => getSimulationListReduer(state).items;
+export const getSimulationListReducer = state => state.simulations;
+export const getEntities = state => getSimulationListReducer(state).entities;
+export const getItems = state => getSimulationListReducer(state).items;
 export const getSimulations = createSelector(
   getEntities, getItems,
     (entities, items = []) => items.map(id => entities[id])
@@ -19,16 +19,6 @@ export const getSimulationError = state => state.simulation.error;
 export const getSimulationIsRunning = createSelector(
   getSimulationStatus,
   status => !status ? undefined : status.simulationRunning
-);
-
-export const getPreprovisionedIoTHubInUse = createSelector(
-  getSimulationStatus,
-  status => !status ? undefined : status.preprovisionedIoTHubInUse
-);
-
-export const getPreprovisionedIoTHubMetricsUrl = createSelector(
-  getSimulationStatus,
-  status => !status ? undefined : status.preprovisionedIoTHubMetricsUrl
 );
 
 export const getPreprovisionedIoTHub = createSelector(

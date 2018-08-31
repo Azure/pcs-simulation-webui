@@ -7,8 +7,6 @@ import {
   getSimulationWithDeviceModels,
   getSimulationIsRunning,
   getPreprovisionedIoTHub,
-  getPreprovisionedIoTHubInUse,
-  getPreprovisionedIoTHubMetricsUrl,
   getSimulationError
 } from 'store/selectors';
 import { Simulation } from './simulation';
@@ -22,8 +20,6 @@ const mapStateToProps = state => ({
   simulation: getSimulationWithDeviceModels(state),
   isRunning: getSimulationIsRunning(state),
   preprovisionedIoTHub: getPreprovisionedIoTHub(state),
-  preprovisionedIoTHubInUse: getPreprovisionedIoTHubInUse(state),
-  preprovisionedIoTHubMetricsUrl: getPreprovisionedIoTHubMetricsUrl(state),
   deviceModels: getDeviceModels(state),
   deviceModelEntities: getDeviceModelEntities(state),
   error: getSimulationError(state)

@@ -34,7 +34,7 @@ class SimulationDetails extends Component {
 
     this.state = {
       simulation: {},
-      isRunning : true,
+      isRunning : false,
       showLink : false,
       hubUrl : '',
       pollingError: '',
@@ -69,7 +69,8 @@ class SimulationDetails extends Component {
             activeDevicesCount: response.statistics.activeDevicesCount,
             averageMessagesPerSecond: response.statistics.averageMessagesPerSecond,
             failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
-            failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount
+            failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
+            hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || ''
           },
             () => {
               if (response.isRunning) {
@@ -78,7 +79,7 @@ class SimulationDetails extends Component {
             }
           );
         },
-        pollingError => this.setState({ pollingError })
+        pollingError => this.setState({ pollingError: pollingError.message })
       )
     );
 
@@ -97,8 +98,9 @@ class SimulationDetails extends Component {
       .subscribe(
         simulation => {
           this.setState({ isRunning: simulation.isRunning })
-        }),
-      serviceError => this.setState({ serviceError })
+        },
+        serviceError => this.setState({ serviceError: serviceError.message })
+      )
     );
   };
 
@@ -127,7 +129,7 @@ class SimulationDetails extends Component {
           const newSimulationPath = path.replace(this.state.simulation.id, newId);
           window.location.replace(newSimulationPath)
         }),
-      serviceError => this.setState({ serviceError })
+        serviceError => this.setState({ serviceError: serviceError.message })
     );
   }
 
@@ -270,10 +272,11 @@ class SimulationDetails extends Component {
       deviceModels = [],
       startTime,
       endTime,
-      connectionString
+      iotHubs = []
     } = simulation;
 
-    const iotHubString = (connectionString || t('simulation.form.targetHub.preProvisionedLbl')).split(';')[0];
+    const iotHub = iotHubs[0] || {};
+    const iotHubString = (iotHub.connectionString || t('simulation.form.targetHub.preProvisionedLbl'));
 
     const [ deviceModel = {} ] = deviceModels;
     const { interval = '' } = deviceModel;

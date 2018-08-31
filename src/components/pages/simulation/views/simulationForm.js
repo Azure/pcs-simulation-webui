@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
-import { Observable } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
@@ -42,17 +41,19 @@ class SimulationForm extends LinkedComponent {
       name: '',
       description: '',
       connectionStrFocused: false,
-      preprovisionedIoTHub: false,
+      preprovisionedIoTHub: true,
       preProvisionedRadio: '',
       iotHubString: '',
       duration: {},
-      durationRadio: '',
+      durationRadio: 'indefinite',
       frequency: {},
       deviceModelOptions: [],
       deviceModel: '',
       deviceModels: [],
       errorMessage: ''
     };
+
+    this.subscriptions = [];
 
     // State to input links
     const simulationNameMaxLength = Config.simulationNameMaxLength;
@@ -97,6 +98,7 @@ class SimulationForm extends LinkedComponent {
 
   componentDidMount() {
     this.getFormState(this.props);
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   componentWillReceiveProps(nextProps) {
@@ -118,38 +120,15 @@ class SimulationForm extends LinkedComponent {
   getFormState = (props) => {
     const {
       deviceModels,
-      simulation,
-      preprovisionedIoTHub,
-      preprovisionedIoTHubInUse,
-      preprovisionedIoTHubMetricsUrl
+      preprovisionedIoTHub
     } = props;
     const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
-    const name = (simulation || {}).name || '';
-    const description = (simulation || {}).description || '';
-    const iotHubString = (simulation || {}).connectionString || '';
-    const preProvisionedRadio = preprovisionedIoTHub && iotHubString === '' ? 'preProvisioned' : 'customString';
-    const { startTime, endTime } = simulation || {};
-    const duration = (startTime && endTime)
-      ? moment.duration(moment(endTime).diff(moment(startTime)))
-      : moment.duration('00:00:00');
+    const preProvisionedRadio = preprovisionedIoTHub ? 'preProvisioned' : 'customString';
 
     this.setState({
-      name,
-      description,
-      iotHubString,
       deviceModelOptions,
       preProvisionedRadio,
-      preprovisionedIoTHub,
-      preprovisionedIoTHubInUse,
-      preprovisionedIoTHubMetricsUrl,
-      durationRadio: (startTime && endTime) ? 'endIn' : 'indefinite',
-      duration: {
-        ms: duration.asMilliseconds(),
-        hours: duration.hours(),
-        minutes: duration.minutes(),
-        seconds: duration.seconds()
-      },
-      deviceModels: (simulation.deviceModels || []).map(this.toDeviceModelReplicable)
+      preprovisionedIoTHub
     });
   }
 
@@ -212,23 +191,22 @@ class SimulationForm extends LinkedComponent {
       name,
       description,
       enabled: true,
-      connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString,
+      iotHubs: [{ connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString }],
       deviceModels,
       ...simulationDuration
     };
 
-      Observable.from([modelUpdates])
-        .flatMap(() => SimulationService.createSimulation(modelUpdates)
-          .catch(error => this.setState({ error }))
-      )
+    this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
       .subscribe(
         response => {
           const id = response.id;
           const path = this.props.location.pathname;
           const newSimulationPath = path.replace('dashboard', id);
           window.location.replace(newSimulationPath);
-        }
+        },
+        error => this.setState({ error: error.message })
       )
+    );
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
@@ -400,7 +378,7 @@ class SimulationForm extends LinkedComponent {
 
         <FormActions>
           {
-            this.props.error ? <ErrorMsg> {this.props.error}</ErrorMsg> : ''
+            this.state.error ? <ErrorMsg> {this.state.error}</ErrorMsg> : ''
           }
           <BtnToolbar>
             <Btn

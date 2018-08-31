@@ -48,6 +48,8 @@
 
     .device-model-header { color: themed('colorLightestFirst'); }
 
+    .new-simulation-btn[disabled]:hover { color: themed('colorMidFirst'); }
+
     .apply-btn {
       // The start simulation svg uses stroke rather than fill
       svg {

@@ -69,7 +69,7 @@ class SimulationTile extends Component {
             }
           });
         },
-        pollingError => this.setState({ pollingError })
+        pollingError => this.setState({ pollingError: pollingError.message })
       )
     );
 

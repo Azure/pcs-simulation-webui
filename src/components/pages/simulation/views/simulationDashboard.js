@@ -37,7 +37,10 @@ export class SimulationDashboard extends Component {
 
   closeFlyout = () => this.setState(closedFlyoutState);
 
-  opennewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout });
+  opennewSimulationFlyout = (isRunning) => {
+    if (isRunning) { return; }
+    this.setState({ flyoutOpen: newSimulationFlyout })
+  };
 
   onSoftSelectChange = ({ id }) => this.setState({
     flyoutOpen: true,
@@ -59,11 +62,12 @@ export class SimulationDashboard extends Component {
   toSimulationGridModel = (input = []) => input.map(
     (simulation = {}) => {
       const { t, deviceModelEntities } = this.props;
+      const stopTime = simulation.stopTime || simulation.endTime;
       return ({
         status: simulation.isRunning ? t('simulation.status.running') : t('simulation.status.stopped'),
         startTime: moment(simulation.startTime).format(dateTimeFormat),
-        endTime: simulation.isRunning ? '' : moment(simulation.stoppedTime || simulation.endTime).format(dateTimeFormat),
-        duration: simulation.isRunning ? '' : humanizeDuration(moment.duration((moment(simulation.stoppedTime || simulation.endTime)).diff(moment(simulation.startTime)))),
+        endTime: simulation.isRunning ? '' : moment(stopTime).format(dateTimeFormat),
+        duration: simulation.isRunning ? '' : humanizeDuration(moment.duration((moment(stopTime)).diff(moment(simulation.startTime)))),
         id : simulation.id,
         name : simulation.name,
         totalMessages: simulation.statistics.totalMessagesCount,
@@ -86,13 +90,14 @@ export class SimulationDashboard extends Component {
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
     const activeSimulationsList = simulationList.filter(sim => sim.isRunning);
-    const maxCount = activeSimulationsList.length > 0 ? 6 : 9;
+    const isRunning = activeSimulationsList.length > 0;
+    const maxCount = isRunning ? 6 : 9;
     const pastSimulationsList = simulationList.filter(sim => !sim.isRunning).slice(0, maxCount);
-    const className = activeSimulationsList.length > 0 ? 'simulation-tile-link twoCol' : 'simulation-tile-link threeCol';
+    const className = isRunning ? 'simulation-tile-link twoCol' : 'simulation-tile-link threeCol';
 
     return [
       <ContextMenu key='context-menu'>
-        <Btn svg={svgs.plus} onClick={this.opennewSimulationFlyout}>
+        <Btn className='new-simulation-btn' svg={svgs.plus} onClick={() => this.opennewSimulationFlyout(isRunning)} disabled={isRunning}>
           { t('simulation.newSim') }
         </Btn>
       </ContextMenu>,

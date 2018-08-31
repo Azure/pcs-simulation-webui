@@ -8,15 +8,6 @@ import { stringToBoolean } from 'utilities';
 export const toSimulationStatusModel = (response = {}) => ({
   simulationRunning: stringToBoolean((response.Properties || {}).SimulationRunning),
   preprovisionedIoTHub: stringToBoolean((response.Properties || {}).PreprovisionedIoTHub),
-  preprovisionedIoTHubInUse: stringToBoolean((response.Properties || {}).PreprovisionedIoTHubInUse),
-  preprovisionedIoTHubMetricsUrl: (response.Properties || {}).PreprovisionedIoTHubMetricsUrl,
-  activeDevicesCount: (response.Properties || {}).ActiveDevicesCount,
-  totalDevicesCount: (response.Properties || {}).TotalDevicesCount,
-  messagesPerSecond: (response.Properties || {}).MessagesPerSecond,
-  failedMessagesCount: (response.Properties || {}).FailedMessagesCount,
-  totalMessagesCount: (response.Properties || {}).TotalMessagesCount,
-  failedDeviceConnectionsCount: (response.Properties || {}).FailedDeviceConnectionsCount,
-  failedDeviceTwinUpdatesCount: (response.Properties || {}).FailedDeviceTwinUpdatesCount
 });
 
 export const toSimulationModel = (response = {}) => ({
@@ -59,8 +50,12 @@ export const toSimulationModel = (response = {}) => ({
       }))
       .reduce((acc, obj) => [...acc, ...obj], [])
   })),
-  connectionString: (response.IoTHub || {}).ConnectionString === 'default'
-    ? '' : (response.IoTHub || {}).ConnectionString
+  iotHubs: (response.IoTHubs || []).map(({ ConnectionString, PreprovisionedIoTHub, PreprovisionedIoTHubInUse, PreprovisionedIoTHubMetricsUrl }) => ({
+    connectionString: ConnectionString === 'default' ? '' : ConnectionString,
+    preprovisionedIoTHub: PreprovisionedIoTHub,
+    preprovisionedIoTHubInUse: PreprovisionedIoTHubInUse,
+    preprovisionedIoTHubMetricsUrl: PreprovisionedIoTHubMetricsUrl
+  }))
 });
 
 export const toSimulationListModel = (response = {}) => (response.Items || []).map(toSimulationModel);
@@ -86,9 +81,7 @@ export const toSimulationRequestModel = (request = {}) => ({
   Name: request.name,
   Desc: request.description,
   DeviceModels: toDeviceModels(request.deviceModels),
-  IoTHub: {
-    ConnectionString: request.connectionString
-  }
+  IoTHubs: toIoTHubs(request.iotHubs)
 });
 
 // Request models
@@ -99,9 +92,7 @@ export const toSimulationCloneModel = (request = {}) => ({
   Name: request.name,
   Desc: request.description,
   DeviceModels: toCloneDeviceModels(request.deviceModels),
-  IoTHub: {
-    ConnectionString: request.connectionString
-  }
+  IoTHubs: toIoTHubs(request.iotHubs)
 });
 
 // Request models
@@ -144,4 +135,10 @@ const toCloneDeviceModels = (deviceModels = []) =>
         }]
       }
     };
+  });
+
+// Map to deviceModels in simulation request model
+const toIoTHubs = (iotHubs = []) =>
+  iotHubs.map(({ connectionString }) => {
+    return { ConnectionString: connectionString };
   });

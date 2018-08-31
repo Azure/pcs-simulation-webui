@@ -47,6 +47,7 @@ $twoColWidth: calc(100% *2 / 3);
 
   @include themify($themes) {
     .simulation-dashboard-container { color: themed('colorHighest'); }
+
     .toggle-view-button:hover { color: themed('colorActive'); }
   }
 }
