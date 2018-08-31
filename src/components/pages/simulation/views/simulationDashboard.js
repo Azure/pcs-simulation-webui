@@ -67,15 +67,15 @@ export class SimulationDashboard extends Component {
         startTime: moment(simulation.startTime).format(dateTimeFormat),
         endTime: simulation.isRunning ? '' : moment(stopTime).format(dateTimeFormat),
         duration: simulation.isRunning ? '' : humanizeDuration(moment.duration((moment(stopTime)).diff(moment(simulation.startTime)))),
-        id : simulation.id,
-        name : simulation.name,
+        id: simulation.id,
+        name: simulation.name,
         totalMessages: simulation.statistics.totalMessagesCount,
         averageMessages: simulation.statistics.averageMessagesPerSecond,
-        deviceModels : (simulation.deviceModels || [])
+        deviceModels: (simulation.deviceModels || [])
           .map(dm =>
               (dm.count + ' ' + (deviceModelEntities && deviceModelEntities[dm.id] ? (deviceModelEntities[dm.id]).name : '-')))
               .join ('; '),
-        totalDevices : (simulation.deviceModels || []).reduce ((total, obj) => { return total + obj['count']; }, 0)
+        totalDevices: (simulation.deviceModels || []).reduce ((total, obj) => { return total + obj['count']; }, 0)
       });
     }
   );

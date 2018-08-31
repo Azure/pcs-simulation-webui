@@ -34,9 +34,9 @@ class SimulationDetails extends Component {
 
     this.state = {
       simulation: {},
-      isRunning : false,
-      showLink : false,
-      hubUrl : '',
+      isRunning: false,
+      showLink: false,
+      hubUrl: '',
       pollingError: '',
       serviceError: ''
     };
