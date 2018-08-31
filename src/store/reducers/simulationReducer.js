@@ -73,7 +73,7 @@ export const epics = createEpicScenario({
         TotalMessages: state.simulation.status.totalMessagesCount,
         TotalFailedMessages: state.simulation.status.failedMessagesCount,
         TotalFailedDeviceConnections: state.simulation.status.failedDeviceConnectionsCount,
-        Total FailedTwinUpdates: state.simulation.status.failedDeviceTwinUpdatesCount
+        TotalFailedTwinUpdates: state.simulation.status.failedDeviceTwinUpdatesCount
       };
 
       const event = diagnosticsEvent('StopSimulation', eventProps);
