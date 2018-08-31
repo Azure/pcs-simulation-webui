@@ -123,7 +123,7 @@ export const epics = createEpicScenario({
           Id: SIMULATION_ID,
           StartTime: startTime,
           EndTime: newModelSimulationRequest.EndTime,
-          IoTHubType: newModelSimulationRequest.IoTHub.ConnectionString===""? 'Preprovisioned': 'Custom',
+          IoTHubType: newModelSimulationRequest.IoTHub.ConnectionString===''? 'Preprovisioned': 'Custom',
           duration: duration
         }]
       };

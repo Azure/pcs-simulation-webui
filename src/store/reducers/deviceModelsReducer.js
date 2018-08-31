@@ -43,9 +43,9 @@ export const epics = createEpicScenario({
       const event = diagnosticsEvent('CreateDeviceModel', eventProps);
 
       return DeviceModelsService.createDeviceModel(fromAction.payload)
-      .map(redux.actions.createDeviceModel)
-      .startWith(appEpics.actions.logEvent(event))
-      .catch(handleError(fromAction))
+              .map(redux.actions.createDeviceModel)
+              .startWith(appEpics.actions.logEvent(event))
+              .catch(handleError(fromAction))
     }
   },
 
@@ -68,9 +68,9 @@ export const epics = createEpicScenario({
       const event = diagnosticsEvent('UpdateDeviceModel', eventProps);
 
       return DeviceModelsService.updateSingleDeviceModel(fromAction.payload)
-      .map(redux.actions.updateSingleDeviceModel)
-      .startWith(appEpics.actions.logEvent(event))
-      .catch(handleError(fromAction))
+              .map(redux.actions.updateSingleDeviceModel)
+              .startWith(appEpics.actions.logEvent(event))
+              .catch(handleError(fromAction))
     }
   },
 
@@ -84,9 +84,9 @@ export const epics = createEpicScenario({
       const event = diagnosticsEvent('DeleteDeviceModel', eventProps);
 
       return DeviceModelsService.deleteDeviceModelById(fromAction.payload)
-      .map(redux.actions.deleteDeviceModel)
-      .startWith(appEpics.actions.logEvent(event))
-      .catch(handleError(fromAction))
+              .map(redux.actions.deleteDeviceModel)
+              .startWith(appEpics.actions.logEvent(event))
+              .catch(handleError(fromAction))
     }
   }
 });

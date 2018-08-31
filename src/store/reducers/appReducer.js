@@ -36,13 +36,16 @@ export const epics = createEpicScenario({
   /** Kicks off all the events that need to happen on app initialization */
   initializeApp: {
     type: 'APP_INITIALIZE',
-    epic: () => [
-      simulationRedux.actions.revertToInitial(),
-      simulationEpics.actions.fetchSimulationStatus(),
-      simulationEpics.actions.fetchSimulation(),
-      epics.actions.getSolutionSettings(),
-      deviceModelsEpics.actions.fetchDeviceModels(),
-    ]
+    epic: () => {
+      const event = diagnosticsEvent('UserLogInSuccess', {});
+      return [
+        simulationRedux.actions.revertToInitial(),
+        simulationEpics.actions.fetchSimulationStatus(),
+        simulationEpics.actions.fetchSimulation(),
+        epics.actions.getSolutionSettings(),
+        epics.actions.logEvent(event),
+        deviceModelsEpics.actions.fetchDeviceModels()
+    ]}
     },
 
   updateSession: {

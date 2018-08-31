@@ -2,9 +2,8 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Rx from 'rxjs';
 import Config from 'app.config';
-import { Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -31,14 +30,10 @@ AuthService.onLoad(() => {
 
   // Create the redux store and redux-observable streams
   const store = configureStore();
-  const userLoginEvent = diagnosticsEvent('UserLogInSuccess', {});
 
   // Creating variables for Session Management
   let useEvent = new Rx.Subject();
   let logSessionStart = true;
-
-  // Logging 'Successful user login' to diagnostics
-  store.dispatch(appEpics.actions.logEvent(userLoginEvent))
 
   // Initialize the app redux data
   store.dispatch(appEpics.actions.initializeApp());
