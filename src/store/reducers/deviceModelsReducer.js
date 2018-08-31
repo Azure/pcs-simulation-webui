@@ -17,10 +17,10 @@ import {
 } from 'store/utilities';
 
 // ========================= Epics - START
-const handleError = (fromAction, state) => error => {
+const handleError = fromAction => error => {
   const errorEvent = diagnosticsEvent('DeviceModelsUXError');
   return Observable.of(redux.actions.registerError(fromAction.type, { error, fromAction }))
-          .startWith(appEpics.actions.logEvent(errorEvent, state))
+          .startWith(appEpics.actions.logEvent(errorEvent))
 }
 
 export const epics = createEpicScenario({
@@ -37,7 +37,6 @@ export const epics = createEpicScenario({
   createDeviceModel: {
     type: 'DEVICE_MODEL_INSERT',
     epic: (fromAction, store) =>{
-      const state = store.getState();
       const eventProps = {
         DeviceModelId: fromAction.payload.id
       };
@@ -45,8 +44,8 @@ export const epics = createEpicScenario({
 
       return DeviceModelsService.createDeviceModel(fromAction.payload)
       .map(redux.actions.createDeviceModel)
-      .startWith(appEpics.actions.logEvent(event, state))
-      .catch(handleError(fromAction, state))
+      .startWith(appEpics.actions.logEvent(event))
+      .catch(handleError(fromAction))
     }
   },
 
@@ -63,7 +62,6 @@ export const epics = createEpicScenario({
   editDeviceModel:{
     type: 'DEVICE_MODEL_UPDATE',
     epic: (fromAction, store) =>{
-      const state = store.getState();
       const eventProps = {
         DeviceModelId: fromAction.payload.id
       };
@@ -71,8 +69,8 @@ export const epics = createEpicScenario({
 
       return DeviceModelsService.updateSingleDeviceModel(fromAction.payload)
       .map(redux.actions.updateSingleDeviceModel)
-      .startWith(appEpics.actions.logEvent(event, state))
-      .catch(handleError(fromAction, state))
+      .startWith(appEpics.actions.logEvent(event))
+      .catch(handleError(fromAction))
     }
   },
 
@@ -80,7 +78,6 @@ export const epics = createEpicScenario({
   deleteDeviceModel: {
     type: 'DEVICE_MODEL_DELETE',
     epic: (fromAction, store) => {
-      const state = store.getState();
       const eventProps = {
         DeviceModelId: fromAction.payload
       };
@@ -88,8 +85,8 @@ export const epics = createEpicScenario({
 
       return DeviceModelsService.deleteDeviceModelById(fromAction.payload)
       .map(redux.actions.deleteDeviceModel)
-      .startWith(appEpics.actions.logEvent(event, state))
-      .catch(handleError(fromAction, state))
+      .startWith(appEpics.actions.logEvent(event))
+      .catch(handleError(fromAction))
     }
   }
 });

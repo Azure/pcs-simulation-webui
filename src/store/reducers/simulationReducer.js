@@ -42,10 +42,10 @@ export const reducer = { simulation: redux.getReducer(initialState) };
 // ========================= Selectors - END
 
 // ========================= Epics - START
-const simulationError = state => error => {
+const simulationError = error => {
   const errorEvent = diagnosticsEvent('SimulationUXError');
   return Observable.of(redux.actions.registerError(error.message))
-            .startWith(appEpics.actions.logEvent(errorEvent, state))};
+            .startWith(appEpics.actions.logEvent(errorEvent))};
 
 export const epics = createEpicScenario({
   /** Loads the simulation */
@@ -79,8 +79,8 @@ export const epics = createEpicScenario({
       const event = diagnosticsEvent('StopSimulation', eventProps);
       return SimulationService.toggleSimulation(eTag, payload)
         .map(redux.actions.updateModel)
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
-        .catch(simulationError(state));
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+        .catch(simulationError);
     }
   },
 
@@ -138,8 +138,8 @@ export const epics = createEpicScenario({
           ] : [];
           return [ ...extraEvents, redux.actions.updateModel(model) ];
         })
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
-        .catch(simulationError(state));
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+        .catch(simulationError);
     }
   }
 });

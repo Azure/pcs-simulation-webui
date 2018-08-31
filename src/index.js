@@ -31,7 +31,6 @@ AuthService.onLoad(() => {
 
   // Create the redux store and redux-observable streams
   const store = configureStore();
-  const state = store.getState();
   const userLoginEvent = diagnosticsEvent('UserLogInSuccess', {});
 
   // Creating variables for Session Management
@@ -39,7 +38,7 @@ AuthService.onLoad(() => {
   let logSessionStart = true;
 
   // Logging 'Successful user login' to diagnostics
-  store.dispatch(appEpics.actions.logEvent(userLoginEvent, state))
+  store.dispatch(appEpics.actions.logEvent(userLoginEvent))
 
   // Initialize the app redux data
   store.dispatch(appEpics.actions.initializeApp());
@@ -51,7 +50,7 @@ AuthService.onLoad(() => {
     if (logSessionStart === true) {
       const sessionStartEvent = diagnosticsEvent('SessionStart', {});
       store.dispatch(appEpics.actions.updateSession(true))
-      store.dispatch(appEpics.actions.logEvent(sessionStartEvent, state))
+      store.dispatch(appEpics.actions.logEvent(sessionStartEvent))
       logSessionStart = false;
     }
 
