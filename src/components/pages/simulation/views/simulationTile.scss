@@ -13,7 +13,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
 
 .simulation-tile-link {
 
-  text-decoration: none; 
+  text-decoration: none;
   @include rem-fallback(min-width, $minWidth);
 
   &.oneCol { @include rem-fallback(width, $oneColWidth); }
@@ -54,7 +54,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     @include rem-fallback(padding-bottom, 14px);
   }
 
-  .time-containers { 
+  .time-containers {
     display: flex;
     flex-flow: row;
     justify-content: space-between;

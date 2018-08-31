@@ -4,9 +4,6 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
-$oneColWidth: calc(100% / 3);
-$twoColWidth: calc(100% *2 / 3);
-
 .simulation-dashboard-container {
   display: flex;
   flex-direction: column;
@@ -28,11 +25,10 @@ $twoColWidth: calc(100% *2 / 3);
   .simulation-containers {
     display: flex;
 
-    .active-simulations { width: $oneColWidth }
+    .active-simulations { flex: 0 0 30% }
 
-    .past-simulations { width: 100% }
+    .past-simulations { flex: 0 0 70% }
 
-    .active-simulations + .past-simulations {  width: $twoColWidth }
   }
 
   .toggle-view-button {
