@@ -145,7 +145,7 @@ class SimulationTile extends Component {
               <div className="simulation-status-section right">
                 <div className="messages-per-second">{this.state.isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
                 <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
-                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesCount : statistics.totalMessagesSent}</div>
+                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesSent : statistics.totalMessagesSent}</div>
               </div>
             </div>
           </div>
