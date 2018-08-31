@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import 'rxjs';
-import diagnosticsEvent from 'store/logEventUtil';
+import moment from 'moment';
 import { Observable } from 'rxjs';
+import diagnosticsEvent from 'store/logEventUtil';
 import { ConfigService, DiagnosticsService } from 'services';
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import {
@@ -17,7 +17,7 @@ const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: 
 
 // session management variables declaration
 // using 'Timestamp as session id'
-let sessionId = new Date();
+let sessionId = moment().toISOString();
 let isSessionActive = false;
 
 export const redux = createReducerScenario({
@@ -52,7 +52,7 @@ export const epics = createEpicScenario({
   updateSession: {
     type: 'UPDATE_SESSION',
     epic: (sessionStatus) => {
-      sessionId = new Date();
+      sessionId = moment().toISOString();
       return Observable.empty()
     }
   },

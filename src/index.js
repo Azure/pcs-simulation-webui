@@ -49,7 +49,7 @@ AuthService.onLoad(() => {
       return Observable.empty()
     })
     .debounceTime(Config.sessionTimeout)
-    .subscribe(() => {console.log(`User has been inactive for ${Config.sessionTimeout} milliseconds`)
+    .subscribe(() => {
       logSessionStart = true;
       return Observable.empty()
   });

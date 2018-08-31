@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import 'rxjs';
-import Config from 'app.config';
+import moment from 'moment';
 import { Observable } from 'rxjs';
+import Config from 'app.config';
 import { SimulationService } from 'services';
 import { toSimulationModel, toSimulationStatusModel, toSimulationRequestModel } from 'services/models';
 import { getSimulation, getSimulationIsRunning } from 'store/selectors';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';
-import moment from 'moment';
 
 // Simulation reducer constants
 const SIMULATION_ID = Config.simulationId;

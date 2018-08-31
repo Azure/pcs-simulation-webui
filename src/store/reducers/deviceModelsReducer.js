@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import 'rxjs';
 import { Observable } from 'rxjs';
 import { schema, normalize } from 'normalizr';
 import update from 'immutability-helper';
