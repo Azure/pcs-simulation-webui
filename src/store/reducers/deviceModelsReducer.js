@@ -19,7 +19,7 @@ import {
 const handleError = fromAction => error => {
   const errorEvent = diagnosticsEvent('DeviceModelsUXError');
   return Observable.of(redux.actions.registerError(fromAction.type, { error, fromAction }))
-          .startWith(appEpics.actions.logEvent(errorEvent))
+    .startWith(appEpics.actions.logEvent(errorEvent))
 }
 
 export const epics = createEpicScenario({
