@@ -45,7 +45,7 @@ export const reducer = { simulation: redux.getReducer(initialState) };
 const simulationError = error => {
   const errorEvent = diagnosticsEvent('SimulationUXError');
   return Observable.of(redux.actions.registerError(error.message))
-            .startWith(appEpics.actions.logEvent(errorEvent))};
+    .startWith(appEpics.actions.logEvent(errorEvent))};
 
 export const epics = createEpicScenario({
   /** Loads the simulation */
@@ -68,19 +68,19 @@ export const epics = createEpicScenario({
       const endTime = new Date();
       const duration = moment.duration(moment(endTime).diff(moment(startTime)));
       const eventProps = {
-          Id: SIMULATION_ID,
-          ActualDuration: duration,
-          TotalMessages: state.simulation.status.totalMessagesCount,
-          TotalFailedMessages: state.simulation.status.failedMessagesCount,
-          TotalFailedDeviceConnections: state.simulation.status.failedDeviceConnectionsCount,
-          TotalFailedTwinUpdates: state.simulation.status.failedDeviceTwinUpdatesCount
-        };
+        Id: SIMULATION_ID,
+        ActualDuration: duration,
+        TotalMessages: state.simulation.status.totalMessagesCount,
+        TotalFailedMessages: state.simulation.status.failedMessagesCount,
+        TotalFailedDeviceConnections: state.simulation.status.failedDeviceConnectionsCount,
+        Total FailedTwinUpdates: state.simulation.status.failedDeviceTwinUpdatesCount
+      };
 
       const event = diagnosticsEvent('StopSimulation', eventProps);
       return SimulationService.toggleSimulation(eTag, payload)
-              .map(redux.actions.updateModel)
-              .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
-              .catch(simulationError);
+        .map(redux.actions.updateModel)
+        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+        .catch(simulationError);
     }
   },
 
@@ -131,15 +131,15 @@ export const epics = createEpicScenario({
       const event = diagnosticsEvent('StartSimulation', eventProps);
       // Force the simulation status to update if turned off
       return SimulationService.updateSimulation(newModel)
-              .flatMap(model => {
-                const extraEvents = statusIsOld ? [
-                  redux.actions.clearStatus(),
-                  epics.actions.fetchSimulationStatus()
-                ] : [];
-                return [ ...extraEvents, redux.actions.updateModel(model) ];
-              })
-              .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
-              .catch(simulationError);
+        .flatMap(model => {
+          const extraEvents = statusIsOld ? [
+            redux.actions.clearStatus(),
+            epics.actions.fetchSimulationStatus()
+          ] : [];
+          return [ ...extraEvents, redux.actions.updateModel(model) ];
+        })
+       .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
+       .catch(simulationError);
     }
   }
 });
