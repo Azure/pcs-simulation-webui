@@ -25,9 +25,9 @@
   .simulation-containers {
     display: flex;
 
-    .active-simulations { flex: 0 0 30% }
+    .active-simulations { flex: 1 0 40% }
 
-    .past-simulations { flex: 1 0 70% }
+    .past-simulations { flex: 1 0 60% }
 
   }
 

@@ -37,14 +37,21 @@ const simulationListModelReducer = (state, { payload }) => {
     items: { $set: result }
   });
 };
-// const simulationModelReducer = (state, action) => ({ ...state, model: action.payload });
-const updateSimulationModelReducer = (state, { payload }) => {
+
+const createSimulationModelReducer = (state, { payload }) => {
   const { entities: { simulations }, result } = normalize([payload], simulationsSchema);
   return update(state, {
     entities: { $merge: simulations },
     items: { $splice: [[state.items.length, 0, result]] }
   });
 };
+
+const updateSimulationModelReducer = (state, { payload }) => {
+  return update(state, {
+    entities: {[payload.id]: {$set: payload}}
+  });
+};
+
 const simulationStatusReducer = (state, action) => ({ ...state, status: action.payload });
 const simulationErrorReducer = (state, action) => ({ error: action.payload });
 const initialStateReducer = (state, action) => initialState;
