@@ -17,7 +17,8 @@
     @include themify($themes) {
       .status-description { color: themed('colorLightestFirst'); }
 
-      .active-devices-status, .status-value { color: themed('colorHighest'); }
+      .active-devices-status,
+      .status-value { color: themed('colorHighest'); }
     }
   }
 }

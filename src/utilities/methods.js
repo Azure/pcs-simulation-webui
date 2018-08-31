@@ -30,6 +30,7 @@ export const translateColumnDefs = (t, columnDefs) => {
   );
 }
 
+// TODO - Update this to add translations
 /*
 * Return human readable time format.
 * Examples:

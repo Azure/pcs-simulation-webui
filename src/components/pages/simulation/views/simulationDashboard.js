@@ -130,8 +130,7 @@ export class SimulationDashboard extends Component {
             }
             </div>
           </div>
-          :
-          <SimulationsGrid {...gridProps} />
+          : <SimulationsGrid {...gridProps} />
         }
         {
           newSimulationFlyoutOpen &&

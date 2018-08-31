@@ -21,7 +21,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
   &.twoCol{ @include rem-fallback(width, $twoColWidth); }
 
   &.threeCol{ @include rem-fallback(width, $threeColWidth); }
-  }
+}
 
 .simulation-tile-container {
   display: flex;

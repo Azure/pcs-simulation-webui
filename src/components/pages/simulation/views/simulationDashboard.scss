@@ -28,9 +28,9 @@ $twoColWidth: calc(100% *2 / 3);
   .simulation-containers {
     display: flex;
 
-    .active-simulations{ width: $oneColWidth }
+    .active-simulations { width: $oneColWidth }
 
-    .past-simulations {  width: 100% }
+    .past-simulations { width: 100% }
 
     .active-simulations + .past-simulations {  width: $twoColWidth }
   }

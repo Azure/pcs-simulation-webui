@@ -67,13 +67,13 @@ class SimulationForm extends LinkedComponent {
       .check(x => x.length < simulationDescMaxLength, () => this.props.t('simulation.form.errorMsg.descGTMaxLength', { simulationDescMaxLength }));
 
     this.iotHubString = this.linkTo('iotHubString')
-      .check(Validator.notEmpty, props.t('simulation.form.errorMsg.hubNameCantBeEmpty'));
+      .check(Validator.notEmpty, () => props.t('simulation.form.errorMsg.hubNameCantBeEmpty'));
 
     this.deviceModel = this.linkTo('deviceModel')
-      .check(Validator.notEmpty, props.t('simulation.form.errorMsg.deviceModelIsRequired'));
+      .check(Validator.notEmpty, () => props.t('simulation.form.errorMsg.deviceModelIsRequired'));
 
     this.duration = this.linkTo('duration')
-      .check(({ ms }) => ms > 0, props.t('simulation.form.errorMsg.durationMustBeGTZero'));
+      .check(({ ms }) => ms > 0, () => props.t('simulation.form.errorMsg.durationMustBeGTZero'));
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
