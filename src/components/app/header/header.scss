@@ -14,7 +14,12 @@ $imgSize: 30px;
 
   @include rem-fallback(height, $headerHeight);
 
-  .breadcrumbs { flex-grow: 1; }
+  .breadcrumbs {
+    flex-grow: 1;
+    @include rem-font-size(16px);
+    @include rem-fallback(line-height, 21px);
+    @include rem-fallback(padding, 12px, 32px);
+  }
 
   .label {
     white-space: nowrap;
@@ -74,6 +79,8 @@ $imgSize: 30px;
   // Apply theme properties
   @include themify($themes) {
     border-bottom: 1px solid themed('colorMidSecond');
+
+    .breadcrumbs {  color: themed('colorHighest'); }
 
     .label { color: themed('colorLightestFirst'); }
 
