@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import SimulationDetails from './views/simulationDetails';
-import SimulationForm from './views/simulationForm';
+import { SimulationDashboard } from './views/simulationDashboard';
 import { FormActions, Indicator, ErrorMsg, Btn } from 'components/shared';
 
 import './simulation.css';
-
-const Header = (props) => (
-  <div className="page-header">{props.children}</div>
-);
 
 /**
  * TODO: Add the real component. Currently being used as a test bed for the
@@ -17,13 +14,13 @@ const Header = (props) => (
  */
 export class Simulation extends Component {
 
-  apply = (event) => {
-    event.preventDefault();
-    this.props.toggleSimulation(!this.props.enabled);
-  };
+  componentDidMount() {
+  // Load the simulation list
+  if ((this.props.simulationList || []).length === 0) this.props.fetchSimulationList();
+  }
 
   getView() {
-    const { simulation: { enabled }, isRunning, error, refresh } = this.props;
+    const { t, simulation: { enabled }, isRunning, error, refresh } = this.props;
     const isLoading = typeof enabled === 'undefined' || typeof isRunning === 'undefined';
     if (error) {
       return (
@@ -32,27 +29,28 @@ export class Simulation extends Component {
             {error}
           </ErrorMsg>
           <br />
-          <Btn onClick={refresh}>Ok</Btn>
+            <Btn onClick={refresh}>
+              { t('common.ok') }
+            </Btn>
         </FormActions>
       );
-    } else if (isRunning === true && enabled === true) {
-      return <SimulationDetails {...this.props} />;
-    } else if ((isRunning === false && !isLoading) || (isRunning === true && enabled === false)) {
-      return <SimulationForm {...this.props} />;
+    } else if (isLoading) {
+      return <FormActions><Indicator pattern="bar" /></FormActions>;
     } else {
-      return <FormActions><Indicator pattern="bar" /></FormActions>
+      return <SimulationDashboard {...this.props} />;
     }
   }
 
   render () {
-    const { t, isRunning, simulation: { enabled } } = this.props;
-    const showRunningHeader = isRunning === true && enabled === true;
     return (
       <div className="simulation-container">
-        <Header>
-          { showRunningHeader ? t('simulation.currentSim') : t('simulation.simSetup') }
-        </Header>
-        { this.getView() }
+        <Switch>
+          <Route exact path={'/simulation/:path(dashboard)'}
+            render={  (routeProps) => <SimulationDashboard {...routeProps} {...this.props} /> } />
+          <Route exact path={'/simulation/:id'}
+            render={ (routeProps) => <SimulationDetails {...routeProps} {...this.props} /> } />
+          <Redirect to='/simulation/dashboard' />
+        </Switch>
       </div>
     );
   }

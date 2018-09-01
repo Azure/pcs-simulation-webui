@@ -38,7 +38,7 @@ class App extends Component {
           <PageContent>
             <Switch>
               <Route exact path="/" render={this.redirectToSimulation} />
-              <Route exact path="/simulation" component={SimulationPage} />
+              <Route path="/simulation" component={SimulationPage} />
               <Route exact path="/devicemodels" component={DeviceModelsPage} />
               <Route component={PageNotFound} />
             </Switch>

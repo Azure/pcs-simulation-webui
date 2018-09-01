@@ -8,7 +8,7 @@ $verticalPadding: 5px;
 $inputHeight: 24px;
 $defaultInputWidth: 124px;
 $smallInputWidth: 80px;
-$longInputWidth: 248px;
+$longInputWidth: 348px;
 $textareaWidth: 348px;
 $textareaHeight: 60px;
 
@@ -24,11 +24,11 @@ $textareaHeight: 60px;
 
     &:disabled {
       -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-          -moz-user-select: none;
-            -ms-user-select: none;
-                user-select: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
     &::-webkit-outer-spin-button,
@@ -40,7 +40,6 @@ $textareaHeight: 60px;
     @include themify($themes) {
       color: themed('colorLightestFirst');
       border: 1px solid themed('colorMidThird');
-
       // Set RGBa opacity to .99 to get correct color in the selection styling
       &::selection {
         color: themed('colorHighest');
@@ -53,9 +52,12 @@ $textareaHeight: 60px;
       }
 
       &::-webkit-input-placeholder { color: themed('colorLightestSecond'); }
-          &:-ms-input-placeholder { color: themed('colorLightestSecond'); }
-              &::-moz-placeholder { color: themed('colorLightestSecond'); }
-                &:-moz-placeholder { color: themed('colorLightestSecond'); }
+
+      &:-ms-input-placeholder { color: themed('colorLightestSecond'); }
+
+      &::-moz-placeholder { color: themed('colorLightestSecond'); }
+
+      &:-moz-placeholder { color: themed('colorLightestSecond'); }
 
       &:hover,
       &:focus { border-color: themed('colorLightestFirst'); }
@@ -68,9 +70,12 @@ $textareaHeight: 60px;
         border: 1px solid themed('colorMidThird');
 
         &::-webkit-input-placeholder { color: themed('colorMidThird'); }
-            &:-ms-input-placeholder { color: themed('colorMidThird'); }
-                &::-moz-placeholder { color: themed('colorMidThird'); }
-                  &:-moz-placeholder { color: themed('colorMidThird'); }
+
+        &:-ms-input-placeholder { color: themed('colorMidThird'); }
+
+        &::-moz-placeholder { color: themed('colorMidThird'); }
+
+        &:-moz-placeholder { color: themed('colorMidThird'); }
       }
     }
   }
@@ -96,8 +101,6 @@ $textareaHeight: 60px;
     margin-top: 4px;
     @include rem-font-size(14px);
 
-    svg {
-      @include square-px-rem(10px);
-    }
+    svg { @include square-px-rem(10px); }
   }
 }

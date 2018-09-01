@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
+import moment from 'moment';
 
 /** Tests if a value is a function */
 export const isFunc = value => typeof value === 'function';
@@ -27,4 +28,29 @@ export const translateColumnDefs = (t, columnDefs) => {
       ? { ...columnDef, headerName: t(columnDef.headerName) }
       : columnDef
   );
+}
+
+// TODO - Update this to add translations
+/*
+* Return human readable time format.
+* Examples:
+* 1 day and 30 seconds
+* 2 days and 2 hours
+* 1 day, 2 hours, 10 minutes and 50 seconds
+* @param {number} - time in milliseconds
+*/
+export const humanizeDuration = (time) => {
+  const duration = moment.duration(time);
+
+  return [
+      [duration.days(), 'day', 'days'],
+      [duration.hours(), 'hour', 'hours'],
+      [duration.minutes(), 'minute', 'minutes'],
+      [duration.seconds(), 'second', 'seconds']
+    ]
+    .filter(([value]) => value)
+    .map(([value, singular, plurals]) => `${value} ${value === 1 ? singular : plurals}`)
+    .join(', ')
+    .replace(/,(?=[^,]*$)/, ' and')
+    .trim();
 }

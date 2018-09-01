@@ -129,10 +129,10 @@ export const reducer = { deviceModels: redux.getReducer(initialState) };
 
 // ========================= Selectors - START
 export const getDeviceModelsReducer = state => state.deviceModels;
-export const getEntities = state => getDeviceModelsReducer(state).entities;
+export const getDeviceModelEntities = state => getDeviceModelsReducer(state).entities;
 export const getItems = state => getDeviceModelsReducer(state).items;
 export const getDeviceModels = createSelector(
-  getEntities, getItems,
+  getDeviceModelEntities, getItems,
   (entities, items) => items.map(id => entities[id])
 );
 export const getDeleteDeviceModelError = state =>

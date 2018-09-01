@@ -1,5 +1,4 @@
 // Copyright (c) Microsoft. All rights reserved.
-
 import { stringToBoolean } from 'utilities';
 
 // Contains methods for converting service response
@@ -9,23 +8,28 @@ import { stringToBoolean } from 'utilities';
 export const toSimulationStatusModel = (response = {}) => ({
   simulationRunning: stringToBoolean((response.Properties || {}).SimulationRunning),
   preprovisionedIoTHub: stringToBoolean((response.Properties || {}).PreprovisionedIoTHub),
-  preprovisionedIoTHubInUse: stringToBoolean((response.Properties || {}).PreprovisionedIoTHubInUse),
-  preprovisionedIoTHubMetricsUrl: (response.Properties || {}).PreprovisionedIoTHubMetricsUrl,
-  activeDevicesCount: (response.Properties || {}).ActiveDevicesCount,
-  totalDevicesCount: (response.Properties || {}).TotalDevicesCount,
-  messagesPerSecond: (response.Properties || {}).MessagesPerSecond,
-  failedMessagesCount: (response.Properties || {}).FailedMessagesCount,
-  totalMessagesCount: (response.Properties || {}).TotalMessagesCount,
-  failedDeviceConnectionsCount: (response.Properties || {}).FailedDeviceConnectionsCount,
-  failedDeviceTwinUpdatesCount: (response.Properties || {}).FailedDeviceTwinUpdatesCount
 });
 
 export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,
   enabled: response.Enabled,
+  isRunning: response.Running,
   startTime: response.StartTime,
   endTime: response.EndTime,
+  stopTime: response.StoppedTime,
   id: response.Id,
+  name: response.Name,
+  description: response.Desc,
+  statistics: {
+    averageMessagesPerSecond: (response.Statistics || {}).AverageMessagesPerSecond,
+    totalMessagesSent: (response.Statistics || {}).TotalMessagesSent,
+    failedMessagesCount: (response.Statistics || {}).FailedMessagesCount,
+    totalDevicesCount: (response.Statistics || {}).TotalDevicesCount,
+    activeDevicesCount: (response.Statistics || {}).ActiveDevicesCount,
+    failedDeviceConnectionsCount: (response.Statistics || {}).FailedDeviceConnectionsCount,
+    failedDeviceTwinUpdatesCount: (response.Statistics || {}).FailedDeviceTwinUpdatesCount,
+    simulationErrorsCount: (response.Statistics || {}).SimulationErrorsCount
+  },
   deviceModels: (response.DeviceModels || []).map(({ Id, Count, Override }) => ({
     id: Id,
     count: Count,
@@ -41,14 +45,20 @@ export const toSimulationModel = (response = {}) => ({
           step: Step,
           unit: Unit,
           path: mapToBehavior(path),
-          type: Type,
+          type: Type
         }
       }))
       .reduce((acc, obj) => [...acc, ...obj], [])
   })),
-  connectionString: (response.IoTHub || {}).ConnectionString === 'default'
-    ? '' : (response.IoTHub || {}).ConnectionString
+  iotHubs: (response.IoTHubs || []).map(({ ConnectionString, PreprovisionedIoTHub, PreprovisionedIoTHubInUse, PreprovisionedIoTHubMetricsUrl }) => ({
+    connectionString: ConnectionString === 'default' ? '' : ConnectionString,
+    preprovisionedIoTHub: PreprovisionedIoTHub,
+    preprovisionedIoTHubInUse: PreprovisionedIoTHubInUse,
+    preprovisionedIoTHubMetricsUrl: PreprovisionedIoTHubMetricsUrl
+  }))
 });
+
+export const toSimulationListModel = (response = {}) => (response.Items || []).map(toSimulationModel);
 
 const mapToBehavior = path => {
   switch (path) {
@@ -68,37 +78,54 @@ export const toSimulationRequestModel = (request = {}) => ({
   StartTime: request.startTime,
   EndTime: request.endTime,
   Id: request.id,
+  Name: request.name,
+  Desc: request.description,
   DeviceModels: toDeviceModels(request.deviceModels),
-  IoTHub: {
-    ConnectionString: request.connectionString
-  }
+  IoTHubs: toIoTHubs(request.iotHubs)
+});
+
+// Request models
+export const toSimulationCloneModel = (request = {}) => ({
+  Enabled: true,
+  StartTime: request.startTime,
+  EndTime: request.endTime,
+  Name: request.name,
+  Desc: request.description,
+  DeviceModels: toCloneDeviceModels(request.deviceModels),
+  IoTHubs: toIoTHubs(request.iotHubs)
+});
+
+// Request models
+export const toSimulationPatchModel = (request = {}, enabled) => ({
+  ETag: request.eTag,
+  Id: request.id,
+  Enabled: enabled
 });
 
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
-  deviceModels.map(({ id, eTag, count, interval, sensors, isCustomDevice, defaultDeviceModel = {} }) => {
-    if (isCustomDevice) {
-      const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
-      return {
-        Id: id,
-        ETag: eTag,
-        Count: count,
-        Override: {
-          Simulation: {
-              Interval: interval,
-              Scripts: script
-            },
-          Telemetry: [{
-            Interval: interval,
-            MessageTemplate: messageTemplate,
-            MessageSchema: messageSchema
-          }]
-        }
-      };
-    }
+  deviceModels.map(({ name: Id, count: Count, interval }) => {
+    const Interval = `${interval.hours}:${interval.minutes}:${interval.seconds}`;
+    return {
+      Id,
+      Count,
+      Override: {
+        Simulation: {
+          Interval
+        },
+        Telemetry: [{
+          Interval
+        }]
+      }
+    };
+  });
+
+// Map to deviceModels in simulation request model
+const toCloneDeviceModels = (deviceModels = []) =>
+  deviceModels.map(({ id, count: Count, interval }) => {
     return {
       Id: id,
-      Count: count,
+      Count,
       Override: {
         Simulation: {
           Interval: interval
@@ -110,47 +137,8 @@ const toDeviceModels = (deviceModels = []) =>
     };
   });
 
-const toCustomSensorModel = (sensors = []) => {
-  const behaviorMap = {};
-  let Fields = {};
-  let messages = [];
-
-  sensors
-    .forEach(({ name, behavior, minValue, maxValue, unit }) => {
-      const _name = name.toLowerCase();
-      const _unit = unit.toLowerCase();
-      const nameString = `"${_name}":$\{${_name}}`;
-      const unitString = `"${_name}_unit":"${_unit}"`;
-      const path = behavior.value;
-      messages = [...messages, nameString, unitString];
-      Fields = { ...Fields, [_name]: 'double', [`${_name}_unit`]: 'text' };
-      if(!behaviorMap[path]) behaviorMap[path] = {};
-      behaviorMap[path] = {
-        ...behaviorMap[path],
-        [_name]: {
-          Min: minValue,
-          Max: maxValue,
-          Step: 1,
-          Unit: unit
-        }
-      }
-    });
-
-    const script = Object.keys(behaviorMap).map(Path => ({
-      Type: "internal",
-      Path,
-      Params: behaviorMap[Path]
-    }));
-    const messageTemplate = `{${messages.join(',')}}`;
-    const messageSchema = {
-      Name: 'custom-sensors;v1',
-      Format: 'JSON',
-      Fields
-    }
-
-    return {
-      script,
-      messageTemplate,
-      messageSchema
-    };
-}
+// Map to deviceModels in simulation request model
+const toIoTHubs = (iotHubs = []) =>
+  iotHubs.map(({ connectionString }) => {
+    return { ConnectionString: connectionString };
+  });
