@@ -38,14 +38,6 @@ const simulationListModelReducer = (state, { payload }) => {
   });
 };
 
-const createSimulationModelReducer = (state, { payload }) => {
-  const { entities: { simulations }, result } = normalize([payload], simulationsSchema);
-  return update(state, {
-    entities: { $merge: simulations },
-    items: { $splice: [[state.items.length, 0, result]] }
-  });
-};
-
 const updateSimulationModelReducer = (state, { payload }) => {
   return update(state, {
     entities: {[payload.id]: {$set: payload}}
