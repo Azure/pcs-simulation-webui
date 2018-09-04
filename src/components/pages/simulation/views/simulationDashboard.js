@@ -104,33 +104,32 @@ export class SimulationDashboard extends Component {
         <SectionHeader className="dashboard-header">
           {t('header.simulationsDashboard')}
         </SectionHeader>
-
         {
           !this.state.showAll ?
           <div className="simulation-containers">
+            {
+              activeSimulationsList.length > 0 &&
+              <div className="active-simulations">
               {
-                activeSimulationsList.length > 0 &&
-                <div className="active-simulations">
-                  {
-                    activeSimulationsList.map(sim =>
-                      <NavLink className="simulation-tile-link oneCol" to={`/simulation/${sim.id}`} key={sim.id}>
-                        <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
-                      </NavLink>
-                    )
-                  }
-                </div>
+                activeSimulationsList.map(sim =>
+                  <NavLink className="simulation-tile-link oneCol" to={`/simulation/${sim.id}`} key={sim.id}>
+                    <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
+                  </NavLink>
+                )
+              }
+              </div>
             }
             <div className="past-simulations">
             {
-                pastSimulationsList.map(sim =>
+              pastSimulationsList.map(sim =>
                 <NavLink className={className} to={`/simulation/${sim.id}`} key={sim.id}>
                   <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
                 </NavLink>
               )
             }
             </div>
-          </div>
-          : <SimulationsGrid {...gridProps} />
+          </div> :
+          <SimulationsGrid {...gridProps} />
         }
         {
           newSimulationFlyoutOpen &&
