@@ -48,7 +48,7 @@ export class Duration extends Component {
   }
 
   convertUnitsToMs({ hours, minutes, seconds }) {
-    return 1000*(60*(60*hours + minutes) + seconds);
+    return 1000 * (60 * (60 * hours + minutes) + seconds);
   }
 
   createValueObject(units) {
@@ -76,7 +76,7 @@ export class Duration extends Component {
   }
 
   render() {
-    const { disabled, className } = this.props;
+    const { disabled, className, showHeaders = true } = this.props;
     const genericProps = {
       ...Duration.defaultProps,
       onChange: this.onChange,
@@ -88,9 +88,10 @@ export class Duration extends Component {
       disabled,
       onBlur: this.onBlur
     };
+
     const { hours, minutes, seconds } = this.state;
-    return (
-      <div className={joinClasses('duration-control-container', className)}>
+    return showHeaders
+      ? (<div className={joinClasses('duration-control-container', className)}>
         <FormGroup>
           <FormLabel>HH</FormLabel>
           <FormControl
@@ -114,8 +115,29 @@ export class Duration extends Component {
             name="seconds"
             value={this.format(seconds)} />
         </FormGroup>
-      </div>
-    );
+      </div>)
+      : (<div className={joinClasses('duration-control-container', className)}>
+        <FormGroup>
+          <FormControl
+            {...genericProps}
+            name="hours"
+            value={this.format(hours)} />
+        </FormGroup>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
+        <FormGroup>
+          <FormControl
+            {...genericProps}
+            name="minutes"
+            value={this.format(minutes)} />
+        </FormGroup>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
+        <FormGroup>
+          <FormControl
+            {...genericProps}
+            name="seconds"
+            value={this.format(seconds)} />
+        </FormGroup>
+      </div>);
   }
 }
 

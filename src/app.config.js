@@ -8,6 +8,8 @@ const Config = {
 
   // Constants
   simulationId: 1,   // constant simulation id of 1 since we currently have only one simulation
+  simulationNameMaxLength: 25,
+  simulationDescMaxLength: 100,
   retryWaitTime: 2000, // On retryable error, retry after 2s
   maxRetryAttempts: 2,
   retryableStatusCodes: new Set([ 0, 502, 503 ]),
@@ -20,7 +22,8 @@ const Config = {
   deviceModelTypes: {
     customModel: 'Custom',
     stockModel: 'Stock'
-  }
+  },
+  dateFormat: 'DD/MM/YY hh:mm:ss A'
 };
 
 export default Config;
