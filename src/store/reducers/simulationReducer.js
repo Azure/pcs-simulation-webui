@@ -14,7 +14,6 @@ import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';
 
 // Simulation reducer constants
-const SIMULATION_ID = Config.simulationId;
 const EMPTY_SIMULATION_LIST = toSimulationListModel();
 const EMPTY_SIMULATION = toSimulationModel();
 const EMPTY_STATUS = toSimulationStatusModel();
@@ -106,7 +105,7 @@ export const epics = createEpicScenario({
       const endTime = new Date();
       const duration = moment.duration(moment(endTime).diff(moment(startTime)));
       const eventProps = {
-        Id: SIMULATION_ID,
+        Id: payload.id,
         ActualDuration: duration,
         TotalMessages: payload.statistics.totalMessagesSent,
         TotalFailedMessages: payload.statistics.failedMessagesCount,
