@@ -8,8 +8,7 @@ import { createSelector } from 'reselect';
 import Config from 'app.config';
 import { getDeviceModelEntities } from 'store/reducers/deviceModelsReducer';
 import { SimulationService } from 'services';
-import { toSimulationListModel, toSimulationModel, toSimulationStatusModel } from 'services/models';
-import { getSimulation, getSimulationIsRunning } from 'store/selectors';
+import { toSimulationListModel, toSimulationModel, toSimulationRequestModel, toSimulationStatusModel } from 'services/models';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';
@@ -103,17 +102,16 @@ export const epics = createEpicScenario({
     type: 'SIMULATION_STOP',
     epic: ({ payload }, store) => {
       const state = store.getState();
-      const { eTag } = getSimulation(state);
-      const startTime = state.simulation.model.startTime;
+      const startTime = payload.startTime;
       const endTime = new Date();
       const duration = moment.duration(moment(endTime).diff(moment(startTime)));
       const eventProps = {
         Id: SIMULATION_ID,
         ActualDuration: duration,
-        TotalMessages: state.simulation.status.totalMessagesCount,
-        TotalFailedMessages: state.simulation.status.failedMessagesCount,
-        TotalFailedDeviceConnections: state.simulation.status.failedDeviceConnectionsCount,
-        TotalFailedTwinUpdates: state.simulation.status.failedDeviceTwinUpdatesCount
+        TotalMessages: payload.statistics.totalMessagesSent,
+        TotalFailedMessages: payload.statistics.failedMessagesCount,
+        TotalFailedDeviceConnections: payload.statistics.failedDeviceConnectionsCount,
+        TotalFailedTwinUpdates: payload.statistics.failedDeviceTwinUpdatesCount
       };
 
       const event = diagnosticsEvent('StopSimulation', eventProps);
@@ -133,44 +131,6 @@ export const epics = createEpicScenario({
         .startWith(redux.actions.clearStatus())
         .catch(simulationError)
   },
-
-  /** Updates the simulation */
-  createSimulation: {
-    type: 'SIMULATION_CREATE',
-    epic: ({ payload }, store) => {
-      const state = store.getState();
-      const hasDeviceModels = payload.deviceModels.length > 0;
-      const deviceModels = payload.deviceModels.length > 0 ? payload.deviceModels[0] : {};
-      const newModelSimulationRequest = toSimulationRequestModel(newModel);
-      const startTime = state.simulation.model.startTime;
-      const endTime = state.simulation.model.endTime;
-      const duration = moment.duration(moment(endTime).diff(moment(startTime)));
-      const eventProps = {
-        DeviceModels: [{
-          Id: hasDeviceModels ? deviceModels.id : '',
-          Name: hasDeviceModels && deviceModels.defaultDeviceModel ? deviceModels.defaultDeviceModel.name : '',
-          Count: hasDeviceModels ? deviceModels.count : 0,
-          Frequency: hasDeviceModels ? deviceModels.interval : '',
-          IsCustomDevice: hasDeviceModels ? deviceModels.isCustomDevice : null,
-          Sensors: hasDeviceModels ? deviceModels.sensors : {}
-        }],
-
-        SimulationDetails: [{
-          Id: SIMULATION_ID,
-          StartTime: startTime,
-          EndTime: newModelSimulationRequest.EndTime,
-          IoTHubType: newModelSimulationRequest.IoTHub.ConnectionString===''? 'Preprovisioned': 'Custom',
-          duration: duration
-        }]
-      };
-
-      const event = diagnosticsEvent('StartSimulation', eventProps);
-      // Force the simulation status to update if turned off
-      return SimulationService.createSimulation(payload)
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event))
-         .catch(simulationError);
-    }
-  }
 });
 // ========================= Epics - END
 
