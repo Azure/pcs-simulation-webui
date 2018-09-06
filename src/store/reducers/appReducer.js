@@ -18,7 +18,6 @@ const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: 
 // session management variables declaration
 // using 'Timestamp as session id'
 let sessionId = moment().toISOString();
-let isSessionActive = false;
 
 export const redux = createReducerScenario({
   deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelErrorReducer },

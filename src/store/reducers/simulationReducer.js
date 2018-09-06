@@ -100,7 +100,6 @@ export const epics = createEpicScenario({
   stopSimulation: {
     type: 'SIMULATION_STOP',
     epic: ({ payload }, store) => {
-      const state = store.getState();
       const startTime = payload.startTime;
       const endTime = new Date();
       const duration = moment.duration(moment(endTime).diff(moment(startTime)));
