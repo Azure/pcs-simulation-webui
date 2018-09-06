@@ -8,7 +8,7 @@ import { createSelector } from 'reselect';
 import Config from 'app.config';
 import { getDeviceModelEntities } from 'store/reducers/deviceModelsReducer';
 import { SimulationService } from 'services';
-import { toSimulationListModel, toSimulationModel, toSimulationRequestModel, toSimulationStatusModel } from 'services/models';
+import { toSimulationListModel, toSimulationModel, toSimulationStatusModel } from 'services/models';
 import { createReducerScenario, createEpicScenario } from 'store/utilities';
 import { epics as appEpics } from './appReducer';
 import diagnosticsEvent from '../logEventUtil';

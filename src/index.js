@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Config from 'app.config';
-import { Subject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
