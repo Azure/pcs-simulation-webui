@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import 'rxjs';
+import moment from 'moment';
 import { Observable } from 'rxjs';
 import { schema, normalize } from 'normalizr';
 import update from 'immutability-helper';
@@ -71,7 +71,10 @@ export const reducer = { simulations: redux.getReducer(initialState) };
 // ========================= Selectors - END
 
 // ========================= Epics - START
-const simulationError = error => Observable.of(redux.actions.registerError(error.message));
+const simulationError = error => {
+  const errorEvent = diagnosticsEvent('SimulationUXError');
+  return Observable.of(redux.actions.registerError(error.message))
+    .startWith(appEpics.actions.logEvent(errorEvent))};
 
 export const epics = createEpicScenario({
   /** Loads the simulation list*/
@@ -97,11 +100,22 @@ export const epics = createEpicScenario({
   stopSimulation: {
     type: 'SIMULATION_STOP',
     epic: ({ payload }, store) => {
-      const state = store.getState();
-      const event = diagnosticsEvent('StopSimulation');
+      const startTime = payload.startTime;
+      const endTime = new Date();
+      const duration = moment.duration(moment(endTime).diff(moment(startTime)));
+      const eventProps = {
+        Id: payload.id,
+        ActualDuration: duration,
+        TotalMessages: payload.statistics.totalMessagesSent,
+        TotalFailedMessages: payload.statistics.failedMessagesCount,
+        TotalFailedDeviceConnections: payload.statistics.failedDeviceConnectionsCount,
+        TotalFailedTwinUpdates: payload.statistics.failedDeviceTwinUpdatesCount
+      };
+
+      const event = diagnosticsEvent('StopSimulation', eventProps);
       return SimulationService.stopSimulation(payload, false)
         .map(redux.actions.updateModel)
-        .startWith(appEpics.actions.logEvent(event, state))
+        .startWith(appEpics.actions.logEvent(event))
         .catch(simulationError);
     }
   },
@@ -115,28 +129,6 @@ export const epics = createEpicScenario({
         .startWith(redux.actions.clearStatus())
         .catch(simulationError)
   },
-
-  /** Updates the simulation */
-  createSimulation: {
-    type: 'SIMULATION_CREATE',
-    epic: ({ payload }, store) => {
-      const state = store.getState();
-      const hasDeviceModels = payload.deviceModels.length > 0;
-      const deviceModels = payload.deviceModels.length > 0 ? payload.deviceModels[0] : {};
-      const eventProps = {
-        DeviceModels: [{
-          Id: hasDeviceModels ? deviceModels.id : '',
-          Name: hasDeviceModels && deviceModels.defaultDeviceModel ? deviceModels.defaultDeviceModel.name : '',
-          Count: hasDeviceModels ? deviceModels.count : 0,
-          IsCustomDevice: hasDeviceModels ? deviceModels.isCustomDevice : null,
-        }]
-      };
-      const event = diagnosticsEvent('StartSimulation', eventProps);
-      return SimulationService.createSimulation(payload)
-        .startWith(redux.actions.clearModel(), appEpics.actions.logEvent(event, state))
-        .catch(simulationError);
-    }
-  }
 });
 // ========================= Epics - END
 

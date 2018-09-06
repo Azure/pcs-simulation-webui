@@ -12,6 +12,7 @@ const Config = {
   retryWaitTime: 2000, // On retryable error, retry after 2s
   maxRetryAttempts: 2,
   retryableStatusCodes: new Set([ 0, 502, 503 ]),
+  sessionTimeout: 1200000,  // Session will expire in 20 mins
   maxSimulatedDevices: 20000,
   simulationStatusPollingInterval: 10000, // 10s
   customSensorValue: 'custom',

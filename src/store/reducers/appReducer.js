@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import 'rxjs';
+import moment from 'moment';
 import { Observable } from 'rxjs';
+import diagnosticsEvent from 'store/logEventUtil';
 import { ConfigService, DiagnosticsService } from 'services';
 import { createAction, createReducerScenario, createEpicScenario } from 'store/utilities';
 import {
@@ -13,6 +14,10 @@ import { epics as deviceModelsEpics } from './deviceModelsReducer';
 // ========================= Reducers - START
 const deviceModelErrorReducer = (state, action) => ({ ...state, error: action.payload });
 const updateSolutionSettingsReducer = (state, action) => ({ ...state, settings: action.payload});
+
+// session management variables declaration
+// using 'Timestamp as session id'
+let sessionId = moment().toISOString();
 
 export const redux = createReducerScenario({
   deviceModelsError: { type: 'DEVICE_MODELS_ERROR', reducer: deviceModelErrorReducer },
@@ -31,13 +36,24 @@ export const epics = createEpicScenario({
   /** Kicks off all the events that need to happen on app initialization */
   initializeApp: {
     type: 'APP_INITIALIZE',
-    epic: () => [
-      simulationRedux.actions.revertToInitial(),
-      simulationEpics.actions.fetchSimulationStatus(),
-      simulationEpics.actions.fetchSimulationList(),
-      epics.actions.getSolutionSettings(),
-      deviceModelsEpics.actions.fetchDeviceModels(),
-    ]
+    epic: () => {
+      const event = diagnosticsEvent('UserLogInSuccess', {});
+      return [
+        simulationRedux.actions.revertToInitial(),
+        simulationEpics.actions.fetchSimulationStatus(),
+        simulationEpics.actions.fetchSimulationList(),
+        epics.actions.getSolutionSettings(),
+        epics.actions.logEvent(event),
+        deviceModelsEpics.actions.fetchDeviceModels()
+    ]}
+    },
+
+  updateSession: {
+    type: 'UPDATE_SESSION',
+    epic: (sessionStatus) => {
+      sessionId = moment().toISOString();
+      return Observable.empty()
+    }
   },
 
   /** Log diagnostics data */
@@ -46,6 +62,7 @@ export const epics = createEpicScenario({
     epic: ({ payload }, store) => {
       const settings = getSolutionSettings(store.getState());
       const diagnosticsOptOut = settings === undefined ? true : settings.diagnosticsOptOut;
+      payload.eventProperties.sessionId = sessionId;
       if (!diagnosticsOptOut) {
         return DiagnosticsService.logEvent(payload)
           .flatMap(_ => Observable.empty())
