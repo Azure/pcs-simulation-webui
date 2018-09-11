@@ -32,8 +32,6 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     @include rem-fallback(height, 530px);
 
     .chart-div { @include rem-fallback(height, 220px); }
-
-    .tile-body .simulation-summary .telemetry-container { justify-content: initial }
   }
 
   .section-header {
@@ -66,13 +64,12 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     @include rem-fallback(padding, 12px);
 
     .active-devices {
-      display: inline-block;
+      display: flex;
       padding: 0 0 40px 10px;
 
       .active-devices-count,
       .active-devices-label {
-        display: inline-block;
-        width: auto;
+        align-self: flex-end;
       }
 
       .active-devices-count {

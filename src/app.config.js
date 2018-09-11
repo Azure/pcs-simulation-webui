@@ -14,6 +14,7 @@ const Config = {
   retryableStatusCodes: new Set([ 0, 502, 503 ]),
   maxSimulatedDevices: 20000,
   simulationStatusPollingInterval: 10000, // 10s
+  telemetryRefreshInterval: 60000, // 60s
   customSensorValue: 'custom',
   defaultAjaxTimeout: 10000, // 10s
   paginationPageSize: 15,

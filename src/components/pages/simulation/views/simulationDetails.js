@@ -16,8 +16,10 @@ import {
   Indicator,
   SectionHeader
 } from 'components/shared';
+import { SimulationService, MetricsService, retryHandler } from 'services';
+import { TelemetryChart, chartColorObjects } from './metrics';
 
-import { SimulationService, retryHandler } from 'services';
+import './simulationDetails.css';
 
 const maxDate = '12/31/9999 11:59:59 PM +00:00';
 
@@ -34,21 +36,25 @@ class SimulationDetails extends Component {
 
     this.state = {
       simulation: {},
-      isRunning: false,
-      showLink: false,
-      hubUrl: '',
+      telemetry: {},
+      metrics:[],
+      isRunning : true,
+      showLink : false,
+      hubUrl : '',
       pollingError: '',
-      serviceError: ''
-    };
+      startError: ''
+    };;
 
     this.emitter = new Subject();
     this.simulationRefresh$ = new Subject();
+    this.telemetryRefresh$ = new Subject();
     this.subscriptions = [];
   }
 
   componentDidMount() {
     const simulationId = this.props.location.pathname.split('/').pop();
 
+    // Simulation stream - START
     const getSimulationStream = _ => SimulationService.getSimulation(simulationId)
       .merge(
         this.simulationRefresh$
@@ -56,6 +62,7 @@ class SimulationDetails extends Component {
           .flatMap(_ => SimulationService.getSimulation(simulationId))
       )
       .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
+    // Simulation stream - END
 
     this.subscriptions.push(this.emitter
       .switchMap(getSimulationStream)
@@ -81,6 +88,35 @@ class SimulationDetails extends Component {
         },
         pollingError => this.setState({ pollingError: pollingError.message })
       )
+    );
+
+    // Telemetry stream - START
+    const getTelemetryStream = _ => MetricsService.fetchIothubMetrics(simulationId)
+      .merge(
+        this.telemetryRefresh$ // Previous request complete
+          .delay(Config.telemetryRefreshInterval) // Wait to refresh
+          .flatMap(_ => MetricsService.fetchIothubMetrics(simulationId))
+      )
+      .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
+    // Telemetry stream - END
+
+    this.subscriptions.push(
+      this.emitter
+        .switchMap(getTelemetryStream)
+        .subscribe(
+          (metrics) => {
+            this.setState(
+              { metrics },
+              () => {
+                const { isRunning } = this.state;
+                if (!(isRunning === false)) {
+                  this.telemetryRefresh$.next('r')
+                }
+              }
+            );
+          },
+          error => this.setState({ pollingError: error })
+        )
     );
 
     // Start polling
@@ -261,7 +297,7 @@ class SimulationDetails extends Component {
       deviceModelEntities = {}
     } = this.props;
 
-    const { simulation } = this.state;
+    const { simulation, metrics } = this.state;
 
     const {
       deviceModels = [],
@@ -312,6 +348,7 @@ class SimulationDetails extends Component {
               )}
             </div>
           </div>
+
         </FormSection>
         <FormSection>
           <SectionHeader>{ t('simulation.form.telemetry.header') }</SectionHeader>
@@ -321,6 +358,9 @@ class SimulationDetails extends Component {
         <FormSection>
           <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
           <div className="duration-content">{duration}</div>
+        </FormSection>
+        <FormSection>
+          <TelemetryChart colors={chartColorObjects} metrics={metrics} />
         </FormSection>
         {this.getSimulationStatusBar(totalDevices) }
       </div>

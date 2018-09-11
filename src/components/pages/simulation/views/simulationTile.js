@@ -6,13 +6,14 @@ import moment from 'moment';
 
 import Config from 'app.config';
 import { SectionHeader } from 'components/shared';
-import { SimulationService, retryHandler } from 'services';
+import { SimulationService, MetricsService, retryHandler } from 'services';
+import { TelemetryChart, chartColorObjects } from './metrics';
 
 import './simulationTile.css';
 
-
 const {
   simulationStatusPollingInterval,
+  telemetryRefreshInterval,
   maxRetryAttempts,
   retryWaitTime,
   dateTimeFormat
@@ -24,22 +25,23 @@ class SimulationTile extends Component {
     super();
 
     this.state = {
-      isRunning: true,
-      pollingError: ''
+      isRunning: false,
+      pollingError: '',
+      metrics:[],
     };
 
     this.emitter = new Subject();
     this.simulationRefresh$ = new Subject();
+    this.telemetryRefresh$ = new Subject();
     this.subscriptions = [];
   }
 
   componentDidMount() {
     // Initialize state from the most recent status
-    this.setState({
-      isRunning: this.props.isRunning
-    });
+    const { simulation: { isRunning, id } } = this.props;
+    this.setState({ isRunning });
 
-    const simulationId = this.props.simulation.id;
+    const simulationId = id;
 
     const getSimulationStream = _ => SimulationService.getSimulation(simulationId)
       .merge(
@@ -73,8 +75,35 @@ class SimulationTile extends Component {
       )
     );
 
+    const getTelemetryStream = _ => MetricsService.fetchIothubMetrics(simulationId)
+      .merge(
+        this.telemetryRefresh$ // Previous request complete
+          .delay(telemetryRefreshInterval) // Wait to refresh
+          .flatMap(_ => MetricsService.fetchIothubMetrics(simulationId))
+      )
+      .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
+
+    this.subscriptions.push(
+      this.emitter
+        .switchMap(getTelemetryStream)
+        .subscribe(
+          (metrics) => {
+
+            this.setState(
+              { metrics },
+              () => {
+                if (!(this.state.isRunning === false)) {
+                  this.telemetryRefresh$.next('r')
+                }
+              }
+            );
+          },
+          error => this.setState({ pollingError: error })
+        )
+    );
+
     // Start polling
-    this.emitter.next(SimulationService.getSimulation(simulationId));
+    if (isRunning) this.emitter.next(SimulationService.getSimulation(simulationId));
   }
 
   componentWillUnmount() {
@@ -109,6 +138,8 @@ class SimulationTile extends Component {
       }
     } = this.props;
 
+    const { isRunning, metrics } = this.state;
+
     const className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
     const startDateTime = moment(startTime).format(dateTimeFormat);
     const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
@@ -128,24 +159,24 @@ class SimulationTile extends Component {
         <div className="tile-body">
           {this.getActiveDevices()}
           {
-            this.state.isRunning &&
-            <div className="chart-div"></div>
+            isRunning &&
+            <TelemetryChart colors={chartColorObjects} metrics={metrics} />
           }
           <div className="simulation-summary">
             <div className="device-model-rows">
               {
-                deviceModels.map(deviceModelItem =>
-                  <div className="device-model-row" key={ deviceModelItem.id }>
+                deviceModels.map((deviceModelItem, idx) =>
+                  <div className="device-model-row" key={ `${deviceModelItem.id}-${idx}` }>
                     {deviceModelItem.count} {deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}
                   </div>
                 )
               }
             </div>
             <div className="telemetry-container">
-              <div className="simulation-status-section right">
-                <div className="messages-per-second">{this.state.isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
+              <div className="simulation-status-section">
+                <div className="messages-per-second">{isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
                 <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
-                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {this.state.isRunning ? this.state.totalMessagesSent : statistics.totalMessagesSent}</div>
+                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {isRunning ? this.state.totalMessagesSent : statistics.totalMessagesSent}</div>
               </div>
             </div>
           </div>
