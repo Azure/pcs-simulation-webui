@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-import 'rxjs';
 import { Observable } from 'rxjs';
 import { schema, normalize } from 'normalizr';
 import update from 'immutability-helper';
 import { createSelector } from 'reselect';
 import { DeviceModelsService } from 'services';
+import { epics as appEpics } from './appReducer';
+import diagnosticsEvent from '../logEventUtil';
 import {
   createReducerScenario,
   createEpicScenario,
@@ -15,8 +16,11 @@ import {
 } from 'store/utilities';
 
 // ========================= Epics - START
-const handleError = fromAction => error =>
-  Observable.of(redux.actions.registerError(fromAction.type, { error, fromAction }));
+const handleError = fromAction => error => {
+  const errorEvent = diagnosticsEvent('DeviceModelsUXError');
+  return Observable.of(redux.actions.registerError(fromAction.type, { error, fromAction }))
+    .startWith(appEpics.actions.logEvent(errorEvent))
+}
 
 export const epics = createEpicScenario({
   /** Loads the list of device models */
@@ -31,10 +35,17 @@ export const epics = createEpicScenario({
   /** Create a device model */
   createDeviceModel: {
     type: 'DEVICE_MODEL_INSERT',
-    epic: (fromAction) =>
-      DeviceModelsService.createDeviceModel(fromAction.payload)
+    epic: (fromAction, store) =>{
+      const eventProps = {
+        DeviceModelId: fromAction.payload.id
+      };
+      const event = diagnosticsEvent('CreateDeviceModel', eventProps);
+
+      return DeviceModelsService.createDeviceModel(fromAction.payload)
         .map(redux.actions.createDeviceModel)
+        .startWith(appEpics.actions.logEvent(event))
         .catch(handleError(fromAction))
+    }
   },
 
   /** Upload a device model */
@@ -49,19 +60,33 @@ export const epics = createEpicScenario({
   /** Edit a single device model */
   editDeviceModel:{
     type: 'DEVICE_MODEL_UPDATE',
-    epic: (fromAction) =>
-      DeviceModelsService.updateSingleDeviceModel(fromAction.payload)
+    epic: (fromAction, store) =>{
+      const eventProps = {
+        DeviceModelId: fromAction.payload.id
+      };
+      const event = diagnosticsEvent('UpdateDeviceModel', eventProps);
+
+      return DeviceModelsService.updateSingleDeviceModel(fromAction.payload)
         .map(redux.actions.updateSingleDeviceModel)
+        .startWith(appEpics.actions.logEvent(event))
         .catch(handleError(fromAction))
+    }
   },
 
   /** Delete a device model */
   deleteDeviceModel: {
     type: 'DEVICE_MODEL_DELETE',
-    epic: (fromAction) =>
-      DeviceModelsService.deleteDeviceModelById(fromAction.payload)
+    epic: (fromAction, store) => {
+      const eventProps = {
+        DeviceModelId: fromAction.payload
+      };
+      const event = diagnosticsEvent('DeleteDeviceModel', eventProps);
+
+      return DeviceModelsService.deleteDeviceModelById(fromAction.payload)
         .map(redux.actions.deleteDeviceModel)
+        .startWith(appEpics.actions.logEvent(event))
         .catch(handleError(fromAction))
+    }
   }
 });
 // ========================= Epics - END

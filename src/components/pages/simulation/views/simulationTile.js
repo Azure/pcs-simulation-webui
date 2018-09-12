@@ -165,8 +165,8 @@ class SimulationTile extends Component {
           <div className="simulation-summary">
             <div className="device-model-rows">
               {
-                deviceModels.map((deviceModelItem, idx) =>
-                  <div className="device-model-row" key={ `${deviceModelItem.id}-${idx}` }>
+                deviceModels.map(deviceModelItem =>
+                  <div className="device-model-row" key={ `${id}-${deviceModelItem.id}` }>
                     {deviceModelItem.count} {deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}
                   </div>
                 )
