@@ -25,7 +25,7 @@ const newDeviceModel = () => ({
   name: '',
   count: 0,
   messageThroughput: '',
-  interval: ''
+  interval: {}
 });
 
 const isIntRegex = /^-?\d*$/;
