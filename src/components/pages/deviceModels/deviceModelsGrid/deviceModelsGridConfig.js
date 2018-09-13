@@ -22,14 +22,10 @@ export const checkboxParams = {
 
 /** A collection of column definitions for the device models grid */
 export const deviceModelsColumnDefs = {
-  id: {
-    headerName: 'deviceModels.grid.id',
-    field: 'id',
-    sort: 'asc'
-  },
   name: {
     headerName: 'deviceModels.grid.modelName',
     field: 'name',
+    sort: 'asc',
     valueFormatter: ({ value }) => checkForEmpty(value)
   },
   description: {
@@ -66,5 +62,5 @@ export const defaultDeviceModelGridProps = {
   multiSelect: false,
   pagination: true,
   paginationPageSize: Config.paginationPageSize,
-  rowSelection: 'single'
+  rowSelection: 'multiple'
 };

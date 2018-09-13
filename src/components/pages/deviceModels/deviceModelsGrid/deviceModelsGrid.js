@@ -30,8 +30,7 @@ export class DeviceModelsGrid extends Component {
 
     // Default device grid columns
     this.columnDefs = [
-      { ...deviceModelsColumnDefs.id, ...checkboxParams },
-      deviceModelsColumnDefs.name,
+      { ...deviceModelsColumnDefs.name, ...checkboxParams },
       deviceModelsColumnDefs.description,
       deviceModelsColumnDefs.dataPoints,
       deviceModelsColumnDefs.version,
@@ -171,7 +170,7 @@ export class DeviceModelsGrid extends Component {
       /* Grid Events */
       onSoftSelectChange: this.onSoftSelectChange,
       onHardSelectChange: this.onHardSelectChange,
-      onGridReady: this.onGridReady,
+        onGridReady: this.onGridReady,
     };
     return ([
       <PcsGrid {...gridProps} key="device-models-grid-key" />,
