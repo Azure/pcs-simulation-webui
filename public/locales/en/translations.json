@@ -23,6 +23,8 @@
     "description": "Description",
     "simSetup": "Simulation setup",
     "start": "Start Simulation",
+    "stop": "Stop Simulation",
+    "startNew": "Start New Simulation",
     "name": "Name",
     "newSim": "New Simulation",
     "showAll": "Show all simulations",

@@ -100,6 +100,7 @@ class SimulationDetails extends Component {
 
   startSimulation = (event) => {
     event.preventDefault();
+    this.setState ({ isRunning: true });
     const { simulation } = this.state;
     const timespan = moment.duration(moment(simulation.endTime).diff(moment(simulation.startTime)));
     const duration = {
@@ -121,7 +122,7 @@ class SimulationDetails extends Component {
           const newId = response.id;
           const path = this.props.location.pathname;
           const newSimulationPath = path.replace(this.state.simulation.id, newId);
-          window.location.replace(newSimulationPath)
+          window.location.replace (newSimulationPath);
         }),
         serviceError => this.setState({ serviceError: serviceError.message })
     );
@@ -133,7 +134,7 @@ class SimulationDetails extends Component {
         <Svg path={svgs.linkTo} className="link-svg" />
         <a href={this.state.hubUrl} target="_blank">View IoT Hub metrics in the Azure portal</a>
       </div>
-    )
+    );
   }
 
   getSimulationStatusBar( totalDevicesCount) {
@@ -175,7 +176,7 @@ class SimulationDetails extends Component {
             { this.getSimulationStatus(totalDevicesCount) }
             { this.getHubLink() }
           <BtnToolbar>
-            <Btn {...stopBtnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
+            <Btn {...stopBtnProps} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
           </BtnToolbar>
         </FormActions>
       );
@@ -184,7 +185,7 @@ class SimulationDetails extends Component {
         <FormActions>
         { t('simulation.status.simulationStopped') }
         <BtnToolbar>
-          <Btn {...startBtnProps}>Start Simulation</Btn>
+          <Btn {...startBtnProps}>{t('simulation.startNew')}</Btn>
         </BtnToolbar>
         { this.getHubLink() }
         </FormActions>
