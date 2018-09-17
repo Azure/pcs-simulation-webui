@@ -2,9 +2,7 @@
 
 import React from 'react';
 
-import { svgs } from 'utilities';
 import Flyout from 'components/shared/flyout';
-import { Svg } from 'components/shared';
 import SimulationForm from '../../views/simulationForm';
 
 export const NewSimulation = (props) => (
