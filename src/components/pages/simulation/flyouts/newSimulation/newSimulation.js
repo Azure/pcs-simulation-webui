@@ -11,7 +11,6 @@ export const NewSimulation = (props) => (
   <Flyout.Container>
     <Flyout.Header>
       <Flyout.Title>
-        <Svg path={svgs.plus} className="flyout-title-icon" />
         {props.t('simulation.simSetup')}
       </Flyout.Title>
       <Flyout.CloseBtn onClick={props.onClose} />
