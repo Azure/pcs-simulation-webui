@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { PcsGrid } from 'components/shared';
-import { checkboxParams, simulationsColumnDefs, defaultSimulationsGridProps } from './simulationsGridConfig';
+import { simulationsColumnDefs, defaultSimulationsGridProps } from './simulationsGridConfig';
 import { isFunc, translateColumnDefs } from 'utilities';
 
 /**
@@ -16,7 +16,7 @@ export class SimulationsGrid extends Component {
 
     // Default device grid columns
     this.columnDefs = [
-      { ...simulationsColumnDefs.name, ...checkboxParams },
+      { ...simulationsColumnDefs.name },
       simulationsColumnDefs.deviceModels,
       simulationsColumnDefs.startTime,
       simulationsColumnDefs.totalDevices,

@@ -15,8 +15,6 @@ const toDataPoints = value => value.reduce((prev, cur) => {
 }, []).join('; ');
 
 export const checkboxParams = {
-  headerCheckboxSelection: true,
-  headerCheckboxSelectionFilteredOnly: true,
   checkboxSelection: true
 };
 
@@ -62,5 +60,5 @@ export const defaultDeviceModelGridProps = {
   multiSelect: false,
   pagination: true,
   paginationPageSize: Config.paginationPageSize,
-  rowSelection: 'multiple'
+  rowSelection: 'single'
 };
