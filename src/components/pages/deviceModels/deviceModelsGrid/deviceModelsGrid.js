@@ -170,7 +170,7 @@ export class DeviceModelsGrid extends Component {
       /* Grid Events */
       onSoftSelectChange: this.onSoftSelectChange,
       onHardSelectChange: this.onHardSelectChange,
-        onGridReady: this.onGridReady,
+      onGridReady: this.onGridReady,
     };
     return ([
       <PcsGrid {...gridProps} key="device-models-grid-key" />,

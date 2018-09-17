@@ -176,7 +176,7 @@ class SimulationDetails extends Component {
             { this.getSimulationStatus(totalDevicesCount) }
             { this.getHubLink() }
           <BtnToolbar>
-            <Btn {...stopBtnProps} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
+            <Btn { ...stopBtnProps } svg={ svgs.stopSimulation }>{ t('simulation.stop') }</Btn>
           </BtnToolbar>
         </FormActions>
       );
@@ -185,7 +185,7 @@ class SimulationDetails extends Component {
         <FormActions>
         { t('simulation.status.simulationStopped') }
         <BtnToolbar>
-          <Btn {...startBtnProps}>{t('simulation.startNew')}</Btn>
+          <Btn { ...startBtnProps }>{ t('simulation.startNew') }</Btn>
         </BtnToolbar>
         { this.getHubLink() }
         </FormActions>
