@@ -6,12 +6,6 @@ import { gridValueFormatters } from 'components/shared/pcsGrid/pcsGridConfig';
 
 const { checkForEmpty } = gridValueFormatters;
 
-export const checkboxParams = {
-  headerCheckboxSelection: true,
-  headerCheckboxSelectionFilteredOnly: true,
-  checkboxSelection: true
-};
-
 /** A collection of column definitions for the device models grid */
 export const simulationsColumnDefs = {
   name: {

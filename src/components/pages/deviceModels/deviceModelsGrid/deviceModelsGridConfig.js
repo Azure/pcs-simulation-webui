@@ -15,21 +15,15 @@ const toDataPoints = value => value.reduce((prev, cur) => {
 }, []).join('; ');
 
 export const checkboxParams = {
-  headerCheckboxSelection: true,
-  headerCheckboxSelectionFilteredOnly: true,
   checkboxSelection: true
 };
 
 /** A collection of column definitions for the device models grid */
 export const deviceModelsColumnDefs = {
-  id: {
-    headerName: 'deviceModels.grid.id',
-    field: 'id',
-    sort: 'asc'
-  },
   name: {
     headerName: 'deviceModels.grid.modelName',
     field: 'name',
+    sort: 'asc',
     valueFormatter: ({ value }) => checkForEmpty(value)
   },
   description: {
