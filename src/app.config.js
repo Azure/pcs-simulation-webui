@@ -9,7 +9,7 @@ const Config = {
   // Constants
   simulationNameMaxLength: 25,
   simulationDescMaxLength: 100,
-  retryWaitTime: 2000, // On retryable error, retry after 2s
+  retryWaitTime: 20000, // On retryable error, retry after 2s
   maxRetryAttempts: 2,
   retryableStatusCodes: new Set([ 0, 502, 503 ]),
   sessionTimeout: 1200000,  // Session will expire in 20 mins
