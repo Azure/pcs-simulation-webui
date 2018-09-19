@@ -66,7 +66,7 @@ class DeviceModelUploadForm extends Component {
             ]
           });
         });
-      
+
       this.subscriptions.push(
         validationSubscrition
       );
@@ -81,7 +81,7 @@ class DeviceModelUploadForm extends Component {
     e.preventDefault();
     const { target: value } = e;
 
-    this.filesSanityCheck(value.files).subscribe(
+    this.filesSanityCheck(Object.values((value || {}).files || {})).subscribe(
       ({ deviceModel, scriptFiles }) => {
         this.setState({
           deviceModel,
@@ -101,7 +101,7 @@ class DeviceModelUploadForm extends Component {
         (acc, file) => {
           if (file.type === 'application/json') {
             acc.jsonFiles.push(file);
-          } else if (file.type === 'application/javascript') {
+          } else if (file.type === 'text/javascript') {
             acc.scriptFiles.push(file);
           }
           return acc;
