@@ -20,6 +20,8 @@ const {
   dateTimeFormat
 } = Config;
 
+const maxDate = '12/31/9999 11:59:59 PM +00:00';
+
 class SimulationTile extends Component {
 
   constructor() {
@@ -160,7 +162,8 @@ class SimulationTile extends Component {
 
     const className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
     const startDateTime = moment(startTime).format(dateTimeFormat);
-    const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
+    const scheduledEndTime = (endTime && endTime === maxDate) ? '-' : moment(endTime).format(dateTimeFormat);
+    const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : scheduledEndTime;
     return (
       <div className= { className } >
         <div className="tile-header">
@@ -168,10 +171,12 @@ class SimulationTile extends Component {
         </div>
         <div className="time-containers">
           <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
-          <div className="right-time-container"> {
+          <div className="right-time-container">
+          {
             this.state.isRunning
               ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
-              : t('simulation.status.ended', { endDateTime })}
+              : t('simulation.status.ended', { endDateTime })
+          }
           </div>
         </div>
         <div className="tile-body">

@@ -30,8 +30,7 @@ export class DeviceModelsGrid extends Component {
 
     // Default device grid columns
     this.columnDefs = [
-      { ...deviceModelsColumnDefs.id, ...checkboxParams },
-      deviceModelsColumnDefs.name,
+      { ...deviceModelsColumnDefs.name, ...checkboxParams },
       deviceModelsColumnDefs.description,
       deviceModelsColumnDefs.dataPoints,
       deviceModelsColumnDefs.version,

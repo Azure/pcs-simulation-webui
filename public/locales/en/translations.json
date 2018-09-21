@@ -24,6 +24,7 @@
     "simSetup": "Simulation setup",
     "start": "Start Simulation",
     "stop": "Stop Simulation",
+    "startNew": "Start New Simulation",
     "name": "Name",
     "newSim": "New Simulation",
     "refresh": "Refresh",
@@ -108,7 +109,7 @@
     }
   },
   "deviceModels": {
-    "title": "Device models",
+    "title": "Add Device Models",
     "noneFound": "No devices found.",
     "refresh": "Refresh",
     "behavior": {
@@ -149,7 +150,7 @@
         "title": "Clone model"
       },
       "new": {
-        "title": "New custom device model",
+        "title": "Add Device Model",
         "name": "Device model name",
         "namePlaceHolder": "",
         "description": "Model description",
@@ -168,11 +169,11 @@
         "title": "Edit a custom device model"
       },
       "upload": {
-        "create": "Create a new device definition by uploading a JSON file with your own device values and properties",
-        "files": "JSON file upload and parsing with javascript",
+        "create": "Each simulated device is derived from a specific device model. Device models define the device\n's capabilities and behavior including what messages to send, which methods are supported, etc. \n\n Device models consist of one JSON configuration file, One JavaScript file defining the simulation behavior, and optionally one JavaScript file for each cloud to device method supported by the device. Advanced device models give you full control over these files. ",
+        "files": "Upload device model files",
         "uploadedFiles": "Uploaded files:",
         "browse": "Browse",
-        "errorMsg": "One or more of the files uploaded failed validation. Please verify selected files are valid and try again."
+        "errorMsg": "One or more files are missing or failed validation. Please verify selected files are valid and try again."
       },
       "sensors": {
         "dataPoint": "Data point",

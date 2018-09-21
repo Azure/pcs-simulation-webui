@@ -2,9 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { svgs } from 'utilities';
 import Flyout from 'components/shared/flyout';
-import { Svg } from 'components/shared';
 import DeviceModelForm from '../views/deviceModelForm';
 import DeviceModelUploadForm from '../views/deviceModelUploadForm';
 
@@ -29,7 +27,6 @@ export class NewDeviceModel extends Component {
       <Flyout.Container className="device-model-flyout-container">
         <Flyout.Header>
           <Flyout.Title>
-            <Svg path={svgs.plus} className="flyout-title-icon" />
             { t('deviceModels.flyouts.new.title') }
           </Flyout.Title>
           <Flyout.CloseBtn onClick={onClose} />
