@@ -14,7 +14,7 @@ export class MetricsService {
   /**Log event */
   static fetchIothubMetrics(id, payload = null) {
     return HttpClient.post(
-      `${ENDPOINT}simulations/${id}/metrics/iothub`,
+      `${ENDPOINT}simulations/${id}/metrics/iothub!search`,
       payload,
       true
     )
