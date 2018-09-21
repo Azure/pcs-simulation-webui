@@ -3,21 +3,14 @@
 import React, { Component } from 'react';
 import { Subject } from 'rxjs';
 import moment from 'moment';
+import { Route, NavLink, Redirect, withRouter } from "react-router-dom";
 
 import Config from 'app.config';
-import { svgs, humanizeDuration } from 'utilities';
-import { Svg } from 'components/shared/svg/svg';
-import {
-  Btn,
-  BtnToolbar,
-  ErrorMsg,
-  FormActions,
-  FormSection,
-  Indicator,
-  SectionHeader
-} from 'components/shared';
+import { svgs, humanizeDuration, ComponentArray } from 'utilities';
+import { Btn, ContextMenu, Svg } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
+import { NewSimulation } from '../flyouts';
 
 import './simulationDetails.css';
 
@@ -26,8 +19,11 @@ const maxDate = '12/31/9999 11:59:59 PM +00:00';
 const {
   simulationStatusPollingInterval,
   maxRetryAttempts,
-  retryWaitTime
+  retryWaitTime,
+  dateTimeFormat
 } = Config;
+
+const newSimulationFlyout = 'new-simulation';
 
 class SimulationDetails extends Component {
 
@@ -38,7 +34,7 @@ class SimulationDetails extends Component {
       simulation: {},
       telemetry: {},
       metrics:[],
-      isRunning : true,
+      isRunning : false,
       showLink : false,
       hubUrl : '',
       pollingError: '',
@@ -52,10 +48,8 @@ class SimulationDetails extends Component {
   }
 
   componentDidMount() {
-    const simulationId = this.props.location.pathname.split('/').pop();
-
     // Simulation stream - START
-    const getSimulationStream = _ => SimulationService.getSimulation(simulationId)
+    const getSimulationStream = simulationId => SimulationService.getSimulation(simulationId)
       .merge(
         this.simulationRefresh$
           .delay(simulationStatusPollingInterval)
@@ -64,13 +58,15 @@ class SimulationDetails extends Component {
       .retryWhen(retryHandler(maxRetryAttempts, retryWaitTime));
     // Simulation stream - END
 
-    this.subscriptions.push(this.emitter
+    this.subscriptions.push(
+      this.emitter
       .switchMap(getSimulationStream)
       .subscribe(
         response => {
           this.setState({
             simulation: response,
             isRunning: response.isRunning,
+            showLink: response.isRunning,
             totalMessagesSent: response.statistics.totalMessagesSent,
             failedMessagesCount: response.statistics.failedMessagesCount,
             activeDevicesCount: response.statistics.activeDevicesCount,
@@ -81,7 +77,7 @@ class SimulationDetails extends Component {
           },
             () => {
               if (response.isRunning) {
-                this.simulationRefresh$.next({ simulationId: response.id });
+                this.simulationRefresh$.next(`r`);
               }
             }
           );
@@ -91,7 +87,7 @@ class SimulationDetails extends Component {
     );
 
     // Telemetry stream - START
-    const getTelemetryStream = _ => MetricsService.fetchIothubMetrics(simulationId)
+    const getTelemetryStream = simulationId => MetricsService.fetchIothubMetrics(simulationId)
       .merge(
         this.telemetryRefresh$ // Previous request complete
           .delay(Config.telemetryRefreshInterval) // Wait to refresh
@@ -109,8 +105,8 @@ class SimulationDetails extends Component {
               { metrics },
               () => {
                 const { isRunning } = this.state;
-                if (!(isRunning === false)) {
-                  this.telemetryRefresh$.next('r')
+                if (isRunning) {
+                  this.telemetryRefresh$.next('r');
                 }
               }
             );
@@ -120,7 +116,13 @@ class SimulationDetails extends Component {
     );
 
     // Start polling
-    this.emitter.next(SimulationService.getSimulation(simulationId));
+    this.emitter.next(this.props.match.params.id);
+  }
+
+  componentWillReceiveProps({ match: { params: { id } } }) {
+    if (id !== '' && id !== this.props.match.params.id) {
+      this.emitter.next(id);
+    }
   }
 
   componentWillUnmount() {
@@ -163,16 +165,16 @@ class SimulationDetails extends Component {
     );
   }
 
-  getHubLink = (shouldPad = true) => {
+  getHubLink = () => {
     return this.state.showLink && (
-      <div className={`portal-link ${shouldPad && "padded"}`}>
+      <ComponentArray>
         <Svg path={svgs.linkTo} className="link-svg" />
-        <a href={this.state.hubUrl} target="_blank">View IoT Hub metrics in the Azure portal</a>
-      </div>
+        <a href={this.state.hubUrl} target="_blank">{ this.props.t('simulation.vieIotHubMetrics') }</a>
+      </ComponentArray>
     )
   }
 
-  getSimulationStatusBar( totalDevicesCount) {
+  getBtnFromSimulationStatus() {
     const { t } = this.props;
 
     const btnProps = {
@@ -194,44 +196,22 @@ class SimulationDetails extends Component {
 
     if (this.state.pollingError) {
       const refreshPage = () => window.location.reload(true);
-
-      return (
-        <FormActions className="details-form-actions">
-          <ErrorMsg>{ t('simulation.form.errorMsg.simulationStatusError') }</ErrorMsg>
-          <BtnToolbar>
-            <Btn { ...btnProps } onClick={refreshPage}>Refresh</Btn>
-          </BtnToolbar>
-        </FormActions>
-      );
-    } else if (this.state.isRunning) {
-      return (
-        <FormActions className="details-form-actions">
-            <Indicator pattern="bar" />
-            { t('simulation.status.simulationRunning') }
-            { this.getSimulationStatus(totalDevicesCount) }
-            { this.getHubLink() }
-          <BtnToolbar>
-            <Btn {...stopBtnProps } svg={svgs.stopSimulation}>Stop Simulation</Btn>
-          </BtnToolbar>
-        </FormActions>
-      );
-    } else {
-      return (
-        <FormActions>
-        { t('simulation.status.simulationStopped') }
-        <BtnToolbar>
-          <Btn {...startBtnProps}>Start Simulation</Btn>
-        </BtnToolbar>
-        { this.getHubLink() }
-        </FormActions>
-      );
+      return <Btn { ...btnProps } onClick={refreshPage}>{ t('simulation.refresh') }</Btn>;
     }
+
+    if (this.state.isRunning) {
+      return <Btn {...stopBtnProps } svg={svgs.stopSimulation}>{ t('simulation.stop') }</Btn>;
+    }
+
+    return <Btn {...startBtnProps}>{ t('simulation.start') }</Btn>;
   }
 
-    getSimulationStatus(totalDevicesCount = 0) {
+  getSimulationStats () {
     const { t } = this.props;
-
     const {
+      simulation: {
+        deviceModels = []
+      },
       totalMessagesSent = 0,
       failedMessagesCount = 0,
       activeDevicesCount = 0,
@@ -240,16 +220,13 @@ class SimulationDetails extends Component {
       failedDeviceTwinUpdatesCount = 0
     } = this.state;
 
+    const totalDevices = deviceModels.reduce((total, { count }) => total + count, 0);
+
     const simulationStatuses = [
       {
-        description: t('simulation.status.activeDevicesCount'),
-        value: activeDevicesCount,
-        className: 'active-devices-status'
-      },
-      {
         description: t('simulation.status.totalDevicesCount'),
-        value: totalDevicesCount,
-        className: 'total-devices-status'
+        value: totalDevices,
+        className: 'status-value'
       },
       {
         description: t('simulation.status.totalMessagesCount'),
@@ -278,23 +255,38 @@ class SimulationDetails extends Component {
       }
     ];
 
-    const statuses = simulationStatuses.map(({description, value, className}, index) => (
-      <SectionHeader key={index}>
-        <span className={className}>{value}</span>
-        <span className="status-description">{description}</span>
-      </SectionHeader>
-    ));
-
-    return (<FormSection className="simulation-status-section">
-      <SectionHeader>{ t('simulation.status.header') }</SectionHeader>
-      {statuses}
-    </FormSection>);
+    return (
+      <ComponentArray>
+        <div className="stats-header">Statistics</div>
+        <div className="stats-container">
+          <div className="active-devices-container">
+            <div className="active-devices">{activeDevicesCount}</div>
+            <div className="active-devices-label">{ t('simulation.status.activeDevicesCount') }</div>
+          </div>
+          <div className="other-stats-container">
+          {
+            simulationStatuses.map(({description, value, className}, index) => (
+              <div className="status-item" key={`${index}-simulation-stats`}>
+                <span className={className}>{value}</span>
+                <span className="status-description">{description}</span>
+              </div>
+            ))
+          }
+          </div>
+        </div>
+      </ComponentArray>
+    );
   }
+
+  closeFlyout = () => this.setState({ flyoutOpen: false });
+
+  openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
 
   render() {
     const {
       t,
-      deviceModelEntities = {}
+      deviceModelEntities = {},
+      match
     } = this.props;
 
     const { simulation, metrics } = this.state;
@@ -303,69 +295,115 @@ class SimulationDetails extends Component {
       deviceModels = [],
       startTime,
       endTime,
+      stopTime,
+      isRunning,
       iotHubs = []
     } = simulation;
+
+    const startDateTime = moment(startTime).format(dateTimeFormat);
+    const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
 
     const iotHub = iotHubs[0] || {};
     const iotHubString = (iotHub.connectionString || t('simulation.form.targetHub.preProvisionedLbl'));
 
     const [ deviceModel = {} ] = deviceModels;
-    const { interval = '' } = deviceModel;
-    const [hour = '00', minutes = '00', seconds = '00'] = interval.split(':');
+    const defaultModelRoute = deviceModel.id || '';
 
     const duration = (!startTime || !endTime || endTime === maxDate)
       ? t('simulation.form.duration.runIndefinitelyBtn')
       : humanizeDuration(moment(endTime).diff(moment(startTime)));
-    const totalDevices = deviceModels.reduce((total, { count }) => total + count, 0);
+    const pathname = `/simulation/${match.params.id}`;
+
+    const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
     return (
-      <div className="simulation-details-container">
-        <FormSection>
-          <SectionHeader>{t('simulation.name')}</SectionHeader>
-          <div className="target-hub-content">{simulation.name}</div>
-        </FormSection>
-        <FormSection>
-          <SectionHeader>{t('simulation.description')}</SectionHeader>
-          <div className="target-hub-content">{simulation.description}</div>
-        </FormSection>
-        <FormSection>
-          <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
-          <div className="target-hub-content">{iotHubString}</div>
-        </FormSection>
-        <FormSection>
-          <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
-          <div className="device-models-container">
-            <div className="device-model-headers">
-              <div className="device-model-header">{ t('simulation.form.deviceModels.name') }</div>
-              <div className="device-model-header">{ t('simulation.form.deviceModels.count') }</div>
-            </div>
-            <div className="device-models-rows">
-              { (deviceModels).map(deviceModelItem =>
-                <div className="device-model-row" key={ deviceModelItem.id }>
-                  <div className="device-model-box">{deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}</div>
-                  <div className="device-model-box">{deviceModelItem.count}</div>
+      <ComponentArray>
+        <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
+
+        <ContextMenu>
+          { this.getBtnFromSimulationStatus() }
+          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning}>
+            { t('simulation.newSim') }
+          </Btn>
+        </ContextMenu>
+
+        <div className="simulation-details-header">
+          <div className="simulation-name">{simulation.name}</div>
+          <div className="iothub-metrics-link">{ this.getHubLink() }</div>
+        </div>
+
+        <div className="simulation-details-container">
+          <div className="simulation-stats-container">
+            <div className="stack-container">
+              <div className="info-container">
+                <div className="info-section">
+                  <div className="info-label">{t('simulation.description')}</div>
+                  <div className="info-content">{simulation.description}</div>
                 </div>
-              )}
+                <div className="info-section">
+                  <div className="info-label">{ t('simulation.form.targetHub.header') }</div>
+                  <div className="info-content">{iotHubString}</div>
+                </div>
+                <div className="info-section">
+                  <div className="info-label">{ t('simulation.form.duration.header') }</div>
+                  <div className="info-content">{duration}</div>
+                </div>
+                <div className="time-container">
+                  <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
+                  <div className="right-time-container">
+                    {
+                      this.state.isRunning
+                        ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
+                        : t('simulation.status.ended', { endDateTime })
+                    }
+                  </div>
+                </div>
+              </div>
+              <div className="simulation-statistics">{ this.getSimulationStats() }</div>
             </div>
+            { isRunning && <TelemetryChart colors={chartColorObjects} metrics={metrics} /> }
           </div>
 
-        </FormSection>
-        <FormSection>
-          <SectionHeader>{ t('simulation.form.telemetry.header') }</SectionHeader>
-          <div className="duration-header">{`HH  MM  SS`}</div>
-          <div className="duration-content">{`${hour} : ${minutes} : ${seconds}`}</div>
-        </FormSection>
-        <FormSection>
-          <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
-          <div className="duration-content">{duration}</div>
-        </FormSection>
-        <FormSection>
-          <TelemetryChart colors={chartColorObjects} metrics={metrics} />
-        </FormSection>
-        {this.getSimulationStatusBar(totalDevices) }
-      </div>
-      );
-    }
+          <div className="simulation-details">
+            <div className="details-sevtion-header">{ t('simulation.details.header') }</div>
+
+            <div className="device-models-details-container">
+              <div className="device-model-links">
+              {
+                (deviceModels).map(({
+                  id, count, interval
+                }, index) => (
+                  <NavLink to={`${pathname}/${id}`} className="nav-item" activeClassName="active" key={`${id}-${index}-navlink`}>
+                    <div key={`${id}-${index}-count`} className="nav-item-count">{count}</div>
+                    <div key={`${id}-${index}-link`} className="nav-item-text">
+                    {
+                      deviceModelEntities && deviceModelEntities[id]
+                        ? (deviceModelEntities[id]).name
+                        : '-'
+                    }
+                    </div>
+                  </NavLink>
+                ))
+              }
+              </div>
+
+              <div className="device-model-details">
+              {
+                match.params.modelId in deviceModelEntities
+                  ? <pre>{ JSON.stringify(deviceModelEntities[match.params.modelId], null, 2) }</pre>
+                  : null
+              }
+              </div>
+            </div>
+          </div>
+        </div>
+        {
+          newSimulationFlyoutOpen &&
+          <NewSimulation onClose={this.closeFlyout} {...this.props} />
+        }
+      </ComponentArray>
+    );
+  }
 }
 
-export default SimulationDetails;
+export default withRouter(SimulationDetails);
