@@ -1,7 +1,7 @@
 {
   "header": {
     "appName": "Microsoft Azure IoT Device Simulation",
-    "dashboard":  "Dashboard", 
+    "dashboard":  "Dashboard",
     "logout": "Logout",
     "sendDiagnosticsHeader": "Help us Improve",
     "sendDiagnosticsText": "Device Simulation can send anonymous information to Microsoft, such as error logs, configuration, and information about how you use the application. No personal information is collected.",
@@ -23,12 +23,19 @@
     "description": "Description",
     "simSetup": "Simulation setup",
     "start": "Start Simulation",
+    "stop": "Stop Simulation",
     "name": "Name",
     "newSim": "New Simulation",
+    "refresh": "Refresh",
     "showAll": "Show all simulations",
     "showDashboard": "Show dashboard view",
     "namePlaceholderText": "Simulation Name",
     "descPlaceholderText": "Add description about Simulation",
+    "vieIotHubMetrics": "View IoT Hub metrics in the Azure portal",
+    "details": {
+      "stats": "Statistics",
+      "header": "Simulation details"
+    },
     "form": {
       "deviceModels": {
         "addDeviceModelBtn": "Add a device type",
