@@ -62,7 +62,7 @@ class SimulationDetails extends Component {
       this.emitter
       .switchMap(getSimulationStream)
       .subscribe(
-        response => {console.log('res', response)
+        response => {
           this.setState({
             simulation: response,
             isRunning: response.isRunning,
