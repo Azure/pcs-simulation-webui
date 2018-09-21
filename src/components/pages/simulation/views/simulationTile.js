@@ -5,7 +5,8 @@ import { Subject } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
-import { SectionHeader } from 'components/shared';
+import { SectionHeader, Svg } from 'components/shared';
+import { svgs } from 'utilities';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 
@@ -123,10 +124,27 @@ class SimulationTile extends Component {
     }
   }
 
+  showDeviceCount = (models) => models.map((deviceModelItem, idx) => {
+    const { deviceModelEntities } = this.props;
+    return (
+      <div className="device-model-row" key={ `${deviceModelItem.id}-${idx}` }>
+        {deviceModelItem.count} {deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}
+      </div>
+    )
+  })
+
+  getDevices(models, maxRows = 8) {
+    return models.length <= maxRows ?
+      this.showDeviceCount(models) :
+      [
+        this.showDeviceCount(models.slice(0, maxRows - 1)),
+        <div className="device-model-row" key="extra-devices-row"><strong>{` + ${models.slice(maxRows - 1).length} more`}</strong></div>
+      ];
+  }
+
   render() {
     const {
       t,
-      deviceModelEntities = {},
       simulation: {
         deviceModels,
         id,
@@ -149,10 +167,10 @@ class SimulationTile extends Component {
           <SectionHeader>{name || id}</SectionHeader>
         </div>
         <div className="time-containers">
-          <div className="left time-container"> {t('simulation.status.created', { startDateTime })} </div>
-          <div className="right time-container"> {
+          <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
+          <div className="right-time-container"> {
             this.state.isRunning
-              ? t('simulation.status.running')
+              ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
               : t('simulation.status.ended', { endDateTime })}
           </div>
         </div>
@@ -164,13 +182,7 @@ class SimulationTile extends Component {
           }
           <div className="simulation-summary">
             <div className="device-model-rows">
-              {
-                deviceModels.map(deviceModelItem =>
-                  <div className="device-model-row" key={ `${id}-${deviceModelItem.id}` }>
-                    {deviceModelItem.count} {deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}
-                  </div>
-                )
-              }
+              { this.getDevices(deviceModels) }
             </div>
             <div className="telemetry-container">
               <div className="simulation-status-section">

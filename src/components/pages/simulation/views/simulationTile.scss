@@ -29,7 +29,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
   @include rem-fallback(height, 260px);
 
   &.active {
-    @include rem-fallback(height, 530px);
+    @include rem-fallback(height, 532px);
 
     .chart-div { @include rem-fallback(height, 220px); }
   }
@@ -57,15 +57,40 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     flex-flow: row;
     justify-content: space-between;
     @include rem-fallback(padding, 12px);
+
+    .right-time-container {
+      display: flex;
+
+      .running-icon svg {
+        @include square-px-rem(16px);
+        @include rem-fallback(margin-right, 8px);
+        -webkit-animation: clockwiseSpin 10s infinite linear;
+        animation: clockwiseSpin 10s infinite linear;
+
+        @-webkit-keyframes clockwiseSpin {
+          0%  {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+          100% {-webkit-transform: rotate(360deg);transform: rotate(360deg);}
+
+        }
+
+        @keyframes clockwiseSpin {
+          0%  {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+          100% {-webkit-transform: rotate(360deg);transform: rotate(360deg);}
+        }
+      }
+    }
   }
 
   .tile-body {
+    display: flex;
     height: 100%;
+    flex-flow: column;
+    justify-content: space-between;
     @include rem-fallback(padding, 12px);
 
     .active-devices {
       display: flex;
-      padding: 0 0 40px 10px;
+      padding: 0 0 10px 10px;
 
       .active-devices-count,
       .active-devices-label {
@@ -118,5 +143,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     color: themed('colorHighest');
 
     .section-header { border-color: themed('colorLightestFirst'); }
+
+    .running-icon svg { fill: themed('colorActive'); }
   }
 }
