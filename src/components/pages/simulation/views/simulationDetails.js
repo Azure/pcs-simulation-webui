@@ -39,7 +39,7 @@ class SimulationDetails extends Component {
       hubUrl : '',
       pollingError: '',
       startError: ''
-    };;
+    };
 
     this.emitter = new Subject();
     this.simulationRefresh$ = new Subject();
@@ -62,18 +62,18 @@ class SimulationDetails extends Component {
       this.emitter
       .switchMap(getSimulationStream)
       .subscribe(
-        response => {
+        response => {console.log('res', response)
           this.setState({
             simulation: response,
             isRunning: response.isRunning,
-            showLink: response.isRunning,
             totalMessagesSent: response.statistics.totalMessagesSent,
             failedMessagesCount: response.statistics.failedMessagesCount,
             activeDevicesCount: response.statistics.activeDevicesCount,
             averageMessagesPerSecond: response.statistics.averageMessagesPerSecond,
             failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
-            hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || ''
+            hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
+            showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse
           },
             () => {
               if (response.isRunning) {
@@ -155,13 +155,11 @@ class SimulationDetails extends Component {
 
     this.subscriptions.push(SimulationService.cloneSimulation(requestModel)
       .subscribe(
-        response => {
-          const newId = response.id;
-          const path = this.props.location.pathname;
-          const newSimulationPath = path.replace(this.state.simulation.id, newId);
-          window.location.replace(newSimulationPath)
-        }),
-        serviceError => this.setState({ serviceError: serviceError.message })
+        ({ id }) => {
+          this.props.history.push(`/simulation/${id}`);
+        },
+        error => this.setState({ serviceError: error.message })
+      )
     );
   }
 

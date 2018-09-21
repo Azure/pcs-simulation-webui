@@ -14,7 +14,6 @@ $svgSize: 16px;
     @include rem-fallback(height, 500px);
 
     .stack-container {
-
       @include rem-fallback(width, 550px);
 
       .info-container {
@@ -34,21 +33,21 @@ $svgSize: 16px;
             display: flex;
 
             .running-icon svg {
-              @include square-px-rem(16px);
-              @include rem-fallback(margin-right, 8px);
               -webkit-animation: clockwiseSpin 10s infinite linear;
               animation: clockwiseSpin 10s infinite linear;
 
               @-webkit-keyframes clockwiseSpin {
                 0%  {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
                 100% {-webkit-transform: rotate(360deg);transform: rotate(360deg);}
-
               }
 
               @keyframes clockwiseSpin {
                 0%  {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
                 100% {-webkit-transform: rotate(360deg);transform: rotate(360deg);}
               }
+
+              @include square-px-rem(16px);
+              @include rem-fallback(margin-right, 8px);
             }
           }
         }
@@ -113,16 +112,14 @@ $svgSize: 16px;
         @include rem-fallback(width, 227px);
 
         .nav-item {
+          align-items: center;
+          background-color: transparent;
           display: flex;
           flex-flow: row nowrap;
           flex-shrink: 0;
-          align-items: center;
-          text-decoration: none;
-          background-color: transparent;
-
-          padding: 0;
           margin: 0;
-
+          padding: 0;
+          text-decoration: none;
           @include rem-fallback(padding, 0px, 10px);
           @include rem-fallback(height, $navItemHeight);
 
@@ -136,7 +133,6 @@ $svgSize: 16px;
             flex-shrink: 0;
             text-transform: capitalize;
             @include rem-fallback(padding-left, $navItemHeight - (2 * $svgSize));
-
             @include rem-fallback(line-height, $navItemHeight);
           }
         }
@@ -179,8 +175,8 @@ $svgSize: 16px;
     display: flex;
 
     a {
-      text-decoration: none;
       background-color: transparent;
+      text-decoration: none;
     }
 
     .link-svg svg {
