@@ -78,7 +78,6 @@ class DeviceModelUploadForm extends Component {
 
   uploadFiles = e => {
     e.preventDefault();
-    
     const { target: value } = e;
     const scripts = [];
     
