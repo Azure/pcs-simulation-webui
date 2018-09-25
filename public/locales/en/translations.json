@@ -1,7 +1,7 @@
 {
   "header": {
     "appName": "Microsoft Azure IoT Device Simulation",
-    "dashboard":  "Dashboard", 
+    "dashboard":  "Dashboard",
     "logout": "Logout",
     "sendDiagnosticsHeader": "Help us Improve",
     "sendDiagnosticsText": "Device Simulation can send anonymous information to Microsoft, such as error logs, configuration, and information about how you use the application. No personal information is collected.",
@@ -167,7 +167,9 @@
         "files": "Upload device model files",
         "uploadedFiles": "Uploaded files:",
         "browse": "Browse",
-        "errorMsg": "One or more files are missing or failed validation. Please verify selected files are valid and try again."
+        "missingJsonFileErrorMessage": "Missing JSON file. There must be a JSON file",
+        "tooManyJsonFilesErrorMessage": "Too many JSON files. There can only ever be one JSON file",
+        "missingJSFileErrorMessage": "Missing JS file(s)"
       },
       "sensors": {
         "dataPoint": "Data point",
