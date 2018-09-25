@@ -255,7 +255,7 @@ class DeviceModelUploadForm extends Component {
           </div>
         </FormSection>
         <FormSection>
-          {
+         {
           this.state.deviceModel && (
             <FormGroup>
               <FormLabel>{t('deviceModels.flyouts.new.name')}</FormLabel>
