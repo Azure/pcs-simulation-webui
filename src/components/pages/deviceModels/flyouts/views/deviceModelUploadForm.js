@@ -79,11 +79,12 @@ class DeviceModelUploadForm extends Component {
   uploadFiles = e => {
     e.preventDefault();
     const { target: value } = e;
-    console.log(value.files);
     const scripts = [];
-    for (var i = 0; i < value.files.length; i++) {
+
+    for(var i = 0; i < value.files.length; i++)  {
       scripts.push(value.files[i]);
     }
+
     this.filesSanityCheck(scripts).subscribe(
       ({ deviceModel, scriptFiles }) => {
         if (deviceModel !== undefined && scriptFiles !== undefined) {
