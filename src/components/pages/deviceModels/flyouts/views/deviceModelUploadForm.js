@@ -239,7 +239,9 @@ class DeviceModelUploadForm extends Component {
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
         <FormSection>
-          <FormLabel>{t('deviceModels.flyouts.upload.create')}</FormLabel>
+          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelCreate')}</FormLabel>
+          <br /><br />
+          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesToBeUploaded')}</FormLabel>
         </FormSection>
         <FormSection>
           <FormLabel>{t('deviceModels.flyouts.upload.files')}</FormLabel>

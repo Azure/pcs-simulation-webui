@@ -1,7 +1,7 @@
 {
   "header": {
     "appName": "Microsoft Azure IoT Device Simulation",
-    "dashboard":  "Dashboard", 
+    "dashboard":  "Dashboard",
     "logout": "Logout",
     "sendDiagnosticsHeader": "Help us Improve",
     "sendDiagnosticsText": "Device Simulation can send anonymous information to Microsoft, such as error logs, configuration, and information about how you use the application. No personal information is collected.",
@@ -163,7 +163,8 @@
         "title": "Edit a custom device model"
       },
       "upload": {
-        "create": "Each simulated device is derived from a specific device model. Device models define the device\n's capabilities and behavior including what messages to send, which methods are supported, etc. \n\n Device models consist of one JSON configuration file, One JavaScript file defining the simulation behavior, and optionally one JavaScript file for each cloud to device method supported by the device. Advanced device models give you full control over these files. ",
+        "deviceModelCreate": "Each simulated device is derived from a specific device model. Device models define the device\n's capabilities and behavior including what messages to send, which methods are supported, etc.",
+        "deviceModelFilesToBeUploaded": "\n\n Device models consist of one JSON configuration file, One JavaScript file defining the simulation behavior, and optionally one JavaScript file for each cloud to device method supported by the device. Advanced device models give you full control over these files. ",
         "files": "Upload device model files",
         "uploadedFiles": "Uploaded files:",
         "browse": "Browse",
