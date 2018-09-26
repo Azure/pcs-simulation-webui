@@ -160,6 +160,10 @@ export const getDeviceModels = createSelector(
   getDeviceModelEntities, getItems,
   (entities, items) => items.map(id => entities[id])
 );
+export const getDeviceModelsNameSet = createSelector(
+  getDeviceModels,
+  models => new Set(models.map(model => model.name.toLowerCase()))
+);
 export const getDeleteDeviceModelError = state =>
   getError(getDeviceModelsReducer(state), epics.actionTypes.deleteDeviceModel);
 // ========================= Selectors - END
