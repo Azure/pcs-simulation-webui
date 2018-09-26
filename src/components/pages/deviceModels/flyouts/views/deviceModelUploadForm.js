@@ -88,8 +88,8 @@ class DeviceModelUploadForm extends Component {
         this.setState({
           deviceModel,
           scripts: (scriptFiles || []).map(file => ({
-             file,
-             validationResult: undefined
+            file,
+            validationResult: undefined
           }))
         });
       });
@@ -138,8 +138,8 @@ class DeviceModelUploadForm extends Component {
 
             const scriptsToBeRemoved = new Set([...uploadedScriptNames].filter(x => !requiredScriptNames.has(x)));
 
-            for (let x of scriptsToBeRemoved) {
-              scriptFiles.splice(scriptFiles.findIndex(y => y.name === x), 1);
+            for (let script of scriptsToBeRemoved) {
+              scriptFiles.splice(scriptFiles.findIndex(x => x.name === script), 1);
             }
           }
 
