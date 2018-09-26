@@ -23,7 +23,7 @@ const Config = {
     customModel: 'Custom',
     stockModel: 'Stock'
   },
-  dateFormat: 'DD/MM/YY hh:mm:ss A'
+  dateTimeFormat: 'DD/MM/YY hh:mm:ss A'
 };
 
 export default Config;
