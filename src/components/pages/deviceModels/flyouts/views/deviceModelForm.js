@@ -71,10 +71,11 @@ class DeviceModelForm extends LinkedComponent {
       formVersion: 0
     };
 
-    const { t } = props;
+    const { t, deviceModelsNameSet } = props;
     // State to input links
     this.nameLink = this.linkTo('name')
-      .check(Validator.notEmpty, () => t('deviceModels.flyouts.errorMsg.nameCantBeEmpty'));
+      .check(Validator.notEmpty, () => t('deviceModels.flyouts.errorMsg.nameCantBeEmpty'))
+      .check((x = '') => !deviceModelsNameSet.has(x.toLowerCase()), t('deviceModels.flyouts.errorMsg.nameCantBeDuplicate'));
     this.descriptionLink = this.linkTo('description');
     this.versionLink = this.linkTo('version');
     this.intervalLink = this.linkTo('interval')
