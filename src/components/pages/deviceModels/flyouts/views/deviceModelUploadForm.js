@@ -82,23 +82,16 @@ class DeviceModelUploadForm extends Component {
   uploadFiles = e => {
     e.preventDefault();
     const { target: value } = e;
-    const scripts = [];
 
-    for (var i = 0; i < value.files.length; i++) {
-      scripts.push(value.files[i]);
-    }
-
-    this.filesSanityCheck(scripts).subscribe(
+    this.filesSanityCheck(Object.values((value || {}).files || {})).subscribe(
       ({ deviceModel, scriptFiles }) => {
-        if (deviceModel !== undefined && scriptFiles !== undefined) {
-          this.setState({
-            deviceModel,
-            scripts: (scriptFiles || []).map(file => ({
-              file,
-              validationResult: undefined
-            }))
-          });
-        }
+        this.setState({
+          deviceModel,
+          scripts: (scriptFiles || []).map(file => ({
+             file,
+             validationResult: undefined
+          }))
+        });
       });
   };
 
