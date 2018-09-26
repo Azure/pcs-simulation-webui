@@ -132,7 +132,8 @@ class DeviceModelUploadForm extends Component {
           if (!isEqual(requiredScriptNames, uploadedScriptNames)) {
             const missingScriptNames = new Set([...requiredScriptNames].filter(x => !uploadedScriptNames.has(x)));
             if (missingScriptNames.size > 0) {
-              this.setState({ ...initialFormState, areThereMissingJSFiles: true, missingJSFileNames: missingScriptNames });
+              const missingScriptNamesString = [...missingScriptNames].join(', ');
+              this.setState({ ...initialFormState, areThereMissingJSFiles: true, missingJSFileNames: missingScriptNamesString });
               return Observable.throw('Files do not match requirements');
             }
 
@@ -296,7 +297,7 @@ class DeviceModelUploadForm extends Component {
         </FormSection>
         {isThereAMissingJsonFile && <ErrorMsg>{t('deviceModels.flyouts.upload.missingJsonFileErrorMessage')}</ErrorMsg>}
         {areThereTooManyJsonFiles && <ErrorMsg>{t('deviceModels.flyouts.upload.tooManyJsonFilesErrorMessage')}</ErrorMsg>}
-        {areThereMissingJSFiles && <ErrorMsg>{t('deviceModels.flyouts.upload.missingJSFileErrorMessage')}: {missingJSFileNames}</ErrorMsg>}
+        {areThereMissingJSFiles && <ErrorMsg>{missingJSFileNames} {t('deviceModels.flyouts.upload.missingJSFileErrorMessage')}</ErrorMsg>}
         <FormActions>
           <BtnToolbar>
             <Btn disabled={!this.formIsValid() || changesApplied} type="submit">

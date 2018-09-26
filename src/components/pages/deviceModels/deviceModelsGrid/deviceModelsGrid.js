@@ -71,7 +71,8 @@ export class DeviceModelsGrid extends Component {
             deviceModel={deviceModel}
             editDeviceModel={editDeviceModel}
             formMode={deviceModelFormModes.FORM_MODE_EDIT}
-            t={t} />
+            t={t}
+            isBasic={deviceModel.simulation.Scripts[0].Type !== 'javascript'} />
           );
       case CLONE_FLYOUT:
         return (
