@@ -326,7 +326,7 @@ class DeviceModelForm extends LinkedComponent {
           </div>
         </FormSection>
         {
-        // Commenting this section for future use
+        // Currently, we do not support device level frequency control. We might revisit in the future once we are ready to honor it.
         /*<FormSection>
           <SectionDesc>{t('deviceModels.flyouts.new.interval')}</SectionDesc>
           <FormGroup>
