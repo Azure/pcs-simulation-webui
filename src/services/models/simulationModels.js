@@ -19,7 +19,7 @@ export const toSimulationModel = (response = {}) => ({
   stopTime: response.StoppedTime,
   id: response.Id,
   name: response.Name,
-  description: response.Desc,
+  description: response.Description,
   statistics: {
     averageMessagesPerSecond: (response.Statistics || {}).AverageMessagesPerSecond,
     totalMessagesSent: (response.Statistics || {}).TotalMessagesSent,
@@ -79,7 +79,7 @@ export const toSimulationRequestModel = (request = {}) => ({
   EndTime: request.endTime,
   Id: request.id,
   Name: request.name,
-  Desc: request.description,
+  Description: request.description,
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHubs: toIoTHubs(request.iotHubs)
 });
@@ -90,7 +90,7 @@ export const toSimulationCloneModel = (request = {}) => ({
   StartTime: request.startTime,
   EndTime: request.endTime,
   Name: request.name,
-  Desc: request.description,
+  Description: request.description,
   DeviceModels: toCloneDeviceModels(request.deviceModels),
   IoTHubs: toIoTHubs(request.iotHubs)
 });

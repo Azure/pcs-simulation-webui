@@ -27,10 +27,16 @@
     "startNew": "Start New Simulation",
     "name": "Name",
     "newSim": "New Simulation",
+    "refresh": "Refresh",
     "showAll": "Show all simulations",
     "showDashboard": "Show dashboard view",
     "namePlaceholderText": "Simulation Name",
     "descPlaceholderText": "Add description about Simulation",
+    "vieIotHubMetrics": "View IoT Hub metrics in the Azure portal",
+    "details": {
+      "stats": "Statistics",
+      "header": "Simulation details"
+    },
     "form": {
       "deviceModels": {
         "addDeviceModelBtn": "Add a device type",

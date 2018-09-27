@@ -54,3 +54,6 @@ export const humanizeDuration = (time) => {
     .replace(/,(?=[^,]*$)/, ' and')
     .trim();
 }
+
+/** Wrapper component for an array of components as its children */
+export const ComponentArray = ({ children }) => children;
