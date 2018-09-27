@@ -17,8 +17,11 @@ export const EditDeviceModel = (props) => (
       <Flyout.CloseBtn onClick={props.onClose} />
     </Flyout.Header>
     <Flyout.Content >
-      {props.isBasic && <DeviceModelForm {...props} />}
-      {!props.isBasic && <DeviceModelUploadForm {...props} />}
+      {
+        props.isBasic
+          ? <DeviceModelForm {...props} />
+          : <DeviceModelUploadForm {...props} />
+      }
     </Flyout.Content>
   </Flyout.Container>
 );

@@ -112,12 +112,10 @@ class DeviceModelUploadForm extends Component {
       )
       .flatMap(({ jsonFiles, scriptFiles }) => {
         if (jsonFiles.length < 1) {
-          this.setState({ ...initialFormState })
           return Observable.throw(t('deviceModels.flyouts.upload.missingJsonFileErrorMessage'));
         }
 
         if (jsonFiles.length > 1) {
-          this.setState({ ...initialFormState })
           return Observable.throw(t('deviceModels.flyouts.upload.tooManyJsonFilesErrorMessage'));
         }
 
