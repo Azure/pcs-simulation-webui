@@ -284,11 +284,9 @@ class DeviceModelUploadForm extends Component {
                       )}
                     </div>
                     <div className="validation-message">
-                      {
-                        (validationResult.messages || []).map((error, idx) => (
-                          <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
-                        ))
-                      }
+                    {(validationResult.messages || []).map((error, idx) => (
+                        <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
+                    ))}
                     </div>
                   </div>
                 ))}
