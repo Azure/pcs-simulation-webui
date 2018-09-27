@@ -40,7 +40,7 @@
     .browse-button {
       border: none;
       @include rem-fallback(width, 75px);
-      @include rem-fallback(height, 25px);
+      @include rem-fallback(height, 32px);
       @include rem-font-size(12px);
     }
   }
