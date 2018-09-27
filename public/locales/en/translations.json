@@ -152,6 +152,7 @@
       },
       "new": {
         "title": "Add Device Model",
+        "basicDeviceModelDescription": "Define a new simulated device and the telemetry data to be sent from the device to your IoT hub. A single device can send one or more data points (e.g. location, humidity, etc.) allowing you to simulate data coming from real devices.",
         "name": "Device model name",
         "namePlaceHolder": "",
         "description": "Model description",

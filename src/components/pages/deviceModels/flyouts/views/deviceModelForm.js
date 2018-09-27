@@ -257,6 +257,9 @@ class DeviceModelForm extends LinkedComponent {
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
         <FormSection>
+          <FormLabel>{t('deviceModels.flyouts.new.basicDeviceModelDescription')}</FormLabel>
+        </FormSection>
+        <FormSection>
           <FormGroup>
             <FormLabel>
               {t('deviceModels.flyouts.new.name')}
