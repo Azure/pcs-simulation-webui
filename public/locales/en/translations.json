@@ -178,7 +178,7 @@
         "browse": "Browse",
         "missingJsonFileErrorMessage": "No JSON definition file was found. The JSON file defines the device's capabilities and is required.",
         "tooManyJsonFilesErrorMessage": "More than one JSON file provided. A simulated device may have only one JSON definition file.",
-        "missingJSFileErrorMessage": " file(s) are missing. Please add these files"
+        "missingJSFileErrorMessage": "{{missingScriptNamesString}} file(s) are missing. Please add these files"
       },
       "sensors": {
         "dataPoint": "Data point",

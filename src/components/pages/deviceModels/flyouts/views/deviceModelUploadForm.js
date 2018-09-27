@@ -21,9 +21,7 @@ import './deviceModelForm.css';
 const initialFormState = {
   deviceModel: undefined,
   scripts: [],
-  isThereAMissingJsonFile: false,
-  areThereMissingJSFiles: false,
-  areThereTooManyJsonFiles: false
+  error: undefined
 };
 
 class DeviceModelUploadForm extends Component {
@@ -67,7 +65,8 @@ class DeviceModelUploadForm extends Component {
               ...scripts
             ]
           });
-        });
+        }
+      );
 
       this.subscriptions.push(
         validationSubscrition
@@ -82,20 +81,24 @@ class DeviceModelUploadForm extends Component {
   uploadFiles = e => {
     e.preventDefault();
     const { target: value } = e;
+    const { t } = this.props;
 
-    this.filesSanityCheck(Object.values((value || {}).files || {})).subscribe(
-      ({ deviceModel, scriptFiles }) => {
+    this.filesSanityCheck(Object.values((value || {}).files || {}), t).subscribe(
+      ({ deviceModel, scriptFiles, error }) => {
         this.setState({
+          error,
           deviceModel,
           scripts: (scriptFiles || []).map(file => ({
             file,
             validationResult: undefined
           }))
         });
-      });
+      },
+      error => this.setState({ error })
+    );
   };
 
-  filesSanityCheck = (files = []) =>
+  filesSanityCheck = (files = [], t) =>
     Observable.from(files)
       .reduce(
         (acc, file) => {
@@ -110,17 +113,13 @@ class DeviceModelUploadForm extends Component {
       )
       .flatMap(({ jsonFiles, scriptFiles }) => {
         if (jsonFiles.length < 1) {
-          this.setState({ ...initialFormState, isThereAMissingJsonFile: true })
-          return Observable.throw('JSON File missing');
+          this.setState({ ...initialFormState })
+          return Observable.throw(t('deviceModels.flyouts.upload.missingJsonFileErrorMessage'));
         }
 
         if (jsonFiles.length > 1) {
-          this.setState({ ...initialFormState, areThereTooManyJsonFiles: true })
-          return Observable.throw('Too many JSON Files');
-        }
-
-        if (scriptFiles.length < 1) {
-          return Observable.throw('Files do not match requirements');
+          this.setState({ ...initialFormState })
+          return Observable.throw(t('deviceModels.flyouts.upload.tooManyJsonFilesErrorMessage'));
         }
 
         return this.readFileAsText(jsonFiles[0]).map(content => {
@@ -133,8 +132,7 @@ class DeviceModelUploadForm extends Component {
             const missingScriptNames = new Set([...requiredScriptNames].filter(x => !uploadedScriptNames.has(x)));
             if (missingScriptNames.size > 0) {
               const missingScriptNamesString = [...missingScriptNames].join(', ');
-              this.setState({ ...initialFormState, areThereMissingJSFiles: true, missingJSFileNames: missingScriptNamesString });
-              return Observable.throw('Files do not match requirements');
+              return Observable.throw(t('deviceModels.flyouts.upload.missingJSFileErrorMessage', { missingScriptNamesString }));
             }
 
             const scriptsToBeRemoved = new Set([...uploadedScriptNames].filter(x => !requiredScriptNames.has(x)));
@@ -235,7 +233,7 @@ class DeviceModelUploadForm extends Component {
 
   render() {
     const { t } = this.props;
-    const { deviceModel, scripts, changesApplied, formVersion, isThereAMissingJsonFile, areThereTooManyJsonFiles, areThereMissingJSFiles, missingJSFileNames } = this.state;
+    const { deviceModel, scripts, changesApplied, formVersion, error } = this.state;
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
         <FormSection>
@@ -287,9 +285,11 @@ class DeviceModelUploadForm extends Component {
                       )}
                     </div>
                     <div className="validation-message">
-                      {(validationResult.messages || []).map((error, idx) => (
+                    {
+                      (validationResult.messages || []).map((error, idx) => (
                         <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
-                      ))}
+                      ))
+                    }
                     </div>
                   </div>
                 ))}
@@ -297,9 +297,7 @@ class DeviceModelUploadForm extends Component {
           )
         }
         </FormSection>
-        {isThereAMissingJsonFile && <ErrorMsg>{t('deviceModels.flyouts.upload.missingJsonFileErrorMessage')}</ErrorMsg>}
-        {areThereTooManyJsonFiles && <ErrorMsg>{t('deviceModels.flyouts.upload.tooManyJsonFilesErrorMessage')}</ErrorMsg>}
-        {areThereMissingJSFiles && <ErrorMsg>{missingJSFileNames} {t('deviceModels.flyouts.upload.missingJSFileErrorMessage')}</ErrorMsg>}
+        {error && <ErrorMsg>{error}</ErrorMsg>}
         <FormActions>
           <BtnToolbar>
             <Btn disabled={!this.formIsValid() || changesApplied} type="submit">
