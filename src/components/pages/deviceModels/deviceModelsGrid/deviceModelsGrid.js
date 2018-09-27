@@ -40,8 +40,8 @@ export class DeviceModelsGrid extends Component {
     // TODO: This is a temporary example implementation. Remove with a better version
     this.contextBtns = [
       <Btn key="delete" svg={svgs.trash} onClick={this.openFlyout(DELETE_FLYOUT)}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
-      <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>Edit</Btn>,
-      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(CLONE_FLYOUT)}>Clone</Btn>
+      <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>{props.t('deviceModels.flyouts.clone.name')}</Btn>,
+      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(CLONE_FLYOUT)}>{props.t('deviceModels.flyouts.edit.name')}</Btn>
     ];
   }
 
@@ -58,10 +58,13 @@ export class DeviceModelsGrid extends Component {
 
   openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
 
-  getOpenFlyout = (t, createDeviceModel, deleteDeviceModel, editDeviceModel) => {
+  getOpenFlyout = ({ t, createDeviceModel, deleteDeviceModel, editDeviceModel, deviceModelsNameSet }) => {
     if (!isFunc((this.deviceModelsGridApi || {}).getSelectedRows)) return;
 
     const [ deviceModel ] = this.deviceModelsGridApi.getSelectedRows() || [];
+    const editModelName = ((deviceModel || {}).name || '').toLowerCase();
+    const deviceModelNames = Array.from(deviceModelsNameSet).filter(name => name !== editModelName);
+    const deviceModelsNameSetForEdit = new Set(deviceModelNames);
     switch (this.state.openFlyoutName) {
       case EDIT_FLYOUT:
         return(
@@ -70,6 +73,7 @@ export class DeviceModelsGrid extends Component {
             onClose={this.closeFlyout}
             deviceModel={deviceModel}
             editDeviceModel={editDeviceModel}
+            deviceModelsNameSet={deviceModelsNameSetForEdit}
             formMode={deviceModelFormModes.FORM_MODE_EDIT}
             t={t}
             isBasic={deviceModel.simulation.Scripts[0].Type !== 'javascript'} />
@@ -81,6 +85,7 @@ export class DeviceModelsGrid extends Component {
             onClose={this.closeFlyout}
             deviceModel={deviceModel}
             createDeviceModel={createDeviceModel}
+            deviceModelsNameSet={deviceModelsNameSet}
             formMode={deviceModelFormModes.FORM_MODE_CREATE}
             t={t} />
         );
@@ -160,7 +165,7 @@ export class DeviceModelsGrid extends Component {
    */
 
   render() {
-    const { t, createDeviceModel, deleteDeviceModel, editDeviceModel } = this.props;
+    const { t } = this.props;
     const gridProps = {
       /* Grid Properties */
       ...defaultDeviceModelGridProps,
@@ -175,7 +180,7 @@ export class DeviceModelsGrid extends Component {
     };
     return ([
       <PcsGrid {...gridProps} key="device-models-grid-key" />,
-      this.getOpenFlyout(t, createDeviceModel, deleteDeviceModel, editDeviceModel)
+      this.getOpenFlyout(this.props)
     ]);
   }
 }

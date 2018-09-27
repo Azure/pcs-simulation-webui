@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import SimulationDetails from './views/simulationDetails';
 import { SimulationDashboard } from './views/simulationDashboard';
 import { FormActions, Indicator, ErrorMsg, Btn } from 'components/shared';
@@ -45,11 +45,11 @@ export class Simulation extends Component {
     return (
       <div className="simulation-container">
         <Switch>
-          <Route exact path={'/simulation/:path(dashboard)'}
-            render={  (routeProps) => <SimulationDashboard {...routeProps} {...this.props} /> } />
-          <Route exact path={'/simulation/:id'}
+          <Route exact path={'/simulation'}
+            render={ (routeProps) => <SimulationDashboard {...routeProps} {...this.props} /> } />
+          <Route path={'/simulation/:id/:modelId?'}
             render={ (routeProps) => <SimulationDetails {...routeProps} {...this.props} /> } />
-          <Redirect to='/simulation/dashboard' />
+          <Route render={ () => (<div>Page not found TODO</div>) } />
         </Switch>
       </div>
     );

@@ -15,6 +15,7 @@ const Config = {
   sessionTimeout: 1200000,  // Session will expire in 20 mins
   maxSimulatedDevices: 20000,
   simulationStatusPollingInterval: 10000, // 10s
+  telemetryRefreshInterval: 60000, // 60s
   customSensorValue: 'custom',
   defaultAjaxTimeout: 10000, // 10s
   paginationPageSize: 15,
@@ -22,7 +23,7 @@ const Config = {
     customModel: 'Custom',
     stockModel: 'Stock'
   },
-  dateFormat: 'DD/MM/YY hh:mm:ss A'
+  dateTimeFormat: 'DD/MM/YY hh:mm:ss A'
 };
 
 export default Config;

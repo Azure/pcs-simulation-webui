@@ -50,7 +50,15 @@ export class DeviceModels extends Component {
   getSoftSelectId = ({ id }) => id;
 
   render() {
-    const { t, deviceModels, createDeviceModel, deleteDeviceModel, editDeviceModel, uploadDeviceModel } = this.props;
+    const {
+      t,
+      deviceModels,
+      createDeviceModel,
+      deleteDeviceModel,
+      editDeviceModel,
+      uploadDeviceModel,
+      deviceModelsNameSet
+    } = this.props;
     const gridProps = {
       rowData: deviceModels || [],
       onSoftSelectChange: this.onSoftSelectChange,
@@ -60,6 +68,7 @@ export class DeviceModels extends Component {
       deleteDeviceModel,
       createDeviceModel,
       editDeviceModel,
+      deviceModelsNameSet,
       t
     };
     const newDeviceModelFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
@@ -78,6 +87,7 @@ export class DeviceModels extends Component {
             formMode={deviceModelFormModes.FORM_MODE_CREATE}
             createDeviceModel={createDeviceModel}
             uploadDeviceModel={uploadDeviceModel}
+            deviceModelsNameSet={deviceModelsNameSet}
             t={t} />
         }
       </PageContent>

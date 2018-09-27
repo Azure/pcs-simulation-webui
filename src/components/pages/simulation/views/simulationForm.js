@@ -198,11 +198,9 @@ class SimulationForm extends LinkedComponent {
 
     this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
       .subscribe(
-        response => {
-          const id = response.id;
-          const path = this.props.location.pathname;
-          const newSimulationPath = path.replace('dashboard', id);
-          window.location.replace(newSimulationPath);
+        ({ id }) => {
+          this.props.history.push(`/simulation/${id}`);
+          this.props.onClose();
         },
         error => this.setState({ error: error.message })
       )

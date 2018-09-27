@@ -2,13 +2,14 @@
 
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { epics, getDeviceModels, getDeleteDeviceModelError } from 'store/reducers/deviceModelsReducer';
+import { epics, getDeviceModels, getDeleteDeviceModelError, getDeviceModelsNameSet } from 'store/reducers/deviceModelsReducer';
 import { DeviceModels } from './deviceModels';
 
 // Pass the device models
 const mapStateToProps = state => ({
   deviceModels: getDeviceModels(state),
-  deleteDeviceModelError: getDeleteDeviceModelError(state)
+  deleteDeviceModelError: getDeleteDeviceModelError(state),
+  deviceModelsNameSet: getDeviceModelsNameSet(state)
 });
 
 // Wrap the dispatch method

@@ -27,10 +27,16 @@
     "startNew": "Start New Simulation",
     "name": "Name",
     "newSim": "New Simulation",
+    "refresh": "Refresh",
     "showAll": "Show all simulations",
     "showDashboard": "Show dashboard view",
     "namePlaceholderText": "Simulation Name",
     "descPlaceholderText": "Add description about Simulation",
+    "vieIotHubMetrics": "View IoT Hub metrics in the Azure portal",
+    "details": {
+      "stats": "Statistics",
+      "header": "Simulation details"
+    },
     "form": {
       "deviceModels": {
         "addDeviceModelBtn": "Add a device type",
@@ -141,7 +147,8 @@
         "close": "Close"
       },
       "clone": {
-        "title": "Clone model"
+        "title": "Clone model",
+        "name": "Clone"
       },
       "new": {
         "title": "Add Device Model",
@@ -160,7 +167,8 @@
         "advanced": "Advanced"
       },
       "edit": {
-        "title": "Edit a custom device model"
+        "title": "Edit a custom device model",
+        "name": "Edit"
       },
       "upload": {
         "deviceModelCreate": "Each simulated device is derived from a specific device model. Device models define the device\n's capabilities and behavior including what messages to send, which methods are supported, etc.",
@@ -187,6 +195,7 @@
       "errorMsg": {
         "nameCantBeEmpty": "Device model name is required",
         "dataPointNameCantBeEmpty": "Name is required",
+        "nameCantBeDuplicate": "Device model name already been used",
         "behaviorCantBeEmpty": "Behavior is required",
         "intervalCantBeLessThanOneSecond": "Telemetry interval must be no less than 1 seconds",
         "frequencyCantBeLessThanTenSeconds": "Telemetry frequency must be no less than 10 seconds",

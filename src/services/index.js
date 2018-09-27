@@ -9,3 +9,4 @@ export * from './diagnosticsService';
 export * from './configService';
 export * from './deviceModelsService';
 export * from './deviceModelScriptService';
+export * from './metricsService';

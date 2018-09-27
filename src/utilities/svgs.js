@@ -13,6 +13,7 @@ import LinkToPath from 'assets/icons/linkTo.svg';
 import PlusIconPath from 'assets/icons/plus.svg';
 import RadioSelectedIconPath from 'assets/icons/radioSelected.svg';
 import RadioUnselectedIconPath from 'assets/icons/radioUnselected.svg';
+import RunningIconPath from 'assets/icons/running.svg';
 import SettingsIconPath from 'assets/icons/settings.svg';
 import SimulationLogoPath from 'assets/icons/simulationLogo.svg';
 import StartSimIconPath from 'assets/icons/startSimulation.svg';
@@ -36,6 +37,7 @@ export const svgs = {
   plus: PlusIconPath,
   radioSelected: RadioSelectedIconPath,
   radioUnselected: RadioUnselectedIconPath,
+  running: RunningIconPath,
   settings: SettingsIconPath,
   simulationLogo: SimulationLogoPath,
   startSimulation: StartSimIconPath,
