@@ -325,7 +325,9 @@ class DeviceModelForm extends LinkedComponent {
           }
           </div>
         </FormSection>
-        <FormSection>
+        {
+        // Commenting this section for future use
+        /*<FormSection>
           <SectionDesc>{t('deviceModels.flyouts.new.interval')}</SectionDesc>
           <FormGroup>
             <FormControl type="duration" name="interval" link={this.intervalLink} onChange={this.setFormChangesFlag} />
@@ -336,7 +338,8 @@ class DeviceModelForm extends LinkedComponent {
           <FormGroup>
             <FormControl type="duration" name="frequency" link={this.frequencyLink} onChange={this.setFormChangesFlag} />
           </FormGroup>
-        </FormSection>
+        </FormSection>*/
+        }
         <FormActions>
           <BtnToolbar>
             <Btn
