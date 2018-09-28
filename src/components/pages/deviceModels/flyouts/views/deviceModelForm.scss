@@ -61,11 +61,9 @@
       .failed-result { color: themed('colorFailure'); }
     }
 
-    .file-uploader-container {
-      .browse-button {
+    .file-uploader-container .browse-button {
         background-color: $colorBlue;
         color: $colorWhite;
-      }
     }
   }
 }
