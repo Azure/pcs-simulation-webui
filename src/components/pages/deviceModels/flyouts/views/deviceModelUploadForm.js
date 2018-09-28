@@ -83,10 +83,11 @@ class DeviceModelUploadForm extends Component {
     const { t } = this.props;
 
     this.filesSanityCheck(Object.values((value || {}).files || {}), t).subscribe(
-      ({ deviceModel, scriptFiles, error }) => {
+      ({ deviceModel, scriptFiles, error, jsonFile }) => {
         this.setState({
           error,
           deviceModel,
+          jsonFile,
           scripts: (scriptFiles || []).map(file => ({
             file,
             validationResult: undefined
@@ -120,7 +121,16 @@ class DeviceModelUploadForm extends Component {
         }
 
         return this.readFileAsText(jsonFiles[0]).map(content => {
-          const deviceModel = JSON.parse(content);
+          let deviceModel = null;
+
+          try {
+            deviceModel = JSON.parse(content);
+          }
+          catch (error) {
+            return Observable.throw(t('deviceModels.flyouts.upload.invalidJSONFileErrorMessage', { error }));
+          }
+
+          const jsonFile = jsonFiles[0];
           const { CloudToDeviceMethods = {}, Simulation: { Scripts } = { Scripts: [] } } = deviceModel;
           const requiredScripts = [...Object.values(CloudToDeviceMethods), ...Scripts];
           const requiredScriptNames = new Set(requiredScripts.map(({ Path }) => Path));
@@ -141,7 +151,8 @@ class DeviceModelUploadForm extends Component {
 
           return {
             deviceModel,
-            scriptFiles
+            scriptFiles,
+            jsonFile
           };
         });
       });
@@ -230,13 +241,13 @@ class DeviceModelUploadForm extends Component {
 
   render() {
     const { t } = this.props;
-    const { deviceModel, scripts, changesApplied, formVersion, error } = this.state;
+    const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error } = this.state;
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
         <FormSection>
-          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelCreate')}</FormLabel>
+          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelInfoText')}</FormLabel>
           <br /><br />
-          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesToBeUploaded')}</FormLabel>
+          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesInfoText')}</FormLabel>
         </FormSection>
         <FormSection>
           <FormLabel>{t('deviceModels.flyouts.upload.files')}</FormLabel>
@@ -263,9 +274,15 @@ class DeviceModelUploadForm extends Component {
           )
         }
         {
-          scripts.length > 0 && (
+          scripts.length > 0 && jsonFile && (
             <FormGroup>
               <FormLabel>{t('deviceModels.flyouts.upload.uploadedFiles')}</FormLabel>
+              <div className="upload-results-container">
+                <div className="file-name">{jsonFile.name}</div>
+                <div className={`${'success-result'}`}>
+                  {'\u2714'}
+                </div>
+              </div>
               {this.state.scripts
                 .sort((a, b) => a.file.name.localeCompare(b.file.name))
                 .map(({ file, validationResult = {} }, idx) => (
