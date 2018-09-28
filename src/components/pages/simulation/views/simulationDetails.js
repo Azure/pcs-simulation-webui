@@ -195,7 +195,7 @@ class SimulationDetails extends Component {
     )
   }
 
-  getBtnFromSimulationStatus() {
+  getBtnFromSimulationStatus(disabled) {
     const { t } = this.props;
 
     const btnProps = {
@@ -212,7 +212,8 @@ class SimulationDetails extends Component {
     const startBtnProps = {
       type: 'button',
       className: 'apply-btn',
-      onClick: this.startSimulation
+      onClick: this.startSimulation,
+      disabled
     };
 
     if (this.state.pollingError) {
@@ -307,7 +308,8 @@ class SimulationDetails extends Component {
     const {
       t,
       deviceModelEntities = {},
-      match
+      match,
+      simulationList
     } = this.props;
 
     const { simulation, metrics } = this.state;
@@ -337,13 +339,15 @@ class SimulationDetails extends Component {
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
+    // Remove isThereARunningSimulation when simulation service support running multiple simulations
+    const isThereARunningSimulation = simulationList.some(({ isRunning }) => isRunning);
     return (
       <ComponentArray>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
 
         <ContextMenu>
-          { this.getBtnFromSimulationStatus() }
-          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning}>
+          { this.getBtnFromSimulationStatus(isThereARunningSimulation) }
+          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning || isThereARunningSimulation}>
             { t('simulation.newSim') }
           </Btn>
         </ContextMenu>
