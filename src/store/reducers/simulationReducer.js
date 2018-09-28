@@ -96,6 +96,33 @@ export const epics = createEpicScenario({
         .catch(simulationError)
   },
 
+  /** Used to enable or disable the simulation */
+    toggleSimulation: {
+      type: 'SIMULATION_TOGGLE',
+      epic: ({ payload }, store) => {
+      const { enabled, id: Id, name: Name, deviceModels: DeviceModels, statistics, startTime } = payload;
+      const event = enabled
+        ? diagnosticsEvent('StartSimulation', {
+            Id,
+            Name,
+            DeviceModels,
+          })
+        : diagnosticsEvent('StopSimulation', {
+            Id,
+            ActualDuration: moment.duration(moment().diff(moment(startTime))),
+            TotalMessages: statistics.totalMessagesSent,
+            TotalFailedMessages: statistics.failedMessagesCount,
+            TotalFailedDeviceConnections: statistics.failedDeviceConnectionsCount,
+            TotalFailedTwinUpdates: statistics.failedDeviceTwinUpdatesCount
+          });
+
+      return SimulationService.toggleSimulation(payload)
+        .map(redux.actions.updateModel)
+        .startWith(appEpics.actions.logEvent(event))
+        .catch(simulationError);
+    }
+  },
+
   /** Used to disable the simulation */
   stopSimulation: {
     type: 'SIMULATION_STOP',
