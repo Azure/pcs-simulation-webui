@@ -23,6 +23,7 @@ const mapStateToProps = state => ({
 
 // Wrap the dispatch method
 const mapDispatchToProps = dispatch => ({
+  toggleSimulation: simulation => dispatch(simulationEpics.actions.toggleSimulation(simulation)),
   stopSimulation: simulation => dispatch(simulationEpics.actions.stopSimulation(simulation)),
   createSimulation: modelUpdates => dispatch(simulationEpics.actions.createSimulation(modelUpdates)),
   fetchSimulationList: () => dispatch(simulationEpics.actions.fetchSimulationList()),

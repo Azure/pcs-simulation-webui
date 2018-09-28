@@ -49,7 +49,6 @@ export class Simulation extends Component {
             render={ (routeProps) => <SimulationDashboard {...routeProps} {...this.props} /> } />
           <Route path={'/simulation/:id/:modelId?'}
             render={ (routeProps) => <SimulationDetails {...routeProps} {...this.props} /> } />
-          <Route render={ () => (<div>Page not found TODO</div>) } />
         </Switch>
       </div>
     );
