@@ -74,14 +74,15 @@ class DeviceModelForm extends LinkedComponent {
     const { t, deviceModelsNameSet } = props;
     // State to input links
     this.nameLink = this.linkTo('name')
-      .check(Validator.notEmpty, () => t('deviceModels.flyouts.errorMsg.nameCantBeEmpty'))
+      .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.nameCantBeEmpty'))
       .check((x = '') => !deviceModelsNameSet.has(x.toLowerCase()), t('deviceModels.flyouts.errorMsg.nameCantBeDuplicate'));
     this.descriptionLink = this.linkTo('description');
     this.versionLink = this.linkTo('version');
     this.intervalLink = this.linkTo('interval')
-      .check(({ ms }) => ms >= 1000, () => t('deviceModels.flyouts.errorMsg.intervalCantBeLessThanOneSecond'));
+      .check(({ ms }) => ms >= 1000, t('deviceModels.flyouts.errorMsg.intervalCantBeLessThanOneSecond'));
+    const minTelemetryInterval = global.DeploymentConfig.minTelemetryInterval;
     this.frequencyLink = this.linkTo('frequency')
-      .check(({ ms }) => ms >= 10000, () => t('deviceModels.flyouts.errorMsg.frequencyCantBeLessThanTenSeconds'));
+      .check(({ ms }) => ms >= minTelemetryInterval, t('deviceModels.flyouts.errorMsg.frequencyCantBeLessThanMinTelemetryInterval', { interval: minTelemetryInterval / 1000 }));
     this.sensorsLink = this.linkTo('sensors');
 
     this.formMode = props.formMode;

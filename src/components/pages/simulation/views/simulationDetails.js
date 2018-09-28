@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import moment from 'moment';
 import { Route, NavLink, Redirect, withRouter } from "react-router-dom";
 
@@ -44,6 +44,7 @@ class SimulationDetails extends Component {
     this.emitter = new Subject();
     this.simulationRefresh$ = new Subject();
     this.telemetryRefresh$ = new Subject();
+    this.newSimulationEmitter = new Subject();
     this.subscriptions = [];
   }
 
@@ -78,6 +79,8 @@ class SimulationDetails extends Component {
             () => {
               if (response.isRunning) {
                 this.simulationRefresh$.next(`r`);
+              } else {
+                this.fetchSimulationStatus(response.id);
               }
             }
           );
@@ -150,17 +153,37 @@ class SimulationDetails extends Component {
     const requestModel = {
       ...this.state.simulation,
       endTime: this.convertDurationToISO(duration),
-      startTime: 'Now'
+      startTime: 'Now',
+      enabled: true
     }
 
-    this.subscriptions.push(SimulationService.cloneSimulation(requestModel)
+    this.subscriptions.push(SimulationService.toggleSimulation(requestModel)
       .subscribe(
         ({ id }) => {
           this.props.history.push(`/simulation/${id}`);
+          this.fetchSimulationStatus(id);
         },
         error => this.setState({ serviceError: error.message })
       )
     );
+  }
+
+  /*
+  * Fetch isRunning 3 times, start polling if isRunning equals to true
+  */
+  fetchSimulationStatus(id) {
+    Observable
+      .interval(simulationStatusPollingInterval)
+      .take(3)
+      .switchMap(() =>
+        SimulationService.getSimulation(id)
+          .filter(({ isRunning }) => isRunning)
+      )
+      .take(1)
+      .subscribe(
+        val => this.emitter.next(id),
+        pollingError => this.setState({ pollingError: pollingError.message })
+      )
   }
 
   getHubLink = () => {
@@ -172,7 +195,7 @@ class SimulationDetails extends Component {
     )
   }
 
-  getBtnFromSimulationStatus() {
+  getBtnFromSimulationStatus(disabled) {
     const { t } = this.props;
 
     const btnProps = {
@@ -189,7 +212,8 @@ class SimulationDetails extends Component {
     const startBtnProps = {
       type: 'button',
       className: 'apply-btn',
-      onClick: this.startSimulation
+      onClick: this.startSimulation,
+      disabled
     };
 
     if (this.state.pollingError) {
@@ -284,7 +308,8 @@ class SimulationDetails extends Component {
     const {
       t,
       deviceModelEntities = {},
-      match
+      match,
+      simulationList
     } = this.props;
 
     const { simulation, metrics } = this.state;
@@ -314,13 +339,15 @@ class SimulationDetails extends Component {
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
+    // Remove isThereARunningSimulation when simulation service support running multiple simulations
+    const isThereARunningSimulation = simulationList.some(({ isRunning }) => isRunning);
     return (
       <ComponentArray>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
 
         <ContextMenu>
-          { this.getBtnFromSimulationStatus() }
-          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning}>
+          { this.getBtnFromSimulationStatus(isThereARunningSimulation) }
+          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning || isThereARunningSimulation}>
             { t('simulation.newSim') }
           </Btn>
         </ContextMenu>

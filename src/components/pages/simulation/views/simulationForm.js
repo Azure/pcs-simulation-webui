@@ -225,19 +225,26 @@ class SimulationForm extends LinkedComponent {
         placeholder="Enter IoT Hub connection string" />
     );
 
-    const deviceModelLinks = this.deviceModelsLink.getLinkedChildren(deviceModelLink => {
+    const deviceModelLinks = this.deviceModelsLink.getLinkedChildren((deviceModelLink, idx) => {
       const name = deviceModelLink.forkTo('name')
         .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
-      const maxSimulatedDevices = Config.maxSimulatedDevices;
+      const maxSimulatedDevices = global.DeploymentConfig.maxDevicesPerSimulation;
+      const currentDevicesCount = deviceModels.reduce(
+        (sum, {count = 0}) => sum + count,
+        0
+      );
+
       const count = deviceModelLink.forkTo('count')
         .reject(nonInteger)
         .map(stringToInt)
         .check(x => Validator.notEmpty(x === '-' ? '' : x), t('simulation.form.errorMsg.countCantBeEmpty'))
         .check(num => num > 0, t('simulation.form.errorMsg.countShouldBeGTZero'))
-        .check(num => num <= Config.maxSimulatedDevices, t('simulation.form.errorMsg.countShouldBeLTMax', { maxSimulatedDevices}));
+        .check(_ => currentDevicesCount <= maxSimulatedDevices, t('simulation.form.errorMsg.countShouldBeLTMax', { maxSimulatedDevices }));
 
+      const minTelemetryInterval = global.DeploymentConfig.minTelemetryInterval;
+      // rename frequencyCantBeLessThanTenSeconds
       const interval = deviceModelLink.forkTo('interval')
-        .check(({ ms }) => ms >= 10000, t('frequencyCantBeLessThanTenSeconds'));
+        .check(({ ms }) => ms >= minTelemetryInterval, t('simulation.form.errorMsg.frequencyCantBeLessThanMinTelemetryInterval', { interval: minTelemetryInterval / 1000 }));
 
       const edited = !(!name.value && !count.value);
       const error = (edited && (name.error || count.error));
@@ -300,6 +307,8 @@ class SimulationForm extends LinkedComponent {
           {
             deviceModelLinks.map(({ name, count, interval, edited, error }, idx) => {
               let throughput = 0;
+              const maxDevicesPerSimulation = global.DeploymentConfig.maxDevicesPerSimulation;
+
               if (count.value && interval.value.ms) {
                 throughput = (count.value * 1000) / interval.value.ms
               }
@@ -322,7 +331,7 @@ class SimulationForm extends LinkedComponent {
                       className="short"
                       type="text"
                       link={count}
-                      max={Config.maxSimulatedDevices} />
+                      max={maxDevicesPerSimulation} />
                   </FormGroup>
                   <FormGroup className="device-model-box">
                     <FormControl

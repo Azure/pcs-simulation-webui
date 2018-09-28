@@ -62,7 +62,8 @@
         "durationMustBeGTZero": "Duration must be greater than zero",
         "countCantBeEmpty": "Number of devices is required",
         "countCantBeLessThanZero": "Amount must be no less than zero",
-        "countShouldBeLTMax": "Number of devices must be no greater than {{maxSimulatedDevices}}",
+        "countShouldBeLTMax": "Total number of devices must be no greater than {{maxSimulatedDevices}}",
+        "frequencyCantBeLessThanMinTelemetryInterval": "Telemetry frequency must be no less than {{ interval }} seconds",
         "countShouldBeGTZero": "Number of devices must be greater than zero",
         "hubNameCantBeEmpty": "IoT Hub connection string is required",
         "simulationStatusError": "Something went wrong and we weren't able to get the simulation status."
@@ -199,7 +200,7 @@
         "nameCantBeDuplicate": "Device model name already been used",
         "behaviorCantBeEmpty": "Behavior is required",
         "intervalCantBeLessThanOneSecond": "Telemetry interval must be no less than 1 seconds",
-        "frequencyCantBeLessThanTenSeconds": "Telemetry frequency must be no less than 10 seconds",
+        "frequencyCantBeLessThanMinTelemetryInterval": "Telemetry frequency must be no less than {{ interval }} seconds",
         "minValueCantBeEmpty": "Min value is required",
         "maxValueCantBeEmpty": "Max value is required",
         "minValueMustBeLessThanMax": "Min value must be less than the max value",
