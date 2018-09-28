@@ -104,7 +104,7 @@ class DeviceModelUploadForm extends Component {
         (acc, file) => {
           if (file.type === 'application/json') {
             acc.jsonFiles.push(file);
-          } else if (file.type === 'text/javascript' || file.name.includes('.js')) {
+          } else if (file.type === 'text/javascript' || file.name.endsWith('.js')) {
             acc.scriptFiles.push(file);
           }
           return acc;
