@@ -79,6 +79,7 @@ class DeviceModelUploadForm extends Component {
 
   uploadFiles = e => {
     e.preventDefault();
+    this.clearAll();
     const { target: value } = e;
     const { t } = this.props;
 
