@@ -40,8 +40,8 @@ export class DeviceModelsGrid extends Component {
     // TODO: This is a temporary example implementation. Remove with a better version
     this.contextBtns = [
       <Btn key="delete" svg={svgs.trash} onClick={this.openFlyout(DELETE_FLYOUT)}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
-      <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>{props.t('deviceModels.flyouts.clone.name')}</Btn>,
-      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(CLONE_FLYOUT)}>{props.t('deviceModels.flyouts.edit.name')}</Btn>
+      <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>{props.t('deviceModels.flyouts.edit.name')}</Btn>,
+      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(CLONE_FLYOUT)}>{props.t('deviceModels.flyouts.clone.name')}</Btn>
     ];
   }
 
@@ -75,7 +75,8 @@ export class DeviceModelsGrid extends Component {
             editDeviceModel={editDeviceModel}
             deviceModelsNameSet={deviceModelsNameSetForEdit}
             formMode={deviceModelFormModes.FORM_MODE_EDIT}
-            t={t} />
+            t={t}
+            isBasic={deviceModel.simulation.Scripts[0].Type !== 'javascript'} />
           );
       case CLONE_FLYOUT:
         return (

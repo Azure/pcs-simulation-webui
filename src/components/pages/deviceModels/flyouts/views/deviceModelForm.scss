@@ -36,6 +36,13 @@
       top: 0;
       opacity: 0;
     }
+
+    .browse-button {
+      border: none;
+      @include rem-fallback(width, 75px);
+      @include rem-fallback(height, 32px);
+      @include rem-font-size(12px);
+    }
   }
 
   .upload-results-container {
@@ -52,6 +59,11 @@
     .upload-results-container {
       .success-result { color: themed('colorSuccess'); }
       .failed-result { color: themed('colorFailure'); }
+    }
+
+    .file-uploader-container .browse-button {
+        background-color: $colorBlue;
+        color: $colorWhite;
     }
   }
 }

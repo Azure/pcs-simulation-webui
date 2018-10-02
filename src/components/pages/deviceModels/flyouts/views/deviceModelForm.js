@@ -258,6 +258,9 @@ class DeviceModelForm extends LinkedComponent {
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className='device-model-form-container'>
         <FormSection>
+          <FormLabel>{t('deviceModels.flyouts.new.basicDeviceModelDescription')}</FormLabel>
+        </FormSection>
+        <FormSection>
           <FormGroup>
             <FormLabel>
               {t('deviceModels.flyouts.new.name')}
@@ -326,7 +329,9 @@ class DeviceModelForm extends LinkedComponent {
           }
           </div>
         </FormSection>
-        <FormSection>
+        {
+        // Currently, we do not support device level frequency control. We might revisit in the future once we are ready to honor it.
+        /*<FormSection>
           <SectionDesc>{t('deviceModels.flyouts.new.interval')}</SectionDesc>
           <FormGroup>
             <FormControl type="duration" name="interval" link={this.intervalLink} onChange={this.setFormChangesFlag} />
@@ -337,7 +342,8 @@ class DeviceModelForm extends LinkedComponent {
           <FormGroup>
             <FormControl type="duration" name="frequency" link={this.frequencyLink} onChange={this.setFormChangesFlag} />
           </FormGroup>
-        </FormSection>
+        </FormSection>*/
+        }
         <FormActions>
           <BtnToolbar>
             <Btn

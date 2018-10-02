@@ -4,6 +4,7 @@ import React from 'react';
 import { svgs } from 'utilities';
 import Flyout from 'components/shared/flyout';
 import DeviceModelForm from '../views/deviceModelForm';
+import DeviceModelUploadForm from '../views/deviceModelUploadForm';
 import { Svg } from 'components/shared';
 
 export const EditDeviceModel = (props) => (
@@ -16,7 +17,11 @@ export const EditDeviceModel = (props) => (
       <Flyout.CloseBtn onClick={props.onClose} />
     </Flyout.Header>
     <Flyout.Content >
-      <DeviceModelForm {...props} />
+      {
+        props.isBasic
+          ? <DeviceModelForm {...props} />
+          : <DeviceModelUploadForm {...props} />
+      }
     </Flyout.Content>
   </Flyout.Container>
 );

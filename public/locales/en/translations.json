@@ -156,6 +156,7 @@
       },
       "new": {
         "title": "Add Device Model",
+        "basicDeviceModelDescription": "Define a new simulated device and the telemetry data to be sent from the device to your IoT hub. A single device can send one or more data points (e.g. location, humidity, etc.) allowing you to simulate data coming from real devices.",
         "name": "Device model name",
         "namePlaceHolder": "",
         "description": "Model description",
@@ -175,11 +176,15 @@
         "name": "Edit"
       },
       "upload": {
-        "create": "Each simulated device is derived from a specific device model. Device models define the device\n's capabilities and behavior including what messages to send, which methods are supported, etc. \n\n Device models consist of one JSON configuration file, One JavaScript file defining the simulation behavior, and optionally one JavaScript file for each cloud to device method supported by the device. Advanced device models give you full control over these files. ",
+        "invalidJSONFileErrorMessage": "Invalid JSON File: {{error}}",
+        "deviceModelInfoText": "Each simulated device is derived from a specific device model. Device models define the device\n's capabilities and behavior including what messages to send, which methods are supported, etc.",
+        "deviceModelFilesInfoText": "Device models consist of one JSON configuration file, one JavaScript file defining the simulation behavior, and optionally one JavaScript file for each cloud to device method supported by the device. Advanced device models give you full control over these files. ",
         "files": "Upload device model files",
         "uploadedFiles": "Uploaded files:",
         "browse": "Browse",
-        "errorMsg": "One or more files are missing or failed validation. Please verify selected files are valid and try again."
+        "missingJsonFileErrorMessage": "No JSON definition file was found. The JSON file defines the device's capabilities and is required.",
+        "tooManyJsonFilesErrorMessage": "More than one JSON file provided. A simulated device may have only one JSON definition file.",
+        "missingJSFileErrorMessage": "{{missingScriptNamesString}} file(s) are missing. Please add these files"
       },
       "sensors": {
         "dataPoint": "Data point",
