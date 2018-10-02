@@ -1,0 +1,123 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.welcome-modal-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  @include rem-fallback(padding, 20px);
+  @include rem-fallback(width, 1200px);
+  @include rem-fallback(height, 760px);
+
+  .welcome-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: x-large;
+
+    .title-container {
+      display: flex;
+      align-items: center;
+
+      .rocket-icon svg {
+        @include rem-fallback(margin-right, 20px);
+        @include square-px-rem(32px);
+      }
+    }
+
+    .modal-icon { @include rem-fallback(padding, 0px); }
+  }
+
+  .welcome-modal-description {
+    text-align: start;
+    @include rem-fallback(padding, 36px, 0px);
+  }
+
+  .welcome-modal-content {
+    display: flex;
+    @include rem-fallback(flex-basis, 500px);
+    @include rem-fallback(margin, -10px);
+  }
+
+  .welcome-modal-footer {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: auto;
+
+    .checkbox-container {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      @include rem-font-size(22px);
+      @include rem-fallback(padding-left, 35px);
+      @include rem-fallback(margin-bottom, 12px);
+
+      /* Hide the browser's default checkbox */
+      input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+
+        /* When the checkbox is checked, add a blue background */
+        &:checked ~ .checkmark { background-color: transparent; }
+
+        /* Show the checkmark when checked */
+        &:checked ~ .checkmark:after { display: block; }
+      }
+
+      /* Create a custom checkbox */
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: transparant;
+        border: 2px solid;
+        @include square-px-rem(25px);
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        &:after {
+          content: "";
+          position: absolute;
+          display: none;
+          border: solid;
+          border-width: 0 3px 3px 0;
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+          @include rem-fallback(left, 9px);
+          @include rem-fallback(top, 5px);
+          @include rem-fallback(width, 5px);
+          @include rem-fallback(height, 10px);
+        }
+      }
+    }
+  }
+
+  @include themify($themes) {
+    color:  themed('colorHighest');
+    border-color: themed('colorSystem');
+    background-image: url('~assets/images/getStartModal.png');
+
+    .welcome-modal-header { color: themed('colorHighest'); }
+
+    .rocket-icon,
+    .modal-icon {
+      fill: themed('colorHighest');
+
+      &:hover {
+        background-color: themed('colorLowestSecond');
+        svg { fill: themed('colorHighest'); }
+      }
+    }
+
+    .checkmark { border: themed('colorHighest'); }
+  }
+}

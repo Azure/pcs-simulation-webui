@@ -1,0 +1,37 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'styles/themes';
+@import 'styles/mixins';
+
+.welcome-tile-container {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 30%;
+  @include rem-fallback(padding, 20px);
+  @include rem-fallback(margin, 10px);
+
+  .welcome-tile-img-container { @include rem-fallback(padding, 20px); }
+
+  .welcome-tile-title {
+    align-content: flex-start;
+    display: flex;
+    font-size: x-large;
+    @include rem-fallback(padding, 20px, 0px);
+  }
+
+  .welcome-tile-description {
+    text-align: start;
+  }
+
+  .btn-container { margin-top:auto; }
+
+  @include themify($themes) {
+    color:  themed('colorBlack');
+    background: themed('colorHighest');
+
+    .btn {
+      color:  themed('colorHighest');
+      background: themed('colorActive');
+    }
+  }
+}
