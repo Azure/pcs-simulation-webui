@@ -2,12 +2,15 @@
   "header": {
     "appName": "Microsoft Azure IoT Device Simulation",
     "dashboard":  "Dashboard",
+    "documentation": "Documentation",
     "logout": "Logout",
     "sendDiagnosticsHeader": "Help us Improve",
     "sendDiagnosticsText": "Device Simulation can send anonymous information to Microsoft, such as error logs, configuration, and information about how you use the application. No personal information is collected.",
     "sendDiagnosticsCheckbox": "Yes, share information with Microsoft",
     "sendDiagnosticsMicrosoftPrivacyUrl": "Privacy Statement",
-    "simulationsDashboard":  "Simulations"
+    "sendSuggestion": "Send a suggestion",
+    "simulationsDashboard": "Simulations",
+    "sourceCode": "Source code"
   },
   "tabs": {
     "simulation": "simulations",
@@ -204,5 +207,26 @@
         "unitValueCantBeEmpty": "Unit value is required"
       }
     }
+  },
+  "getStarted": {
+    "title": "Get started",
+    "description": "Build basic or advanced simulated devices that look and act like the real thing. Gather, process, analyze, and act on data, and use it for end-to-end solution testing. Choose from the following if you'd like help getting started.",
+    "sampleSimulation": {
+      "title": "Sample simulation",
+      "description": "Get started instantly using a sample simulation. With the sample simulation you can see data flowing to your IoT Hub right away. This will simulate a few trucks sending location, speed and cargo temperature data.",
+      "btnName": "Start a sample simulation"
+    },
+    "customDevices": {
+      "title": "Custom devices",
+      "description": "Custom devices allow you to specify exactly what data is sent to your IoT Hub. You can define the different data points to send (e.g. temperature, fuel level, etc.) and provide value ranges to represent data from physical devices.",
+      "btnName": "Create a custom device"
+    },
+    "advancedDevices": {
+      "title": "Advanced devices",
+      "description": "Design complex device behaviors by authoring a custom JSON device definition file and scripting device behaviors in JavaScript. The advanced device experience gives you full control over how your simulated devices behave.",
+      "btnName": "Upload a device model"
+    },
+    "doNotShownAgain": "Don’t show me this again",
+    "findMe": "You can always find this on the help menu"
   }
 }
