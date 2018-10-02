@@ -113,8 +113,8 @@
       fill: themed('colorHighest');
 
       &:hover {
-        background-color: themed('colorLowestSecond');
-        svg { fill: themed('colorHighest'); }
+        background-color: transparent;
+        svg { fill: themed('colorLightestFirst'); }
       }
     }
 
