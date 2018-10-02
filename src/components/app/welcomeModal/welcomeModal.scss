@@ -6,7 +6,6 @@
 .welcome-modal-container {
   display: flex;
   flex-direction: column;
-  border: 1px solid;
   @include rem-fallback(padding, 20px);
   @include rem-fallback(width, 1200px);
   @include rem-fallback(height, 760px);
@@ -103,8 +102,8 @@
 
   @include themify($themes) {
     color:  themed('colorHighest');
-    border-color: themed('colorSystem');
-    background-image: url('~assets/images/getStartModal.png');
+    background-color: themed('colorLowestThird');
+    background-image: url('~assets/images/getStartedModal.svg');
 
     .welcome-modal-header { color: themed('colorHighest'); }
 

@@ -10,7 +10,10 @@
   @include rem-fallback(padding, 20px);
   @include rem-fallback(margin, 10px);
 
-  .welcome-tile-img-container { @include rem-fallback(padding, 20px); }
+  .welcome-tile-img-container {
+    @include rem-fallback(padding, 20px);
+    @include rem-fallback(height, 85px);
+}
 
   .welcome-tile-title {
     align-content: flex-start;

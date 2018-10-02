@@ -47,7 +47,7 @@ export class WelcomeModal extends Component {
                 {
                   title: t('getStarted.sampleSimulation.title'),
                   description: t('getStarted.sampleSimulation.description'),
-                  imgPath: 'https://via.placeholder.com/100x100',
+                  imgPath: svgs.sampleSimulation,
                   link: {
                     pathname: '/simulations/1',
                     state: {}
@@ -57,7 +57,7 @@ export class WelcomeModal extends Component {
                 {
                   title: t('getStarted.customDevices.title'),
                   description: t('getStarted.customDevices.description'),
-                  imgPath: 'https://via.placeholder.com/100x100',
+                  imgPath: svgs.customDeviceModel,
                   link: {
                     pathname: '/deviceModels',
                     state: {
@@ -70,7 +70,7 @@ export class WelcomeModal extends Component {
                 {
                   title: t('getStarted.advancedDevices.title'),
                   description: t('getStarted.advancedDevices.description'),
-                  imgPath: 'https://via.placeholder.com/100x100',
+                  imgPath: svgs.advancedDeviceModel,
                   link: {
                     pathname: '/deviceModels',
                     state: {
