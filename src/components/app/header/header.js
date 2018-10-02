@@ -95,14 +95,14 @@ class Header extends Component {
             {
               this.state.openDropdown === docsDropdown &&
               <div className="menu">
-                <div className="menu-item" onClick={this.openModal}>{`Get Start`}</div>
+                <div className="menu-item" onClick={this.openModal}>{ t('getStarted.title') }</div>
                 {
                   docLinks.map(({ url, translationId }) =>
                     <Link key={translationId}
                       className="menu-item"
                       target="_blank"
                       to={url}>
-                      { this.props.t(translationId) }
+                      { t(translationId) }
                     </Link>
                   )
                 }
