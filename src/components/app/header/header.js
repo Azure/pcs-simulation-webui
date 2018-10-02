@@ -41,6 +41,8 @@ const docLinks = [
   }
 ];
 
+const closeModal = { openWelcomeModal: false };
+
 /** The header component for the top of the page */
 class Header extends Component {
 
@@ -62,6 +64,12 @@ class Header extends Component {
     window.removeEventListener('mousedown', this.handleWindowMousedown);
   }
 
+  componentWillReceiveProps({ location }) {
+    if (location.key !== this.props.location.key) {
+      this.setState(closeModal)
+    }
+  }
+
   handleWindowMousedown = ({ target }) => {
     const isMenuTrigger = parentHasClass(target, 'menu-item', 'menu-trigger');
     if (!isMenuTrigger && this.state.openDropdown !== '') {
@@ -76,9 +84,12 @@ class Header extends Component {
 
   toggleDropdown = (openDropdown) => () => this.setState({ openDropdown });
 
-  openModal = () => this.setState({ openWelcomeModal: true });
+  openModal = () => this.setState({
+    openWelcomeModal: true,
+    openDropdown: ''
+  });
 
-  closeModal = () => this.setState({ openWelcomeModal: false });
+  closeModal = () => this.setState(closeModal);
 
   render() {
     const { t, cookies } = this.props;

@@ -15,6 +15,16 @@ export class NewDeviceModel extends Component {
     };
   }
 
+  componentDidMount() {
+    const { state = {} } = this.props.location;
+    this.setState({ ...state });
+  }
+
+  componentWillReceiveProps({ location }) {
+    const { state = {} } = location;
+    this.setState({ ...state })
+  }
+
   onClickBasic = () => this.setState({ isBasic: true });
 
   onClickAdvanced = () => this.setState({ isBasic: false });

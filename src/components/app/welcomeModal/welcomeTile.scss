@@ -23,7 +23,14 @@
     text-align: start;
   }
 
-  .btn-container { margin-top:auto; }
+  .btn-container {
+    margin-top:auto;
+
+    .btn {
+      text-decoration: none;
+      @include rem-fallback(height, 33px);
+    }
+  }
 
   @include themify($themes) {
     color:  themed('colorBlack');

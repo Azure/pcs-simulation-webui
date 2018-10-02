@@ -48,21 +48,36 @@ export class WelcomeModal extends Component {
                   title: t('getStarted.sampleSimulation.title'),
                   description: t('getStarted.sampleSimulation.description'),
                   imgPath: 'https://via.placeholder.com/100x100',
-                  onClick: () => {},
+                  link: {
+                    pathname: '/simulations/1',
+                    state: {}
+                  },
                   btnName: t('getStarted.sampleSimulation.btnName'),
                 },
                 {
                   title: t('getStarted.customDevices.title'),
                   description: t('getStarted.customDevices.description'),
                   imgPath: 'https://via.placeholder.com/100x100',
-                  onClick: () => {},
+                  link: {
+                    pathname: '/deviceModels',
+                    state: {
+                      flyoutOpen: 'new-device-model',
+                      isBasic: true
+                    }
+                  },
                   btnName: t('getStarted.customDevices.btnName'),
                 },
                 {
                   title: t('getStarted.advancedDevices.title'),
                   description: t('getStarted.advancedDevices.description'),
                   imgPath: 'https://via.placeholder.com/100x100',
-                  onClick: () => {},
+                  link: {
+                    pathname: '/deviceModels',
+                    state: {
+                      flyoutOpen: 'new-device-model',
+                      isBasic: false
+                    }
+                  },
                   btnName: t('getStarted.advancedDevices.btnName'),
                 }
               ].map((item, idx) => <WelcomeTile key={`welcome-model-tile-${idx}`} {...item} />)
