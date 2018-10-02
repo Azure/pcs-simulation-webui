@@ -11,8 +11,10 @@ import HamburgerIconPath from 'assets/icons/hamburger.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
 import LinkToPath from 'assets/icons/linkTo.svg';
 import PlusIconPath from 'assets/icons/plus.svg';
+import QuestionMarkIconPath from 'assets/icons/questionMark.svg';
 import RadioSelectedIconPath from 'assets/icons/radioSelected.svg';
 import RadioUnselectedIconPath from 'assets/icons/radioUnselected.svg';
+import RocketIconPath from 'assets/icons/rocket.svg';
 import RunningIconPath from 'assets/icons/running.svg';
 import SettingsIconPath from 'assets/icons/settings.svg';
 import SimulationLogoPath from 'assets/icons/simulationLogo.svg';
@@ -35,8 +37,10 @@ export const svgs = {
   infoBubble: InfoBubbleIconPath,
   linkTo: LinkToPath,
   plus: PlusIconPath,
+  questionMark: QuestionMarkIconPath,
   radioSelected: RadioSelectedIconPath,
   radioUnselected: RadioUnselectedIconPath,
+  rocket: RocketIconPath,
   running: RunningIconPath,
   settings: SettingsIconPath,
   simulationLogo: SimulationLogoPath,
