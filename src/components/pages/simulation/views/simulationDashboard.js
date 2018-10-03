@@ -123,7 +123,7 @@ export class SimulationDashboard extends Component {
             <div className="past-simulations">
             {
                 pastSimulationsList.map(sim =>
-                <NavLink className={className} to={`/simulation/${sim.id}`} key={sim.id}>
+                <NavLink className={className} to={`/simulations/${sim.id}`} key={sim.id}>
                   <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
                 </NavLink>
               )

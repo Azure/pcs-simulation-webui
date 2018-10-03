@@ -45,9 +45,9 @@ export class Simulation extends Component {
     return (
       <div className="simulation-container">
         <Switch>
-          <Route exact path={'/simulation'}
+          <Route exact path={'/simulations'}
             render={ (routeProps) => <SimulationDashboard {...routeProps} {...this.props} /> } />
-          <Route path={'/simulation/:id/:modelId?'}
+          <Route path={'/simulations/:id/:modelId?'}
             render={ (routeProps) => <SimulationDetails {...routeProps} {...this.props} /> } />
         </Switch>
       </div>
