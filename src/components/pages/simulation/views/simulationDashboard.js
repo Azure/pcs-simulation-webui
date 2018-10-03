@@ -113,7 +113,7 @@ export class SimulationDashboard extends Component {
                 <div className="active-simulations">
                   {
                     activeSimulationsList.map(sim =>
-                      <NavLink className="simulation-tile-link oneCol" to={`/simulation/${sim.id}`} key={sim.id}>
+                      <NavLink className="simulation-tile-link oneCol" to={`/simulations/${sim.id}`} key={sim.id}>
                         <SimulationTile simulation={sim} deviceModelEntities={deviceModelEntities} t={t} />
                       </NavLink>
                     )
