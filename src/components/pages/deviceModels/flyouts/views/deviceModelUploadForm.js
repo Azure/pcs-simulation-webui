@@ -252,7 +252,12 @@ class DeviceModelUploadForm extends Component {
       }
 
       this.state.scripts.push({ file: uploadedFile });
-      this.setState({ ...initialFormState, scripts: this.state.scripts, deviceModel: this.state.deviceModel, missingScripts: this.state.missingScripts });
+      this.setState({
+        ...initialFormState,
+        scripts: this.state.scripts,
+        deviceModel: this.state.deviceModel,
+        missingScripts: this.state.missingScripts
+      });
     }
   };
 
