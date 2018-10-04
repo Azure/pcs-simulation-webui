@@ -81,8 +81,6 @@ class DeviceModelUploadForm extends Component {
     this.clearAll();
     const { target: value } = e;
     const { t } = this.props;
-    console.log('Value.file', value.files);
-    console.log('Value.filelist', value.fileList);
 
     this.filesSanityCheck(Object.values((value || {}).files || {}), t).subscribe(
       ({ deviceModel, scriptFiles, error, jsonFile, missingScripts }) => {
@@ -191,7 +189,11 @@ class DeviceModelUploadForm extends Component {
     // Uploading scripts
     Observable.from(scripts)
       .flatMap(({ file }) => DeviceModelScriptsService.uploadsDeviceModelScript(file))
-      .reduce((scripts, script) => ({ ...scripts, [script.name]: script }), {})
+      .reduce((scripts, script) => {
+        const scriptName = script.name.split('\\').pop();
+        return ({ ...scripts, [scriptName]: script })
+      },
+      {})
       .map(scripts => {
         const {
           CloudToDeviceMethods = {},
