@@ -351,7 +351,7 @@ class DeviceModelUploadForm extends Component {
                     </div>
                     <div id={file.name} className="validation-message">
                       {(validationResult.messages || []).map((error, idx) => (
-                        <input key={`file-change-${idx}`} type="file" onChange={this.reloadUpload} />
+                        <input key={`file-replace-${idx}`} type="file" onChange={this.reloadUpload} />
                       ))}
                     </div>
                   </div>
