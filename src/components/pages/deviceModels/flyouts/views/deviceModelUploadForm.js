@@ -308,10 +308,10 @@ class DeviceModelUploadForm extends Component {
               missingScripts
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((file) => (
-                  <div key={`missing-file-container-${file.name}`} className="upload-results-container">
+                  <div key={`missing-scripts-container-${file.name}`} className="upload-results-container">
                     <div className="file-name">{file.name}</div>
                     <div id={file.name} className="validation-message">
-                      <input key={`missing-file-${file.name}`} type="file" onChange={this.reloadUpload} />
+                      <input key={`missing-script-${file.name}`} type="file" onChange={this.reloadUpload} />
                     </div>
                   </div>
                 ))
