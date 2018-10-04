@@ -81,6 +81,8 @@ class DeviceModelUploadForm extends Component {
     this.clearAll();
     const { target: value } = e;
     const { t } = this.props;
+    console.log('Value.file', value.files);
+    console.log('Value.filelist', value.fileList);
 
     this.filesSanityCheck(Object.values((value || {}).files || {}), t).subscribe(
       ({ deviceModel, scriptFiles, error, jsonFile, missingScripts }) => {
@@ -237,10 +239,11 @@ class DeviceModelUploadForm extends Component {
   };
 
   reloadUpload = e => {
-    const uploadedFile = e.target.files;
-    if (e.target.parentElement.id === e.target.files[0].name) {
-      const addMissingScriptIndex = this.state.missingScripts.findIndex(script => (script.name === e.target.files[0].name));
-      const replaceIncorrectScriptIndex = this.state.scripts.findIndex(script => (script.file.name === e.target.files[0].name && script.validationResult.isValid === false));
+    const uploadedFile = e.target.files[0];
+    if (e.target.parentElement.id === uploadedFile.name) {
+      const addMissingScriptIndex = this.state.missingScripts.findIndex(script => (script.name === uploadedFile.name));
+      const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
+        script => (script.file.name === uploadedFile.name && script.validationResult.isValid === false));
 
       if (addMissingScriptIndex !== -1) {
         this.state.missingScripts.splice(addMissingScriptIndex, 1);
@@ -248,7 +251,7 @@ class DeviceModelUploadForm extends Component {
         this.state.scripts.splice(replaceIncorrectScriptIndex, 1);
       }
 
-      this.state.scripts.push({ file: uploadedFile[0] });
+      this.state.scripts.push({ file: uploadedFile });
       this.setState({ ...initialFormState, scripts: this.state.scripts, deviceModel: this.state.deviceModel, missingScripts: this.state.missingScripts });
     }
   };
