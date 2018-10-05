@@ -6,15 +6,17 @@
 .welcome-modal-container {
   display: flex;
   flex-direction: column;
+  background-repeat: no-repeat;
+  background-size: cover;
   @include rem-fallback(padding, 20px);
-  @include rem-fallback(width, 1200px);
-  @include rem-fallback(height, 760px);
+  @include rem-fallback(width, 836px);
+  @include rem-fallback(height, 500px);
 
   .welcome-modal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: x-large;
+    @include rem-font-size(24px);
 
     .title-container {
       display: flex;
@@ -31,13 +33,13 @@
 
   .welcome-modal-description {
     text-align: start;
-    @include rem-fallback(padding, 36px, 0px);
+    @include rem-fallback(padding, 20px, 0px);
+    @include rem-font-size(18px);
   }
 
   .welcome-modal-content {
     display: flex;
-    @include rem-fallback(flex-basis, 500px);
-    @include rem-fallback(margin, -10px);
+    @include rem-fallback(margin, 0px, -10px);
   }
 
   .welcome-modal-footer {
@@ -55,9 +57,9 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      @include rem-font-size(22px);
-      @include rem-fallback(padding-left, 35px);
-      @include rem-fallback(margin-bottom, 12px);
+      @include rem-font-size(16px);
+      @include rem-fallback(padding-left, 33px);
+      @include rem-fallback(margin-right, 45px);
 
       /* Hide the browser's default checkbox */
       input {
@@ -75,11 +77,12 @@
       /* Create a custom checkbox */
       .checkmark {
         position: absolute;
-        top: 0;
         left: 0;
         background-color: transparant;
-        border: 2px solid;
-        @include square-px-rem(25px);
+        border: 1px solid;
+        @include square-px-rem(13px);
+        @include rem-fallback(top, 3px);
+        @include rem-fallback(border-radius, 2px);
 
         /* Create the checkmark/indicator (hidden when not checked) */
         &:after {
@@ -87,22 +90,24 @@
           position: absolute;
           display: none;
           border: solid;
-          border-width: 0 3px 3px 0;
+          border-width: 0 1px 1px 0;
           -webkit-transform: rotate(45deg);
           -ms-transform: rotate(45deg);
           transform: rotate(45deg);
-          @include rem-fallback(left, 9px);
-          @include rem-fallback(top, 5px);
-          @include rem-fallback(width, 5px);
-          @include rem-fallback(height, 10px);
+          @include rem-fallback(left, 4px);
+          @include rem-fallback(top, 1px);
+          @include rem-fallback(width, 4px);
+          @include rem-fallback(height, 8px);
         }
       }
     }
+
+    .find-me { @include rem-font-size(12px); }
   }
 
   @include themify($themes) {
     color:  themed('colorHighest');
-    background-color: themed('colorLowestThird');
+    background-color: themed('colorModalBackground');
     background-image: url('~assets/images/getStartedModal.svg');
 
     .welcome-modal-header { color: themed('colorHighest'); }

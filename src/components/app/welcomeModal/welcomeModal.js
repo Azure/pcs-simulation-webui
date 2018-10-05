@@ -93,7 +93,7 @@ export class WelcomeModal extends Component {
                 checked={this.state.isChecked} />
               <span className="checkmark"></span>
             </div>
-            <div>{ t('getStarted.findMe') }</div>
+            <div className="find-me">{ t('getStarted.findMe') }</div>
           </div>
         </div>
       </Modal>

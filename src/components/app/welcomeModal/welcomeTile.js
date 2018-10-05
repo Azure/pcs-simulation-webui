@@ -10,9 +10,9 @@ export const WelcomeTile = ({ onClick, imgPath, title, description, btnName, lin
     <div className="welcome-tile-img-container"><img alt={`${btnName}`} src={imgPath}/></div>
     <div className="welcome-tile-title">{title}</div>
     <div className="welcome-tile-description">{description}</div>
-    <div className="btn-container">
+    <div className="btn-link-container">
       <Link
-        className="btn"
+        className="btn-link"
         to={{
         pathname: link.pathname,
         state: link.state

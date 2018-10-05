@@ -6,32 +6,38 @@
 .welcome-tile-container {
   display: flex;
   flex-flow: column nowrap;
-  width: 30%;
   @include rem-fallback(padding, 20px);
-  @include rem-fallback(margin, 10px);
+  @include rem-fallback(margin, 0px, 10px);
+  @include rem-fallback(width, 252px);
+  @include rem-fallback(height, 270px);
 
-  .welcome-tile-img-container {
-    @include rem-fallback(padding, 20px);
-    @include rem-fallback(height, 85px);
-}
+  .welcome-tile-img-container { @include rem-fallback(height, 100px); }
 
   .welcome-tile-title {
     align-content: flex-start;
     display: flex;
-    font-size: x-large;
-    @include rem-fallback(padding, 20px, 0px);
+    font-weight: bold;
+    @include rem-font-size(18px);
+    @include rem-fallback(padding-bottom, 13px);
   }
 
   .welcome-tile-description {
     text-align: start;
+    @include rem-font-size(12px);
   }
 
-  .btn-container {
+  .btn-link-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
     margin-top:auto;
+    @include rem-fallback(height, 32px);
+    @include rem-fallback(width, 173px);
+    @include rem-fallback(border-radius, 2px);
 
-    .btn {
+    .btn-link {
       text-decoration: none;
-      @include rem-fallback(height, 33px);
+      @include rem-font-size(14px);
     }
   }
 
@@ -39,9 +45,11 @@
     color:  themed('colorBlack');
     background: themed('colorHighest');
 
-    .btn {
-      color:  themed('colorHighest');
+    .btn-link { color:  themed('colorHighest'); }
+
+    .btn-link-container {
       background: themed('colorActive');
+      box-shadow: 2px 2px 2px themed('colorLightestFirst');
     }
   }
 }
