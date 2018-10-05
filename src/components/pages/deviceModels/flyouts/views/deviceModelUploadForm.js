@@ -189,8 +189,7 @@ class DeviceModelUploadForm extends Component {
     Observable.from(scripts)
       .flatMap(({ file }) => DeviceModelScriptsService.uploadsDeviceModelScript(file))
       .reduce((scripts, script) => {
-        const scriptName = script.name.split('\\').pop();
-        return ({ ...scripts, [scriptName]: script })
+        return ({ ...scripts, [script.name.split('\\').pop()]: script })
       },
       {})
       .map(scripts => {
