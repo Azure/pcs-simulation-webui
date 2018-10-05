@@ -46,6 +46,12 @@ const sensorBehavior = {
   decrement: 'Math.Decreasing'
 }
 
+const timeInterval = {
+  hours: '00',
+  minutes: '00',
+  seconds: '10'
+}
+
 const isRealRegex = /^-?(([1-9][0-9]*)*|0?)\.?\d*$/;
 const nonReal = x => !x.match(isRealRegex);
 const stringToFloat = x => x === '' || x === '-' ? x : parseFloat(x);
@@ -91,9 +97,7 @@ class DeviceModelForm extends LinkedComponent {
   formIsValid() {
     return [
       this.nameLink,
-      this.sensorsLink,
-      this.intervalLink,
-      this.frequencyLink
+      this.sensorsLink
     ].every(link => !link.error);
   }
 
@@ -178,8 +182,6 @@ class DeviceModelForm extends LinkedComponent {
   apply = (event) => {
     event.preventDefault();
     const {
-      frequency,
-      interval,
       description,
       name,
       version,
@@ -187,8 +189,8 @@ class DeviceModelForm extends LinkedComponent {
       id,
       eTag
     } = this.state;
-    const simulationFrequency = frequency.ms > 0 ? { frequency: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
-    const telemetryInterval = interval.ms > 0 ? { interval: `${interval.hours}:${interval.minutes}:${interval.seconds}` } : {};
+    const simulationFrequency = { frequency: `${timeInterval.hours}:${timeInterval.minutes}:${timeInterval.seconds}` };
+    const telemetryInterval = { interval: `${timeInterval.hours}:${timeInterval.minutes}:${timeInterval.seconds}` };
     const model = {
       id,
       eTag,
