@@ -297,31 +297,30 @@ class DeviceModelUploadForm extends Component {
         }
         {
           missingScripts && missingScripts.length > 0 && (
-          <FormGroup>
-            <FormLabel>{t('deviceModels.flyouts.upload.missingFiles')}</FormLabel>
-            {
-              missingScripts
-                .sort((a, b) => a.localeCompare(b))
-                .map((file) => (
-                  <div key={`missing-scripts-container-${file}`} className="upload-results-container">
-                    <div className="file-name">{file}</div>
-                    <div className="validation-message">
-                      <div id={file} className="file-uploader-container">
-                        <input
-                          className="file-uploader"
-                          type="file"
-                          id="missingScriptsUploader"
-                          name="missingScriptsuploader"
-                          accept=".json, .js"
-                          onChange={this.reloadUpload}
-                        />
-                        <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+            <FormGroup>
+              <FormLabel>{t('deviceModels.flyouts.upload.missingFiles')}</FormLabel>
+              {
+                missingScripts
+                  .sort((a, b) => a.localeCompare(b))
+                  .map((file) => (
+                    <div key={`missing-scripts-container-${file}`} className="upload-results-container">
+                      <div className="file-name">{file}</div>
+                      <div className="validation-message">
+                        <div id={file} className="file-uploader-container">
+                          <input
+                            className="file-uploader"
+                            type="file"
+                            id="missingScriptsUploader"
+                            name="missingScriptsuploader"
+                            accept=".json, .js"
+                            onChange={this.reloadUpload}
+                          />
+                          <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-            }
-           </FormGroup>
+                  ))}
+            </FormGroup>
           )
         }
         {
@@ -338,7 +337,6 @@ class DeviceModelUploadForm extends Component {
                 .sort((a, b) => a.file.name.localeCompare(b.file.name))
                 .map(({ file, validationResult = {} }, idx) => (
                   <div key={`script-${idx}`} className="upload-results-container">
-
                     <div className="file-name">{file.name}
                       <div className="validation-message">
                         {(validationResult.messages || []).map((error, idx) => (
