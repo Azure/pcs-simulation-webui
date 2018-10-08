@@ -52,6 +52,8 @@
     .file-name { @include rem-fallback(width, 250px); }
 
     .validation-result { @include rem-fallback(width, 36px); }
+
+    .validation-message { @include rem-fallback(margin-top, 8px); }
   }
 
   @include themify($themes) {
