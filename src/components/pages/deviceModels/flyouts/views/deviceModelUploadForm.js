@@ -365,7 +365,6 @@ class DeviceModelUploadForm extends Component {
                             id="replaceIncorrectScriptUploader"
                             name="replaceIncorrectScriptUploader"
                             accept=".json, .js"
-
                             onChange={this.reloadUpload}
                           />
                           <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
