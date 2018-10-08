@@ -46,12 +46,6 @@ const sensorBehavior = {
   decrement: 'Math.Decreasing'
 }
 
-const timeInterval = {
-  hours: '00',
-  minutes: '00',
-  seconds: '10'
-}
-
 const isRealRegex = /^-?(([1-9][0-9]*)*|0?)\.?\d*$/;
 const nonReal = x => !x.match(isRealRegex);
 const stringToFloat = x => x === '' || x === '-' ? x : parseFloat(x);
@@ -189,17 +183,13 @@ class DeviceModelForm extends LinkedComponent {
       id,
       eTag
     } = this.state;
-    const simulationFrequency = { frequency: `${timeInterval.hours}:${timeInterval.minutes}:${timeInterval.seconds}` };
-    const telemetryInterval = { interval: `${timeInterval.hours}:${timeInterval.minutes}:${timeInterval.seconds}` };
     const model = {
       id,
       eTag,
       name,
       description,
       version,
-      sensors,
-      ...simulationFrequency,
-      ...telemetryInterval
+      sensors
     };
 
     // apply changes
