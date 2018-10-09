@@ -103,6 +103,7 @@
       "totalDevicesCount": "Total devices",
       "totalMessagesCount": "Total messages",
       "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}",
+      "settingUp" : "Setting up",
       "running": "Running",
       "stopped": "Stopped",
       "created": "Created {{startDateTime}}",

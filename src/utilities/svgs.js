@@ -6,13 +6,16 @@ import ColonIconPath from 'assets/icons/colon.svg';
 import ContosoIconPath from 'assets/icons/contoso.svg';
 import CopyIconPath from 'assets/icons/copy.svg';
 import EditIconPath from 'assets/icons/edit.svg';
+import ErrorCrossIconPath from 'assets/icons/error.svg';
 import ErrorIconPath from 'assets/icons/errorAsterisk.svg';
 import HamburgerIconPath from 'assets/icons/hamburger.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
 import LinkToPath from 'assets/icons/linkTo.svg';
+import LoadingIconPath from 'assets/icons/loading.svg';
 import PlusIconPath from 'assets/icons/plus.svg';
 import RadioSelectedIconPath from 'assets/icons/radioSelected.svg';
 import RadioUnselectedIconPath from 'assets/icons/radioUnselected.svg';
+import RefreshIconPath from 'assets/icons/refresh.svg';
 import RunningIconPath from 'assets/icons/running.svg';
 import SettingsIconPath from 'assets/icons/settings.svg';
 import SimulationLogoPath from 'assets/icons/simulationLogo.svg';
@@ -31,12 +34,15 @@ export const svgs = {
   copy: CopyIconPath,
   edit: EditIconPath,
   error: ErrorIconPath,
+  errorCross: ErrorCrossIconPath,
   hamburger: HamburgerIconPath,
   infoBubble: InfoBubbleIconPath,
   linkTo: LinkToPath,
+  loading: LoadingIconPath,
   plus: PlusIconPath,
   radioSelected: RadioSelectedIconPath,
   radioUnselected: RadioUnselectedIconPath,
+  refresh: RefreshIconPath,
   running: RunningIconPath,
   settings: SettingsIconPath,
   simulationLogo: SimulationLogoPath,
