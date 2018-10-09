@@ -247,10 +247,12 @@ class DeviceModelUploadForm extends Component {
         this.state.scripts.splice(replaceIncorrectScriptIndex, 1);
       }
 
-      this.state.scripts.push({ file: uploadedFile });
       this.setState({
         ...initialFormState,
-        scripts: this.state.scripts,
+        scripts: [
+          ...this.state.scripts,
+          {file: uploadedFile}
+        ],
         deviceModel: this.state.deviceModel,
         missingScripts: this.state.missingScripts
       });
@@ -304,7 +306,7 @@ class DeviceModelUploadForm extends Component {
                 missingScripts
                   .sort((a, b) => a.localeCompare(b))
                   .map((file) => (
-                    <div key={`missing-scripts-container-${file}`} className="upload-results-container">
+                    <div key={`${file}`} className="upload-results-container">
                       <div className="file-name">{file}</div>
                       <div className="validation-message">
                         <div className="file-uploader-container">
@@ -320,7 +322,8 @@ class DeviceModelUploadForm extends Component {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))
+                }
             </FormGroup>
           )
         }
@@ -338,11 +341,14 @@ class DeviceModelUploadForm extends Component {
                 .sort((a, b) => a.file.name.localeCompare(b.file.name))
                 .map(({ file, validationResult = {} }, idx) => (
                   <div key={`script-${idx}`} className="upload-results-container">
-                    <div className="file-name">{file.name}
+                    <div className="file-name">
+                    {file.name}
                       <div className="validation-message">
-                        {(validationResult.messages || []).map((error, idx) => (
+                        {
+                          (validationResult.messages || []).map((error, idx) => (
                           <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
-                        ))}
+                          ))
+                        }
                       </div>
                     </div>
                     <div
@@ -356,7 +362,8 @@ class DeviceModelUploadForm extends Component {
                       )}
                     </div>
                     <div>
-                      {(validationResult.messages || []).map((error, idx) => (
+                      {
+                        (validationResult.messages || []).map((error, idx) => (
                         <div key={`validated-result-${idx}`} className="file-uploader-container">
                           <input
                             className="file-uploader"
@@ -368,7 +375,8 @@ class DeviceModelUploadForm extends Component {
                           />
                           <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
                         </div>
-                      ))}
+                        ))
+                      }
                     </div>
                   </div>
                 ))}
