@@ -235,7 +235,7 @@ class DeviceModelUploadForm extends Component {
 
   reloadUpload = e => {
     const uploadedFile = e.target.files[0];
-    if (e.target.parentElement.id === uploadedFile.name) {
+    if (e.target.id === uploadedFile.name) {
       const addMissingScriptIndex = this.state.missingScripts.findIndex(script => (script === uploadedFile.name));
       const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
         script => (script.file.name === uploadedFile.name && script.validationResult.isValid === false));
@@ -306,11 +306,11 @@ class DeviceModelUploadForm extends Component {
                     <div key={`missing-scripts-container-${file}`} className="upload-results-container">
                       <div className="file-name">{file}</div>
                       <div className="validation-message">
-                        <div id={file} className="file-uploader-container">
+                        <div className="file-uploader-container">
                           <input
                             className="file-uploader"
                             type="file"
-                            id="missingScriptsUploader"
+                            id={file}
                             name="missingScriptsuploader"
                             accept=".json, .js"
                             onChange={this.reloadUpload}
@@ -356,11 +356,11 @@ class DeviceModelUploadForm extends Component {
                     </div>
                     <div>
                       {(validationResult.messages || []).map((error, idx) => (
-                        <div id={file.name} className="file-uploader-container">
+                        <div key={`validated-result-${idx}`} className="file-uploader-container">
                           <input
                             className="file-uploader"
                             type="file"
-                            id="replaceIncorrectScriptUploader"
+                            id={file.name}
                             name="replaceIncorrectScriptUploader"
                             accept=".json, .js"
                             onChange={this.reloadUpload}
