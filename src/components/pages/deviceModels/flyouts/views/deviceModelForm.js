@@ -91,9 +91,7 @@ class DeviceModelForm extends LinkedComponent {
   formIsValid() {
     return [
       this.nameLink,
-      this.sensorsLink,
-      this.intervalLink,
-      this.frequencyLink
+      this.sensorsLink
     ].every(link => !link.error);
   }
 
@@ -178,8 +176,6 @@ class DeviceModelForm extends LinkedComponent {
   apply = (event) => {
     event.preventDefault();
     const {
-      frequency,
-      interval,
       description,
       name,
       version,
@@ -187,17 +183,13 @@ class DeviceModelForm extends LinkedComponent {
       id,
       eTag
     } = this.state;
-    const simulationFrequency = frequency.ms > 0 ? { frequency: `${frequency.hours}:${frequency.minutes}:${frequency.seconds}` } : {};
-    const telemetryInterval = interval.ms > 0 ? { interval: `${interval.hours}:${interval.minutes}:${interval.seconds}` } : {};
     const model = {
       id,
       eTag,
       name,
       description,
       version,
-      sensors,
-      ...simulationFrequency,
-      ...telemetryInterval
+      sensors
     };
 
     // apply changes
