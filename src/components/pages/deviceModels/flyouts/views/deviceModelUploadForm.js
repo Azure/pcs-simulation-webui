@@ -21,6 +21,7 @@ import './deviceModelForm.css';
 const initialFormState = {
   deviceModel: undefined,
   scripts: [],
+  missingScripts: [],
   error: undefined
 };
 
