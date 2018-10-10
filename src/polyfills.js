@@ -127,6 +127,7 @@ if (!Array.prototype.findIndex) {
         if (predicate.call(thisArg, kValue, k, o)) {
           return k;
         }
+
         // e. Increase k by 1.
         k++;
       }
@@ -134,6 +135,7 @@ if (!Array.prototype.findIndex) {
       // 7. Return -1.
       return -1;
     },
+
     configurable: true,
     writable: true
   });
@@ -175,6 +177,7 @@ if (!Array.prototype.find) {
         if (predicate.call(thisArg, kValue, k, o)) {
           return kValue;
         }
+
         // e. Increase k by 1.
         k++;
       }
@@ -182,6 +185,7 @@ if (!Array.prototype.find) {
       // 7. Return undefined.
       return undefined;
     },
+
     configurable: true,
     writable: true
   });

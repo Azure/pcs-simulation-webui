@@ -141,6 +141,7 @@ class DeviceModelUploadForm extends Component {
           const requiredScriptNames = new Set(requiredScripts.map(({ Path }) => Path));
           const uploadedScriptNames = new Set(scriptFiles.map(({ name }) => name));
           let missingScripts = [];
+
           if (!isEqual(requiredScriptNames, uploadedScriptNames)) {
             const missingScriptNames = new Set([...requiredScriptNames].filter(x => !uploadedScriptNames.has(x)));
             missingScripts = [...missingScriptNames];
