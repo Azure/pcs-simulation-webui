@@ -76,6 +76,8 @@ if (!String.prototype.padStart) {
   };
 }
 
+// Code below is copied from remote monitoring to handle usage of the following functions in IE11.
+// Currently, this function is not being used. We would eventually need this in the future.
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
 if (!Object.entries) {
   Object.entries = function (obj) {
@@ -89,6 +91,7 @@ if (!Object.entries) {
   };
 }
 
+// Currently, this function is not being used. We would eventually need this in the future.
 if (!Object.values) {
   Object.values = (obj) => Object.keys(obj).map(key => obj[key]);
 }
@@ -141,6 +144,7 @@ if (!Array.prototype.findIndex) {
   });
 }
 
+// Currently, this function is not being used. We would eventually need this in the future.
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 if (!Array.prototype.find) {
