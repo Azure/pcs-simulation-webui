@@ -89,7 +89,10 @@ class DeviceModelUploadForm extends Component {
           error,
           deviceModel,
           jsonFile,
-          missingScripts,
+          missingScripts: (missingScripts || []).map(fileName => ({
+            fileName: fileName,
+            validationResult: undefined
+          })),
           scripts: (scriptFiles || []).map(file => ({
             file,
             validationResult: undefined
@@ -236,27 +239,63 @@ class DeviceModelUploadForm extends Component {
 
   reloadUpload = e => {
     const uploadedFile = e.target.files[0];
-    if (e.target.id === uploadedFile.name) {
-      const addMissingScriptIndex = this.state.missingScripts.findIndex(script => (script === uploadedFile.name));
-      const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
-        script => (script.file.name === uploadedFile.name && script.validationResult.isValid === false));
+    const addMissingScriptIndex = this.state.missingScripts.findIndex(
+      script => (script.fileName === e.target.id));
+    const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
+      script => (script.file.name === e.target.id && script.validationResult.isValid === false));
+    let scriptToBeUploaded = null;
 
-      if (addMissingScriptIndex !== -1) {
-        this.state.missingScripts.splice(addMissingScriptIndex, 1);
-      } else if (replaceIncorrectScriptIndex !== -1) {
-        this.state.scripts.splice(replaceIncorrectScriptIndex, 1);
-      }
-
-      this.setState({
-        ...initialFormState,
-        scripts: [
-          ...this.state.scripts,
-          {file: uploadedFile}
-        ],
-        deviceModel: this.state.deviceModel,
-        missingScripts: this.state.missingScripts
-      });
+    if (addMissingScriptIndex !== -1) {
+      scriptToBeUploaded = this.state.missingScripts[addMissingScriptIndex];
+      this.state.missingScripts.splice(addMissingScriptIndex, 1);
+    } else if (replaceIncorrectScriptIndex !== -1) {
+      scriptToBeUploaded = this.state.scripts[replaceIncorrectScriptIndex];
+      this.state.scripts.splice(replaceIncorrectScriptIndex, 1);
     }
+
+    let scripts = [];
+    let missingScripts = [];
+
+    if (e.target.id === uploadedFile.name) {
+      scripts = [
+        ...this.state.scripts,
+        { file: uploadedFile }
+      ];
+      missingScripts = this.state.missingScripts;
+    } else {
+      if (replaceIncorrectScriptIndex !== -1) {
+        scripts = [
+          ...this.state.scripts,
+          {
+            file: scriptToBeUploaded.file,
+            validationResult: {
+              isValid: false,
+              messages: ['Expected file is ' + e.target.id]
+            }
+          }
+        ];
+        missingScripts = this.state.missingScripts;
+      } else if (addMissingScriptIndex !== -1) {
+        scripts = this.state.scripts;
+        missingScripts = [
+          ...this.state.missingScripts,
+          {
+            fileName: scriptToBeUploaded.fileName,
+            validationResult: {
+              isValid: false,
+              messages: ['Expected file is ' + e.target.id]
+            }
+          }
+        ];
+      }
+    }
+
+    this.setState({
+      ...initialFormState,
+      scripts: scripts,
+      deviceModel: this.state.deviceModel,
+      missingScripts: missingScripts
+    })
   };
 
   clearAll = () => {
@@ -304,16 +343,24 @@ class DeviceModelUploadForm extends Component {
               <FormLabel>{t('deviceModels.flyouts.upload.missingFiles')}</FormLabel>
               {
                 missingScripts
-                  .sort((a, b) => a.localeCompare(b))
-                  .map((file) => (
-                    <div key={`${file}`} className="upload-results-container">
-                      <div className="file-name">{file}</div>
+                  .sort((a, b) => a.fileName.localeCompare(b.fileName))
+                  .map(({ fileName, validationResult = {} }, idx) => (
+                    <div key={`${fileName}`} className="upload-results-container">
+                      <div className="file-name">{fileName}
+                        <div className="validation-message">
+                          {
+                            (validationResult.messages || []).map((error, idx) => (
+                              <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
+                            ))
+                          }
+                        </div>
+                      </div>
                       <div className="validation-message">
                         <div className="file-uploader-container">
                           <input
                             className="file-uploader"
                             type="file"
-                            id={file}
+                            id={fileName}
                             name="missingScriptsuploader"
                             accept=".json, .js"
                             onChange={this.reloadUpload}
