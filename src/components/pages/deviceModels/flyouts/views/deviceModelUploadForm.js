@@ -271,7 +271,7 @@ class DeviceModelUploadForm extends Component {
             file: scriptToBeUploaded.file,
             validationResult: {
               isValid: false,
-              messages: ['Expected file is ' + e.target.id]
+              messages: [`Expected file is ${ e.target.id}`]
             }
           }
         ];
@@ -284,7 +284,7 @@ class DeviceModelUploadForm extends Component {
             fileName: scriptToBeUploaded.fileName,
             validationResult: {
               isValid: false,
-              messages: ['Expected file is ' + e.target.id]
+              messages: [`Expected file is ${ e.target.id}`]
             }
           }
         ];
