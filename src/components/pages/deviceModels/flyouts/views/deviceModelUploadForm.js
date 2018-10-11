@@ -244,24 +244,22 @@ class DeviceModelUploadForm extends Component {
     const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
       script => (script.file.name === e.target.id));
     let scriptToBeUploaded = null;
+    let scripts = this.state.scripts;
+    let missingScripts = this.state.missingScripts;
 
     if (addMissingScriptIndex !== -1) {
       scriptToBeUploaded = this.state.missingScripts[addMissingScriptIndex];
-      this.state.missingScripts.splice(addMissingScriptIndex, 1);
+      missingScripts.splice(addMissingScriptIndex, 1);
     } else if (replaceIncorrectScriptIndex !== -1) {
       scriptToBeUploaded = this.state.scripts[replaceIncorrectScriptIndex];
-      this.state.scripts.splice(replaceIncorrectScriptIndex, 1);
+      scripts.splice(replaceIncorrectScriptIndex, 1);
     }
-
-    let scripts = [];
-    let missingScripts = [];
 
     if (e.target.id === uploadedFile.name) {
       scripts = [
-        ...this.state.scripts,
+        ...scripts,
         { file: uploadedFile }
       ];
-      missingScripts = this.state.missingScripts;
     } else {
       if (replaceIncorrectScriptIndex !== -1) {
         scripts = [
@@ -274,9 +272,7 @@ class DeviceModelUploadForm extends Component {
             }
           }
         ];
-        missingScripts = this.state.missingScripts;
       } else if (addMissingScriptIndex !== -1) {
-        scripts = this.state.scripts;
         missingScripts = [
           ...this.state.missingScripts,
           {
