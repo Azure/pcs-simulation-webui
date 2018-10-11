@@ -347,7 +347,7 @@ class DeviceModelUploadForm extends Component {
                         <div className="validation-message">
                           {
                             (validationResult.messages || []).map((error, idx) => (
-                              <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
+                              <ErrorMsg key={idx}>{error}</ErrorMsg>
                             ))
                           }
                         </div>
@@ -384,13 +384,13 @@ class DeviceModelUploadForm extends Component {
               {this.state.scripts
                 .sort((a, b) => a.file.name.localeCompare(b.file.name))
                 .map(({ file, validationResult = {} }, idx) => (
-                  <div key={`script-${idx}`} className="upload-results-container">
+                  <div key={idx} className="upload-results-container">
                     <div className="file-name">
                       {file.name}
                       <div className="validation-message">
                         {
                           (validationResult.messages || []).map((error, idx) => (
-                            <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
+                            <ErrorMsg key={idx}>{error}</ErrorMsg>
                           ))
                         }
                       </div>
@@ -408,7 +408,7 @@ class DeviceModelUploadForm extends Component {
                     <div>
                       {
                         (validationResult.messages || []).map((error, idx) => (
-                          <div key={`validated-result-${idx}`} className="file-uploader-container">
+                          <div key={idx} className="file-uploader-container">
                           <input
                             className="file-uploader"
                             type="file"
