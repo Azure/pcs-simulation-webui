@@ -90,8 +90,7 @@ class DeviceModelUploadForm extends Component {
           deviceModel,
           jsonFile,
           missingScripts: (missingScripts || []).map(fileName => ({
-            fileName: fileName,
-            validationResult: undefined
+            fileName: fileName
           })),
           scripts: (scriptFiles || []).map(file => ({
             file,
@@ -346,8 +345,9 @@ class DeviceModelUploadForm extends Component {
                 missingScripts
                   .sort((a, b) => a.fileName.localeCompare(b.fileName))
                   .map(({ fileName, validationResult = {} }, idx) => (
-                    <div key={`${fileName}`} className="upload-results-container">
-                      <div className="file-name">{fileName}
+                    <div key={fileName} className="upload-results-container">
+                      <div className="file-name">
+                        {fileName}
                         <div className="validation-message">
                           {
                             (validationResult.messages || []).map((error, idx) => (
