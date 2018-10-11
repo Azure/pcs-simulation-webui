@@ -390,11 +390,11 @@ class DeviceModelUploadForm extends Component {
                 .map(({ file, validationResult = {} }, idx) => (
                   <div key={`script-${idx}`} className="upload-results-container">
                     <div className="file-name">
-                    {file.name}
+                      {file.name}
                       <div className="validation-message">
                         {
                           (validationResult.messages || []).map((error, idx) => (
-                          <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
+                            <ErrorMsg key={`script-error-${idx}`}>{error}</ErrorMsg>
                           ))
                         }
                       </div>
@@ -412,7 +412,7 @@ class DeviceModelUploadForm extends Component {
                     <div>
                       {
                         (validationResult.messages || []).map((error, idx) => (
-                        <div key={`validated-result-${idx}`} className="file-uploader-container">
+                          <div key={`validated-result-${idx}`} className="file-uploader-container">
                           <input
                             className="file-uploader"
                             type="file"
