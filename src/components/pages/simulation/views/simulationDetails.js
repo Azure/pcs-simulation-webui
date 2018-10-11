@@ -38,7 +38,7 @@ class SimulationDetails extends Component {
       showLink : false,
       hubUrl : '',
       simualtionPollingError: '',
-      telemetryPollingError: ''
+      hubMetricsPollingError: ''
     };
 
     this.emitter = new Subject();
@@ -76,7 +76,8 @@ class SimulationDetails extends Component {
             failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
-            showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse
+            showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
+            simualtionPollingError: ''
           },
             () => {
               if (response.isActive) {
@@ -105,7 +106,10 @@ class SimulationDetails extends Component {
         .subscribe(
           (metrics) => {
             this.setState(
-              { metrics },
+              {
+                metrics,
+                hubMetricsPollingError: ''
+              },
               () => {
                 const { isRunning } = this.state;
                 if (isRunning) {
@@ -114,7 +118,7 @@ class SimulationDetails extends Component {
               }
             );
           },
-          telemetryPollingError => this.setState({ telemetryPollingError })
+          hubMetricsPollingError => this.setState({ hubMetricsPollingError })
         )
     );
 
@@ -273,13 +277,19 @@ class SimulationDetails extends Component {
   openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
 
   getSimulationState = (endDateTime, t) => {
-    return this.state.enabled
-      ? this.state.isRunning
-          ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
-          : this.state.isActive
-              ? [ <Indicator size='small' className="setting-up-icon" />, t('simulation.status.settingUp') ]
-              : t('simulation.status.ended', { endDateTime })
-      : t('simulation.status.ended', { endDateTime })
+    const { simualtionPollingError, enabled, isRunning, isActive } = this.state;
+    return simualtionPollingError
+      ? <div className="simulation-error-container">
+          <div>{ t('simulation.status.error') }</div>
+          <ErrorMsg>{ simualtionPollingError.message }</ErrorMsg>
+        </div>
+      : enabled
+          ? isRunning
+              ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
+              : isActive
+                  ? [ <Indicator size='small' className="setting-up-icon" />, t('simulation.status.settingUp') ]
+                  : t('simulation.status.ended', { endDateTime })
+          : t('simulation.status.ended', { endDateTime })
   }
 
   render() {
@@ -290,8 +300,8 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, telemetryPollingError, simulationPollingError } = this.state;
-    const pollingError = telemetryPollingError || simulationPollingError;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError } = this.state;
+    const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
       id,
@@ -325,7 +335,7 @@ class SimulationDetails extends Component {
       <ComponentArray>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
         <ContextMenu>
-          { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn>}
+          { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
           { id && this.getBtnFromSimulationStatus(isThereARunningSimulation) }
           <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning || isThereARunningSimulation}>
             { t('simulation.newSim') }
@@ -368,12 +378,16 @@ class SimulationDetails extends Component {
               }
               <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
             </div>
-            { isRunning && <TelemetryChart colors={chartColorObjects} metrics={metrics} /> }
+            {
+              hubMetricsPollingError
+                ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
+                : isRunning && <TelemetryChart colors={chartColorObjects} metrics={metrics} />
+            }
           </div>
           {
             id &&
             <div className="simulation-details">
-              <div className="details-sevtion-header">{ t('simulation.details.header') }</div>
+              <div className="details-section-header">{ t('simulation.details.header') }</div>
               <div className="device-models-details-container">
                 <div className="device-model-links">
                 {
