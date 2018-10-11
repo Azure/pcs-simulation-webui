@@ -243,7 +243,7 @@ class DeviceModelUploadForm extends Component {
     const addMissingScriptIndex = this.state.missingScripts.findIndex(
       script => (script.fileName === e.target.id));
     const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
-      script => (script.file.name === e.target.id && script.validationResult.isValid === false));
+      script => (script.file.name === e.target.id));
     let scriptToBeUploaded = null;
 
     if (addMissingScriptIndex !== -1) {
