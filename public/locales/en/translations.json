@@ -215,7 +215,7 @@
   },
   "getStarted": {
     "title": "Get started",
-    "description": "Build basic or advanced simulated devices that look and act like the real thing. Gather, process, analyze, and act on data, and use it for end-to-end solution testing. Choose from the following if you'd like help getting started.",
+    "description": "Build basic or advanced simulated devices that look and act like the real thing. Gather, process, analyze, act on data, and use it for end-to-end solution testing. Choose from the following if you'd like help getting started.",
     "sampleSimulation": {
       "title": "Sample simulation",
       "description": "Get started instantly using a sample simulation. With the sample simulation you can see data flowing to your IoT Hub right away. This will simulate a few trucks sending location, speed and cargo temperature data.",

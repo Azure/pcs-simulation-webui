@@ -34,6 +34,7 @@
   .welcome-modal-description {
     text-align: start;
     @include rem-fallback(padding, 20px, 0px);
+    @include rem-fallback(line-height, 21px);
     @include rem-font-size(18px);
   }
 
