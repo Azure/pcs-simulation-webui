@@ -20,7 +20,7 @@ export const toDeviceModel = (response = {}) => ({
 
 // Request model
 export const toDeviceModelRequestModel = (request = {}) => {
-  const { id = 'new', eTag, name, description, version, interval, sensors, frequency } = request;
+  const { id = 'new', eTag, name, description, version, interval = '00:00:10', sensors, frequency = '00:00:10' } = request;
   const { script, messageTemplate, messageSchema } = toCustomSensorModel(sensors);
   return {
     Id: id,
