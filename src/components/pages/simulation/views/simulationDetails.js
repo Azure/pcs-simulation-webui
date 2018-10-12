@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import moment from 'moment';
 import { Route, NavLink, Redirect, withRouter } from "react-router-dom";
 
