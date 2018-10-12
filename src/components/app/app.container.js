@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { withRouter } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { AuthService } from 'services';
@@ -13,6 +14,6 @@ const mapDispatchToProps = dispatch => ({
   logout: () => AuthService.logout()
 });
 
-const AppContainer = withRouter(translate()(connect(undefined, mapDispatchToProps)(App)));
+const AppContainer = withCookies(withRouter(translate()(connect(undefined, mapDispatchToProps)(App))));
 
 export default AppContainer;

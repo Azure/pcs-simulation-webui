@@ -164,7 +164,7 @@ class SimulationDetails extends Component {
     this.subscriptions.push(SimulationService.toggleSimulation(requestModel)
       .subscribe(
         ({ id }) => {
-          this.props.history.push(`/simulation/${id}`);
+          this.props.history.push(`/simulations/${id}`);
         },
         error => this.setState({ serviceError: error.message })
       )
@@ -325,7 +325,7 @@ class SimulationDetails extends Component {
     const duration = (!startTime || !endTime || endTime === maxDate)
       ? t('simulation.form.duration.runIndefinitelyBtn')
       : humanizeDuration(moment(endTime).diff(moment(startTime)));
-    const pathname = `/simulation/${match.params.id}`;
+    const pathname = `/simulations/${match.params.id}`;
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
