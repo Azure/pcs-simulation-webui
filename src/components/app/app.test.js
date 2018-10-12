@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { MemoryRouter as Router } from 'react-router-dom';
 import i18n from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import configureStore from 'store/configureStore';
 import AppContainer from 'components/app/app.container';
 
