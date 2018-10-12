@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import moment from 'moment';
 import { Route, NavLink, Redirect, withRouter } from "react-router-dom";
 
 import Config from 'app.config';
 import { svgs, humanizeDuration, ComponentArray } from 'utilities';
-import { Btn, ContextMenu, Svg } from 'components/shared';
+import { Btn, ContextMenu, Svg, ErrorMsg, Indicator } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 import { NewSimulation } from '../flyouts';
@@ -37,8 +37,8 @@ class SimulationDetails extends Component {
       isRunning : false,
       showLink : false,
       hubUrl : '',
-      pollingError: '',
-      startError: ''
+      simualtionPollingError: '',
+      hubMetricsPollingError: ''
     };
 
     this.emitter = new Subject();
@@ -66,6 +66,8 @@ class SimulationDetails extends Component {
         response => {
           this.setState({
             simulation: response,
+            enabled: response.enabled,
+            isActive: response.isActive,
             isRunning: response.isRunning,
             totalMessagesSent: response.statistics.totalMessagesSent,
             failedMessagesCount: response.statistics.failedMessagesCount,
@@ -74,18 +76,17 @@ class SimulationDetails extends Component {
             failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
-            showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse
+            showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
+            simualtionPollingError: ''
           },
             () => {
-              if (response.isRunning) {
+              if (response.isActive) {
                 this.simulationRefresh$.next(`r`);
-              } else {
-                this.fetchSimulationStatus(response.id);
               }
             }
           );
         },
-        pollingError => this.setState({ pollingError: pollingError.message })
+        simualtionPollingError => this.setState({ simualtionPollingError })
       )
     );
 
@@ -105,7 +106,10 @@ class SimulationDetails extends Component {
         .subscribe(
           (metrics) => {
             this.setState(
-              { metrics },
+              {
+                metrics,
+                hubMetricsPollingError: ''
+              },
               () => {
                 const { isRunning } = this.state;
                 if (isRunning) {
@@ -114,7 +118,7 @@ class SimulationDetails extends Component {
               }
             );
           },
-          error => this.setState({ pollingError: error })
+          hubMetricsPollingError => this.setState({ hubMetricsPollingError })
         )
     );
 
@@ -123,7 +127,7 @@ class SimulationDetails extends Component {
   }
 
   componentWillReceiveProps({ match: { params: { id } } }) {
-    if (id !== '' && id !== this.props.match.params.id) {
+    if (id !== '') {
       this.emitter.next(id);
     }
   }
@@ -161,29 +165,10 @@ class SimulationDetails extends Component {
       .subscribe(
         ({ id }) => {
           this.props.history.push(`/simulations/${id}`);
-          this.fetchSimulationStatus(id);
         },
         error => this.setState({ serviceError: error.message })
       )
     );
-  }
-
-  /*
-  * Fetch isRunning 3 times, start polling if isRunning equals to true
-  */
-  fetchSimulationStatus(id) {
-    Observable
-      .interval(simulationStatusPollingInterval)
-      .take(3)
-      .switchMap(() =>
-        SimulationService.getSimulation(id)
-          .filter(({ isRunning }) => isRunning)
-      )
-      .take(1)
-      .subscribe(
-        val => this.emitter.next(id),
-        pollingError => this.setState({ pollingError: pollingError.message })
-      )
   }
 
   getHubLink = () => {
@@ -195,37 +180,24 @@ class SimulationDetails extends Component {
     )
   }
 
+  refreshPage = () => window.location.reload(true);
+
   getBtnFromSimulationStatus(disabled) {
     const { t } = this.props;
 
-    const btnProps = {
-      type: 'button',
-      className: 'apply-btn'
-    };
-
     const stopBtnProps = {
       type: 'button',
-      className: 'apply-btn',
       onClick: this.stopSimulation
     };
 
     const startBtnProps = {
       type: 'button',
-      className: 'apply-btn',
-      onClick: this.startSimulation,
-      disabled
+      onClick: this.startSimulation
     };
 
-    if (this.state.pollingError) {
-      const refreshPage = () => window.location.reload(true);
-      return <Btn { ...btnProps } onClick={refreshPage}>{ t('simulation.refresh') }</Btn>;
-    }
-
-    if (this.state.isRunning) {
-      return <Btn {...stopBtnProps } svg={svgs.stopSimulation}>{ t('simulation.stop') }</Btn>;
-    }
-
-    return <Btn {...startBtnProps}>{ t('simulation.start') }</Btn>;
+    return this.state.enabled
+      ? <Btn {...stopBtnProps } svg={svgs.stopSimulation}>{ t('simulation.stop') }</Btn>
+      : <Btn {...startBtnProps}>{ t('simulation.start') }</Btn>;
   }
 
   getSimulationStats () {
@@ -304,6 +276,22 @@ class SimulationDetails extends Component {
 
   openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
 
+  getSimulationState = (endDateTime, t) => {
+    const { simualtionPollingError, enabled, isRunning, isActive } = this.state;
+    return simualtionPollingError
+      ? <div className="simulation-error-container">
+          <div>{ t('simulation.status.error') }</div>
+          <ErrorMsg>{ simualtionPollingError.message }</ErrorMsg>
+        </div>
+      : enabled
+          ? isRunning
+              ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
+              : isActive
+                  ? [ <Indicator size='small' className="setting-up-icon" />, t('simulation.status.settingUp') ]
+                  : t('simulation.status.ended', { endDateTime })
+          : t('simulation.status.ended', { endDateTime })
+  }
+
   render() {
     const {
       t,
@@ -312,9 +300,11 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError } = this.state;
+    const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
+      id,
       deviceModels = [],
       startTime,
       endTime,
@@ -344,83 +334,90 @@ class SimulationDetails extends Component {
     return (
       <ComponentArray>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
-
         <ContextMenu>
-          { this.getBtnFromSimulationStatus(isThereARunningSimulation) }
+          { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
+          { id && this.getBtnFromSimulationStatus(isThereARunningSimulation) }
           <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning || isThereARunningSimulation}>
             { t('simulation.newSim') }
           </Btn>
         </ContextMenu>
 
         <div className="simulation-details-header">
-          <div className="simulation-name">{simulation.name}</div>
-          <div className="iothub-metrics-link">{ this.getHubLink() }</div>
+          {
+            id
+            ? <ComponentArray>
+                <div className="simulation-name">{ simulation.name }</div>
+                <div className="iothub-metrics-link">{ this.getHubLink() }</div>
+              </ComponentArray>
+            : <Indicator pattern="bar" />
+          }
         </div>
 
         <div className="simulation-details-container">
           <div className="simulation-stats-container">
             <div className="stack-container">
-              <div className="info-container">
-                <div className="info-section">
-                  <div className="info-label">{t('simulation.description')}</div>
-                  <div className="info-content">{simulation.description}</div>
-                </div>
-                <div className="info-section">
-                  <div className="info-label">{ t('simulation.form.targetHub.header') }</div>
-                  <div className="info-content">{iotHubString}</div>
-                </div>
-                <div className="info-section">
-                  <div className="info-label">{ t('simulation.form.duration.header') }</div>
-                  <div className="info-content">{duration}</div>
-                </div>
-                <div className="time-container">
-                  <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
-                  <div className="right-time-container">
-                    {
-                      this.state.isRunning
-                        ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
-                        : t('simulation.status.ended', { endDateTime })
-                    }
+              {
+                id && <div className="info-container">
+                  <div className="info-section">
+                    <div className="info-label">{ t('simulation.description') }</div>
+                    <div className="info-content">{ simulation.description }</div>
+                  </div>
+                  <div className="info-section">
+                    <div className="info-label">{ t('simulation.form.targetHub.header') }</div>
+                    <div className="info-content">{ iotHubString }</div>
+                  </div>
+                  <div className="info-section">
+                    <div className="info-label">{ t('simulation.form.duration.header') }</div>
+                    <div className="info-content">{ duration }</div>
+                  </div>
+                  <div className="time-container">
+                    <div className="left-time-container">{ t('simulation.status.created', { startDateTime }) }</div>
+                    <div className="right-time-container">{ this.getSimulationState(endDateTime, t) }</div>
                   </div>
                 </div>
-              </div>
-              <div className="simulation-statistics">{ this.getSimulationStats() }</div>
-            </div>
-            { isRunning && <TelemetryChart colors={chartColorObjects} metrics={metrics} /> }
-          </div>
-
-          <div className="simulation-details">
-            <div className="details-sevtion-header">{ t('simulation.details.header') }</div>
-
-            <div className="device-models-details-container">
-              <div className="device-model-links">
-              {
-                (deviceModels).map(({
-                  id, count, interval
-                }, index) => (
-                  <NavLink to={`${pathname}/${id}`} className="nav-item" activeClassName="active" key={`${id}-${index}-navlink`}>
-                    <div key={`${id}-${index}-count`} className="nav-item-count">{count}</div>
-                    <div key={`${id}-${index}-link`} className="nav-item-text">
-                    {
-                      deviceModelEntities && deviceModelEntities[id]
-                        ? (deviceModelEntities[id]).name
-                        : '-'
-                    }
-                    </div>
-                  </NavLink>
-                ))
               }
-              </div>
+              <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
+            </div>
+            {
+              hubMetricsPollingError
+                ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
+                : isRunning && <TelemetryChart colors={chartColorObjects} metrics={metrics} />
+            }
+          </div>
+          {
+            id &&
+            <div className="simulation-details">
+              <div className="details-section-header">{ t('simulation.details.header') }</div>
+              <div className="device-models-details-container">
+                <div className="device-model-links">
+                {
+                  (deviceModels).map(({
+                    id, count, interval
+                  }, index) => (
+                    <NavLink to={`${pathname}/${id}`} className="nav-item" activeClassName="active" key={`${id}-${index}-navlink`}>
+                      <div key={`${id}-${index}-count`} className="nav-item-count">{count}</div>
+                      <div key={`${id}-${index}-link`} className="nav-item-text">
+                      {
+                        deviceModelEntities && deviceModelEntities[id]
+                          ? (deviceModelEntities[id]).name
+                          : '-'
+                      }
+                      </div>
+                    </NavLink>
+                  ))
+                }
+                </div>
 
-              <div className="device-model-details">
-              {
-                match.params.modelId in deviceModelEntities
-                  ? <pre>{ JSON.stringify(deviceModelEntities[match.params.modelId], null, 2) }</pre>
-                  : null
-              }
+                <div className="device-model-details">
+                {
+                  match.params.modelId in deviceModelEntities
+                    ? <pre>{ JSON.stringify(deviceModelEntities[match.params.modelId], null, 2) }</pre>
+                    : null
+                }
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
         {
           newSimulationFlyoutOpen &&

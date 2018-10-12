@@ -96,20 +96,22 @@
     "status": {
       "activeDevicesCount": "Active devices",
       "averageMessagesPerSec": "Average messages per second",
+      "created": "Created {{startDateTime}}",
+      "error": "Error",
+      "ended": "Ended {{endDateTime}}",
       "failedDeviceConnectionsCount": "Failed device connections",
       "failedDeviceTwinUpdatesCount": "Failed twin updates",
       "failedMessagesCount": "Failed messages",
       "header": "Simulation Status",
       "messagesPerSec": "Messages per second",
+      "running": "Running",
+      "settingUp" : "Setting up",
       "simulationRunning": "Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.",
       "simulationStopped": "Your simulation has stopped running.",
+      "stopped": "Stopped",
       "totalDevicesCount": "Total devices",
       "totalMessagesCount": "Total messages",
-      "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}",
-      "running": "Running",
-      "stopped": "Stopped",
-      "created": "Created {{startDateTime}}",
-      "ended": "Ended {{endDateTime}}"
+      "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}"
     }
   },
   "deviceModels": {

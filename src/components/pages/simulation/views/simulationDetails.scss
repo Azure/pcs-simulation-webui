@@ -14,10 +14,10 @@ $svgSize: 16px;
     @include rem-fallback(height, 500px);
 
     .stack-container {
-      @include rem-fallback(width, 550px);
+      @include rem-fallback(width, 580px);
 
       .info-container {
-        @include rem-fallback(padding, 32px);
+        @include rem-fallback(padding, 20px);
 
         .info-section {
           display: flex;
@@ -49,12 +49,20 @@ $svgSize: 16px;
               @include square-px-rem(16px);
               @include rem-fallback(margin-right, 8px);
             }
+
+            .setting-up-icon { @include rem-fallback(margin-right, 8px); }
+
+            .simulation-error-container {
+              align-items: flex-end;
+              display: flex;
+              flex-direction: column;
+            }
           }
         }
       }
 
       .simulation-statistics {
-        @include rem-fallback(padding, 32px);
+        @include rem-fallback(padding, 20px);
 
         .stats-header { @include rem-font-size(24px); }
 
@@ -79,6 +87,8 @@ $svgSize: 16px;
 
     .telemetry-chart-container { @include rem-fallback(height, 500px); }
 
+    .error-message { flex: 1 0 0; }
+
     @include themify($themes) {
       border-bottom: 1px solid themed('colorMidSecond');
 
@@ -100,9 +110,9 @@ $svgSize: 16px;
   }
 
   .simulation-details {
-    @include rem-fallback(padding, 36px, 24px);
+    @include rem-fallback(padding, 36px, 20px);
 
-    .details-sevtion-header { @include rem-fallback(padding-bottom, 24px); }
+    .details-section-header { @include rem-fallback(padding-bottom, 24px); }
 
     .device-models-details-container {
       display: flex;
@@ -145,6 +155,8 @@ $svgSize: 16px;
   @include themify($themes) {
     border-top: 1px solid themed('colorMidSecond');
 
+    .setting-up-icon .inner {background-color: themed('colorActive');}
+
     .device-model-links {
       color: themed('colorHighest');
       border-right: 1px solid themed('colorMidSecond');
@@ -168,7 +180,7 @@ $svgSize: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @include rem-fallback(padding, 12px, 24px);
+  @include rem-fallback(padding, 12px, 20px);
   @include rem-fallback(height, 40px);
 
   .iothub-metrics-link {

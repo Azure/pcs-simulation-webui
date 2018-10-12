@@ -8,14 +8,17 @@ import ContosoIconPath from 'assets/icons/contoso.svg';
 import CopyIconPath from 'assets/icons/copy.svg';
 import CustomDeviceModelPath from 'assets/icons/customDeviceModel.svg';
 import EditIconPath from 'assets/icons/edit.svg';
+import ErrorCrossIconPath from 'assets/icons/error.svg';
 import ErrorIconPath from 'assets/icons/errorAsterisk.svg';
 import HamburgerIconPath from 'assets/icons/hamburger.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
 import LinkToPath from 'assets/icons/linkTo.svg';
+import LoadingIconPath from 'assets/icons/loading.svg';
 import PlusIconPath from 'assets/icons/plus.svg';
 import QuestionMarkIconPath from 'assets/icons/questionMark.svg';
 import RadioSelectedIconPath from 'assets/icons/radioSelected.svg';
 import RadioUnselectedIconPath from 'assets/icons/radioUnselected.svg';
+import RefreshIconPath from 'assets/icons/refresh.svg';
 import RocketIconPath from 'assets/icons/rocket.svg';
 import RunningIconPath from 'assets/icons/running.svg';
 import SampleSimulationPath from 'assets/icons/sampleSimulation.svg';
@@ -38,13 +41,16 @@ export const svgs = {
   customDeviceModel: CustomDeviceModelPath,
   edit: EditIconPath,
   error: ErrorIconPath,
+  errorCross: ErrorCrossIconPath,
   hamburger: HamburgerIconPath,
   infoBubble: InfoBubbleIconPath,
   linkTo: LinkToPath,
+  loading: LoadingIconPath,
   plus: PlusIconPath,
   questionMark: QuestionMarkIconPath,
   radioSelected: RadioSelectedIconPath,
   radioUnselected: RadioUnselectedIconPath,
+  refresh: RefreshIconPath,
   rocket: RocketIconPath,
   running: RunningIconPath,
   sampleSimulation: SampleSimulationPath,
