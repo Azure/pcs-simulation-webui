@@ -27,18 +27,18 @@ class App extends Component {
     history.listen(({ pathname }) => registerRouteEvent(pathname));
   }
 
-  redirectToSimulation = () => <Redirect to="/simulation" push={true} />;
+  redirectToSimulation = () => <Redirect to="/simulations" push={true} />;
 
   render() {
     return (
       <div className="app">
         <Navigation />
         <Main>
-          <Header logout={this.props.logout} t={this.props.t} />
+          <Header {...this.props} />
           <PageContent>
             <Switch>
               <Route exact path="/" render={this.redirectToSimulation} />
-              <Route path="/simulation" component={SimulationPage} />
+              <Route path="/simulations" component={SimulationPage} />
               <Route exact path="/devicemodels" component={DeviceModelsPage} />
               <Route component={PageNotFound} />
             </Switch>
