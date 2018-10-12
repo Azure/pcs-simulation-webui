@@ -3,10 +3,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { CookiesProvider } from 'react-cookie';
 import { MemoryRouter as Router } from 'react-router-dom';
 import i18n from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import configureStore from 'store/configureStore';
 import AppContainer from 'components/app/app.container';
 
@@ -30,27 +31,24 @@ i18n
 // Include cross browser polyfills
 import 'polyfills';
 
-describe('App integration test', () => {
+describe('App test', () => {
   let store, wrapper;
 
   it('Create redux store', () => {
     store = configureStore();
   });
 
-  it('Render App component', () => {
-    wrapper = mount(
-      <Provider store={store}>
-        <Router>
-          <I18nextProvider i18n={i18n}>
-            <AppContainer />
-          </I18nextProvider>
-        </Router>
-      </Provider>
+  it('Render App without crashing', () => {
+    wrapper = shallow(
+      <CookiesProvider>
+        <Provider store={store}>
+          <Router>
+            <I18nextProvider i18n={i18n}>
+              <AppContainer />
+            </I18nextProvider>
+          </Router>
+        </Provider>
+      </CookiesProvider>
     );
   });
-
-  it('Rerouting to simulation worked', () => {
-    expect(wrapper.find('.simulation-container').exists()).toBe(true);
-  });
-
 });
