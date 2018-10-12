@@ -155,7 +155,7 @@ $svgSize: 16px;
   @include themify($themes) {
     border-top: 1px solid themed('colorMidSecond');
 
-    .setting-up-icon .inner {background-color: themed('colorActive');}
+    .setting-up-icon .inner { background-color: themed('colorActive'); }
 
     .device-model-links {
       color: themed('colorHighest');

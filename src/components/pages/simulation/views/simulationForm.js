@@ -199,7 +199,7 @@ class SimulationForm extends LinkedComponent {
     this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
       .subscribe(
         ({ id }) => {
-          this.props.history.push(`/simulation/${id}`);
+          this.props.history.push(`/simulations/${id}`);
           this.props.onClose();
         },
         error => this.setState({ error: error.message })

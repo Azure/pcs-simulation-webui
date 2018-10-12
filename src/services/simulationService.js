@@ -46,7 +46,7 @@ export class SimulationService {
   }
 
   /** Enables or disables a simulation */
-  static toggleSimulation({ eTag, enabled, id }) {console.log('etag, enabled, id', eTag, enabled, id)
+  static toggleSimulation({ eTag, enabled, id }) {
     return HttpClient.patch(`${ENDPOINT}simulations/${id}`, { ETag: eTag, Enabled: enabled })
       .map(toSimulationModel)
       .catch(resolveConflict);

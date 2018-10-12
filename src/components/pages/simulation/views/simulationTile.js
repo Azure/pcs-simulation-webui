@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
-import { SectionHeader, Svg } from 'components/shared';
+import { SectionHeader, Svg, ErrorMsg, Indicator } from 'components/shared';
 import { svgs } from 'utilities';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
@@ -29,7 +29,8 @@ class SimulationTile extends Component {
 
     this.state = {
       isRunning: false,
-      pollingError: '',
+      simualtionPollingError: '',
+      hubMetricsPollingError: '',
       metrics:[],
     };
 
@@ -41,12 +42,9 @@ class SimulationTile extends Component {
 
   componentDidMount() {
     // Initialize state from the most recent status
-    const { simulation: { isRunning, id } } = this.props;
-    this.setState({ isRunning });
+    const { simulation: { isActive, id } } = this.props;
 
-    const simulationId = id;
-
-    const getSimulationStream = _ => SimulationService.getSimulation(simulationId)
+    const getSimulationStream = simulationId => SimulationService.getSimulation(simulationId)
       .merge(
         this.simulationRefresh$
           .delay(simulationStatusPollingInterval)
@@ -60,6 +58,8 @@ class SimulationTile extends Component {
          response => {
           this.setState({
             simulation: response,
+            enabled: response.enabled,
+            isActive: response.isActive,
             isRunning: response.isRunning,
             totalMessagesSent: response.statistics.totalMessagesSent,
             failedMessagesCount: response.statistics.failedMessagesCount,
@@ -69,16 +69,16 @@ class SimulationTile extends Component {
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount
           },
           () => {
-            if (response.isRunning) {
+            if (response.isActive) {
               this.simulationRefresh$.next({ simulationId: response.id });
             }
           });
         },
-        pollingError => this.setState({ pollingError: pollingError.message })
+        simualtionPollingError => this.setState({ simualtionPollingError })
       )
     );
 
-    const getTelemetryStream = _ => MetricsService.fetchIothubMetrics(simulationId)
+    const getTelemetryStream = simulationId => MetricsService.fetchIothubMetrics(simulationId)
       .merge(
         this.telemetryRefresh$ // Previous request complete
           .delay(telemetryRefreshInterval) // Wait to refresh
@@ -95,18 +95,18 @@ class SimulationTile extends Component {
             this.setState(
               { metrics },
               () => {
-                if (!(this.state.isRunning === false)) {
+                if (this.state.isRunning) {
                   this.telemetryRefresh$.next('r')
                 }
               }
             );
           },
-          error => this.setState({ pollingError: error })
+          hubMetricsPollingError => this.setState({ hubMetricsPollingError })
         )
     );
 
     // Start polling
-    if (isRunning) this.emitter.next(SimulationService.getSimulation(simulationId));
+    if (isActive) this.emitter.next(id);
   }
 
   componentWillUnmount() {
@@ -144,6 +144,22 @@ class SimulationTile extends Component {
       ];
   }
 
+  getSimulationState = (endDateTime, t) => {
+    const { simualtionPollingError, enabled, isRunning, isActive } = this.state;
+    return simualtionPollingError
+      ? <div className="simulation-error-container">
+          <div>{ t('simulation.status.error') }</div>
+          <ErrorMsg>{ simualtionPollingError.message }</ErrorMsg>
+        </div>
+      : enabled
+          ? isRunning
+              ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
+              : isActive
+                  ? [ <Indicator size='small' className="setting-up-icon" />, t('simulation.status.settingUp') ]
+                  : t('simulation.status.ended', { endDateTime })
+          : t('simulation.status.ended', { endDateTime })
+  }
+
   render() {
     const {
       t,
@@ -172,11 +188,7 @@ class SimulationTile extends Component {
         <div className="time-containers">
           <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
           <div className="right-time-container">
-          {
-            this.state.isRunning
-              ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
-              : t('simulation.status.ended', { endDateTime })
-          }
+          { this.getSimulationState(endDateTime, t) }
           </div>
         </div>
         <div className="tile-body">
