@@ -49,25 +49,21 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
-    const { cookies } = props.cookies;
     this.state = {
       openDropdown: '',
-      openWelcomeModal: !cookies.openWelcomeModal || cookies.openWelcomeModal === "true"
+      openWelcomeModal: false
     };
   }
 
   componentDidMount() {
     window.addEventListener('mousedown', this.handleWindowMousedown);
+    const { cookies } = this.props.cookies;
+    const openWelcomeModal =  !cookies.openWelcomeModal || cookies.openWelcomeModal === "true";
+    this.setState({ openWelcomeModal });
   }
 
   componentWillUnmount() {
     window.removeEventListener('mousedown', this.handleWindowMousedown);
-  }
-
-  componentWillReceiveProps({ location }) {
-    if (location.key !== this.props.location.key) {
-      this.setState(closeModal)
-    }
   }
 
   handleWindowMousedown = ({ target }) => {

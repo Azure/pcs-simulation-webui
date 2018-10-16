@@ -14,7 +14,7 @@ import { NewSimulation } from '../flyouts';
 
 import './simulationDetails.css';
 
-const maxDate = '12/31/9999 11:59:59 PM +00:00';
+const maxDate = '9999-12-31T23:59:59+00:00';
 
 const {
   simulationStatusPollingInterval,
@@ -111,8 +111,8 @@ class SimulationDetails extends Component {
                 hubMetricsPollingError: ''
               },
               () => {
-                const { isRunning } = this.state;
-                if (isRunning) {
+                const { isActive } = this.state;
+                if (isActive) {
                   this.telemetryRefresh$.next('r');
                 }
               }
@@ -139,7 +139,7 @@ class SimulationDetails extends Component {
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
   stopSimulation = () => this.setState(
-    { isRunning: false },
+    { isActive: false },
     () => this.props.stopSimulation(this.state.simulation)
   );
 
@@ -309,7 +309,7 @@ class SimulationDetails extends Component {
       startTime,
       endTime,
       stopTime,
-      isRunning,
+      isActive,
       iotHubs = []
     } = simulation;
 
@@ -337,7 +337,7 @@ class SimulationDetails extends Component {
         <ContextMenu>
           { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
           { id && this.getBtnFromSimulationStatus(isThereARunningSimulation) }
-          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning || isThereARunningSimulation}>
+          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
             { t('simulation.newSim') }
           </Btn>
         </ContextMenu>
@@ -381,7 +381,7 @@ class SimulationDetails extends Component {
             {
               hubMetricsPollingError
                 ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
-                : isRunning && <TelemetryChart colors={chartColorObjects} metrics={metrics} />
+                : isActive && <TelemetryChart colors={chartColorObjects} metrics={metrics} />
             }
           </div>
           {

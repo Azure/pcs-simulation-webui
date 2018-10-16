@@ -122,7 +122,9 @@ class SimulationForm extends LinkedComponent {
       deviceModels,
       preprovisionedIoTHub
     } = props;
-    const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
+    const deviceModelOptions = (deviceModels || [])
+      .map(this.toSelectOption)
+      .sort((a, b) => a.label.localeCompare(b.label));
     const preProvisionedRadio = preprovisionedIoTHub ? 'preProvisioned' : 'customString';
 
     this.setState({
