@@ -57,7 +57,7 @@ class SimulationForm extends LinkedComponent {
       deviceModels: [],
       errorMessage: '',
       devicesDeletionRequired: false,
-      vmPriceAckonwledged: false
+      vmPriceAcknowledged: false
     };
 
     this.subscriptions = [];
@@ -186,7 +186,7 @@ class SimulationForm extends LinkedComponent {
 
   toggleBulkDeletionCheckBox = () => this.setState({ devicesDeletionRequired: !this.state.devicesDeletionRequired });
 
-  togglePriceAckownledgeCheckBox = () => this.setState({ vmPriceAckonwledged: !this.state.vmPriceAckonwledged });
+  togglePriceAckownledgeCheckBox = () => this.setState({ vmPriceAcknowledged: !this.state.vmPriceAcknowledged });
 
   apply = (event) => {
     event.preventDefault();
@@ -233,7 +233,7 @@ class SimulationForm extends LinkedComponent {
 
   render () {
     const { t } = this.props;
-    const { deviceModels, devicesDeletionRequired, vmPriceAckonwledged } = this.state;
+    const { deviceModels, devicesDeletionRequired, vmPriceAcknowledged } = this.state;
     const connectStringInput = (
       <FormControl
         className="long"
@@ -281,8 +281,8 @@ class SimulationForm extends LinkedComponent {
     ];
 
     const multipleVmsRequired = deviceModels.reduce((sum, {count = 0}) => sum + count, 0) > Config.maxDevicesPerVM;
-    const vmPriceAckonwledgedRequired = multipleVmsRequired
-      ? vmPriceAckonwledged ? false : true
+    const vmPriceAcknowledgedRequired = multipleVmsRequired
+      ? vmPriceAcknowledged ? false : true
       : false;
 
     return (
@@ -429,7 +429,7 @@ class SimulationForm extends LinkedComponent {
             multipleVmsRequired &&
             <div className="muti-vms-ackownledge-container">
               <div className="checkbox-container">
-                { t('simulation.form.multiVMsAckonwledge') }
+                { t('simulation.form.multiVMsAcknowledge') }
                 <Link
                   className="learn-more"
                   target="_blank"
@@ -438,9 +438,9 @@ class SimulationForm extends LinkedComponent {
                 </Link>
                 <input
                   type="checkbox"
-                  name="vmPriceAckonwledged"
+                  name="vmPriceAcknowledged"
                   onChange={this.togglePriceAckownledgeCheckBox}
-                  checked={vmPriceAckonwledged} />
+                  checked={vmPriceAcknowledged} />
                 <span className="checkmark"></span>
               </div>
             </div>
@@ -450,7 +450,7 @@ class SimulationForm extends LinkedComponent {
               svg={svgs.startSimulation}
               type="submit"
               className="apply-btn"
-              disabled={!this.formIsValid() || deviceModelsHaveError || vmPriceAckonwledgedRequired}>
+              disabled={!this.formIsValid() || deviceModelsHaveError || vmPriceAcknowledgedRequired}>
                 { t('simulation.start') }
             </Btn>
           </BtnToolbar>
