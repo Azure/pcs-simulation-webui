@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 import Config from 'app.config';
@@ -55,7 +56,8 @@ class SimulationForm extends LinkedComponent {
       deviceModel: '',
       deviceModels: [],
       errorMessage: '',
-      devicesDeletionRequired: false
+      devicesDeletionRequired: false,
+      vmPriceAckonwledged: false
     };
 
     this.subscriptions = [];
@@ -182,7 +184,9 @@ class SimulationForm extends LinkedComponent {
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
-  toggleCheckBox = () => this.setState({ devicesDeletionRequired: !this.state.devicesDeletionRequired });
+  toggleBulkDeletionCheckBox = () => this.setState({ devicesDeletionRequired: !this.state.devicesDeletionRequired });
+
+  togglePriceAckownledgeCheckBox = () => this.setState({ vmPriceAckonwledged: !this.state.vmPriceAckonwledged });
 
   apply = (event) => {
     event.preventDefault();
@@ -194,7 +198,7 @@ class SimulationForm extends LinkedComponent {
       deviceModels,
       iotHubString,
       preProvisionedRadio,
-      devicesDeletionRequired,
+      devicesDeletionRequired
     } = this.state;
     const simulationDuration = {
       startTime: 'NOW',
@@ -229,7 +233,7 @@ class SimulationForm extends LinkedComponent {
 
   render () {
     const { t } = this.props;
-    const { deviceModels, devicesDeletionRequired } = this.state;
+    const { deviceModels, devicesDeletionRequired, vmPriceAckonwledged } = this.state;
     const connectStringInput = (
       <FormControl
         className="long"
@@ -275,6 +279,11 @@ class SimulationForm extends LinkedComponent {
       t('simulation.form.deviceModels.throughput'),
       t('simulation.form.deviceModels.duration')
     ];
+
+    const multipleVmsRequired = deviceModels.reduce((sum, {count = 0}) => sum + count, 0) > Config.maxDevicesPerVM;
+    const vmPriceAckonwledgedRequired = multipleVmsRequired
+      ? vmPriceAckonwledged ? false : true
+      : false;
 
     return (
       <form onSubmit={this.apply}>
@@ -398,12 +407,12 @@ class SimulationForm extends LinkedComponent {
         </FormSection>
 
         <FormSection className="bulk-deletion-container">
-          <div className="checkbox-container" onClick={this.toggleCheckBox}>
+          <div className="checkbox-container" onClick={this.toggleBulkDeletionCheckBox}>
             { t('simulation.form.deleteDevicesWhenSimulationEnds') }
             <input
               type="checkbox"
               name="isChecked"
-              onChange={this.toggleCheckBox}
+              onChange={this.toggleBulkDeletionCheckBox}
               checked={devicesDeletionRequired} />
             <span className="checkmark"></span>
           </div>
@@ -416,12 +425,32 @@ class SimulationForm extends LinkedComponent {
           {
             this.state.error ? <ErrorMsg> {this.state.error}</ErrorMsg> : ''
           }
+          { //TODO: replace link to learn more
+            multipleVmsRequired &&
+            <div className="muti-vms-ackownledge-container">
+              <div className="checkbox-container">
+                { t('simulation.form.multiVMsAckonwledge') }
+                <Link
+                  className="learn-more"
+                  target="_blank"
+                  to={`https://azure.com`}>
+                  {t('simulation.form.learnMore')}
+                </Link>
+                <input
+                  type="checkbox"
+                  name="vmPriceAckonwledged"
+                  onChange={this.togglePriceAckownledgeCheckBox}
+                  checked={vmPriceAckonwledged} />
+                <span className="checkmark"></span>
+              </div>
+            </div>
+          }
           <BtnToolbar>
             <Btn
               svg={svgs.startSimulation}
               type="submit"
               className="apply-btn"
-              disabled={!this.formIsValid() || deviceModelsHaveError}>
+              disabled={!this.formIsValid() || deviceModelsHaveError || vmPriceAckonwledgedRequired}>
                 { t('simulation.start') }
             </Btn>
           </BtnToolbar>

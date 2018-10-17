@@ -4,13 +4,13 @@
 @import 'styles/themes';
 @import 'styles/mixins';
 
-.bulk-deletion-container {
+.bulk-deletion-container,
+.muti-vms-ackownledge-container {
   display: flex;
 
   .checkbox-container {
     display: block;
     position: relative;
-    cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -21,9 +21,13 @@
 
     /* Hide the browser's default checkbox */
     input {
+      cursor: pointer;
       position: absolute;
       opacity: 0;
-      cursor: pointer;
+      left: 0;
+      z-index: 10;
+      @include square-px-rem(13px);
+      @include rem-fallback(top, 3px);
 
       /* Show the checkmark when checked */
       &:checked ~ .checkmark:after { display: block; }
@@ -71,5 +75,18 @@
         svg { fill: themed('colorLightestFirst'); }
       }
     }
+  }
+}
+
+.form-actions-container {
+  @include rem-fallback(margin-top, 48px);
+  @include rem-fallback(padding-top, 48px);
+  @include rem-fallback(padding-left, 0px);
+
+  .muti-vms-ackownledge-container {
+    @include rem-fallback(margin-bottom, 40px);
+    @include rem-fallback(width, 700px);
+
+    .learn-more { @include rem-fallback(margin-left, 4px); }
   }
 }

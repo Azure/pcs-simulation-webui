@@ -72,6 +72,8 @@
         "hubNameCantBeEmpty": "IoT Hub connection string is required",
         "simulationStatusError": "Something went wrong and we weren't able to get the simulation status."
       },
+      "learnMore": "Learn more.",
+      "multiVMsAckonwledge": "The amount of devices selected in the simulation will require multiple virtual machines to handle the bandwidth of this operation. This that will change the pricing structure previously set up.",
       "targetHub": {
         "description": "Add the connection string for your IoT Hub",
         "header": "Target IoT Hub",

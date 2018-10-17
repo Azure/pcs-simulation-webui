@@ -11,6 +11,7 @@ const Config = {
   simulationDescMaxLength: 100,
   retryWaitTime: 15000, // On retryable error, retry after 2s
   maxRetryAttempts: 2,
+  maxDevicesPerVM: 20000,
   retryableStatusCodes: new Set([ 0, 502, 503 ]),
   sessionTimeout: 1200000,  // Session will expire in 20 mins
   simulationStatusPollingInterval: 10000, // 10s
