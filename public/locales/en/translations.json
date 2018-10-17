@@ -56,6 +56,7 @@
         "endsInBtn": "End in:",
         "runIndefinitelyBtn": "Run indefinitely"
       },
+      "deleteDevicesWhenSimulationEnds": "Delete all devices when the simulation is complete",
       "errorMsg": {
         "nameCantBeEmpty": "Simulation name is required",
         "nameGTMaxLength": "Name can't be greater than {{simulationNameMaxLength}} characters",
@@ -79,6 +80,9 @@
       },
       "telemetry": {
         "header": "Telemetry frequency"
+      },
+      "tooltip": {
+        "bulkDeletion": "Automatically bulk deletes your devices when your simulation completes, so you don’t have to delete them one by one. If you want to keep your devices so you can run the simulation again, leave this option unchecked."
       }
     },
     "grid": {

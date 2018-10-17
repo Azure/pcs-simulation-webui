@@ -16,10 +16,14 @@ import {
   FormSection,
   Radio,
   SectionDesc,
-  SectionHeader
+  SectionHeader,
+  Svg,
+  Tooltip
 } from 'components/shared';
 
 import { SimulationService } from 'services';
+
+import './simulationForm.css';
 
 const newDeviceModel = () => ({
   name: '',
@@ -50,7 +54,8 @@ class SimulationForm extends LinkedComponent {
       deviceModelOptions: [],
       deviceModel: '',
       deviceModels: [],
-      errorMessage: ''
+      errorMessage: '',
+      devicesDeletionRequired: false
     };
 
     this.subscriptions = [];
@@ -85,6 +90,7 @@ class SimulationForm extends LinkedComponent {
 
     this.sensorLink = this.linkTo('sensors');
     this.deviceModelsLink = this.linkTo('deviceModels');
+    // this.devicesDeletionRequiredLink = this.linkTo('devicesDeletionRequired');
   }
 
   formIsValid() {
@@ -98,7 +104,6 @@ class SimulationForm extends LinkedComponent {
 
   componentDidMount() {
     this.getFormState(this.props);
-    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,6 +120,10 @@ class SimulationForm extends LinkedComponent {
         this.setTelemetryFrequency(name, index);
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   getFormState = (props) => {
@@ -173,6 +182,8 @@ class SimulationForm extends LinkedComponent {
 
   convertDurationToISO = ({ hours, minutes, seconds }) => `NOW+PT${hours}H${minutes}M${seconds}S`;
 
+  toggleCheckBox = () => this.setState({ devicesDeletionRequired: !this.state.devicesDeletionRequired });
+
   apply = (event) => {
     event.preventDefault();
     const {
@@ -183,6 +194,7 @@ class SimulationForm extends LinkedComponent {
       deviceModels,
       iotHubString,
       preProvisionedRadio,
+      devicesDeletionRequired,
     } = this.state;
     const simulationDuration = {
       startTime: 'NOW',
@@ -195,7 +207,8 @@ class SimulationForm extends LinkedComponent {
       enabled: true,
       iotHubs: [{ connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString }],
       deviceModels,
-      ...simulationDuration
+      ...simulationDuration,
+      devicesDeletionRequired
     };
 
     this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
@@ -216,7 +229,7 @@ class SimulationForm extends LinkedComponent {
 
   render () {
     const { t } = this.props;
-    const { deviceModels } = this.state;
+    const { deviceModels, devicesDeletionRequired } = this.state;
     const connectStringInput = (
       <FormControl
         className="long"
@@ -244,7 +257,6 @@ class SimulationForm extends LinkedComponent {
         .check(_ => currentDevicesCount <= maxSimulatedDevices, t('simulation.form.errorMsg.countShouldBeLTMax', { maxSimulatedDevices }));
 
       const minTelemetryInterval = global.DeploymentConfig.minTelemetryInterval;
-      // rename frequencyCantBeLessThanTenSeconds
       const interval = deviceModelLink.forkTo('interval')
         .check(({ ms }) => ms >= minTelemetryInterval, t('simulation.form.errorMsg.frequencyCantBeLessThanMinTelemetryInterval', { interval: minTelemetryInterval / 1000 }));
 
@@ -383,6 +395,21 @@ class SimulationForm extends LinkedComponent {
             </div>
             : connectStringInput
           }
+        </FormSection>
+
+        <FormSection className="bulk-deletion-container">
+          <div className="checkbox-container" onClick={this.toggleCheckBox}>
+            { t('simulation.form.deleteDevicesWhenSimulationEnds') }
+            <input
+              type="checkbox"
+              name="isChecked"
+              onChange={this.toggleCheckBox}
+              checked={devicesDeletionRequired} />
+            <span className="checkmark"></span>
+          </div>
+          <Tooltip message={t('simulation.form.tooltip.bulkDeletion')} position={'top'}>
+            <Svg path={svgs.infoBubble} className="tooltip-trigger-icon" />
+          </Tooltip>
         </FormSection>
 
         <FormActions>
