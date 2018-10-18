@@ -251,7 +251,7 @@ class DeviceModelUploadForm extends Component {
     if(this.state.validationResults === undefined){
       validationResults = scripts
       .map(({file, validationResult}) => ({fileName: file.name, validationResult}))
-        .reduce((acc, {fileName, validationResult}) => ({ ...acc, [fileName]: validationResult }), {})
+      .reduce((acc, {fileName, validationResult}) => ({ ...acc, [fileName]: validationResult }), {})
     } else {
       validationResults = {...this.state.validationResults};
     }
@@ -424,15 +424,15 @@ class DeviceModelUploadForm extends Component {
                       {
                         (validationResult.messages || []).map((error, idx) => (
                           <div key={idx} className="file-uploader-container">
-                          <input
-                            className="file-uploader"
-                            type="file"
-                            id={file.name}
-                            name="replaceIncorrectScriptUploader"
-                            accept=".json, .js"
-                            onChange={this.uploadSingleFile}
-                          />
-                          <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+                            <input
+                              className="file-uploader"
+                              type="file"
+                              id={file.name}
+                              name="replaceIncorrectScriptUploader"
+                              accept=".json, .js"
+                              onChange={this.uploadSingleFile}
+                            />
+                            <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
                         </div>
                         ))
                       }
