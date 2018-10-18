@@ -279,6 +279,7 @@ class DeviceModelUploadForm extends Component {
         ]
       };
       }
+
       validationResults[e.target.id] = {
         isValid: undefined,
         messages: [
