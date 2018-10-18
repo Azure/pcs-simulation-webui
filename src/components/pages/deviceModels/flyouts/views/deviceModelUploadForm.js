@@ -357,7 +357,7 @@ class DeviceModelUploadForm extends Component {
                               ))
                             )
                           }
-                      </div>
+                        </div>
                       </div>
                       <div className="validation-message">
                         <div className="file-uploader-container">
