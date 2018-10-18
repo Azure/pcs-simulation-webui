@@ -57,7 +57,7 @@ export const toSimulationModel = (response = {}) => ({
     preprovisionedIoTHubInUse: PreprovisionedIoTHubInUse,
     preprovisionedIoTHubMetricsUrl: PreprovisionedIoTHubMetricsUrl
   })),
-  devicesDeletionRequired: response.DevicesCleanUpRequiredByUser
+  devicesDeletionRequired: response.DeleteDevicesWhenSimulationEnds
 });
 
 export const toSimulationListModel = (response = {}) => (response.Items || []).map(toSimulationModel);
@@ -84,7 +84,7 @@ export const toSimulationRequestModel = (request = {}) => ({
   Description: request.description,
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHubs: toIoTHubs(request.iotHubs),
-  DevicesCleanUpRequiredByUser: request.devicesDeletionRequired
+  DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired
 });
 
 // Request models
