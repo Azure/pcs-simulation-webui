@@ -243,65 +243,69 @@ class DeviceModelUploadForm extends Component {
       script => (script.fileName === e.target.id));
     const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
       script => (script.file.name === e.target.id));
-    let scriptToBeUploaded = null;
+
     let scripts = [...this.state.scripts];
     let missingScripts = [...this.state.missingScripts];
+    let validationResults = null;
 
-    if (addMissingScriptIndex !== -1) {
-      scriptToBeUploaded = this.state.missingScripts[addMissingScriptIndex];
-      missingScripts.splice(addMissingScriptIndex, 1);
-    } else if (replaceIncorrectScriptIndex !== -1) {
-      scriptToBeUploaded = this.state.scripts[replaceIncorrectScriptIndex];
-      scripts.splice(replaceIncorrectScriptIndex, 1);
+    if(this.state.validationResults === undefined){
+      validationResults = scripts
+      .map(({file, validationResult}) => ({fileName: file.name, validationResult}))
+        .reduce((acc, {fileName, validationResult}) => ({ ...acc, [fileName]: validationResult }), {})
+    } else {
+      validationResults = {...this.state.validationResults};
     }
 
-    if (e.target.id === uploadedFile.name) {
+    if (uploadedFile && e.target.id === uploadedFile.name) {
+      validationResults[e.target.id] = undefined;
+
+      addMissingScriptIndex !== -1
+        ? missingScripts.splice(addMissingScriptIndex, 1)
+        : scripts.splice(replaceIncorrectScriptIndex, 1);
+
       scripts = [
         ...scripts,
-        { file: uploadedFile }
+        {file: uploadedFile}
       ];
     } else {
-      if (replaceIncorrectScriptIndex !== -1) {
-        scripts = [
-          ...scripts,
-          {
-            file: scriptToBeUploaded.file,
-            validationResult: {
-              isValid: false,
-              messages: [`Expected file is ${ e.target.id}`]
-            }
-          }
-        ];
-      } else if (addMissingScriptIndex !== -1) {
-        missingScripts = [
-          ...missingScripts,
-          {
-            fileName: scriptToBeUploaded.fileName,
-            validationResult: {
-              isValid: false,
-              messages: [`Expected file is ${ e.target.id}`]
-            }
-          }
-        ];
-      }
+      const index = scripts.findIndex(
+        script => (script.file.name === e.target.id));
+
+      if(index!== -1){
+      scripts[index].validationResult = {
+        isValid: false,
+        messages: [
+          `Expected file is ${ e.target.id}`
+        ]
+      };
+    }
+      validationResults[e.target.id] = {
+        isValid: undefined,
+        messages: [
+          `Expected file is ${ e.target.id}`
+        ]
+      };
     }
 
     this.setState({
       ...initialFormState,
       scripts: scripts,
       deviceModel: this.state.deviceModel,
-      missingScripts: missingScripts
+      missingScripts: missingScripts,
+      validationResults: validationResults
     })
   };
 
   clearAll = () => {
     const formVersion = this.state.formVersion + 1;
-    this.setState({ ...initialFormState, formVersion });
+    const validationResults = undefined
+
+    this.setState({ ...initialFormState, formVersion, validationResults });
   };
 
   render() {
     const { t } = this.props;
-    const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error, missingScripts } = this.state;
+    const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error, missingScripts, validationResults } = this.state;
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
         <FormSection>
@@ -346,11 +350,13 @@ class DeviceModelUploadForm extends Component {
                         {fileName}
                         <div className="validation-message">
                           {
-                            (validationResult.messages || []).map((error, idx) => (
-                              <ErrorMsg key={idx}>{error}</ErrorMsg>
-                            ))
+                            (validationResults && validationResults[fileName] !== undefined) && (
+                              (validationResults[fileName].messages || []).map((error, idx) => (
+                                <ErrorMsg key={idx}>{error}</ErrorMsg>
+                              ))
+                            )
                           }
-                        </div>
+                      </div>
                       </div>
                       <div className="validation-message">
                         <div className="file-uploader-container">
@@ -389,9 +395,17 @@ class DeviceModelUploadForm extends Component {
                       {file.name}
                       <div className="validation-message">
                         {
-                          (validationResult.messages || []).map((error, idx) => (
+                          (validationResults === undefined || validationResults[file.name] === undefined)
+                          ?(
+                            (validationResult.messages || []).map((error, idx) => (
+                              <ErrorMsg key={idx}>{error}</ErrorMsg>
+                            ))
+                          )
+                          :(
+                            (validationResults[file.name].messages || []).map((error, idx) => (
                             <ErrorMsg key={idx}>{error}</ErrorMsg>
                           ))
+                          )
                         }
                       </div>
                     </div>
