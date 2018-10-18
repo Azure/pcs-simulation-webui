@@ -237,7 +237,7 @@ class DeviceModelUploadForm extends Component {
       });
   };
 
-  reloadUpload = e => {
+  uploadSingleFile = e => {
     const uploadedFile = e.target.files[0];
     const addMissingScriptIndex = this.state.missingScripts.findIndex(
       script => (script.fileName === e.target.id));
@@ -366,7 +366,7 @@ class DeviceModelUploadForm extends Component {
                             id={fileName}
                             name="missingScriptsuploader"
                             accept=".json, .js"
-                            onChange={this.reloadUpload}
+                            onChange={this.uploadSingleFile}
                           />
                           <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
                         </div>
@@ -429,7 +429,7 @@ class DeviceModelUploadForm extends Component {
                             id={file.name}
                             name="replaceIncorrectScriptUploader"
                             accept=".json, .js"
-                            onChange={this.reloadUpload}
+                            onChange={this.uploadSingleFile}
                           />
                           <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
                         </div>
