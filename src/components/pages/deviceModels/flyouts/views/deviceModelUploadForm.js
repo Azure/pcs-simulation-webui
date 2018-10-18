@@ -278,7 +278,7 @@ class DeviceModelUploadForm extends Component {
           `Expected file is ${ e.target.id}`
         ]
       };
-    }
+      }
       validationResults[e.target.id] = {
         isValid: undefined,
         messages: [
