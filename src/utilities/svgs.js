@@ -8,6 +8,8 @@ import CopyIconPath from 'assets/icons/copy.svg';
 import EditIconPath from 'assets/icons/edit.svg';
 import ErrorIconPath from 'assets/icons/errorAsterisk.svg';
 import HamburgerIconPath from 'assets/icons/hamburger.svg';
+import IconDarkStatusOk from 'assets/icons/IconDarkStatusOK.svg';
+import IconLightStatusCriticalError from 'assets/icons/IconLightStatusCriticalError.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
 import LinkToPath from 'assets/icons/linkTo.svg';
 import PlusIconPath from 'assets/icons/plus.svg';
@@ -44,5 +46,7 @@ export const svgs = {
   stopSimulation: StopSimIconPath,
   trash: TrashPath,
   tabDeviceModels: TabDevicesPath,
-  x: XIconPath
+  x: XIconPath,
+  success: IconDarkStatusOk,
+  failure: IconLightStatusCriticalError
 };

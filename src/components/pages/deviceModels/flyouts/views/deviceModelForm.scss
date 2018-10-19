@@ -54,13 +54,15 @@
     .validation-result { @include rem-fallback(width, 36px); }
 
     .validation-message { @include rem-fallback(margin-top, 8px); }
+
+    .json-file-validation { margin-left: 9px; }
   }
 
   @include themify($themes) {
     .sensors-container .sensor-header { color: themed('colorLightestFirst'); }
     .upload-results-container {
-      .success-result { color: themed('colorSuccess'); }
-      .failed-result { color: themed('colorFailure'); }
+      .success-result svg { fill: themed('colorSuccess'); }
+      .failed-result svg { fill: themed('colorFailure'); }
     }
 
     .file-uploader-container .browse-button {

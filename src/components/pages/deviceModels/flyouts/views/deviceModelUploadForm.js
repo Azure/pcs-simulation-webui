@@ -5,6 +5,7 @@ import { isEqual, isEmpty } from 'lodash';
 import { Observable } from 'rxjs';
 import { DeviceModelScriptsService } from 'services';
 import { svgs } from 'utilities';
+import { Svg } from 'components/shared';
 import {
   Btn,
   BtnToolbar,
@@ -384,9 +385,7 @@ class DeviceModelUploadForm extends Component {
               <FormLabel>{t('deviceModels.flyouts.upload.uploadedFiles')}</FormLabel>
               <div className="upload-results-container">
                 <div className="file-name">{jsonFile.name}</div>
-                <div className={`${'success-result'}`}>
-                  {'\u2714'}
-                </div>
+                <Svg path={svgs.success} className="success-result json-file-validation" />
               </div>
               {this.state.scripts
                 .sort((a, b) => a.file.name.localeCompare(b.file.name))
@@ -415,9 +414,9 @@ class DeviceModelUploadForm extends Component {
                       {validationResult.isValid === undefined ? (
                         <Indicator size="mini" />
                       ) : validationResult.isValid ? (
-                        '\u2714'
+                        <Svg path={svgs.success} className="success-result" />
                       ) : (
-                        '\u2716'
+                        <Svg path={svgs.failure} className="failed-result" />
                       )}
                     </div>
                     <div>
