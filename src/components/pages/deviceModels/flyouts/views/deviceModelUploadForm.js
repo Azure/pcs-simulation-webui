@@ -144,8 +144,9 @@ class DeviceModelUploadForm extends Component {
 
           if (!isEqual(requiredScriptNames, uploadedScriptNames)) {
             const missingScriptNames = new Set([...requiredScriptNames].filter(x => !uploadedScriptNames.has(x)));
-            missingScripts = [...missingScriptNames];
             const scriptsToBeRemoved = new Set([...uploadedScriptNames].filter(x => !requiredScriptNames.has(x)));
+
+            missingScripts = [...missingScriptNames];
 
             for (let script of scriptsToBeRemoved) {
               scriptFiles.splice(scriptFiles.findIndex(x => x.name === script), 1);
