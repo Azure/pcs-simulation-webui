@@ -26,8 +26,16 @@ export class DeviceModels extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.isPending && nextProps.isPending !== this.props.isPending) {
+  componentDidMount() {
+    const { state = {} } = this.props.location;
+    this.setState({ ...state });
+  }
+
+  componentWillReceiveProps({ isPending, location }) {
+    const { state = {} } = location;
+    this.setState({ ...state });
+
+    if (isPending && isPending !== this.props.isPending) {
       // If the grid data refreshes, hide the flyout and deselect soft selections
       this.setState(closedFlyoutState);
     }
@@ -52,6 +60,7 @@ export class DeviceModels extends Component {
   render() {
     const {
       t,
+      location,
       deviceModels,
       createDeviceModel,
       deleteDeviceModel,
@@ -88,6 +97,7 @@ export class DeviceModels extends Component {
             createDeviceModel={createDeviceModel}
             uploadDeviceModel={uploadDeviceModel}
             deviceModelsNameSet={deviceModelsNameSet}
+            location={location}
             t={t} />
         }
       </PageContent>

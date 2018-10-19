@@ -6,6 +6,7 @@ import Config from 'app.config';
 import { Observable } from 'rxjs';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
 import configureStore from 'store/configureStore';
 import diagnosticsEvent from 'store/logEventUtil';
@@ -56,11 +57,13 @@ AuthService.onLoad(() => {
 
   // Create the React app
   ReactDOM.render(
-    <Provider store={store}>
-      <Router>
-        <AppContainer />
-      </Router>
-    </Provider>,
+    <CookiesProvider>
+      <Provider store={store}>
+        <Router>
+          <AppContainer />
+        </Router>
+      </Provider>
+    </CookiesProvider>,
     document.getElementById('root')
   );
 

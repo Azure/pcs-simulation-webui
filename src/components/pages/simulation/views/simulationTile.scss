@@ -79,6 +79,14 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
         @include square-px-rem(16px);
         @include rem-fallback(margin-right, 8px);
       }
+
+      .setting-up-icon { @include rem-fallback(margin-right, 8px); }
+
+      .simulation-error-container {
+        align-items: flex-end;
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 
@@ -146,5 +154,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     .section-header { border-color: themed('colorLightestFirst'); }
 
     .running-icon svg { fill: themed('colorActive'); }
+
+    .setting-up-icon .inner { background-color: themed('colorActive'); }
   }
 }

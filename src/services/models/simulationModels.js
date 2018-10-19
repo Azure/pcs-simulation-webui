@@ -14,6 +14,7 @@ export const toSimulationModel = (response = {}) => ({
   eTag: response.ETag,
   enabled: response.Enabled,
   isRunning: response.Running,
+  isActive: response.ActiveNow,
   startTime: response.StartTime,
   endTime: response.EndTime,
   stopTime: response.StoppedTime,

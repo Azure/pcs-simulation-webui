@@ -122,7 +122,9 @@ class SimulationForm extends LinkedComponent {
       deviceModels,
       preprovisionedIoTHub
     } = props;
-    const deviceModelOptions = (deviceModels || []).map(this.toSelectOption);
+    const deviceModelOptions = (deviceModels || [])
+      .map(this.toSelectOption)
+      .sort((a, b) => a.label.localeCompare(b.label));
     const preProvisionedRadio = preprovisionedIoTHub ? 'preProvisioned' : 'customString';
 
     this.setState({
@@ -199,7 +201,7 @@ class SimulationForm extends LinkedComponent {
     this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
       .subscribe(
         ({ id }) => {
-          this.props.history.push(`/simulation/${id}`);
+          this.props.history.push(`/simulations/${id}`);
           this.props.onClose();
         },
         error => this.setState({ error: error.message })
