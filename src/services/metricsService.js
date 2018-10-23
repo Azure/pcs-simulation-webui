@@ -7,8 +7,6 @@ import { toIothubMetricsModel } from './models';
 
 const ENDPOINT = Config.simulationApiUrl;
 
-//Config.diagnosticsApiUrl;
-
 /** Contains methods for calling the diagnostics service */
 export class MetricsService {
   /**Log event */
