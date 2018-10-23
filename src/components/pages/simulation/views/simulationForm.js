@@ -57,7 +57,7 @@ class SimulationForm extends LinkedComponent {
       deviceModels: [],
       errorMessage: '',
       devicesDeletionRequired: false,
-      vmPriceAcknowledged: false
+      autoscaleAcknowledged: false
     };
 
     this.subscriptions = [];
@@ -92,7 +92,6 @@ class SimulationForm extends LinkedComponent {
 
     this.sensorLink = this.linkTo('sensors');
     this.deviceModelsLink = this.linkTo('deviceModels');
-    // this.devicesDeletionRequiredLink = this.linkTo('devicesDeletionRequired');
   }
 
   formIsValid() {
@@ -186,7 +185,7 @@ class SimulationForm extends LinkedComponent {
 
   toggleBulkDeletionCheckBox = () => this.setState({ devicesDeletionRequired: !this.state.devicesDeletionRequired });
 
-  togglePriceAckownledgeCheckBox = () => this.setState({ vmPriceAcknowledged: !this.state.vmPriceAcknowledged });
+  toggleAutoscaleAckownledgeCheckBox = () => this.setState({ autoscaleAcknowledged: !this.state.autoscaleAcknowledged });
 
   apply = (event) => {
     event.preventDefault();
@@ -233,7 +232,7 @@ class SimulationForm extends LinkedComponent {
 
   render () {
     const { t } = this.props;
-    const { deviceModels, devicesDeletionRequired, vmPriceAcknowledged } = this.state;
+    const { deviceModels, devicesDeletionRequired, autoscaleAcknowledged } = this.state;
     const connectStringInput = (
       <FormControl
         className="long"
@@ -282,9 +281,9 @@ class SimulationForm extends LinkedComponent {
 
     const totalDevicesCount = deviceModels.reduce((sum, {count = 0}) => sum + count, 0);
     const requiredVMsCount = Math.ceil( totalDevicesCount / Config.maxDevicesPerVM);
-    const multipleVmsRequired = totalDevicesCount > Config.maxDevicesPerVM;
-    const vmPriceAcknowledgedRequired = multipleVmsRequired
-      ? vmPriceAcknowledged ? false : true
+    const additionalVMsRequired = totalDevicesCount > Config.maxDevicesPerVM;
+    const autoscaleAcknowledgedRequired = additionalVMsRequired
+      ? autoscaleAcknowledged ? false : true
       : false;
 
     return (
@@ -428,8 +427,8 @@ class SimulationForm extends LinkedComponent {
             this.state.error ? <ErrorMsg> {this.state.error}</ErrorMsg> : ''
           }
           {
-            multipleVmsRequired &&
-            <div className="muti-vms-ackownledge-container">
+            additionalVMsRequired &&
+            <div className="autoscale-ackownledge-container">
               <div className="checkbox-container">
                 { t('simulation.form.autoScaleAcknowledgement', { totalDevicesCount, additionVMsCount: requiredVMsCount - 1 }) }
                 <Link
@@ -440,9 +439,9 @@ class SimulationForm extends LinkedComponent {
                 </Link>
                 <input
                   type="checkbox"
-                  name="vmPriceAcknowledged"
-                  onChange={this.togglePriceAckownledgeCheckBox}
-                  checked={vmPriceAcknowledged} />
+                  name="autoscaleAcknowledged"
+                  onChange={this.toggleAutoscaleAckownledgeCheckBox}
+                  checked={autoscaleAcknowledged} />
                 <span className="checkmark"></span>
               </div>
             </div>
@@ -452,7 +451,7 @@ class SimulationForm extends LinkedComponent {
               svg={svgs.startSimulation}
               type="submit"
               className="apply-btn"
-              disabled={!this.formIsValid() || deviceModelsHaveError || vmPriceAcknowledgedRequired}>
+              disabled={!this.formIsValid() || deviceModelsHaveError || autoscaleAcknowledgedRequired}>
                 { t('simulation.start') }
             </Btn>
           </BtnToolbar>

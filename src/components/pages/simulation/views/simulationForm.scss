@@ -5,7 +5,7 @@
 @import 'styles/mixins';
 
 .bulk-deletion-container,
-.muti-vms-ackownledge-container {
+.autoscale-ackownledge-container {
   display: flex;
 
   .checkbox-container {
@@ -65,7 +65,10 @@
     color:  themed('colorGray');
 
     input ~ .checkmark { background-color: themed('colorMidThird'); }
-    input:checked ~ .checkmark { background-color: themed('colorActive'); }
+    input:checked ~ .checkmark {
+      color: themed('colorBlack');
+      background-color: themed('colorHighest');
+    }
 
     .tooltip-trigger-icon {
       fill: themed('colorHighest');
@@ -83,7 +86,7 @@
   @include rem-fallback(padding-top, 48px);
   @include rem-fallback(padding-left, 0px);
 
-  .muti-vms-ackownledge-container {
+  .autoscale-ackownledge-container {
     @include rem-fallback(margin-bottom, 40px);
     @include rem-fallback(width, 700px);
 
