@@ -11,7 +11,12 @@
   @include rem-fallback(width, 252px);
   @include rem-fallback(height, 270px);
 
-  .welcome-tile-img-container { @include rem-fallback(height, 100px); }
+  .welcome-tile-img-container {
+    display: flex;
+    justify-content: center;
+    @include rem-fallback(margin-top, -10px);
+    @include rem-fallback(height, 100px);
+  }
 
   .welcome-tile-title {
     align-content: flex-start;
@@ -23,6 +28,7 @@
 
   .welcome-tile-description {
     text-align: start;
+    line-height: 1.4;
     @include rem-font-size(12px);
   }
 
