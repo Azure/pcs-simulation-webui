@@ -280,7 +280,9 @@ class SimulationForm extends LinkedComponent {
       t('simulation.form.deviceModels.duration')
     ];
 
-    const multipleVmsRequired = deviceModels.reduce((sum, {count = 0}) => sum + count, 0) > Config.maxDevicesPerVM;
+    const totalDevicesCount = deviceModels.reduce((sum, {count = 0}) => sum + count, 0);
+    const requiredVMsCount = Math.ceil( totalDevicesCount / Config.maxDevicesPerVM);
+    const multipleVmsRequired = totalDevicesCount > Config.maxDevicesPerVM;
     const vmPriceAcknowledgedRequired = multipleVmsRequired
       ? vmPriceAcknowledged ? false : true
       : false;
@@ -425,15 +427,15 @@ class SimulationForm extends LinkedComponent {
           {
             this.state.error ? <ErrorMsg> {this.state.error}</ErrorMsg> : ''
           }
-          { //TODO: replace link to learn more
+          {
             multipleVmsRequired &&
             <div className="muti-vms-ackownledge-container">
               <div className="checkbox-container">
-                { t('simulation.form.multiVMsAcknowledge') }
+                { t('simulation.form.autoScaleAcknowledgement', { totalDevicesCount, additionVMsCount: requiredVMsCount - 1 }) }
                 <Link
                   className="learn-more"
                   target="_blank"
-                  to={`https://azure.com`}>
+                  to='https://azure.microsoft.com/en-us/pricing/calculator/'>
                   {t('simulation.form.learnMore')}
                 </Link>
                 <input

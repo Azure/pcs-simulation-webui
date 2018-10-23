@@ -72,8 +72,8 @@
         "hubNameCantBeEmpty": "IoT Hub connection string is required",
         "simulationStatusError": "Something went wrong and we weren't able to get the simulation status."
       },
-      "learnMore": "Learn more.",
-      "multiVMsAcknowledge": "The amount of devices selected in the simulation will require multiple virtual machines to handle the bandwidth of this operation. This that will change the pricing structure previously set up.",
+      "learnMore": "See pricing for F4-V2 VMs.",
+      "autoScaleAcknowledgement": "I understand simulating {{ totalDevicesCount }} devices requires {{ additionVMsCount }} additional VMs to be deployed in my Azure subscription. These VMs will be automatically removed once all simulations are stopped.",
       "targetHub": {
         "description": "Add the connection string for your IoT Hub",
         "header": "Target IoT Hub",
