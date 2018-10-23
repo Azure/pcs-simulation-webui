@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import update from 'immutability-helper';
+import moment from 'moment-timezone';
 import 'tsiclient';
 
 import './telemetryChart.css';
@@ -60,6 +61,7 @@ export class TelemetryChart extends Component {
   componentWillUpdate({ metrics, theme }, { telemetryKey }) {
     if (metrics) {
       const chartData = this.props.metrics;
+      const offset = moment.tz.guess();
 
       // Set a timeout to allow the panel height to be calculated before updating the graph
       setTimeout(() => {
@@ -71,7 +73,8 @@ export class TelemetryChart extends Component {
               legend: 'compact',
               tooltip: true,
               yAxisState: 'shared', // Default to all values being on the same axis
-              theme
+              theme,
+              offset // offset for all timestamps in minutes or timezone from UTC
             },
             this.props.colors
           );
