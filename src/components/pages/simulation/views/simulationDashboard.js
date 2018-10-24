@@ -101,6 +101,9 @@ export class SimulationDashboard extends Component {
       <PageContent className="simulation-dashboard-container" key="page-content">
         <SectionHeader className="dashboard-header">
           {t('header.simulationsDashboard')}
+          <Btn className="toggle-view-button" onClick={this.toggleDashboardView}>
+            {!this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard')}
+          </Btn>
         </SectionHeader>
 
         {
@@ -134,10 +137,6 @@ export class SimulationDashboard extends Component {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
         }
-
-        <Btn className="toggle-view-button" onClick={this.toggleDashboardView}>
-          {!this.state.showAll ? t('simulation.showAll') : t('simulation.showDashboard')}
-        </Btn>
 
       </PageContent>
     ];

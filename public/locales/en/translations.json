@@ -102,6 +102,7 @@
     "status": {
       "activeDevicesCount": "Active devices",
       "averageMessagesPerSec": "Average messages per second",
+      "cleaningUp": "Cleaning up",
       "created": "Created {{startDateTime}}",
       "error": "Error",
       "ended": "Ended {{endDateTime}}",
