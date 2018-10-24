@@ -56,6 +56,7 @@
         "endsInBtn": "End in:",
         "runIndefinitelyBtn": "Run indefinitely"
       },
+      "deleteDevicesWhenSimulationEnds": "Delete all devices when the simulation is complete",
       "errorMsg": {
         "nameCantBeEmpty": "Simulation name is required",
         "nameGTMaxLength": "Name can't be greater than {{simulationNameMaxLength}} characters",
@@ -71,6 +72,8 @@
         "hubNameCantBeEmpty": "IoT Hub connection string is required",
         "simulationStatusError": "Something went wrong and we weren't able to get the simulation status."
       },
+      "learnMore": "See pricing for F4-V2 VMs.",
+      "autoScaleAcknowledgement": "I understand simulating {{ totalDevicesCount }} devices requires {{ additionVMsCount }} additional VMs to be deployed in my Azure subscription. These VMs will be automatically removed once all simulations are stopped.",
       "targetHub": {
         "description": "Add the connection string for your IoT Hub",
         "header": "Target IoT Hub",
@@ -79,6 +82,9 @@
       },
       "telemetry": {
         "header": "Telemetry frequency"
+      },
+      "tooltip": {
+        "bulkDeletion": "Automatically bulk deletes your devices when your simulation completes, so you don’t have to delete them one by one. If you want to keep your devices so you can run the simulation again, leave this option unchecked."
       }
     },
     "grid": {
