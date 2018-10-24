@@ -178,7 +178,7 @@ class DeviceModelUploadForm extends Component {
   };
 
   formIsValid() {
-    const { deviceModel, scripts, missingScripts, validationResults } = this.state;
+    const { deviceModel, missingScripts, validationResults } = this.state;
     return !isEmpty(deviceModel) && missingScripts.length === 0 && Object.values(validationResults || {}).every(v => v && v.isValid);
   }
 
@@ -257,13 +257,10 @@ class DeviceModelUploadForm extends Component {
       validationResults[e.target.id] = undefined;
 
     } else if (uploadedFile && e.target.id !== uploadedFile.name) {
-      const index = scripts.findIndex(
-        script => (script.name === e.target.id));
-
-      validationResults[e.target.id] = {
-        isValid: false,
-        messages: [`Expected file is ${e.target.id}`]
-      };
+        validationResults[e.target.id] = {
+          isValid: false,
+          messages: [`Expected file is ${e.target.id}`]
+        };
     }
 
     this.setState({
@@ -327,8 +324,7 @@ class DeviceModelUploadForm extends Component {
                         {fileName}
                         <div className="validation-message">
                         {
-                          validationResults[fileName] &&
-                            (validationResults[fileName].messages || []).map((error, idx) => (
+                          ((validationResults[fileName] || {}).messages || []).map((error, idx) => (
                               <ErrorMsg key={idx}>{error}</ErrorMsg>
                               )
                             )
@@ -370,11 +366,10 @@ class DeviceModelUploadForm extends Component {
                       {name}
                       <div className="validation-message">
                         {
-                          validationResults[name] && validationResults[name].messages &&
-                            (
-                              validationResults[name].messages || []).map((error, idx) => (
+                          ((validationResults[name] || {}).messages || []).map((error, idx) => (
                               <ErrorMsg key={idx}>{error}</ErrorMsg>
-                            ))
+                            )
+                          )
                         }
                       </div>
                     </div>
