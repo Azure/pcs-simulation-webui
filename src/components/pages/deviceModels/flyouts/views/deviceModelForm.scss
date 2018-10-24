@@ -52,13 +52,27 @@
     .file-name { @include rem-fallback(width, 250px); }
 
     .validation-result { @include rem-fallback(width, 36px); }
+
+    .validation-message { @include rem-fallback(margin-top, 8px); }
+
+    .success-result svg {
+      @include rem-fallback(width, 16px);
+      @include rem-fallback(height, 16px);
+    }
+
+    .failed-result svg {
+      @include rem-fallback(width, 16px);
+      @include rem-fallback(height, 16px);
+    }
+
+    .json-file-validation { margin-left: 9px; }
   }
 
   @include themify($themes) {
     .sensors-container .sensor-header { color: themed('colorLightestFirst'); }
     .upload-results-container {
-      .success-result { color: themed('colorSuccess'); }
-      .failed-result { color: themed('colorFailure'); }
+      .success-result svg { fill: themed('colorSuccess'); }
+      .failed-result svg { fill: themed('colorFailure'); }
     }
 
     .file-uploader-container .browse-button {

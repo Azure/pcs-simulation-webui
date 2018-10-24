@@ -11,6 +11,8 @@ import EditIconPath from 'assets/icons/edit.svg';
 import ErrorCrossIconPath from 'assets/icons/error.svg';
 import ErrorIconPath from 'assets/icons/errorAsterisk.svg';
 import HamburgerIconPath from 'assets/icons/hamburger.svg';
+import SuccessIconPath from 'assets/icons/success.svg';
+import FailureIconPath from 'assets/icons/failure.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
 import LinkToPath from 'assets/icons/linkTo.svg';
 import LoadingIconPath from 'assets/icons/loading.svg';
@@ -60,5 +62,7 @@ export const svgs = {
   stopSimulation: StopSimIconPath,
   trash: TrashPath,
   tabDeviceModels: TabDevicesPath,
-  x: XIconPath
+  x: XIconPath,
+  success: SuccessIconPath,
+  failure: FailureIconPath
 };
