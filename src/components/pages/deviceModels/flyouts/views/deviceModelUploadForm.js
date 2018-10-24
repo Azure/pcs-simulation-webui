@@ -52,6 +52,7 @@ class DeviceModelUploadForm extends Component {
           }))
           .catch(error => {
             const { ajaxError: { response: { Messages = [] } } = { response: {} } } = error;
+
             return Observable.of({
               fileName: [file.name],
               validationResult: {
