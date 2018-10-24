@@ -12,6 +12,7 @@
     "immutability-helper": "2.5.1",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
+    "moment-timezone": "^0.5.21",
     "normalizr": "3.2.4",
     "react": "16.5.2",
     "react-cookie": "^3.0.4",
@@ -26,7 +27,7 @@
     "redux-observable": "0.17.0",
     "reselect": "3.0.1",
     "rxjs": "5.5.2",
-    "tsiclient": "1.1.19"
+    "tsiclient": "1.2.6"
   },
   "devDependencies": {
     "enzyme": "3.2.0",
