@@ -17,6 +17,8 @@
   }
 
   .dashboard-header {
+    display: flex;
+    justify-content: space-between;
     font-family: $fontSelawikBold;
     @include rem-font-size(34px);
     @include rem-fallback(line-height, 41px);
@@ -32,8 +34,6 @@
   }
 
   .toggle-view-button {
-    justify-content: flex-end;
-    @include rem-fallback(margin-top, 24px);
 
     &:hover {
       background: inherit;
