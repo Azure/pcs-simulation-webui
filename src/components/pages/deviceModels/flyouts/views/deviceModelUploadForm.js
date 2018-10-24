@@ -23,6 +23,7 @@ const initialFormState = {
   deviceModel: undefined,
   scripts: [],
   missingScripts: [],
+  validationResults: {},
   error: undefined
 };
 
@@ -38,40 +39,42 @@ class DeviceModelUploadForm extends Component {
     this.subscriptions = [];
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { scripts } = this.state;
+  validateScripts () {
+    const { scripts, validationResults } = this.state;
 
-    if (scripts.length > 0 && scripts.some(({ validationResult }) => !validationResult)) {
-      const validationSubscrition = Observable.from(scripts)
-        .filter(({ validation = {} }) => !validation.isValid)
-        .flatMap(({ file }) =>
-          DeviceModelScriptsService.validateDeviceModelScript(file)
-            .map(validationResult => ({ file, validationResult }))
-            .catch(error => {
-              const { ajaxError: { response: { Messages = [] } } = { response: {} } } = error;
+    Observable.from(scripts)
+      .filter(script => !validationResults[script.name])
+      .flatMap(file =>{
 
-              return Observable.of({
-                file,
-                validationResult: {
-                  isValid: false,
-                  messages: [Messages]
-                }
-              });
-            })
-        )
-        .toArray()
-        .subscribe(scripts => {
-          this.setState({
-            scripts: [
-              ...scripts
-            ]
-          });
+        return DeviceModelScriptsService.validateDeviceModelScript(file)
+          .map(validationResult => ({
+            fileName: file.name,
+            validationResult : validationResult
+          }))
+          .catch(error => {
+            const { ajaxError: { response: { Messages = [] } } = { response: {} } } = error;
+            return Observable.of({
+              fileName: [file.name],
+              validationResult: {
+                isValid: false,
+                messages: [Messages]
+              }
+            });
+          })
+        }
+      )
+      .reduce((acc, { fileName, validationResult }) => ({
+        ...acc, [fileName]: validationResult
+      }), {})
+      .subscribe(updatedValidationState => {
+        this.setState({
+          validationResults: {
+            ...this.state.validationResults,
+            ...updatedValidationState
+          }
         });
+      });
 
-      this.subscriptions.push(
-        validationSubscrition
-      );
-    }
   }
 
   componentWillUnmount() {
@@ -90,14 +93,10 @@ class DeviceModelUploadForm extends Component {
           error,
           deviceModel,
           jsonFile,
-          missingScripts: (missingScripts || []).map(fileName => ({
-            fileName: fileName
-          })),
-          scripts: (scriptFiles || []).map(file => ({
-            file,
-            validationResult: undefined
-          }))
-        });
+          missingScripts: (missingScripts || []).map(fileName => ({ fileName })),
+          scripts: (scriptFiles || []),
+          validationResults: {}
+        }, () => this.validateScripts());
       },
       error => this.setState({ error })
     );
@@ -181,8 +180,8 @@ class DeviceModelUploadForm extends Component {
   };
 
   formIsValid() {
-    const { deviceModel, scripts } = this.state;
-    return !isEmpty(deviceModel) && scripts.every(({ validationResult }) => (validationResult || {}).isValid);
+    const { deviceModel, scripts, missingScripts, validationResults } = this.state;
+    return !isEmpty(deviceModel) && missingScripts.length === 0 && Object.values(validationResults || {}).every(v => v && v.isValid);
   }
 
   apply = event => {
@@ -191,7 +190,7 @@ class DeviceModelUploadForm extends Component {
 
     // Uploading scripts
     Observable.from(scripts)
-      .flatMap(({ file }) => DeviceModelScriptsService.uploadsDeviceModelScript(file))
+      .flatMap(file => DeviceModelScriptsService.uploadsDeviceModelScript(file))
       .reduce((scripts, script) => ({ ...scripts, [script.name.replace(/^.*[\\/]/, '')]: script }), {})
       .map(scripts => {
         const {
@@ -244,64 +243,41 @@ class DeviceModelUploadForm extends Component {
     const addMissingScriptIndex = this.state.missingScripts.findIndex(
       script => (script.fileName === e.target.id));
     const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
-      script => (script.file.name === e.target.id));
+      script => (script.name === e.target.id));
 
     let scripts = [...this.state.scripts];
     let missingScripts = [...this.state.missingScripts];
-    let validationResults = null;
-
-    if(this.state.validationResults === undefined){
-      validationResults = scripts
-      .map(({file, validationResult}) => ({fileName: file.name, validationResult}))
-      .reduce((acc, {fileName, validationResult}) => ({ ...acc, [fileName]: validationResult }), {})
-    } else {
-      validationResults = {...this.state.validationResults};
-    }
+    let validationResults = { ...this.state.validationResults };
 
     if (uploadedFile && e.target.id === uploadedFile.name) {
-      validationResults[e.target.id] = undefined;
-
       addMissingScriptIndex !== -1
         ? missingScripts.splice(addMissingScriptIndex, 1)
         : scripts.splice(replaceIncorrectScriptIndex, 1);
 
-      scripts = [
-        ...scripts,
-        {file: uploadedFile}
-      ];
-    } else {
-      const index = scripts.findIndex(
-        script => (script.file.name === e.target.id));
+      scripts.push(uploadedFile);
 
-      if(index!== -1){
-      scripts[index].validationResult = {
-        isValid: false,
-        messages: [
-          `Expected file is ${ e.target.id}`
-        ]
-      };
-      }
+      validationResults[e.target.id] = undefined;
+
+    } else if (uploadedFile && e.target.id !== uploadedFile.name) {
+      const index = scripts.findIndex(
+        script => (script.name === e.target.id));
 
       validationResults[e.target.id] = {
-        isValid: undefined,
-        messages: [
-          `Expected file is ${ e.target.id}`
-        ]
+        isValid: false,
+        messages: [`Expected file is ${e.target.id}`]
       };
     }
 
     this.setState({
-      ...initialFormState,
-      scripts: scripts,
-      deviceModel: this.state.deviceModel,
-      missingScripts: missingScripts,
-      validationResults: validationResults
-    })
+      scripts,
+      missingScripts,
+      validationResults
+    }, () => this.validateScripts())
   };
 
   clearAll = () => {
     const formVersion = this.state.formVersion + 1;
-    const validationResults = undefined
+    const validationResults = {}
 
     this.setState({ ...initialFormState, formVersion, validationResults });
   };
@@ -352,27 +328,28 @@ class DeviceModelUploadForm extends Component {
                       <div className="file-name">
                         {fileName}
                         <div className="validation-message">
-                          {
-                            (validationResults && validationResults[fileName] !== undefined) && (
-                              (validationResults[fileName].messages || []).map((error, idx) => (
-                                <ErrorMsg key={idx}>{error}</ErrorMsg>
-                              ))
+                        {
+                          (validationResults[fileName]) &&
+                            (
+                              validationResults[fileName].messages || []).map((error, idx) => (
+                              <ErrorMsg key={idx}>{error}</ErrorMsg>
+                              )
                             )
-                          }
+                        }
                         </div>
                       </div>
                       <div className="validation-message">
-                        <div className="file-uploader-container">
+                      <div className="file-uploader-container">
                           <input
                             className="file-uploader"
                             type="file"
                             id={fileName}
-                            name="missingScriptsuploader"
+                            name="uploader"
                             accept=".json, .js"
                             onChange={this.uploadSingleFile}
                           />
-                          <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
-                        </div>
+                          <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
+                      </div>
                       </div>
                     </div>
                   ))
@@ -389,50 +366,44 @@ class DeviceModelUploadForm extends Component {
                 <Svg path={svgs.success} className="success-result json-file-validation" />
               </div>
               {this.state.scripts
-                .sort((a, b) => a.file.name.localeCompare(b.file.name))
-                .map(({ file, validationResult = {} }, idx) => (
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(({ name }, idx) => (
                   <div key={idx} className="upload-results-container">
                     <div className="file-name">
-                      {file.name}
+                      {name}
                       <div className="validation-message">
                         {
-                          (validationResults === undefined || validationResults[file.name] === undefined)
-                          ?(
-                            (validationResult.messages || []).map((error, idx) => (
+                          (validationResults[name] && validationResults[name].messages) &&
+                            (
+                              validationResults[name].messages || []).map((error, idx) => (
                               <ErrorMsg key={idx}>{error}</ErrorMsg>
                             ))
-                          )
-                          :(
-                            (validationResults[file.name].messages || []).map((error, idx) => (
-                            <ErrorMsg key={idx}>{error}</ErrorMsg>
-                          ))
-                          )
                         }
                       </div>
                     </div>
                     <div
-                      className={`validation-result ${validationResult.isValid ? 'success-result' : 'failed-result'}`}>
-                      {validationResult.isValid === undefined ? (
-                        <Indicator size="mini" />
-                      ) : validationResult.isValid ? (
+                      className={`validation-result ${(validationResults[name] && validationResults[name].isValid) ? 'success-result' : 'failed-result'}`}>
+                      {validationResults[name] && validationResults[name].isValid === true ? (
                         <Svg path={svgs.success} className="success-result" />
-                      ) : (
+                      ) : validationResults[name] && validationResults[name].isValid === false ? (
                         <Svg path={svgs.failure} className="failed-result" />
+                      ) : (
+                        <Indicator size="mini" />
                       )}
                     </div>
                     <div>
                       {
-                        (validationResult.messages || []).map((error, idx) => (
-                          <div key={idx} className="file-uploader-container">
-                            <input
-                              className="file-uploader"
-                              type="file"
-                              id={file.name}
-                              name="replaceIncorrectScriptUploader"
-                              accept=".json, .js"
-                              onChange={this.uploadSingleFile}
-                            />
-                            <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+                        (validationResults[name] && validationResults[name].messages || []).map((error, idx) => (
+                          <div className="file-uploader-container">
+                          <input
+                            className="file-uploader"
+                            type="file"
+                            id={name}
+                            name="uploader"
+                            accept=".json, .js"
+                            onChange={this.uploadSingleFile}
+                          />
+                          <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
                         </div>
                         ))
                       }
