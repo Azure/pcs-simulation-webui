@@ -189,6 +189,7 @@
         "deviceModelFilesInfoText": "Device models consist of one JSON configuration file, one JavaScript file defining the simulation behavior, and optionally one JavaScript file for each cloud to device method supported by the device. Advanced device models give you full control over these files. ",
         "files": "Upload device model files",
         "uploadedFiles": "Uploaded files:",
+        "missingFiles": "Missing File(s)",
         "browse": "Browse",
         "missingJsonFileErrorMessage": "No JSON definition file was found. The JSON file defines the device's capabilities and is required.",
         "tooManyJsonFilesErrorMessage": "More than one JSON file provided. A simulated device may have only one JSON definition file.",
