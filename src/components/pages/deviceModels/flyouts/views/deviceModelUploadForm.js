@@ -44,9 +44,8 @@ class DeviceModelUploadForm extends Component {
 
     Observable.from(scripts)
       .filter(script => !validationResults[script.name])
-      .flatMap(file =>{
-
-        return DeviceModelScriptsService.validateDeviceModelScript(file)
+      .flatMap(file =>
+        DeviceModelScriptsService.validateDeviceModelScript(file)
           .map(validationResult => ({
             fileName: file.name,
             validationResult : validationResult
@@ -61,7 +60,6 @@ class DeviceModelUploadForm extends Component {
               }
             });
           })
-        }
       )
       .reduce((acc, { fileName, validationResult }) => ({
         ...acc, [fileName]: validationResult
@@ -329,9 +327,8 @@ class DeviceModelUploadForm extends Component {
                         {fileName}
                         <div className="validation-message">
                         {
-                          (validationResults[fileName]) &&
-                            (
-                              validationResults[fileName].messages || []).map((error, idx) => (
+                          validationResults[fileName] &&
+                            (validationResults[fileName].messages || []).map((error, idx) => (
                               <ErrorMsg key={idx}>{error}</ErrorMsg>
                               )
                             )
@@ -373,7 +370,7 @@ class DeviceModelUploadForm extends Component {
                       {name}
                       <div className="validation-message">
                         {
-                          (validationResults[name] && validationResults[name].messages) &&
+                          validationResults[name] && validationResults[name].messages &&
                             (
                               validationResults[name].messages || []).map((error, idx) => (
                               <ErrorMsg key={idx}>{error}</ErrorMsg>
@@ -393,7 +390,7 @@ class DeviceModelUploadForm extends Component {
                     </div>
                     <div>
                       {
-                        (validationResults[name] && validationResults[name].messages || []).map((error, idx) => (
+                        validationResults[name] && (validationResults[name].messages || []).map((error, idx) => (
                           <div className="file-uploader-container">
                           <input
                             className="file-uploader"
