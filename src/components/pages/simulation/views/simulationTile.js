@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import Config from 'app.config';
 import { SectionHeader, Svg, ErrorMsg, Indicator } from 'components/shared';
-import { svgs } from 'utilities';
+import { svgs, ComponentArray } from 'utilities';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 
@@ -153,9 +153,15 @@ class SimulationTile extends Component {
         </div>
       : enabled
           ? isRunning
-              ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
+              ? <ComponentArray>
+                  <Svg path={svgs.running} className="running-icon" />
+                  t('simulation.status.running')
+                </ComponentArray>
               : isActive
-                  ? [ <Indicator size='small' className="setting-up-icon" />, t('simulation.status.settingUp') ]
+                  ? <ComponentArray>
+                      <Indicator size='small' className="setting-up-icon" />
+                      t('simulation.status.settingUp')
+                    </ComponentArray>
                   : t('simulation.status.ended', { endDateTime })
           : t('simulation.status.ended', { endDateTime })
   }
