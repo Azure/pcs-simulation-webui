@@ -37,7 +37,7 @@ class SimulationDetails extends Component {
       isRunning : false,
       showLink : false,
       hubUrl : '',
-      simualtionPollingError: '',
+      simulationPollingError: '',
       hubMetricsPollingError: ''
     };
 
@@ -81,7 +81,7 @@ class SimulationDetails extends Component {
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
             showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
-            simualtionPollingError: '',
+            simulationPollingError: '',
             devicesDeletionInProgress
           },
           () => {
@@ -90,7 +90,7 @@ class SimulationDetails extends Component {
             }
           });
         },
-        simualtionPollingError => this.setState({ simualtionPollingError })
+        simulationPollingError => this.setState({ simulationPollingError })
       )
     );
 
@@ -170,7 +170,7 @@ class SimulationDetails extends Component {
         ({ id }) => {
           this.props.history.push(`/simulations/${id}`);
         },
-        error => this.setState({ serviceError: error.message })
+        simulationPollingError => this.setState({ simulationPollingError })
       )
     );
   }
@@ -282,11 +282,11 @@ class SimulationDetails extends Component {
   openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
 
   getSimulationState = (endDateTime, t) => {
-    const { simualtionPollingError, enabled, isRunning, isActive, devicesDeletionInProgress } = this.state;
-    return simualtionPollingError
+    const { simulationPollingError, enabled, isRunning, isActive, devicesDeletionInProgress } = this.state;
+    return simulationPollingError
       ? <div className="simulation-error-container">
           <div>{ t('simulation.status.error') }</div>
-          <ErrorMsg>{ simualtionPollingError.message }</ErrorMsg>
+          <ErrorMsg>{ simulationPollingError.message }</ErrorMsg>
         </div>
       : enabled
           ? isRunning
