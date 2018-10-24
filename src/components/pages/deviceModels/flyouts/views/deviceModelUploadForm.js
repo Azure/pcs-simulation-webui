@@ -333,17 +333,17 @@ class DeviceModelUploadForm extends Component {
                         </div>
                       </div>
                       <div className="validation-message">
-                      <div className="file-uploader-container">
-                          <input
-                            className="file-uploader"
-                            type="file"
-                            id={fileName}
-                            name="uploader"
-                            accept=".json, .js"
-                            onChange={this.uploadSingleFile}
-                          />
-                          <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
-                      </div>
+                        <div className="file-uploader-container">
+                            <input
+                              className="file-uploader"
+                              type="file"
+                              id={fileName}
+                              name="uploader"
+                              accept=".json, .js"
+                              onChange={this.uploadSingleFile}
+                            />
+                            <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
+                        </div>
                       </div>
                     </div>
                   ))
@@ -388,16 +388,16 @@ class DeviceModelUploadForm extends Component {
                       {
                         validationResults[name] && (validationResults[name].messages || []).map((error, idx) => (
                           <div className="file-uploader-container">
-                          <input
-                            className="file-uploader"
-                            type="file"
-                            id={name}
-                            name="uploader"
-                            accept=".json, .js"
-                            onChange={this.uploadSingleFile}
-                          />
-                          <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
-                        </div>
+                            <input
+                              className="file-uploader"
+                              type="file"
+                              id={name}
+                              name="uploader"
+                              accept=".json, .js"
+                              onChange={this.uploadSingleFile}
+                            />
+                            <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
+                          </div>
                         ))
                       }
                     </div>
