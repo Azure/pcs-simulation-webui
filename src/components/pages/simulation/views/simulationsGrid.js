@@ -42,6 +42,17 @@ export class SimulationsGrid extends Component {
     }
   };
 
+  /**
+   * Handles soft select props method
+   */
+  onSoftSelectChange = (simulation, rowEvent) => {
+    const { onSoftSelectChange } = this.props;
+
+    if (isFunc(onSoftSelectChange)) {
+      onSoftSelectChange(simulation, rowEvent);
+    }
+  }
+
   render() {
     const { t } = this.props;
     const gridProps = {
@@ -52,7 +63,8 @@ export class SimulationsGrid extends Component {
       ...this.props, // Allow default property overrides
       context: { t },
       /* Grid Events */
-      onGridReady: this.onGridReady
+      onGridReady: this.onGridReady,
+      onSoftSelectChange: this.onSoftSelectChange,
     };
     return (
       <PcsGrid {...gridProps} key="simulation-grid-key" />

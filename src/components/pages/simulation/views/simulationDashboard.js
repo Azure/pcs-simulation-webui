@@ -41,10 +41,7 @@ export class SimulationDashboard extends Component {
     this.setState({ flyoutOpen: newSimulationFlyout })
   };
 
-  onSoftSelectChange = ({ id }) => this.setState({
-    flyoutOpen: true,
-    selectedDeviceModelId: id
-  });
+  onSoftSelectChange = ({ id }) => this.props.history.push(`/simulations/${id}`)
 
   onContextMenuChange = contextBtns => this.setState({
     contextBtns,
@@ -84,6 +81,7 @@ export class SimulationDashboard extends Component {
     const { t, simulationList = [], deviceModelEntities } = this.props;
     const gridProps = {
       rowData: this.toSimulationGridModel(simulationList || []),
+      onSoftSelectChange: this.onSoftSelectChange,
       t
     };
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
