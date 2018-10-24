@@ -64,6 +64,10 @@ class SimulationDetails extends Component {
       .switchMap(getSimulationStream)
       .subscribe(
         response => {
+          const devicesDeletionInProgress = !response.enabled
+            && response.devicesDeletionRequired
+            && !response.devicesDeletionCompleted;
+
           this.setState({
             simulation: response,
             enabled: response.enabled,
@@ -77,14 +81,14 @@ class SimulationDetails extends Component {
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
             showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
-            simualtionPollingError: ''
+            simualtionPollingError: '',
+            devicesDeletionInProgress
           },
-            () => {
-              if (response.isActive) {
-                this.simulationRefresh$.next(`r`);
-              }
+          () => {
+            if (response.isActive || this.state.devicesDeletionInProgress) {
+              this.simulationRefresh$.next(`r`);
             }
-          );
+          });
         },
         simualtionPollingError => this.setState({ simualtionPollingError })
       )
@@ -192,7 +196,8 @@ class SimulationDetails extends Component {
 
     const startBtnProps = {
       type: 'button',
-      onClick: this.startSimulation
+      onClick: this.startSimulation,
+      disabled: this.state.devicesDeletionInProgress
     };
 
     return this.state.enabled
@@ -277,7 +282,7 @@ class SimulationDetails extends Component {
   openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
 
   getSimulationState = (endDateTime, t) => {
-    const { simualtionPollingError, enabled, isRunning, isActive } = this.state;
+    const { simualtionPollingError, enabled, isRunning, isActive, devicesDeletionInProgress } = this.state;
     return simualtionPollingError
       ? <div className="simulation-error-container">
           <div>{ t('simulation.status.error') }</div>
@@ -285,11 +290,22 @@ class SimulationDetails extends Component {
         </div>
       : enabled
           ? isRunning
-              ? [ <Svg path={svgs.running} className="running-icon" key="running-icon" />, t('simulation.status.running') ]
+              ? <ComponentArray>
+                  <Svg path={svgs.running} className="running-icon" />
+                  { t('simulation.status.running') }
+                </ComponentArray>
               : isActive
-                  ? [ <Indicator size='small' className="setting-up-icon" />, t('simulation.status.settingUp') ]
+                  ? <ComponentArray>
+                      <Indicator size='small' className="setting-up-icon" />
+                      { t('simulation.status.settingUp') }
+                    </ComponentArray>
                   : t('simulation.status.ended', { endDateTime })
-          : t('simulation.status.ended', { endDateTime })
+          : devicesDeletionInProgress
+              ? <ComponentArray>
+                  <Indicator size='small' className="setting-up-icon" />
+                  { t('simulation.status.cleaningUp') }
+                </ComponentArray>
+              : t('simulation.status.ended', { endDateTime })
   }
 
   render() {

@@ -155,12 +155,12 @@ class SimulationTile extends Component {
           ? isRunning
               ? <ComponentArray>
                   <Svg path={svgs.running} className="running-icon" />
-                  t('simulation.status.running')
+                  { t('simulation.status.running') }
                 </ComponentArray>
               : isActive
                   ? <ComponentArray>
                       <Indicator size='small' className="setting-up-icon" />
-                      t('simulation.status.settingUp')
+                      { t('simulation.status.settingUp') }
                     </ComponentArray>
                   : t('simulation.status.ended', { endDateTime })
           : t('simulation.status.ended', { endDateTime })
