@@ -244,6 +244,7 @@ class DeviceModelUploadForm extends Component {
     const replaceIncorrectScriptIndex = this.state.scripts.findIndex(
       script => (script.name === e.target.id));
 
+    // TODO: Construct just the new state without copying old state
     let scripts = [...this.state.scripts];
     let missingScripts = [...this.state.missingScripts];
     let validationResults = { ...this.state.validationResults };
