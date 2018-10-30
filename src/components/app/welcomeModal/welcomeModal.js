@@ -53,6 +53,7 @@ export class WelcomeModal extends Component {
                     state: {}
                   },
                   btnName: t('getStarted.sampleSimulation.btnName'),
+                  onClick: onClose
                 },
                 {
                   title: t('getStarted.customDevices.title'),
@@ -66,6 +67,7 @@ export class WelcomeModal extends Component {
                     }
                   },
                   btnName: t('getStarted.customDevices.btnName'),
+                  onClick: onClose
                 },
                 {
                   title: t('getStarted.advancedDevices.title'),
@@ -79,6 +81,7 @@ export class WelcomeModal extends Component {
                     }
                   },
                   btnName: t('getStarted.advancedDevices.btnName'),
+                  onClick: onClose
                 }
               ].map((item, idx) => <WelcomeTile key={`welcome-model-tile-${idx}`} {...item} />)
             }

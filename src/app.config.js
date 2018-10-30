@@ -7,9 +7,9 @@ const Config = {
   configApiUrl: '/config-svc/v1/',
 
   // Constants
-  simulationNameMaxLength: 25,
-  simulationDescMaxLength: 100,
-  retryWaitTime: 15000, // On retryable error, retry after 2s
+  formFieldMaxLength: 25,
+  formDescMaxLength: 100,
+  retryWaitTime: 15000, // On retryable error, retry after 15s
   maxRetryAttempts: 2,
   maxDevicesPerVM: 20000,
   retryableStatusCodes: new Set([ 0, 502, 503 ]),

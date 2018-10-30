@@ -61,6 +61,9 @@ const initialFormState = {
   id: ''
 }
 
+const formFieldMaxLength = Config.formFieldMaxLength;
+const formDescMaxLength = Config.formDescMaxLength;
+
 class DeviceModelForm extends LinkedComponent {
 
   constructor(props) {
@@ -72,12 +75,19 @@ class DeviceModelForm extends LinkedComponent {
     };
 
     const { t, deviceModelsNameSet } = props;
+
     // State to input links
     this.nameLink = this.linkTo('name')
       .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.nameCantBeEmpty'))
+      .check(x => x.length < formFieldMaxLength, () => this.props.t('deviceModels.flyouts.errorMsg.nameGTMaxLength', { formFieldMaxLength }))
       .check((x = '') => !deviceModelsNameSet.has(x.toLowerCase()), t('deviceModels.flyouts.errorMsg.nameCantBeDuplicate'));
-    this.descriptionLink = this.linkTo('description');
-    this.versionLink = this.linkTo('version');
+
+    this.descriptionLink = this.linkTo('description')
+      .check(x => x.length < formDescMaxLength, () => this.props.t('deviceModels.flyouts.errorMsg.descGTMaxLength', { formDescMaxLength }));
+
+    this.versionLink = this.linkTo('version')
+      .check(x => x.length < formFieldMaxLength, () => this.props.t('deviceModels.flyouts.errorMsg.versionGTMaxLength', { formFieldMaxLength }));
+
     this.intervalLink = this.linkTo('interval')
       .check(({ ms }) => ms >= 1000, t('deviceModels.flyouts.errorMsg.intervalCantBeLessThanOneSecond'));
     const minTelemetryInterval = global.DeploymentConfig.minTelemetryInterval;
@@ -213,6 +223,7 @@ class DeviceModelForm extends LinkedComponent {
     // Create the state link for the dynamic form elements
     const sensorLinks = this.sensorsLink.getLinkedChildren(sensorLink => {
       const name = sensorLink.forkTo('name')
+        .check(x => x.length < formFieldMaxLength, t('deviceModels.flyouts.errorMsg.dataPointGTMaxLength', { formFieldMaxLength }))
         .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.dataPointNameCantBeEmpty'));
       const behavior = sensorLink.forkTo('behavior')
         .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.behaviorCantBeEmpty'));
@@ -225,6 +236,7 @@ class DeviceModelForm extends LinkedComponent {
         .check(x => Validator.notEmpty(x === '-' ||  x === '.' ? '' : x), t('deviceModels.flyouts.errorMsg.maxValueCantBeEmpty'))
         .check(x => stringToFloat(x) > stringToFloat(minValue.value),  t('deviceModels.flyouts.errorMsg.maxValueMustBeGreaterThanMin'));
       const unit = sensorLink.forkTo('unit')
+        .check(x => x.length < formFieldMaxLength, t('deviceModels.flyouts.errorMsg.unitGTMaxLength', { formFieldMaxLength }))
         .check(Validator.notEmpty, t('deviceModels.flyouts.errorMsg.unitValueCantBeEmpty'));
       const edited = !(!name.value && !behavior.value && !minValue.value && !maxValue.value && !unit.value);
       const error = (edited && (name.error || behavior.error || minValue.error || maxValue.error || unit.error)) || '';
@@ -289,10 +301,6 @@ class DeviceModelForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>{t('deviceModels.flyouts.new.telemetry')}</SectionHeader>
           <SectionDesc>{t('deviceModels.flyouts.new.telemetryDescription')}</SectionDesc>
-          {
-            sensors.length < 10 &&
-              <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
-          }
           <div className="sensors-container">
           {
             sensors.length > 0 &&
@@ -320,6 +328,10 @@ class DeviceModelForm extends LinkedComponent {
             ))
           }
           </div>
+          {
+            sensors.length < 10 &&
+              <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
+          }
         </FormSection>
         {
         // Currently, we do not support device level frequency control. We might revisit in the future once we are ready to honor it.
