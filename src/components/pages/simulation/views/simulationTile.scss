@@ -39,7 +39,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     font-family: $fontSelawikBold;
     @include rem-font-size(18px);
     @include rem-fallback(line-height, 22px);
-    @include rem-fallback(padding, 12px);
+    @include rem-fallback(padding, 24px 24px 12px 24px);
   }
 
   .time-containers,
@@ -56,7 +56,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     display: flex;
     flex-flow: row;
     justify-content: space-between;
-    @include rem-fallback(padding, 12px);
+    @include rem-fallback(padding, 12px 24px);
 
     .right-time-container {
       display: flex;
@@ -95,7 +95,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     flex-flow: column;
     height: 100%;
     justify-content: space-between;
-    @include rem-fallback(padding, 12px);
+    @include rem-fallback(padding, 12px 24px 24px 24px);
 
     .active-devices {
       display: flex;
