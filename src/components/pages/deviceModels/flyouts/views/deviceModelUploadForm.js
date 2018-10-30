@@ -134,7 +134,7 @@ class DeviceModelUploadForm extends Component {
           }
 
           const jsonFile = jsonFiles[0];
-          const { CloudToDeviceMethods = {}, Simulation: { Scripts } = { Scripts: [] } } = deviceModel;
+          const { CloudToDeviceMethods = {}, Simulation: { Scripts } = { Scripts: [] } } = deviceModel || {};
           const requiredScripts = [...Object.values(CloudToDeviceMethods), ...Scripts];
           const requiredScriptNames = new Set(requiredScripts.map(({ Path }) => Path));
           const uploadedScriptNames = new Set(scriptFiles.map(({ name }) => name));
@@ -358,7 +358,7 @@ class DeviceModelUploadForm extends Component {
               <FormLabel>{t('deviceModels.flyouts.upload.uploadedFiles')}</FormLabel>
               <div className="upload-results-container">
                 <div className="file-name">{jsonFile.name}</div>
-                <Svg path={svgs.success} className="success-result json-file-validation" />
+                <Svg path={svgs.success} className="success-result" />
               </div>
               {this.state.scripts
                 .sort((a, b) => a.name.localeCompare(b.name))
@@ -376,7 +376,7 @@ class DeviceModelUploadForm extends Component {
                       </div>
                     </div>
                     <div
-                      className={`validation-result ${(validationResults[name] && validationResults[name].isValid) ? 'success-result' : 'failed-result'}`}>
+                      className={`${(validationResults[name] && validationResults[name].isValid) ? 'success-result' : 'failed-result'}`}>
                       {validationResults[name] && validationResults[name].isValid === true ? (
                         <Svg path={svgs.success} className="success-result" />
                       ) : validationResults[name] && validationResults[name].isValid === false ? (
@@ -388,7 +388,7 @@ class DeviceModelUploadForm extends Component {
                     <div>
                       {
                         validationResults[name] && (validationResults[name].messages || []).map((error, idx) => (
-                          <div className="file-uploader-container">
+                          <div key={name} className="file-uploader-container">
                             <input
                               className="file-uploader"
                               type="file"
