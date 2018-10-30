@@ -32,7 +32,7 @@
         background: none;
         border: none;
         cursor: pointer;
-        @include rem-font-size(32px);
+        @include rem-font-size(20px);
         @include rem-fallback(padding, 5px 0px);
         @include rem-fallback(padding-bottom, 10px);
         @include rem-fallback(margin-right, 72px);
@@ -41,7 +41,7 @@
 
       .active {
         font-weight: 700;
-        border-bottom: 5px solid;
+        border-bottom: 2px solid;
       }
     }
   }

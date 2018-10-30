@@ -105,7 +105,7 @@ class DeviceModelUploadForm extends Component {
     Observable.from(files)
       .reduce(
         (acc, file) => {
-          if (file.type === 'application/json') {
+          if (file.type === 'application/json' || file.name.endsWith('.json')) {
             acc.jsonFiles.push(file);
           } else if (file.type === 'text/javascript' || file.name.endsWith('.js')) {
             acc.scriptFiles.push(file);

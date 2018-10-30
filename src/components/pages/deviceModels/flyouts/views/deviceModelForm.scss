@@ -23,6 +23,10 @@
     }
   }
 
+  .form-group-label {
+    @include rem-font-size(14px);
+  }
+
   .file-uploader-container {
     position: relative;
     display: inline-block;
