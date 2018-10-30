@@ -55,8 +55,6 @@
 
     .file-name { @include rem-fallback(width, 250px); }
 
-    .validation-result { @include rem-fallback(width, 36px); }
-
     .validation-message { @include rem-fallback(margin-top, 8px); }
 
     .success-result svg {
@@ -68,8 +66,6 @@
       @include rem-fallback(width, 16px);
       @include rem-fallback(height, 16px);
     }
-
-    .json-file-validation { margin-left: 9px; }
   }
 
   @include themify($themes) {
