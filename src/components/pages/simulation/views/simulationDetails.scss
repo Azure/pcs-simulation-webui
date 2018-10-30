@@ -122,7 +122,6 @@ $svgSize: 16px;
 
       .device-model-links {
         flex-shrink: 0;
-        @include rem-fallback(width, 270px);
 
         .nav-item {
           align-items: center;
