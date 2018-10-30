@@ -86,8 +86,12 @@ class DeviceModelUploadForm extends Component {
     const { target: value } = e;
     const { t } = this.props;
 
+    console.log('Files being uploaded inside upload files', value.files);
+
     this.filesSanityCheck(Object.values((value || {}).files || {}), t).subscribe(
       ({ deviceModel, scriptFiles, error, jsonFile, missingScripts }) => {
+        console.log('JsonFile: Before setting state in uploadFiles function', jsonFile);
+
         this.setState({
           error,
           deviceModel,
@@ -97,16 +101,24 @@ class DeviceModelUploadForm extends Component {
           validationResults: {}
         }, () => this.validateScripts());
       },
-      error => this.setState({ error })
+      error => {
+        console.log('Before setting state with error in uploadFiles function', error);
+
+        return this.setState({ error })
+      }
     );
   };
 
-  filesSanityCheck = (files = [], t) =>
-    Observable.from(files)
+  filesSanityCheck = (files = [], t) => {
+    console.log('Files received in filesSanityCheck',files);
+
+    return Observable.from(files)
       .reduce(
         (acc, file) => {
           if (file.type === 'application/json' || file.name.endsWith('.json')) {
+            console.log('Uploaded json file is', file);
             acc.jsonFiles.push(file);
+            console.log('Inserted json file into the accumulator', acc.jsonFiles);
           } else if (file.type === 'text/javascript' || file.name.endsWith('.js')) {
             acc.scriptFiles.push(file);
           }
@@ -115,6 +127,8 @@ class DeviceModelUploadForm extends Component {
         { jsonFiles: [], scriptFiles: [] }
       )
       .flatMap(({ jsonFiles, scriptFiles }) => {
+        console.log('Json files received from reducer in filesSanityCheck', jsonFiles);
+
         if (jsonFiles.length < 1) {
           return Observable.throw(t('deviceModels.flyouts.upload.missingJsonFileErrorMessage'));
         }
@@ -124,12 +138,16 @@ class DeviceModelUploadForm extends Component {
         }
 
         return this.readFileAsText(jsonFiles[0]).map(content => {
+          console.log('Json file content received from readFileAsText', content);
+
           let deviceModel = null;
 
           try {
             deviceModel = JSON.parse(content);
           }
           catch (error) {
+            console.log('After parsing json content into device model, found an Invalid JSON File', error);
+
             return Observable.throw(t('deviceModels.flyouts.upload.invalidJSONFileErrorMessage', { error }));
           }
 
@@ -151,6 +169,8 @@ class DeviceModelUploadForm extends Component {
             }
           }
 
+          console.log('Final json file to be set in state', jsonFile);
+
           return {
             deviceModel,
             scriptFiles,
@@ -159,12 +179,14 @@ class DeviceModelUploadForm extends Component {
           };
         });
       });
+    }
 
   readFileAsText = file => {
     const reader = new FileReader();
 
     return Observable.create(observer => {
       reader.onerror = ({ target: error }) => {
+        console.log('Error in readFileAsText', error);
         reader.abort();
         observer.throw(error);
       };
