@@ -37,6 +37,7 @@
     .checkmark {
       position: absolute;
       left: 0;
+      border: 1px solid;
       @include square-px-rem(13px);
       @include rem-fallback(top, 3px);
       @include rem-fallback(border-radius, 2px);
@@ -64,7 +65,10 @@
   @include themify($themes) {
     color:  themed('colorGray');
 
-    input ~ .checkmark { background-color: themed('colorMidThird'); }
+    input ~ .checkmark {
+      background-color: themed('colorBlack');
+      border-color: themed('colorMidThird')
+    }
     input:checked ~ .checkmark {
       color: themed('colorBlack');
       background-color: themed('colorHighest');
