@@ -57,14 +57,16 @@ class SimulationForm extends LinkedComponent {
       deviceModels: [],
       errorMessage: '',
       devicesDeletionRequired: false,
-      autoscaleAcknowledged: false
+      autoscaleAcknowledged: false,
+      formSubmitted: false
     };
 
     this.subscriptions = [];
 
     // State to input links
-    const simulationNameMaxLength = Config.simulationNameMaxLength;
-    const simulationDescMaxLength = Config.simulationDescMaxLength;
+    const simulationNameMaxLength = Config.formFieldMaxLength;
+    const simulationDescMaxLength = Config.formDescMaxLength;
+    const minimumDurationInMinutes = 5;
 
     this.name = this.linkTo('name')
       .check(x => Validator.notEmpty(x === '-' ? '' : x), () => this.props.t('simulation.form.errorMsg.nameCantBeEmpty'))
@@ -80,7 +82,7 @@ class SimulationForm extends LinkedComponent {
       .check(Validator.notEmpty, () => props.t('simulation.form.errorMsg.deviceModelIsRequired'));
 
     this.duration = this.linkTo('duration')
-      .check(({ ms }) => ms > 0, () => props.t('simulation.form.errorMsg.durationMustBeGTZero'));
+      .check(({ ms }) => ms >= minimumDurationInMinutes * 60 * 1000, () => props.t('simulation.form.errorMsg.valueLTMinDuration', { minimumDurationInMinutes }));
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
@@ -214,13 +216,16 @@ class SimulationForm extends LinkedComponent {
       devicesDeletionRequired
     };
 
-    this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
-      .subscribe(
-        ({ id }) => {
-          this.props.history.push(`/simulations/${id}`);
-          this.props.onClose();
-        },
-        error => this.setState({ error: error.message })
+    this.setState(
+      { formSubmitted: true },
+      () => this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
+        .subscribe(
+          ({ id }) => {
+            this.props.history.push(`/simulations/${id}`);
+            this.props.onClose();
+          },
+          error => this.setState({ error: error.message })
+        )
       )
     );
   };
@@ -232,7 +237,7 @@ class SimulationForm extends LinkedComponent {
 
   render () {
     const { t } = this.props;
-    const { deviceModels, devicesDeletionRequired, autoscaleAcknowledged } = this.state;
+    const { deviceModels, devicesDeletionRequired, autoscaleAcknowledged, formSubmitted } = this.state;
     const connectStringInput = (
       <FormControl
         className="long"
@@ -451,7 +456,7 @@ class SimulationForm extends LinkedComponent {
               svg={svgs.startSimulation}
               type="submit"
               className="apply-btn"
-              disabled={!this.formIsValid() || deviceModelsHaveError || autoscaleAcknowledgedRequired}>
+              disabled={!this.formIsValid() || deviceModelsHaveError || autoscaleAcknowledgedRequired || formSubmitted}>
                 { t('simulation.start') }
             </Btn>
           </BtnToolbar>

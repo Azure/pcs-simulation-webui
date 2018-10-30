@@ -330,7 +330,11 @@ class SimulationDetails extends Component {
     } = simulation;
 
     const startDateTime = moment(startTime).format(dateTimeFormat);
-    const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : moment(endTime).format(dateTimeFormat);
+    const endDateTime = stopTime
+      ? moment(stopTime).format(dateTimeFormat)
+      : endTime
+          ? moment(endTime).format(dateTimeFormat)
+          :  '-';
 
     const iotHub = iotHubs[0] || {};
     const iotHubString = (iotHub.connectionString || t('simulation.form.targetHub.preProvisionedLbl'));
