@@ -49,7 +49,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     font-family: $fontSelawikSemilight;
     @include rem-font-size(12px);
     @include rem-fallback(line-height, 15px);
-    @include rem-fallback(padding-bottom, 14px);
+    @include rem-fallback(padding-bottom, 12px);
   }
 
   .time-containers {
@@ -133,9 +133,13 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
       }
 
       .telemetry-container {
-        display: flex;
-        flex-flow: column;
-        justify-content: flex-end;
+        margin-top: auto;
+
+        .simulation-status-section {
+          display: flex;
+          flex-flow: column;
+          justify-content: flex-end;
+        }
       }
 
       .messages-per-second {
