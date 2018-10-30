@@ -63,7 +63,7 @@
         "descGTMaxLength": "Description can't be greater than {{simulationDescMaxLength}} characters",
         "deviceModelIsRequired": "A device model must be selected",
         "deviceModelNameCantBeEmpty": "Name is required",
-        "valueLTMinDuration": "Duration must be at least {{minimumDurationInMinites}} minutes",
+        "valueLTMinDuration": "Duration must be at least {{minimumDurationInMinutes}} minutes",
         "countCantBeEmpty": "Number of devices is required",
         "countCantBeLessThanZero": "Amount must be no less than zero",
         "countShouldBeLTMax": "Total number of devices must be no greater than {{maxSimulatedDevices}}",

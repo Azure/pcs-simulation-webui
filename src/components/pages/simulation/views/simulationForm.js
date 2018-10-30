@@ -66,7 +66,7 @@ class SimulationForm extends LinkedComponent {
     // State to input links
     const simulationNameMaxLength = Config.formFieldMaxLength;
     const simulationDescMaxLength = Config.formDescMaxLength;
-    const minimumDurationInMinites = 5;
+    const minimumDurationInMinutes = 5;
 
     this.name = this.linkTo('name')
       .check(x => Validator.notEmpty(x === '-' ? '' : x), () => this.props.t('simulation.form.errorMsg.nameCantBeEmpty'))
@@ -82,7 +82,7 @@ class SimulationForm extends LinkedComponent {
       .check(Validator.notEmpty, () => props.t('simulation.form.errorMsg.deviceModelIsRequired'));
 
     this.duration = this.linkTo('duration')
-      .check(({ ms }) => ms >= minimumDurationInMinites * 60 * 1000, () => props.t('simulation.form.errorMsg.valueLTMinDuration', { minimumDurationInMinites }));
+      .check(({ ms }) => ms >= minimumDurationInMinutes * 60 * 1000, () => props.t('simulation.form.errorMsg.valueLTMinDuration', { minimumDurationInMinutes }));
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
