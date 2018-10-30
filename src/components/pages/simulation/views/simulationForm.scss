@@ -69,6 +69,7 @@
       background-color: themed('colorBlack');
       border-color: themed('colorMidThird')
     }
+    
     input:checked ~ .checkmark {
       color: themed('colorBlack');
       background-color: themed('colorHighest');
