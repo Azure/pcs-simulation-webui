@@ -82,7 +82,7 @@ class SimulationForm extends LinkedComponent {
       .check(Validator.notEmpty, () => props.t('simulation.form.errorMsg.deviceModelIsRequired'));
 
     this.duration = this.linkTo('duration')
-      .check(({ ms }) => ms >= minimumDurationInMinites * 60 * 1000, () => props.t('simulation.form.errorMsg.durationCantBeLessThanMinimumDuration', { minimumDurationInMinites }));
+      .check(({ ms }) => ms >= minimumDurationInMinites * 60 * 1000, () => props.t('simulation.form.errorMsg.valueLTMinDuration', { minimumDurationInMinites }));
 
     this.targetHub = this.linkTo('preProvisionedRadio')
       .check(Validator.notEmpty)
