@@ -13,6 +13,7 @@ export const WelcomeTile = ({ onClick, imgPath, title, description, btnName, lin
     <div className="btn-link-container">
       <Link
         className="btn-link"
+        onClick={onClick}
         to={{
         pathname: link.pathname,
         state: link.state

@@ -184,7 +184,7 @@ class SimulationTile extends Component {
 
     const className = this.state.isRunning ? 'simulation-tile-container active' : 'simulation-tile-container';
     const startDateTime = moment(startTime).format(dateTimeFormat);
-    const scheduledEndTime = (endTime && endTime === maxDate) ? '-' : moment(endTime).format(dateTimeFormat);
+    const scheduledEndTime = (!endTime || endTime === maxDate) ? '-' : moment(endTime).format(dateTimeFormat);
     const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : scheduledEndTime;
     return (
       <div className= { className } >
