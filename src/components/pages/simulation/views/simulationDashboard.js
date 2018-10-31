@@ -90,15 +90,15 @@ export class SimulationDashboard extends Component {
     };
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
-    const activeSimulationsList = simulationList.filter(sim => sim.isRunning);
-    const isRunning = activeSimulationsList.length > 0;
-    const maxCount = isRunning ? 6 : 9;
-    const pastSimulationsList = simulationList.filter(sim => !sim.isRunning).slice(0, maxCount);
-    const className = isRunning ? 'simulation-tile-link twoCol' : 'simulation-tile-link threeCol';
+    const activeSimulationsList = simulationList.filter(({isActive}) => isActive);
+    const isActive = activeSimulationsList.length > 0;
+    const maxCount = isActive ? 6 : 9;
+    const pastSimulationsList = simulationList.filter(sim => !sim.isActive).slice(0, maxCount);
+    const className = isActive ? 'simulation-tile-link twoCol' : 'simulation-tile-link threeCol';
 
     return [
       <ContextMenu key="context-menu">
-        <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isRunning}>
+        <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive}>
           { t('simulation.newSim') }
         </Btn>
       </ContextMenu>,

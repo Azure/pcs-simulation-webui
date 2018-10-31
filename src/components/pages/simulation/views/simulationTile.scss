@@ -91,10 +91,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
   }
 
   .tile-body {
-    display: flex;
-    flex-flow: column;
-    height: 100%;
-    justify-content: space-between;
+    margin-top: auto;
     @include rem-fallback(padding, 12px 24px 24px 24px);
 
     .active-devices {
@@ -121,7 +118,6 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     .simulation-summary {
       display: flex;
       justify-content: space-between;
-      @include rem-fallback(height, 140px);
       @include rem-fallback(padding-top, 12px);
 
       .device-model-rows { vertical-align: top; }
