@@ -74,6 +74,7 @@ export class TelemetryChart extends Component {
               tooltip: true,
               yAxisState: 'shared', // Default to all values being on the same axis
               theme,
+              is24HourTime: false,
               offset // offset for all timestamps in minutes or timezone from UTC
             },
             this.props.colors

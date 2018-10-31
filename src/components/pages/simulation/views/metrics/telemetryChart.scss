@@ -10,6 +10,7 @@
   flex-flow: column nowrap;
   flex-grow: 1;
   overflow: hidden;
+  padding-bottom: 10px;
 
   .chart-container {
     @include rem-fallback(min-height, 150px);
