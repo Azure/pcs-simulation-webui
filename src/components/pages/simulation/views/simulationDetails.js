@@ -197,7 +197,7 @@ class SimulationDetails extends Component {
     const startBtnProps = {
       type: 'button',
       onClick: this.startSimulation,
-      disabled: this.state.devicesDeletionInProgress
+      disabled: disabled || this.state.devicesDeletionInProgress
     };
 
     return this.state.enabled
@@ -350,7 +350,8 @@ class SimulationDetails extends Component {
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
 
     // Remove isThereARunningSimulation when simulation service support running multiple simulations
-    const isThereARunningSimulation = simulationList.some(({ isRunning }) => isRunning);
+    const isThereARunningSimulation = simulationList.some(({ isActive }) => isActive);
+
     return (
       <ComponentArray>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
