@@ -33,6 +33,10 @@ export class SimulationDashboard extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.fetchSimulationList();
+  }
+
   openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
 
   closeFlyout = () => this.setState(closedFlyoutState);
