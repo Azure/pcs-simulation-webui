@@ -23,6 +23,13 @@ $svgSize: 16px;
           display: flex;
           justify-content: space-between;
           @include rem-fallback(padding-bottom, 16px);
+
+          .info-content {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            @include rem-fallback(max-width, 350px);
+          }
         }
 
         .time-container {

@@ -138,7 +138,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
         .simulation-status-section {
           display: flex;
           flex-flow: column;
-          justify-content: flex-end;
+          align-items: flex-end;
         }
       }
 
