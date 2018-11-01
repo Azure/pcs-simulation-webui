@@ -56,7 +56,6 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     display: flex;
     flex-flow: row;
     justify-content: space-between;
-    @include rem-fallback(padding, 12px 24px);
 
     .right-time-container {
       display: flex;
@@ -91,7 +90,10 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
   }
 
   .tile-body {
-    margin-top: auto;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-between;
     @include rem-fallback(padding, 12px 24px 24px 24px);
 
     .active-devices {

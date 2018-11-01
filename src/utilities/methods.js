@@ -57,3 +57,6 @@ export const humanizeDuration = (time) => {
 
 /** Wrapper component for an array of components as its children */
 export const ComponentArray = ({ children }) => children;
+
+/** Returns true if the value is defined */
+export const isDef = (val) => typeof val !== 'undefined';
