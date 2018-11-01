@@ -66,7 +66,9 @@ export class DeviceModels extends Component {
       deleteDeviceModel,
       editDeviceModel,
       uploadDeviceModel,
-      deviceModelsNameSet
+      deviceModelsNameSet,
+      uploadDeviceModelsError,
+      clearUploadDeviceModelError
     } = this.props;
     const gridProps = {
       rowData: deviceModels || [],
@@ -78,6 +80,7 @@ export class DeviceModels extends Component {
       createDeviceModel,
       editDeviceModel,
       deviceModelsNameSet,
+      clearUploadDeviceModelError,
       t
     };
     const newDeviceModelFlyoutOpen = this.state.flyoutOpen === newDeviceModelFlyout;
@@ -98,6 +101,8 @@ export class DeviceModels extends Component {
             uploadDeviceModel={uploadDeviceModel}
             deviceModelsNameSet={deviceModelsNameSet}
             location={location}
+            uploadDeviceModelsError={uploadDeviceModelsError}
+            clearUploadDeviceModelError={clearUploadDeviceModelError}
             t={t} />
         }
       </PageContent>

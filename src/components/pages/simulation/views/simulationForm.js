@@ -249,13 +249,25 @@ class SimulationForm extends LinkedComponent {
     );
 
     const deviceModelLinks = this.deviceModelsLink.getLinkedChildren((deviceModelLink, idx) => {
-      const name = deviceModelLink.forkTo('name')
-        .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
       const maxSimulatedDevices = global.DeploymentConfig.maxDevicesPerSimulation;
       const currentDevicesCount = deviceModels.reduce(
         (sum, {count = 0}) => sum + count,
         0
       );
+
+      // TODO: remove when service support duplicate device models
+      const selectedDeviceModels = {};
+      for (let i=0; i < deviceModels.length; i++) {
+        const name = deviceModels[i].name;
+        if (!selectedDeviceModels[name]) {
+          selectedDeviceModels[name] = 0;
+        }
+        selectedDeviceModels[name]++;
+      }
+
+      const name = deviceModelLink.forkTo('name')
+        .check(x => selectedDeviceModels[x] < 2, t('simulation.form.errorMsg.duplicateModelsNotAllowed'))
+        .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
 
       const count = deviceModelLink.forkTo('count')
         .reject(nonInteger)

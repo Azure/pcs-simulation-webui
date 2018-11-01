@@ -140,12 +140,18 @@ const deleteDeviceModelReducer = (state, { payload }) => {
   });
 };
 
+// Where payload is an action type
+const wipeReducer = (state, { payload }) => update(state, {
+  errors: { $unset: [payload] }
+});
+
 export const redux = createReducerScenario({
   updateDeviceModels: { type: 'DEVICE_MODELS_UPDATE', reducer: updateDeviceModelsReducer },
   updateSingleDeviceModel: { type: 'DEVICE_MODEL_SINGLE_UPDATE', reducer: updateSingleDeviceModelReducer },
   createDeviceModel: { type: 'CREATE_DEVICE_MODEL', reducer: createDeviceModelReducer },
   uploadDeviceModel: { type: 'UPLOAD_DEVICE_MODEL', reducer: uploadDeviceModelReducer },
   deleteDeviceModel: { type: 'DELETE_DEVICE_MODEL', reducer: deleteDeviceModelReducer },
+  clearUploadDeviceModelError: { type: 'WIPE_ERROR', reducer: wipeReducer, staticPayload: epics.actionTypes.uploadDeviceModel },
   registerError: { type: 'DEVICE_MODELS_REDUCER_ERROR', reducer: errorReducer },
 });
 
@@ -166,4 +172,6 @@ export const getDeviceModelsNameSet = createSelector(
 );
 export const getDeleteDeviceModelError = state =>
   getError(getDeviceModelsReducer(state), epics.actionTypes.deleteDeviceModel);
+export const getUpLoadDeviceModelsError = state =>
+  getError(getDeviceModelsReducer(state), epics.actionTypes.uploadDeviceModel);
 // ========================= Selectors - END
