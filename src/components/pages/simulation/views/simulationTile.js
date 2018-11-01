@@ -129,7 +129,7 @@ class SimulationTile extends Component {
   showDeviceCount = (models) => models.map((deviceModelItem, idx) => {
     const { deviceModelEntities } = this.props;
     return (
-      <div className="device-model-row" key={ `${deviceModelItem.id}-${idx}` }>
+      <div className="device-model-row" key={`${deviceModelItem.id}-${idx}`}>
         {deviceModelItem.count} {deviceModelEntities && deviceModelEntities[deviceModelItem.id] ? (deviceModelEntities[deviceModelItem.id]).name : '-'}
       </div>
     )
@@ -187,13 +187,15 @@ class SimulationTile extends Component {
     const scheduledEndTime = (!endTime || endTime === maxDate) ? '-' : moment(endTime).format(dateTimeFormat);
     const endDateTime = stopTime ? moment(stopTime).format(dateTimeFormat) : scheduledEndTime;
     return (
-      <div className= { className } >
+      <div className={className}>
         <div className="tile-header">
-          <SectionHeader>{name || id}</SectionHeader>
+          <SectionHeader>{ name || id }</SectionHeader>
         </div>
         <div className="tile-body">
           <div className="time-containers">
-            <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
+            <div className="left-time-container">
+              { t('simulation.status.created', { startDateTime }) }
+            </div>
             <div className="right-time-container">
             { this.getSimulationState(endDateTime, t) }
             </div>
@@ -209,9 +211,19 @@ class SimulationTile extends Component {
             </div>
             <div className="telemetry-container">
               <div className="simulation-status-section">
-                <div className="messages-per-second">{isRunning ? this.state.averageMessagesPerSecond : statistics.averageMessagesPerSecond}</div>
-                <div className="messages-per-second-desc">{t('simulation.status.averageMessagesPerSec')}</div>
-                <div className="total -messages">{t('simulation.status.totalMessagesSentLabel')} {isRunning ? this.state.totalMessagesSent : statistics.totalMessagesSent}</div>
+                <div className="messages-per-second">
+                  { isRunning
+                      ? this.state.averageMessagesPerSecond
+                      : statistics.averageMessagesPerSecond
+                  }
+                </div>
+                <div className="messages-per-second-desc">
+                  { t('simulation.status.averageMessagesPerSec') }
+                </div>
+                <div className="total -messages">
+                  { t('simulation.status.totalMessagesSentLabel') }
+                  { isRunning ? this.state.totalMessagesSent : statistics.totalMessagesSent }
+                </div>
               </div>
             </div>
           </div>
