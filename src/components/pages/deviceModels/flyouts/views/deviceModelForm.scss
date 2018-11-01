@@ -49,10 +49,7 @@
     }
   }
 
-  .device-model-info-text {
-    display: block;
-    padding-bottom: 22px;
-  }
+  .device-model-info-text { @include rem-fallback(margin-top, 22px); }
 
   .upload-results-container {
     display: flex;
