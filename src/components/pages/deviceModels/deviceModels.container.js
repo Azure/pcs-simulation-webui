@@ -16,7 +16,7 @@ import { DeviceModels } from './deviceModels';
 const mapStateToProps = state => ({
   deviceModels: getDeviceModels(state),
   deleteDeviceModelError: getDeleteDeviceModelError(state),
-  upLoadDeviceModelsError: getUpLoadDeviceModelsError(state),
+  uploadDeviceModelsError: getUpLoadDeviceModelsError(state),
   deviceModelsNameSet: getDeviceModelsNameSet(state)
 });
 
@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
   uploadDeviceModel: (payload) => dispatch(epics.actions.uploadDeviceModel(payload)),
   deleteDeviceModel: (id) => dispatch(epics.actions.deleteDeviceModel(id)),
   editDeviceModel: (payload) => dispatch(epics.actions.editDeviceModel(payload)),
-  wipeUploadDeviceModelError: () => dispatch(redux.actions.wipeUploadDeviceModelError())
+  clearUploadDeviceModelError: () => dispatch(redux.actions.clearUploadDeviceModelError())
 });
 
 export const DeviceModelsContainer = translate()(connect(mapStateToProps, mapDispatchToProps)(DeviceModels));

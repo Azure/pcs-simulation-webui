@@ -277,11 +277,11 @@ class DeviceModelUploadForm extends Component {
     const validationResults = {}
 
     this.setState({ ...initialFormState, formVersion, validationResults });
-    this.props.wipeUploadDeviceModelError();
+    this.props.clearUploadDeviceModelError();
   };
 
   render() {
-    const { t, upLoadDeviceModelsError } = this.props;
+    const { t, uploadDeviceModelsError } = this.props;
     const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error, missingScripts, validationResults } = this.state;
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
@@ -410,8 +410,8 @@ class DeviceModelUploadForm extends Component {
         }
         </FormSection>
         { error && <ErrorMsg>{ error }</ErrorMsg> }
-        { upLoadDeviceModelsError &&
-          <ErrorMsg>{ (upLoadDeviceModelsError || {}).errorMessage }</ErrorMsg>
+        { uploadDeviceModelsError &&
+          <ErrorMsg>{ (uploadDeviceModelsError || {}).errorMessage }</ErrorMsg>
         }
         <FormActions>
           <BtnToolbar>

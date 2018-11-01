@@ -257,16 +257,16 @@ class SimulationForm extends LinkedComponent {
 
       // TODO: remove when service support duplicate device models
       const selectedDeviceModels = {};
-      for(let i=0; i < deviceModels.length; i++) {
+      for (let i=0; i < deviceModels.length; i++) {
         const name = deviceModels[i].name;
-        if(!selectedDeviceModels[name]) {
+        if (!selectedDeviceModels[name]) {
           selectedDeviceModels[name] = 0;
         }
         selectedDeviceModels[name]++;
       }
 
       const name = deviceModelLink.forkTo('name')
-        .check(x => selectedDeviceModels[x] < 2, t('simulation.form.errorMsg.noDuplicateModelInUse'))
+        .check(x => selectedDeviceModels[x] < 2, t('simulation.form.errorMsg.duplicateModelsNotAllowed'))
         .check(Validator.notEmpty, t('simulation.form.errorMsg.deviceModelNameCantBeEmpty'));
 
       const count = deviceModelLink.forkTo('count')

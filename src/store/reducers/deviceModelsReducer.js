@@ -151,7 +151,7 @@ export const redux = createReducerScenario({
   createDeviceModel: { type: 'CREATE_DEVICE_MODEL', reducer: createDeviceModelReducer },
   uploadDeviceModel: { type: 'UPLOAD_DEVICE_MODEL', reducer: uploadDeviceModelReducer },
   deleteDeviceModel: { type: 'DELETE_DEVICE_MODEL', reducer: deleteDeviceModelReducer },
-  wipeUploadDeviceModelError: { type: 'WIPE_ERROR', reducer: wipeReducer, staticPayload: epics.actionTypes.uploadDeviceModel },
+  clearUploadDeviceModelError: { type: 'WIPE_ERROR', reducer: wipeReducer, staticPayload: epics.actionTypes.uploadDeviceModel },
   registerError: { type: 'DEVICE_MODELS_REDUCER_ERROR', reducer: errorReducer },
 });
 
