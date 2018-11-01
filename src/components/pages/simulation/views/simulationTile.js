@@ -191,13 +191,13 @@ class SimulationTile extends Component {
         <div className="tile-header">
           <SectionHeader>{name || id}</SectionHeader>
         </div>
-        <div className="time-containers">
-          <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
-          <div className="right-time-container">
-          { this.getSimulationState(endDateTime, t) }
-          </div>
-        </div>
         <div className="tile-body">
+          <div className="time-containers">
+            <div className="left-time-container"> {t('simulation.status.created', { startDateTime })} </div>
+            <div className="right-time-container">
+            { this.getSimulationState(endDateTime, t) }
+            </div>
+          </div>
           {this.getActiveDevices()}
           {
             isRunning &&

@@ -8,6 +8,7 @@ import { Svg } from 'components/shared';
 import { svgs } from 'utilities';
 import ProfileImagePath from 'assets/images/profile.png';
 import { WelcomeModal } from '../welcomeModal/welcomeModal';
+import { Breadcrumbs } from './breadcrumbs';
 
 import './header.css';
 
@@ -92,7 +93,7 @@ class Header extends Component {
 
     return (
       <header className="app-header">
-        <div className="breadcrumbs">{ this.props.breadcrumbs || this.props.t('header.dashboard') }</div>
+        <div className="breadcrumbs"><Breadcrumbs t={this.props.t} crumbsConfig={this.props.crumbsConfig} /></div>
         <div className="label">{ this.props.t('header.appName') }</div>
         <div className="items-container">
           <div className="menu-container">

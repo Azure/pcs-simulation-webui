@@ -18,6 +18,19 @@ import  {
 
 import './app.css';
 
+const crumbsConfig = [
+  {
+    path: '/simulations', crumbs: [
+      { to: '/simulations', labelId: 'Simulations' }
+    ]
+  },
+  {
+    path: '/deviceModels', crumbs: [
+      { to: '/devicemodels', labelId: 'Device Models' }
+    ]
+  }
+];
+
 /** The base component for the app */
 class App extends Component {
 
@@ -34,7 +47,7 @@ class App extends Component {
       <div className="app">
         <Navigation />
         <Main>
-          <Header {...this.props} />
+          <Header {...this.props} crumbsConfig={crumbsConfig} />
           <PageContent>
             <Switch>
               <Route exact path="/" render={this.redirectToSimulation} />
