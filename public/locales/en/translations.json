@@ -58,6 +58,7 @@
       },
       "deleteDevicesWhenSimulationEnds": "Delete all devices when the simulation is complete",
       "errorMsg": {
+        "noDuplicateModelInUse": "A device model may be used only once",
         "nameCantBeEmpty": "Simulation name is required",
         "nameGTMaxLength": "Name can't be greater than {{simulationNameMaxLength}} characters",
         "descGTMaxLength": "Description can't be greater than {{simulationDescMaxLength}} characters",
