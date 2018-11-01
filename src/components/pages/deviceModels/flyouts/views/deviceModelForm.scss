@@ -43,10 +43,15 @@
 
     .browse-button {
       border: none;
-      @include rem-fallback(width, 75px);
+      @include rem-fallback(width, 100px);
       @include rem-fallback(height, 32px);
       @include rem-font-size(12px);
     }
+  }
+
+  .device-model-info-text {
+    display: block;
+    padding-bottom: 22px;
   }
 
   .upload-results-container {
