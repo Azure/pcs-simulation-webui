@@ -98,12 +98,12 @@ export function createEpicScenario(cases = {}) {
  *  - The reducer that handles actions of given type
  */
 function createReducerCase(params) {
-  if (!params.type || !params.reducer) {
+  if ((!params.type && !params.rawType) || !params.reducer) {
     throw new Error('Error in createReducerCase: "type" and "reducer" are required parameters');
   }
 
   // The scenario properties
-  const type = `REDUX_${params.type}`;
+  const type = params.rawType || `REDUX_${params.type}`;
   const action = createAction(type, params.staticPayload);
   const reducer = params.reducer
 

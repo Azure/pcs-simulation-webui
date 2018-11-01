@@ -185,7 +185,7 @@ class DeviceModelUploadForm extends Component {
 
   apply = event => {
     event.preventDefault();
-    const { deviceModel, scripts } = this.state;
+    const { deviceModel = {}, scripts } = this.state;
 
     // Uploading scripts
     Observable.from(scripts)
@@ -277,10 +277,11 @@ class DeviceModelUploadForm extends Component {
     const validationResults = {}
 
     this.setState({ ...initialFormState, formVersion, validationResults });
+    this.props.wipeUploadDeviceModelError();
   };
 
   render() {
-    const { t } = this.props;
+    const { t, upLoadDeviceModelsError } = this.props;
     const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error, missingScripts, validationResults } = this.state;
     return (
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
@@ -408,7 +409,10 @@ class DeviceModelUploadForm extends Component {
           )
         }
         </FormSection>
-        {error && <ErrorMsg>{error}</ErrorMsg>}
+        { error && <ErrorMsg>{ error }</ErrorMsg> }
+        { upLoadDeviceModelsError &&
+          <ErrorMsg>{ (upLoadDeviceModelsError || {}).errorMessage }</ErrorMsg>
+        }
         <FormActions>
           <BtnToolbar>
             <Btn disabled={!this.formIsValid() || changesApplied} type="submit">
