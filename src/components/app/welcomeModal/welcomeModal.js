@@ -26,7 +26,30 @@ export class WelcomeModal extends Component {
   }
 
   render() {
-    const { t, onClose } = this.props;
+    const { t, onClose, preprovisionedIoTHub } = this.props;
+    const defaultSimulationTile = preprovisionedIoTHub
+      ? {
+          title: t('getStarted.sampleSimulation.title'),
+          description: t('getStarted.sampleSimulation.description'),
+          imgPath: svgs.sampleSimulation,
+          link: {
+            pathname: '/simulations/1',
+            state: {}
+          },
+          btnName: t('getStarted.sampleSimulation.btnName'),
+          onClick: onClose
+        }
+      : {
+          title: t('getStarted.sampleDevices.title'),
+          description: t('getStarted.sampleDevices.description'),
+          imgPath: svgs.sampleSimulation,
+          link: {
+            pathname: '/simulations/',
+            state: { flyoutOpen: 'new-simulation' }
+          },
+          btnName: t('getStarted.sampleDevices.btnName'),
+          onClick: onClose
+        };
 
     return (
       <Modal onClose={onClose}>
@@ -44,17 +67,7 @@ export class WelcomeModal extends Component {
           <div className="welcome-modal-content">
             {
               [
-                {
-                  title: t('getStarted.sampleSimulation.title'),
-                  description: t('getStarted.sampleSimulation.description'),
-                  imgPath: svgs.sampleSimulation,
-                  link: {
-                    pathname: '/simulations/1',
-                    state: {}
-                  },
-                  btnName: t('getStarted.sampleSimulation.btnName'),
-                  onClick: onClose
-                },
+                defaultSimulationTile,
                 {
                   title: t('getStarted.customDevices.title'),
                   description: t('getStarted.customDevices.description'),

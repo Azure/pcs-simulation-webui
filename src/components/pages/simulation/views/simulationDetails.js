@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { Subject } from 'rxjs';
 import moment from 'moment';
-import { Route, NavLink, Redirect, withRouter } from "react-router-dom";
+import { Route, NavLink, Redirect, withRouter, Link } from "react-router-dom";
 
 import Config from 'app.config';
 import { svgs, humanizeDuration, ComponentArray } from 'utilities';
@@ -313,7 +313,8 @@ class SimulationDetails extends Component {
       t,
       deviceModelEntities = {},
       match,
-      simulationList
+      simulationList,
+      preprovisionedIoTHub
     } = this.props;
 
     const { simulation, metrics, hubMetricsPollingError, simulationPollingError } = this.state;
@@ -400,9 +401,24 @@ class SimulationDetails extends Component {
               <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
             </div>
             {
-              hubMetricsPollingError
-                ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
-                : isActive && <TelemetryChart colors={chartColorObjects} metrics={metrics} />
+              preprovisionedIoTHub
+                ?  hubMetricsPollingError
+                    ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
+                    : <TelemetryChart colors={chartColorObjects} metrics={metrics} />
+                : <div className="dummy-chart-container">
+                    <div className="dummy-chart-content">
+                      <div className="chart-svg-container"></div>
+                      <div className="metrics-unavaiable-container">
+                        { t('simulation.details.dummyChart') }
+                        <Link
+                          className="learn-more"
+                          target="_blank"
+                          to='https://github.com/Azure/device-simulation-dotnet/wiki/How-to-Enable-Hub-Metrics-Charts-for-Simulations'>
+                          {t('simulation.details.learnMore')}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
             }
           </div>
           {
@@ -415,7 +431,7 @@ class SimulationDetails extends Component {
                   (deviceModels).map(({
                     id, count, interval
                   }, index) => (
-                    <NavLink to={`${pathname}/${id}`} className="nav-item" activeClassName="active" key={`${id}-${index}-navlink`}>
+                    <NavLink to={`${pathname}/${id}`} className="nav-item" activeClassName="active" key={index}>
                       <div key={`${id}-${index}-count`} className="nav-item-count">{count}</div>
                       <div key={`${id}-${index}-link`} className="nav-item-text">
                       {

@@ -33,8 +33,15 @@ export class SimulationDashboard extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount() {console.log('this.props', this.props)
+    const { state = {} } = this.props.location;
+    this.setState({ ...state });
     this.props.fetchSimulationList();
+  }
+
+  componentWillReceiveProps({ location }) {
+    const { state = {} } = location;
+    this.setState({ ...state });
   }
 
   openFlyout = (flyoutName) => () => this.setState({ openFlyoutName: flyoutName });
