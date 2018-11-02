@@ -15,6 +15,7 @@ $svgSize: 16px;
 
     .stack-container {
       @include rem-fallback(width, 580px);
+      @include rem-fallback(min-width, 430px);
 
       .info-container {
         @include rem-fallback(padding, 24px);
@@ -93,6 +94,29 @@ $svgSize: 16px;
     }
 
     .telemetry-chart-container { @include rem-fallback(height, 500px); }
+
+    .dummy-chart-container {
+      display: flex;
+      flex-grow: 1;
+      justify-content: center;
+      align-items: center;
+
+      .dummy-chart-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .chart-svg-container {
+          background-image: url('~assets/images/charticon.png');
+          background-size: 100% 100%;
+          @include rem-fallback(height, 62px)
+          @include rem-fallback(width, 64px)
+          @include rem-fallback(margin-bottom, 24px)
+        }
+
+        .learn-more { @include rem-fallback(margin-left, 14px) }
+      }
+    }
 
     .error-message { flex: 1 0 0; }
 
