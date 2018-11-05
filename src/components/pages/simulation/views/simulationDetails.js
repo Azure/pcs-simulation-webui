@@ -370,8 +370,8 @@ class SimulationDetails extends Component {
     // Remove isThereARunningSimulation when simulation service support running multiple simulations
     const isThereARunningSimulation = simulationList.some(({ isActive }) => isActive);
 
-    // Remove servicePrincipleHasAuthError when service expose service princeple stats
-    const servicePrincipleHasAuthError = ((hubMetricsPollingError || {}).errorMessage || '')
+    // Remove insufficientPermissionsError when service expose service princeple stats
+    const insufficientPermissionsError = ((hubMetricsPollingError || {}).errorMessage || '')
       .includes('does not have authorization to perform action');
 
     return (
@@ -424,8 +424,8 @@ class SimulationDetails extends Component {
             {
               id && isDef(preprovisionedIoTHub) && (preprovisionedIoTHub
                 ? hubMetricsPollingError
-                    ? servicePrincipleHasAuthError
-                      ? this.getMetricsPlaceHolder(t('simulation.details.permissionRequiredChart'))
+                    ? insufficientPermissionsError
+                      ? this.getMetricsPlaceHolder(t('simulation.details.insufficientPermissions'))
                       : <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
                     : <TelemetryChart colors={chartColorObjects} metrics={metrics} />
                 : this.getMetricsPlaceHolder(t('simulation.details.missingChart')))
