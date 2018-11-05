@@ -308,6 +308,23 @@ class SimulationDetails extends Component {
               : t('simulation.status.ended', { endDateTime })
   }
 
+  getMetricsPlaceHolder = (message) => (
+    <div className="missing-chart-container">
+        <div className="missing-chart-content">
+          <Svg path={svgs.missingChart} className="missing-chart-svg" />
+          <div className="metrics-unavaiable-container">
+            { message }
+            <Link
+              className="learn-more"
+              target="_blank"
+              to='https://github.com/Azure/device-simulation-dotnet/wiki/How-to-Enable-Hub-Metrics-Charts-for-Simulations'>
+              { this.props.t('simulation.details.learnMore') }
+            </Link>
+          </div>
+        </div>
+      </div>
+  )
+
   render() {
     const {
       t,
@@ -352,6 +369,10 @@ class SimulationDetails extends Component {
 
     // Remove isThereARunningSimulation when simulation service support running multiple simulations
     const isThereARunningSimulation = simulationList.some(({ isActive }) => isActive);
+
+    // Remove insufficientPermissionsError when service expose service princeple stats
+    const insufficientPermissionsError = ((hubMetricsPollingError || {}).errorMessage || '')
+      .includes('does not have authorization to perform action');
 
     return (
       <ComponentArray>
@@ -403,22 +424,11 @@ class SimulationDetails extends Component {
             {
               id && isDef(preprovisionedIoTHub) && (preprovisionedIoTHub
                 ? hubMetricsPollingError
-                    ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
+                    ? insufficientPermissionsError
+                      ? this.getMetricsPlaceHolder(t('simulation.details.insufficientPermissions'))
+                      : <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
                     : <TelemetryChart colors={chartColorObjects} metrics={metrics} />
-                : <div className="missing-chart-container">
-                    <div className="missing-chart-content">
-                      <Svg path={svgs.missingChart} className="missing-chart-svg" />
-                      <div className="metrics-unavaiable-container">
-                        { t('simulation.details.missingChart') }
-                        <Link
-                          className="learn-more"
-                          target="_blank"
-                          to='https://github.com/Azure/device-simulation-dotnet/wiki/How-to-Enable-Hub-Metrics-Charts-for-Simulations'>
-                          {t('simulation.details.learnMore')}
-                        </Link>
-                      </div>
-                    </div>
-                  </div>)
+                : this.getMetricsPlaceHolder(t('simulation.details.missingChart')))
             }
           </div>
           {

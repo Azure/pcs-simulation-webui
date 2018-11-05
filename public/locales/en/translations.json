@@ -40,6 +40,7 @@
       "stats": "Statistics",
       "header": "Simulation details",
       "missingChart": "IoT Hub metrics unavaliable. Metrics charts are only supported for simulations using the default hub deployed with Device Simulation.",
+      "insufficientPermissions": "IoT Hub metrics unavailable. Device Simulation needs additional permissions to access IoT Hub metrics.",
       "learnMore": "Learn more"
     },
     "form": {
