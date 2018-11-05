@@ -428,7 +428,7 @@ class SimulationDetails extends Component {
                       ? this.getMetricsPlaceHolder(t('simulation.details.permissionRequiredChart'))
                       : <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
                     : <TelemetryChart colors={chartColorObjects} metrics={metrics} />
-                : this.getMetricsPlaceHolder(t('simulation.details.premissionRequiredChart')))
+                : this.getMetricsPlaceHolder(t('simulation.details.missingChart')))
             }
           </div>
           {
