@@ -425,7 +425,7 @@ class SimulationDetails extends Component {
               id && isDef(preprovisionedIoTHub) && (preprovisionedIoTHub
                 ? hubMetricsPollingError
                     ? servicePrincipleHasAuthError
-                      ? this.getMetricsPlaceHolder(t('simulation.details.premissionRequiredChart'))
+                      ? this.getMetricsPlaceHolder(t('simulation.details.permissionRequiredChart'))
                       : <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
                     : <TelemetryChart colors={chartColorObjects} metrics={metrics} />
                 : this.getMetricsPlaceHolder(t('simulation.details.premissionRequiredChart')))
