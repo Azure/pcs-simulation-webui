@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Route, NavLink, Redirect, withRouter, Link } from "react-router-dom";
 
 import Config from 'app.config';
-import { svgs, humanizeDuration, ComponentArray } from 'utilities';
+import { svgs, humanizeDuration, ComponentArray, isDef } from 'utilities';
 import { Btn, ContextMenu, Svg, ErrorMsg, Indicator } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
@@ -401,15 +401,15 @@ class SimulationDetails extends Component {
               <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
             </div>
             {
-              preprovisionedIoTHub
-                ?  hubMetricsPollingError
+              id && isDef(preprovisionedIoTHub) && (preprovisionedIoTHub
+                ? hubMetricsPollingError
                     ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
                     : <TelemetryChart colors={chartColorObjects} metrics={metrics} />
-                : <div className="dummy-chart-container">
-                    <div className="dummy-chart-content">
-                      <div className="chart-svg-container"></div>
+                : <div className="missing-chart-container">
+                    <div className="missing-chart-content">
+                      <Svg path={svgs.missingChart} className="missing-chart-svg" />
                       <div className="metrics-unavaiable-container">
-                        { t('simulation.details.dummyChart') }
+                        { t('simulation.details.missingChart') }
                         <Link
                           className="learn-more"
                           target="_blank"
@@ -418,7 +418,7 @@ class SimulationDetails extends Component {
                         </Link>
                       </div>
                     </div>
-                  </div>
+                  </div>)
             }
           </div>
           {

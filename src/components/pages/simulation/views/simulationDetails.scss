@@ -95,23 +95,20 @@ $svgSize: 16px;
 
     .telemetry-chart-container { @include rem-fallback(height, 500px); }
 
-    .dummy-chart-container {
+    .missing-chart-container {
       display: flex;
       flex-grow: 1;
       justify-content: center;
       align-items: center;
 
-      .dummy-chart-content {
+      .missing-chart-content {
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        .chart-svg-container {
-          background-image: url('~assets/images/charticon.png');
-          background-size: 100% 100%;
-          @include rem-fallback(height, 62px)
-          @include rem-fallback(width, 64px)
-          @include rem-fallback(margin-bottom, 24px)
+        .missing-chart-svg svg {
+          @include square-px-rem(64px);
+          @include rem-fallback(margin-bottom, 8px);
         }
 
         .learn-more { @include rem-fallback(margin-left, 14px) }
@@ -135,6 +132,7 @@ $svgSize: 16px;
         .active-devices,
         .status-value { color: themed('colorHighest'); }
 
+        .missing-chart-svg,
         .running-icon svg { fill: themed('colorActive'); }
       }
     }
