@@ -35,8 +35,8 @@ class SimulationDetails extends Component {
       telemetry: {},
       metrics:[],
       isRunning : false,
-      showLink : false,
-      hubUrl : '',
+      preprovisionedIoTHubInUse: undefined,
+      hubUrl: '',
       simulationPollingError: '',
       hubMetricsPollingError: ''
     };
@@ -80,7 +80,7 @@ class SimulationDetails extends Component {
             failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
-            showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
+            preprovisionedIoTHubInUse: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
             simulationPollingError: '',
             devicesDeletionInProgress
           },
@@ -176,7 +176,7 @@ class SimulationDetails extends Component {
   }
 
   getHubLink = () => {
-    return this.state.showLink && (
+    return this.state.preprovisionedIoTHubInUse && (
       <ComponentArray>
         <Svg path={svgs.linkTo} className="link-svg" />
         <a href={this.state.hubUrl} target="_blank">{ this.props.t('simulation.vieIotHubMetrics') }</a>
@@ -330,11 +330,10 @@ class SimulationDetails extends Component {
       t,
       deviceModelEntities = {},
       match,
-      simulationList,
-      preprovisionedIoTHub
+      simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
@@ -422,7 +421,7 @@ class SimulationDetails extends Component {
               <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
             </div>
             {
-              id && isDef(preprovisionedIoTHub) && (preprovisionedIoTHub
+              id && isDef(preprovisionedIoTHubInUse) && (preprovisionedIoTHubInUse
                 ? hubMetricsPollingError
                     ? insufficientPermissionsError
                       ? this.getMetricsPlaceHolder(t('simulation.details.insufficientPermissions'))
