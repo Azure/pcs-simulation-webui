@@ -106,6 +106,12 @@ export const toSimulationPatchModel = (request = {}, enabled) => ({
   Enabled: enabled
 });
 
+export const deviceDeletionPatchModel = (request = {}, deleteDevices) => ({
+  ETag: request.eTag,
+  Id: request.id,
+  DeleteDevicesWhenSimulationEnds: true
+});
+
 // Map to deviceModels in simulation request model
 const toDeviceModels = (deviceModels = []) =>
   deviceModels.map(({ name: Id, count: Count, interval }) => {
