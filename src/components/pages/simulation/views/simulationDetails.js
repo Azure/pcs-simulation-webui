@@ -179,7 +179,7 @@ class SimulationDetails extends Component {
     return this.state.showLink && (
       <ComponentArray>
         <Svg path={svgs.linkTo} className="link-svg" />
-        <a href={this.state.hubUrl} target="_blank">{ this.props.t('simulation.vieIotHubMetrics') }</a>
+        <a href={this.state.hubUrl} target="_blank" rel="noopener noreferrer">{ this.props.t('simulation.vieIotHubMetrics') }</a>
       </ComponentArray>
     )
   }
