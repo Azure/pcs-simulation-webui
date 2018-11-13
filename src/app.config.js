@@ -2,7 +2,7 @@
 
 const Config = {
   // APIs
-  simulationApiUrl: '/devicesimulation-svc/v1/',
+  simulationApiUrl: 'https://xiong-20181030-cli-1.azurewebsites.net/devicesimulation-svc/v1/',
   diagnosticsApiUrl: '/diagnostics-svc/v1/',
   configApiUrl: '/config-svc/v1/',
 

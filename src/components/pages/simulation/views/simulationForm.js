@@ -58,7 +58,10 @@ class SimulationForm extends LinkedComponent {
       errorMessage: '',
       devicesDeletionRequired: false,
       autoscaleAcknowledged: false,
-      formSubmitted: false
+      formSubmitted: false,
+      // Replay vars
+      simulationType: 'deviceModel',
+      numDevices: ''
     };
 
     this.subscriptions = [];
@@ -94,6 +97,13 @@ class SimulationForm extends LinkedComponent {
 
     this.sensorLink = this.linkTo('sensors');
     this.deviceModelsLink = this.linkTo('deviceModels');
+
+    // Replay links
+    this.simulationType = this.linkTo('simulationType')
+      .check(Validator.notEmpty, () => 'Simulation type is required');
+
+    this.numDevices = this.linkTo('numDevices')
+      .check(Validator.notEmpty, () => 'Number of devices is required');
   }
 
   formIsValid() {
@@ -322,6 +332,39 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>{t('simulation.form.duration.header')}</SectionHeader>
           <SectionDesc>{t('simulation.form.duration.description')}</SectionDesc>
+          <Radio link={this.simulationType} value="deviceModel">Device Model</Radio>
+          <Radio link={this.simulationType} value="fileReplay">Replay from file</Radio>
+          {
+            this.simulationType.value === 'fileReplay' &&
+              <FormGroup>
+                <FormLabel>Select replay file</FormLabel>
+                <div className="file-uploader-container">
+                  <input
+                    className="file-uploader"
+                    type="file"
+                    id="uploader"
+                    name="uploader"
+                    accept=".json, .js"
+                    multiple
+                    onChange={this.uploadFiles}
+                  />
+                  <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+                </div>
+              </FormGroup>
+          }
+          {
+            this.simulationType.value === 'fileReplay' &&
+              <FormGroup>
+                <FormLabel>Number of devices</FormLabel>
+                <FormControl className="short" type="text" link={this.numDevices} />
+              </FormGroup>
+          }
+          {
+            this.simulationType.value === 'fileReplay' &&
+              <Radio link={this.durationRadio} value="endOfFile">
+                Stop at end of file
+              </Radio>
+          }
           <Radio link={this.durationRadio} value="endIn">
             <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
             <FormControl type="duration" link={this.duration} />
@@ -331,82 +374,84 @@ class SimulationForm extends LinkedComponent {
           </Radio>
         </FormSection>
 
-        <FormSection>
-          <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
-          <SectionDesc>{ t('simulation.form.deviceModels.description') }</SectionDesc>
-          <div className="device-models-container">
-          {
-            deviceModels.length > 0 &&
-              <div className="device-model-headers">
-                {
-                  deviceModelHeaders.map((header, idx) => (
-                    <div className="device-model-header" key={idx}>{header}</div>
-                  ))
-                }
-              </div>
-          }
-          {
-            deviceModelLinks.map(({ name, count, interval, edited, error }, idx) => {
-              let throughput = 0;
-              const maxDevicesPerSimulation = global.DeploymentConfig.maxDevicesPerSimulation;
-
-              if (count.value && interval.value.ms) {
-                throughput = (count.value * 1000) / interval.value.ms
-              }
-
-              return (
-                <div className="device-model-row" key={idx}>
-                  <FormGroup className="device-model-box">
-                    <FormControl
-                      className="long"
-                      type="select"
-                      options={this.state.deviceModelOptions}
-                      link={name}
-                      clearable={false}
-                      searchable={true}
-                      simpleValue={true}
-                      placeholder="Select model" />
-                  </FormGroup>
-                  <FormGroup className="device-model-box">
-                    <FormControl
-                      className="short"
-                      type="text"
-                      link={count}
-                      max={maxDevicesPerSimulation} />
-                  </FormGroup>
-                  <FormGroup className="device-model-box">
-                    <FormControl
-                      className="short"
-                      type="text"
-                      readOnly
-                      value={throughput} />
-                  </FormGroup>
-                  <FormGroup className="duration-box">
-                    <FormControl
-                      type="duration"
-                      name="frequency"
-                      link={interval}
-                      showHeaders={false} />
-                  </FormGroup>
-                  <Btn
-                    className="delete-device-model-btn"
-                    svg={svgs.trash}
-                    onClick={this.deleteDeviceModel(idx)} />
-                </div>
-              );
-            })
-        }
-        </div>
         {
-          deviceModels.length < 10 &&
-            <Btn
-              svg={svgs.plus}
-              onClick={this.addDeviceModel}>
-              { t('simulation.form.deviceModels.addDeviceModelBtn') }
-            </Btn>
-        }
-        </FormSection>
+          this.simulationType.value === 'deviceModel' &&
+          <FormSection>
+            <SectionHeader>{ t('simulation.form.deviceModels.header') }</SectionHeader>
+            <SectionDesc>{ t('simulation.form.deviceModels.description') }</SectionDesc>
+            <div className="device-models-container">
+            {
+              deviceModels.length > 0 &&
+                <div className="device-model-headers">
+                  {
+                    deviceModelHeaders.map((header, idx) => (
+                      <div className="device-model-header" key={idx}>{header}</div>
+                    ))
+                  }
+                </div>
+            }
+            {
+              deviceModelLinks.map(({ name, count, interval, edited, error }, idx) => {
+                let throughput = 0;
+                const maxDevicesPerSimulation = global.DeploymentConfig.maxDevicesPerSimulation;
 
+                if (count.value && interval.value.ms) {
+                  throughput = (count.value * 1000) / interval.value.ms
+                }
+
+                return (
+                  <div className="device-model-row" key={idx}>
+                    <FormGroup className="device-model-box">
+                      <FormControl
+                        className="long"
+                        type="select"
+                        options={this.state.deviceModelOptions}
+                        link={name}
+                        clearable={false}
+                        searchable={true}
+                        simpleValue={true}
+                        placeholder="Select model" />
+                    </FormGroup>
+                    <FormGroup className="device-model-box">
+                      <FormControl
+                        className="short"
+                        type="text"
+                        link={count}
+                        max={maxDevicesPerSimulation} />
+                    </FormGroup>
+                    <FormGroup className="device-model-box">
+                      <FormControl
+                        className="short"
+                        type="text"
+                        readOnly
+                        value={throughput} />
+                    </FormGroup>
+                    <FormGroup className="duration-box">
+                      <FormControl
+                        type="duration"
+                        name="frequency"
+                        link={interval}
+                        showHeaders={false} />
+                    </FormGroup>
+                    <Btn
+                      className="delete-device-model-btn"
+                      svg={svgs.trash}
+                      onClick={this.deleteDeviceModel(idx)} />
+                  </div>
+                );
+              })
+          }
+          </div>
+          {
+            deviceModels.length < 10 &&
+              <Btn
+                svg={svgs.plus}
+                onClick={this.addDeviceModel}>
+                { t('simulation.form.deviceModels.addDeviceModelBtn') }
+              </Btn>
+          }
+          </FormSection>
+        }
         <FormSection>
           <SectionHeader>{t('simulation.form.targetHub.header')}</SectionHeader>
           <SectionDesc>{t('simulation.form.targetHub.description')}</SectionDesc>
