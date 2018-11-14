@@ -14,8 +14,7 @@
   .welcome-tile-img-container {
     display: flex;
     justify-content: center;
-    @include rem-fallback(margin-top, -10px);
-    @include rem-fallback(height, 100px);
+    @include rem-fallback(padding, 10px 20px 20px 20px);
   }
 
   .welcome-tile-title {
@@ -27,7 +26,7 @@
   }
 
   .welcome-tile-description {
-    text-align: start;
+    text-align: left;
     line-height: 1.4;
     @include rem-font-size(12px);
   }
