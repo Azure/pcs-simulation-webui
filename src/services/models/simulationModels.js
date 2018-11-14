@@ -54,7 +54,7 @@ export const toSimulationModel = (response = {}) => ({
   iotHubs: (response.IoTHubs || []).map(({ ConnectionString, PreprovisionedIoTHub, PreprovisionedIoTHubInUse, PreprovisionedIoTHubMetricsUrl }) => ({
     connectionString: ConnectionString === 'default' ? '' : ConnectionString,
     preprovisionedIoTHub: PreprovisionedIoTHub,
-    preprovisionedIoTHubInUse: PreprovisionedIoTHubInUse,
+    preprovisionedIoTHubInUse: ConnectionString === 'default',
     preprovisionedIoTHubMetricsUrl: PreprovisionedIoTHubMetricsUrl
   })),
   devicesDeletionRequired: response.DeleteDevicesWhenSimulationEnds,

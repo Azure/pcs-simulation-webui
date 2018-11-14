@@ -3,10 +3,10 @@
 import React, { Component } from 'react';
 import { Subject } from 'rxjs';
 import moment from 'moment';
-import { Route, NavLink, Redirect, withRouter } from "react-router-dom";
+import { Route, NavLink, Redirect, withRouter, Link } from "react-router-dom";
 
 import Config from 'app.config';
-import { svgs, humanizeDuration, ComponentArray } from 'utilities';
+import { svgs, humanizeDuration, ComponentArray, isDef } from 'utilities';
 import { Btn, ContextMenu, Svg, ErrorMsg, Indicator } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
@@ -35,8 +35,8 @@ class SimulationDetails extends Component {
       telemetry: {},
       metrics:[],
       isRunning : false,
-      showLink : false,
-      hubUrl : '',
+      preprovisionedIoTHubInUse: undefined,
+      hubUrl: '',
       simulationPollingError: '',
       hubMetricsPollingError: ''
     };
@@ -80,7 +80,7 @@ class SimulationDetails extends Component {
             failedDeviceConnectionsCount: response.statistics.failedDeviceConnectionsCount,
             failedDeviceTwinUpdatesCount: response.statistics.failedDeviceTwinUpdatesCount,
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
-            showLink: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
+            preprovisionedIoTHubInUse: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
             simulationPollingError: '',
             devicesDeletionInProgress
           },
@@ -176,7 +176,7 @@ class SimulationDetails extends Component {
   }
 
   getHubLink = () => {
-    return this.state.showLink && (
+    return this.state.preprovisionedIoTHubInUse && (
       <ComponentArray>
         <Svg path={svgs.linkTo} className="link-svg" />
         <a href={this.state.hubUrl} target="_blank">{ this.props.t('simulation.vieIotHubMetrics') }</a>
@@ -308,6 +308,23 @@ class SimulationDetails extends Component {
               : t('simulation.status.ended', { endDateTime })
   }
 
+  getMetricsPlaceHolder = (message) => (
+    <div className="missing-chart-container">
+        <div className="missing-chart-content">
+          <Svg path={svgs.missingChart} className="missing-chart-svg" />
+          <div className="metrics-unavaiable-container">
+            { message }
+            <Link
+              className="learn-more"
+              target="_blank"
+              to='https://github.com/Azure/device-simulation-dotnet/wiki/How-to-Enable-Hub-Metrics-Charts-for-Simulations'>
+              { this.props.t('simulation.details.learnMore') }
+            </Link>
+          </div>
+        </div>
+      </div>
+  )
+
   render() {
     const {
       t,
@@ -316,7 +333,7 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
@@ -351,6 +368,10 @@ class SimulationDetails extends Component {
 
     // Remove isThereARunningSimulation when simulation service support running multiple simulations
     const isThereARunningSimulation = simulationList.some(({ isActive }) => isActive);
+
+    // Remove insufficientPermissionsError when service expose service princeple stats
+    const insufficientPermissionsError = ((hubMetricsPollingError || {}).errorMessage || '')
+      .includes('does not have authorization to perform action');
 
     return (
       <ComponentArray>
@@ -400,9 +421,13 @@ class SimulationDetails extends Component {
               <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
             </div>
             {
-              hubMetricsPollingError
-                ? <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
-                : isActive && <TelemetryChart colors={chartColorObjects} metrics={metrics} />
+              id && isDef(preprovisionedIoTHubInUse) && (preprovisionedIoTHubInUse
+                ? hubMetricsPollingError
+                    ? insufficientPermissionsError
+                      ? this.getMetricsPlaceHolder(t('simulation.details.insufficientPermissions'))
+                      : <ErrorMsg>{ hubMetricsPollingError.message }</ErrorMsg>
+                    : <TelemetryChart colors={chartColorObjects} metrics={metrics} />
+                : this.getMetricsPlaceHolder(t('simulation.details.missingChart')))
             }
           </div>
           {
@@ -415,7 +440,7 @@ class SimulationDetails extends Component {
                   (deviceModels).map(({
                     id, count, interval
                   }, index) => (
-                    <NavLink to={`${pathname}/${id}`} className="nav-item" activeClassName="active" key={`${id}-${index}-navlink`}>
+                    <NavLink to={`${pathname}/${id}`} className="nav-item" activeClassName="active" key={index}>
                       <div key={`${id}-${index}-count`} className="nav-item-count">{count}</div>
                       <div key={`${id}-${index}-link`} className="nav-item-text">
                       {

@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 
 import { SettingsContainer } from './settingsContainer';
 import { Svg } from 'components/shared';
-import { svgs } from 'utilities';
+import { svgs, isDef } from 'utilities';
 import ProfileImagePath from 'assets/images/profile.png';
 import { WelcomeModal } from '../welcomeModal/welcomeModal';
+import { Breadcrumbs } from './breadcrumbs';
 
 import './header.css';
 
@@ -88,11 +89,11 @@ class Header extends Component {
   closeModal = () => this.setState(closeModal);
 
   render() {
-    const { t, cookies } = this.props;
+    const { t, cookies, preprovisionedIoTHub } = this.props;
 
     return (
       <header className="app-header">
-        <div className="breadcrumbs">{ this.props.breadcrumbs || this.props.t('header.dashboard') }</div>
+        <div className="breadcrumbs"><Breadcrumbs t={this.props.t} crumbsConfig={this.props.crumbsConfig} /></div>
         <div className="label">{ this.props.t('header.appName') }</div>
         <div className="items-container">
           <div className="menu-container">
@@ -124,14 +125,21 @@ class Header extends Component {
               this.state.openDropdown === profileDropdown &&
               <div className="profile-dropdown">
                 <SettingsContainer />
-                <button className="dropdown-item" onClick={this.logout}>{ this.props.t('header.logout') }</button>
+                <button className="dropdown-item" onClick={this.logout}>
+                  { this.props.t('header.logout') }
+                </button>
               </div>
             }
           </div>
         </div>
         {
           this.state.openWelcomeModal &&
-          <WelcomeModal t={t} onClose={this.closeModal} cookies={cookies} />
+          isDef(preprovisionedIoTHub) &&
+          <WelcomeModal
+            onClose={this.closeModal}
+            cookies={cookies}
+            preprovisionedIoTHub={preprovisionedIoTHub}
+            t={t} />
         }
       </header>
     );

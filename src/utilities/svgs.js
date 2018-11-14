@@ -16,6 +16,7 @@ import FailureIconPath from 'assets/icons/failure.svg';
 import InfoBubbleIconPath from 'assets/icons/infoBubble.svg';
 import LinkToPath from 'assets/icons/linkTo.svg';
 import LoadingIconPath from 'assets/icons/loading.svg';
+import MissingChartIconPath from 'assets/icons/missingChartIcon.svg';
 import PlusIconPath from 'assets/icons/plus.svg';
 import QuestionMarkIconPath from 'assets/icons/questionMark.svg';
 import RadioSelectedIconPath from 'assets/icons/radioSelected.svg';
@@ -48,6 +49,7 @@ export const svgs = {
   infoBubble: InfoBubbleIconPath,
   linkTo: LinkToPath,
   loading: LoadingIconPath,
+  missingChart: MissingChartIconPath,
   plus: PlusIconPath,
   questionMark: QuestionMarkIconPath,
   radioSelected: RadioSelectedIconPath,
