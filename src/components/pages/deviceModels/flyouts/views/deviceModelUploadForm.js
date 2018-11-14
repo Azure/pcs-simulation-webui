@@ -36,6 +36,7 @@ class DeviceModelUploadForm extends Component {
       formVersion: 0
     };
 
+    this.fileInputRef = React.createRef();
     this.subscriptions = [];
   }
 
@@ -280,6 +281,10 @@ class DeviceModelUploadForm extends Component {
     this.props.clearUploadDeviceModelError();
   };
 
+  fileUploadRef = () => {
+    this.fileInputRef.current.click();
+  }
+
   render() {
     const { t, uploadDeviceModelsError } = this.props;
     const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error, missingScripts, validationResults } = this.state;
@@ -287,8 +292,9 @@ class DeviceModelUploadForm extends Component {
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
         <FormSection>
           <FormLabel>{t('deviceModels.flyouts.upload.deviceModelInfoText')}</FormLabel>
-          <br /><br />
-          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesInfoText')}</FormLabel>
+          <div className="device-model-info-text">
+            <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesInfoText')}</FormLabel>
+          </div>
         </FormSection>
         <FormSection>
           <FormLabel>{t('deviceModels.flyouts.upload.files')}</FormLabel>
@@ -300,9 +306,10 @@ class DeviceModelUploadForm extends Component {
               name="uploader"
               accept=".json, .js"
               multiple
+              ref={this.fileInputRef}
               onChange={this.uploadFiles}
             />
-            <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+            <Btn className="browse-button" htmlFor="fileUpload" onClick={this.fileUploadRef}>{t('deviceModels.flyouts.upload.browse')}</Btn>
           </div>
         </FormSection>
         <FormSection>
