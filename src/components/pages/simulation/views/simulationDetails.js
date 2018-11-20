@@ -65,7 +65,7 @@ class SimulationDetails extends Component {
       .subscribe(
         response => {
           const devicesDeletionInProgress = !response.enabled
-            && response.devicesDeletionRequired
+            && (response.devicesDeletionRequired || response.deleteDevicesOnce)
             && !response.devicesDeletionCompleted;
 
           this.setState({
@@ -84,6 +84,7 @@ class SimulationDetails extends Component {
             simulationPollingError: '',
             devicesDeletionInProgress,
             devicesDeletionRequired: response.devicesDeletionRequired,
+            deleteDevicesWhenSimulationEnds: response.deleteDevicesWhenSimulationEnds,
             devicesDeletionCompleted: response.devicesDeletionCompleted
           },
           () => {
@@ -288,7 +289,7 @@ class SimulationDetails extends Component {
       .subscribe(
         response => {
           const devicesDeletionInProgress = !response.enabled
-            && response.devicesDeletionRequired
+            && (response.devicesDeletionRequired || response.deleteDevicesOnce)
             && !response.devicesDeletionCompleted;
           this.setState({ devicesDeletionInProgress, devicesDeletionCompleted: response.devicesDeletionCompleted },
             () => {

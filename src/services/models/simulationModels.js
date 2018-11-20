@@ -58,6 +58,7 @@ export const toSimulationModel = (response = {}) => ({
     preprovisionedIoTHubMetricsUrl: PreprovisionedIoTHubMetricsUrl
   })),
   devicesDeletionRequired: response.DeleteDevicesWhenSimulationEnds,
+  deleteDevicesOnce: response.DeleteDevicesOnce,
   devicesDeletionCompleted: response.DevicesDeletionComplete
 });
 
@@ -109,7 +110,7 @@ export const toSimulationPatchModel = (request = {}, enabled) => ({
 export const deviceDeletionPatchModel = (request = {}, deleteDevices) => ({
   ETag: request.eTag,
   Id: request.id,
-  DeleteDevicesWhenSimulationEnds: true
+  DeleteDevicesOnce: true
 });
 
 // Map to deviceModels in simulation request model
