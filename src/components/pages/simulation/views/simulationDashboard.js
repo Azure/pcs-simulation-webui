@@ -33,7 +33,7 @@ export class SimulationDashboard extends Component {
     };
   }
 
-  componentDidMount() {console.log('this.props', this.props)
+  componentDidMount() {
     const { state = {} } = this.props.location;
     this.setState({ ...state });
     this.props.fetchSimulationList();
