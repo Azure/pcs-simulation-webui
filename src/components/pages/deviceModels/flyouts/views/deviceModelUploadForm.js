@@ -286,7 +286,7 @@ class DeviceModelUploadForm extends Component {
     this.fileInputRef.current.click();
   }
 
-  onClickSingleFileInputRef = () => {console.log('ref clicked')
+  onClickSingleFileInputRef = () => {
     this.singleFileInputRef.current.click();
   }
 
