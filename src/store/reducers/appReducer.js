@@ -62,7 +62,7 @@ export const epics = createEpicScenario({
     epic: ({ payload }, store) => {
       const settings = getSolutionSettings(store.getState());
       const diagnosticsOptOut = settings === undefined ? true : settings.diagnosticsOptOut;
-      payload.eventProperties.sessionId = sessionId;
+      (payload.eventProperties||{}).sessionId = sessionId;
       if (!diagnosticsOptOut) {
         return DiagnosticsService.logEvent(payload)
           .flatMap(_ => Observable.empty())
