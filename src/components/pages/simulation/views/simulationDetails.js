@@ -438,7 +438,7 @@ class SimulationDetails extends Component {
                     <div className="right-time-container">{ this.getSimulationState(endDateTime, t) }</div>
                   </div>
                   {
-                    !devicesDeletionCompleted && !enabled &&
+                    !devicesDeletionCompleted && !enabled && stopTime != null &&
                     <div className="info-section">
                       <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
                     </div>
