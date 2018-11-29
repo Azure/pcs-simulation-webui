@@ -54,6 +54,8 @@ export class SimulationService {
 
   /** Creates a new simulation */
   static createSimulation(model) {
+    var mod = toSimulationRequestModel(model);
+    console.log(mod);
     return HttpClient.post(
         `${ENDPOINT}simulations`,
         toSimulationRequestModel(model)
