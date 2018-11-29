@@ -93,7 +93,7 @@
           "unitsLabel": "Number of units",
           "learnMore": "View Hub limits",
           "warningLabel": "Warning:",
-          "warningMessage": "This simulation will be throttled at {{ messageThrottlingLimit }} messages per second with these settings"
+          "warningMessage": "This simulation will be throttled at {{ messageThrottlingLimit }} messages per second with these settings."
         }
       },
       "telemetry": {
