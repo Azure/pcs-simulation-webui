@@ -11,8 +11,9 @@ import './navigation.css';
 
 /** The navigation tab configurations */
 const navLinks = [
-  { key: 0, to: '/simulations', svg: svgs.simulationLogo, labelId: 'tabs.simulation' },
-  { key: 1, to: '/devicemodels', svg: svgs.tabDeviceModels, labelId: 'tabs.deviceModels' }
+  { key: 0, to: '/simulations', svg: svgs.tabSimulations, labelId: 'tabs.simulation' },
+  { key: 1, to: '/devicemodels', svg: svgs.tabDeviceModels, labelId: 'tabs.deviceModels' },
+  { key: 2, to: '/devices', svg: svgs.tabDevices, labelId: 'tabs.devices' }
 ];
 
 /** A window size less than this will automatically collapse the left nav */
