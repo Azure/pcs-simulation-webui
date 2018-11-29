@@ -91,7 +91,7 @@
           "s2": "S2 Standard",
           "s3": "S3 Standard",
           "unitsLabel": "Number of units",
-          "learnMore": "View Hub Limits",
+          "learnMore": "View Hub limits",
           "warningLabel": "Warning:",
           "warningMessage": "This simulation will be throttled at {{ messageThrottlingLimit }} messages per second with these settings"
         }
