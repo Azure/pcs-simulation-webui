@@ -185,6 +185,19 @@ class SimulationForm extends LinkedComponent {
     };
   }
 
+  getMessageThrottlingLimit = hubSku => {
+    switch (hubSku) {
+      case 'S1':
+        return Config.iotHubRateLimits.s1.DeviceMessagesPerSecond;
+      case 'S2':
+        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+      case 'S3':
+        return Config.iotHubRateLimits.s3.DeviceMessagesPerSecond;
+      default:
+        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+    }
+  }
+
   inputOnBlur = () => this.setState({ connectionStrFocused: false })
 
   inputOnFocus = () => this.setState({ connectionStrFocused: true })
@@ -309,7 +322,8 @@ class SimulationForm extends LinkedComponent {
       t('simulation.form.deviceModels.duration')
     ];
 
-    const totalDevicesCount = deviceModels.reduce((sum, {count = 0}) => sum + count, 0);
+    const totalDevicesCount = deviceModels.reduce((sum, { count = 0 }) => sum + count, 0);
+    const messageThrottlingLimit = this.getMessageThrottlingLimit(this.state.iotHubSku) * this.state.iotHubUnits;
     const requiredVMsCount = Math.ceil( totalDevicesCount / Config.maxDevicesPerVM);
     const additionalVMsRequired = totalDevicesCount > Config.maxDevicesPerVM;
     const autoscaleAcknowledgedRequired = additionalVMsRequired
@@ -465,6 +479,8 @@ class SimulationForm extends LinkedComponent {
                 type="text"
                 link={this.iotHubUnits}
                 max={10} />
+              <FormLabel className="warning-label">{t('simulation.form.targetHub.sku.warningLabel')}</FormLabel>
+              <FormLabel className="warning-desc">{t('simulation.form.targetHub.sku.warningMessage',{ messageThrottlingLimit })}</FormLabel>
             </FormGroup>
            </div>
 
