@@ -13,6 +13,7 @@ import { PageContent } from 'components/shared';
 import  {
   SimulationContainer as SimulationPage,
   DeviceModelsContainer as DeviceModelsPage,
+  DevicesContainer as DevicesPage,
   PageNotFound
 } from 'components/pages';
 
@@ -27,6 +28,11 @@ const crumbsConfig = [
   {
     path: '/deviceModels', crumbs: [
       { to: '/devicemodels', labelId: 'Device Models' }
+    ]
+  },
+  {
+    path: '/devices', crumbs: [
+      { to: '/devices', labelId: 'Devices' }
     ]
   }
 ];
@@ -53,6 +59,7 @@ class App extends Component {
               <Route exact path="/" render={this.redirectToSimulation} />
               <Route path="/simulations" component={SimulationPage} />
               <Route exact path="/devicemodels" component={DeviceModelsPage} />
+              <Route exact path="/devices" component={DevicesPage} />
               <Route component={PageNotFound} />
             </Switch>
           </PageContent>
