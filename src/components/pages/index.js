@@ -5,3 +5,4 @@
 export * from './simulation/simulation.container';
 export * from './pageNotFound/pageNotFound';
 export * from './deviceModels/deviceModels.container';
+export * from './devices/devices.container';

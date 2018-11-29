@@ -1,0 +1,47 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'src/styles/mixins';
+@import 'src/styles/themes';
+
+.devices-container {
+  @include rem-fallback(padding, 20px 0 20px 20px);
+
+  .filter-list-container {
+    display: flex;
+    align-items: center;
+    @include rem-fallback(margin-left, 16px);
+
+    .filter-container {
+      display: flex;
+      @include rem-fallback(padding, 10px);
+      @include rem-fallback(margin-left, 10px);
+
+      .remove-filter {
+        @include square-px-rem(16px);
+        @include rem-fallback(margin-left, 10px);
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        svg {
+          @include square-px-rem(16px);
+        }
+      }
+    }
+  }
+
+
+  @include themify($themes) {
+    color: themed('colorHighest');
+    .filter-container { background: themed('colorLowestThird'); }
+
+    .remove-filter svg {
+      fill: themed('colorHighest');
+
+      &:hover {
+        fill: themed('colorAlarm'); 
+      }
+    }
+  }
+}
