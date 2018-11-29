@@ -149,6 +149,7 @@ class SimulationDetails extends Component {
 
   startSimulation = (event) => {
     event.preventDefault();
+    this.setState({ disableStart: true });
     const { simulation } = this.state;
     const timespan = moment.duration(moment(simulation.endTime).diff(moment(simulation.startTime)));
     const duration = {
@@ -169,6 +170,7 @@ class SimulationDetails extends Component {
       .subscribe(
         ({ id }) => {
           this.props.history.push(`/simulations/${id}`);
+          this.setState({ disableStart: false });
         },
         simulationPollingError => this.setState({ simulationPollingError })
       )
@@ -191,13 +193,14 @@ class SimulationDetails extends Component {
 
     const stopBtnProps = {
       type: 'button',
-      onClick: this.stopSimulation
+      onClick: this.stopSimulation,
+      disabled: !this.state.isActive
     };
 
     const startBtnProps = {
       type: 'button',
       onClick: this.startSimulation,
-      disabled: disabled || this.state.devicesDeletionInProgress
+      disabled: disabled || this.state.devicesDeletionInProgress || this.state.disableStart
     };
 
     return this.state.enabled
