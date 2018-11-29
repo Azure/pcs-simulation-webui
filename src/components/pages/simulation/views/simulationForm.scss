@@ -87,20 +87,35 @@
 }
 
 .hub-units-desc { 
-    @include rem-font-size(14px);
+  @include rem-font-size(14px);
+
+  @include themify($themes) { 
+    color: themed('colorHighest');
+  }
+}
+
+.hub-units-box { 
+  display: flex;
+
+  .warning-label,
+  .warning-desc {
+    @include rem-fallback(margin-left, 12px);
 
     @include themify($themes) { 
-      color: themed('colorHighest');
+     color: themed('colorWarning');
     }
+  }
+
+  .warning-label { font-weight: bold; }
 }
 
 .hub-sku-desc, 
 .hub-units-box { @include rem-fallback(margin-top, 12px); }
 
 .hub-sku-radios { 
-    display: flex;
-    @include rem-fallback(padding-bottom, 12px);
-    .radio-container { margin-top: 0;}
+  display: flex;
+  @include rem-fallback(padding-bottom, 12px);
+  .radio-container { margin-top: 0;}
 }
 
 .hub-units-desc, 

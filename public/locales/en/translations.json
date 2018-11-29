@@ -92,7 +92,7 @@
           "s3": "S3 Standard",
           "unitsLabel": "Number of units",
           "learnMore": "View Hub Limits",
-          "warningLabel": "Warning: ",
+          "warningLabel": "Warning:",
           "warningMessage": "This simulation will be throttled at {{ messageThrottlingLimit }} messages per second with these settings"
         }
       },
