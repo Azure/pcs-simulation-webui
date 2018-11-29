@@ -364,7 +364,7 @@ class SimulationForm extends LinkedComponent {
               const maxDevicesPerSimulation = global.DeploymentConfig.maxDevicesPerSimulation;
 
               if (count.value && interval.value.ms) {
-                throughput = (count.value * 1000) / interval.value.ms
+                throughput = (count.value * 1000) / interval.value.ms;
               }
 
               return (
