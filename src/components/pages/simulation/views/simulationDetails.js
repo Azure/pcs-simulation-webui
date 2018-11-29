@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Subject } from 'rxjs';
 import moment from 'moment';
 import { Route, NavLink, Redirect, withRouter, Link } from "react-router-dom";
+import { debounce } from 'lodash';
 
 import Config from 'app.config';
 import { svgs, humanizeDuration, ComponentArray, isDef } from 'utilities';
@@ -46,6 +47,7 @@ class SimulationDetails extends Component {
     this.telemetryRefresh$ = new Subject();
     this.newSimulationEmitter = new Subject();
     this.subscriptions = [];
+    this.startButtonClicked = debounce(this.startSimulation, 2000);
   }
 
   componentDidMount() {
@@ -149,7 +151,7 @@ class SimulationDetails extends Component {
 
   startSimulation = (event) => {
     event.preventDefault();
-    this.setState({ disableStart: true });
+
     const { simulation } = this.state;
     const timespan = moment.duration(moment(simulation.endTime).diff(moment(simulation.startTime)));
     const duration = {
@@ -170,7 +172,6 @@ class SimulationDetails extends Component {
       .subscribe(
         ({ id }) => {
           this.props.history.push(`/simulations/${id}`);
-          this.setState({ disableStart: false });
         },
         simulationPollingError => this.setState({ simulationPollingError })
       )
@@ -199,7 +200,7 @@ class SimulationDetails extends Component {
 
     const startBtnProps = {
       type: 'button',
-      onClick: this.startSimulation,
+      onClick: this.startButtonClicked,
       disabled: disabled || this.state.devicesDeletionInProgress || this.state.disableStart
     };
 
