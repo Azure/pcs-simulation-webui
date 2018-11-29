@@ -168,13 +168,11 @@ const toRateLimits = (iotHubSku = 'S2', iotHubUnits = 1) => {
       break;
   }
 
-  rateLimits.map(({ RegistryOperationsPerMinute, TwinReadsPerSecond, TwinWritesPerSecond, ConnectionsPerSecond, DeviceMessagesPerSecond }) => {
-    return {
-      RegistryOperationsPerMinute: RegistryOperationsPerMinute * iotHubUnits,
-      TwinReadsPerSecond: TwinReadsPerSecond * iotHubUnits,
-      TwinWritesPerSecond: TwinWritesPerSecond * iotHubUnits,
-      ConnectionsPerSecond: ConnectionsPerSecond * iotHubUnits,
-      DeviceMessagesPerSecond: DeviceMessagesPerSecond * iotHubUnits
-    };
-  });
+  return {
+    RegistryOperationsPerMinute: rateLimits.RegistryOperationsPerMinute * iotHubUnits,
+    TwinReadsPerSecond: rateLimits.TwinReadsPerSecond * iotHubUnits,
+    TwinWritesPerSecond: rateLimits.TwinWritesPerSecond * iotHubUnits,
+    ConnectionsPerSecond: rateLimits.ConnectionsPerSecond * iotHubUnits,
+    DeviceMessagesPerSecond: rateLimits.DeviceMessagesPerSecond * iotHubUnits
+  };
 };
