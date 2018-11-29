@@ -1,0 +1,37 @@
+<svg id="Dashboard" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 11">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #afb9c3;
+      }
+
+      .cls-3 {
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <g id="Random">
+    <path id="Path_1835" data-name="Path 1835" class="cls-1" d="M5,10H15V3H5ZM6,8.289,8.5,5.8l1,1L11.289,5H10V4h3V7H12V5.711L9.5,8.2l-1-1L6,9.711Z"/>
+    <path id="Path_1836" data-name="Path 1836" class="cls-1" d="M4,6H1v4H4V5.5H4Z"/>
+    <path id="Path_1837" data-name="Path 1837" class="cls-1" d="M1,5H4v.5H4V3H1Z"/>
+    <rect id="Rectangle_1266" data-name="Rectangle 1266" class="cls-1" width="14" height="1" transform="translate(1 1)"/>
+    <path id="Path_1838" data-name="Path 1838" class="cls-1" d="M1,5H4V6H1v4H4V3H1Z"/>
+    <path id="Path_1839" data-name="Path 1839" class="cls-1" d="M5,10H15V3H5ZM6,8.289,8.5,5.8l1,1L11.289,5H10V4h3V7H12V5.711L9.5,8.2l-1-1L6,9.711Z"/>
+    <rect id="Rectangle_1267" data-name="Rectangle 1267" class="cls-1" width="14" height="1" transform="translate(1 1)"/>
+    <rect id="Rectangle_1268" data-name="Rectangle 1268" class="cls-1" width="10" height="7" transform="translate(5 3)"/>
+    <path id="Path_1840" data-name="Path 1840" class="cls-1" d="M1,5H4V6H1v4H4V3H1Z"/>
+    <rect id="Rectangle_1269" data-name="Rectangle 1269" class="cls-1" width="14" height="1" transform="translate(1 1)"/>
+    <path id="Path_1841" data-name="Path 1841" class="cls-1" d="M1,5H4V6H1v4H4V3H1Z"/>
+    <rect id="Rectangle_1270" data-name="Rectangle 1270" class="cls-1" width="10" height="7" transform="translate(5 3)"/>
+    <rect id="Rectangle_1271" data-name="Rectangle 1271" class="cls-1" width="14" height="1" transform="translate(1 1)"/>
+    <path id="Path_1842" data-name="Path 1842" class="cls-2" d="M0,0V11H16V0ZM4,10H1V6H4V5H1V3H4Zm11,0H5V3H15Zm0-8H1V1H15Z"/>
+    <path id="Path_1843" data-name="Path 1843" class="cls-2" d="M9.5,8.2,12,5.711V7h1V4H10V5h1.289L9.5,6.8l-1-1L6,8.289V9.711L8.5,7.2Z"/>
+    <line id="Line_1902" data-name="Line 1902" class="cls-3" transform="translate(4 5.5)"/>
+  </g>
+</svg>
