@@ -436,13 +436,16 @@ class SimulationForm extends LinkedComponent {
             : connectStringInput
           }
 
-          <SectionDesc>{t('simulation.form.targetHub.sku.description')}</SectionDesc>
-          <Link
-            className="learn-more"
-            target="_blank"
-            to='https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-quotas-throttling'>
-            {t('simulation.form.targetHub.sku.learnMore')}
-          </Link>
+          <SectionDesc className="hub-sku-desc">
+            {t('simulation.form.targetHub.sku.description')}
+            <Link
+              className="learn-more"
+              target="_blank"
+              to='https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-quotas-throttling'>
+              {t('simulation.form.targetHub.sku.learnMore')}
+            </Link>
+          </SectionDesc>
+          
           <div>
             <Radio link={this.iotHubSku} value="S1">
               {t('simulation.form.targetHub.sku.s1')}
@@ -454,7 +457,8 @@ class SimulationForm extends LinkedComponent {
               {t('simulation.form.targetHub.sku.s3')}
             </Radio>
           </div>
-          <SectionDesc>{t('simulation.form.targetHub.sku.unitsLabel')}</SectionDesc>
+
+          <SectionDesc className="hub-units-desc">{t('simulation.form.targetHub.sku.unitsLabel')}</SectionDesc>
           <FormGroup className="hub-units-box">
             <FormControl
               className="short"

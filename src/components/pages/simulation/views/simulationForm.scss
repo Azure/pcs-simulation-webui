@@ -86,6 +86,11 @@
   }
 }
 
+.hub-sku-desc,
+.hub-units-desc { @include rem-fallback(margin-top, 12px); }
+
+.learn-more { @include rem-fallback(margin-left, 8px); }
+
 .form-actions-container {
   @include rem-fallback(margin-top, 48px);
   @include rem-fallback(padding-top, 48px);
@@ -94,7 +99,5 @@
   .autoscale-ackownledge-container {
     @include rem-fallback(margin-bottom, 40px);
     @include rem-fallback(width, 700px);
-
-    .learn-more { @include rem-fallback(margin-left, 4px); }
   }
 }
