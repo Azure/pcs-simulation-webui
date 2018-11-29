@@ -86,8 +86,25 @@
   }
 }
 
-.hub-sku-desc,
-.hub-units-desc { @include rem-fallback(margin-top, 12px); }
+.hub-units-desc { 
+    @include rem-font-size(14px);
+
+    @include themify($themes) { 
+      color: themed('colorHighest');
+    }
+}
+
+.hub-sku-desc, 
+.hub-units-box { @include rem-fallback(margin-top, 12px); }
+
+.hub-sku-radios { 
+    display: flex;
+    @include rem-fallback(padding-bottom, 12px);
+    .radio-container { margin-top: 0;}
+}
+
+.hub-units-desc, 
+.hub-units-box { @include rem-fallback(margin-left, 18px); }
 
 .learn-more { @include rem-fallback(margin-left, 8px); }
 

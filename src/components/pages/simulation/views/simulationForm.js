@@ -445,27 +445,29 @@ class SimulationForm extends LinkedComponent {
               {t('simulation.form.targetHub.sku.learnMore')}
             </Link>
           </SectionDesc>
-          
-          <div>
-            <Radio link={this.iotHubSku} value="S1">
-              {t('simulation.form.targetHub.sku.s1')}
-            </Radio>
-            <Radio link={this.iotHubSku} value="S2">
-              {t('simulation.form.targetHub.sku.s2')}
-            </Radio>
-            <Radio link={this.iotHubSku} value="S3">
-              {t('simulation.form.targetHub.sku.s3')}
-            </Radio>
-          </div>
 
-          <SectionDesc className="hub-units-desc">{t('simulation.form.targetHub.sku.unitsLabel')}</SectionDesc>
-          <FormGroup className="hub-units-box">
-            <FormControl
-              className="short"
-              type="text"
-              link={this.iotHubUnits}
-              max={10} />
-          </FormGroup>
+          <div>
+            <div className="hub-sku-radios">
+              <Radio link={this.iotHubSku} value="S1">
+                {t('simulation.form.targetHub.sku.s1')}
+              </Radio>
+              <Radio link={this.iotHubSku} value="S2">
+                {t('simulation.form.targetHub.sku.s2')}
+              </Radio>
+              <Radio link={this.iotHubSku} value="S3">
+                {t('simulation.form.targetHub.sku.s3')}
+              </Radio>
+            </div>
+            <FormLabel className="hub-units-desc">{t('simulation.form.targetHub.sku.unitsLabel')}</FormLabel>
+            <FormGroup className="hub-units-box">
+              <FormControl
+                className="short"
+                type="text"
+                link={this.iotHubUnits}
+                max={10} />
+            </FormGroup>
+           </div>
+
         </FormSection>
 
         <FormSection className="bulk-deletion-container">
