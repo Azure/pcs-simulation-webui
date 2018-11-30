@@ -74,7 +74,9 @@
         "frequencyCantBeLessThanMinTelemetryInterval": "Telemetry frequency must be no less than {{ interval }} seconds",
         "countShouldBeGTZero": "Number of devices must be greater than zero",
         "hubNameCantBeEmpty": "IoT Hub connection string is required",
-        "simulationStatusError": "Something went wrong and we weren't able to get the simulation status."
+        "simulationStatusError": "Something went wrong and we weren't able to get the simulation status.",
+        "invalidHubSku": "Select a Hub Sku",
+        "invalidHubUnits": "Hub units should be between 1 and 10"
       },
       "learnMore": "See pricing for F4-V2 VMs.",
       "autoScaleAcknowledgement": "I understand simulating {{ totalDevicesCount }} devices requires {{ additionVMsCount }} additional VMs to be deployed in my Azure subscription. These VMs will be automatically removed once all simulations are stopped.",
@@ -82,7 +84,17 @@
         "description": "Add the connection string for your IoT Hub",
         "header": "Target IoT Hub",
         "usePreProvisionedBtn": "Use pre-provisioned IoT Hub",
-        "preProvisionedLbl": "Pre-provisioned"
+        "preProvisionedLbl": "Pre-provisioned",
+        "sku": {
+          "description": "Specify the IoT Hub throttling limits to use for this simulation.",
+          "s1": "S1 Standard",
+          "s2": "S2 Standard",
+          "s3": "S3 Standard",
+          "unitsLabel": "Number of units",
+          "learnMore": "View Hub limits",
+          "warningLabel": "Warning:",
+          "warningMessage": "This simulation will be throttled at {{ messageThrottlingLimit }} messages per second with these settings."
+        }
       },
       "telemetry": {
         "header": "Telemetry frequency"

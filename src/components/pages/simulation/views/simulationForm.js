@@ -49,6 +49,8 @@ class SimulationForm extends LinkedComponent {
       preprovisionedIoTHub: true,
       preProvisionedRadio: '',
       iotHubString: '',
+      iotHubSku: 'S2',
+      iotHubUnits: 1,
       duration: {},
       durationRadio: 'indefinite',
       frequency: {},
@@ -77,6 +79,12 @@ class SimulationForm extends LinkedComponent {
 
     this.iotHubString = this.linkTo('iotHubString')
       .check(Validator.notEmpty, () => props.t('simulation.form.errorMsg.hubNameCantBeEmpty'));
+
+    this.iotHubSku = this.linkTo('iotHubSku')
+      .check(Validator.notEmpty, () => this.props.t('simulation.form.errorMsg.invalidHubSku'));
+
+    this.iotHubUnits = this.linkTo('iotHubUnits')
+      .check(x => (x > 0 && x <= 10), () => this.props.t('simulation.form.errorMsg.invalidHubUnits'));
 
     this.deviceModel = this.linkTo('deviceModel')
       .check(Validator.notEmpty, () => props.t('simulation.form.errorMsg.deviceModelIsRequired'));
@@ -177,6 +185,19 @@ class SimulationForm extends LinkedComponent {
     };
   }
 
+  getMessageThrottlingLimit = hubSku => {
+    switch (hubSku) {
+      case 'S1':
+        return Config.iotHubRateLimits.s1.DeviceMessagesPerSecond;
+      case 'S2':
+        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+      case 'S3':
+        return Config.iotHubRateLimits.s3.DeviceMessagesPerSecond;
+      default:
+        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+    }
+  }
+
   inputOnBlur = () => this.setState({ connectionStrFocused: false })
 
   inputOnFocus = () => this.setState({ connectionStrFocused: true })
@@ -198,9 +219,12 @@ class SimulationForm extends LinkedComponent {
       duration,
       deviceModels,
       iotHubString,
+      iotHubSku,
+      iotHubUnits,
       preProvisionedRadio,
       devicesDeletionRequired
     } = this.state;
+
     const simulationDuration = {
       startTime: 'NOW',
       endTime: (durationRadio === 'endIn') ? this.convertDurationToISO(duration) : ''
@@ -211,6 +235,8 @@ class SimulationForm extends LinkedComponent {
       description,
       enabled: true,
       iotHubs: [{ connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString }],
+      iotHubSku,
+      iotHubUnits,
       deviceModels,
       ...simulationDuration,
       devicesDeletionRequired
@@ -296,7 +322,8 @@ class SimulationForm extends LinkedComponent {
       t('simulation.form.deviceModels.duration')
     ];
 
-    const totalDevicesCount = deviceModels.reduce((sum, {count = 0}) => sum + count, 0);
+    const totalDevicesCount = deviceModels.reduce((sum, { count = 0 }) => sum + count, 0);
+    const messageThrottlingLimit = this.getMessageThrottlingLimit(this.state.iotHubSku) * this.state.iotHubUnits;
     const requiredVMsCount = Math.ceil( totalDevicesCount / Config.maxDevicesPerVM);
     const additionalVMsRequired = totalDevicesCount > Config.maxDevicesPerVM;
     const autoscaleAcknowledgedRequired = additionalVMsRequired
@@ -351,7 +378,7 @@ class SimulationForm extends LinkedComponent {
               const maxDevicesPerSimulation = global.DeploymentConfig.maxDevicesPerSimulation;
 
               if (count.value && interval.value.ms) {
-                throughput = (count.value * 1000) / interval.value.ms
+                throughput = (count.value * 1000) / interval.value.ms;
               }
 
               return (
@@ -422,6 +449,41 @@ class SimulationForm extends LinkedComponent {
             </div>
             : connectStringInput
           }
+
+          <SectionDesc className="hub-sku-desc">
+            {t('simulation.form.targetHub.sku.description')}
+            <Link
+              className="learn-more"
+              target="_blank"
+              to='https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-quotas-throttling'>
+              {t('simulation.form.targetHub.sku.learnMore')}
+            </Link>
+          </SectionDesc>
+
+          <div>
+            <div className="hub-sku-radios">
+              <Radio link={this.iotHubSku} value="S1">
+                {t('simulation.form.targetHub.sku.s1')}
+              </Radio>
+              <Radio link={this.iotHubSku} value="S2">
+                {t('simulation.form.targetHub.sku.s2')}
+              </Radio>
+              <Radio link={this.iotHubSku} value="S3">
+                {t('simulation.form.targetHub.sku.s3')}
+              </Radio>
+            </div>
+            <FormLabel className="hub-units-desc">{t('simulation.form.targetHub.sku.unitsLabel')}</FormLabel>
+            <FormGroup className="hub-units-box">
+              <FormControl
+                className="short"
+                type="text"
+                link={this.iotHubUnits}
+                max={10} />
+              <FormLabel className="warning-label">{t('simulation.form.targetHub.sku.warningLabel')}</FormLabel>
+              <FormLabel className="warning-desc">{t('simulation.form.targetHub.sku.warningMessage', { messageThrottlingLimit })}</FormLabel>
+            </FormGroup>
+           </div>
+
         </FormSection>
 
         <FormSection className="bulk-deletion-container">
