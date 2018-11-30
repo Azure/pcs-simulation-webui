@@ -89,13 +89,11 @@
 .hub-units-box {
   display: flex;
 
-  .warning-desc {
-    @include rem-fallback(margin-left, 6px);
-  }
+  .warning-desc { @include rem-fallback(margin-left, 6px); }
 
   .warning-label {
-      font-weight: bold;
-      @include rem-fallback(margin-left, 12px);
+    font-weight: bold;
+    @include rem-fallback(margin-left, 12px);
   }
 
   @include themify($themes) {
