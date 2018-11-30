@@ -151,7 +151,6 @@ class SimulationDetails extends Component {
 
   startSimulation = (event) => {
     event.preventDefault();
-
     const { simulation } = this.state;
     const timespan = moment.duration(moment(simulation.endTime).diff(moment(simulation.startTime)));
     const duration = {
