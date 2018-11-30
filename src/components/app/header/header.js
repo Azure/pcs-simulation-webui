@@ -38,7 +38,7 @@ const docLinks = [
   },
   {
     translationId: 'header.sendSuggestion',
-    url: 'https://feedback.azure.com/forums/321918-azure-iot '
+    url: 'https://feedback.azure.com/forums/916438-azure-iot-solution-accelerators'
   }
 ];
 
