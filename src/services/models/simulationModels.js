@@ -151,7 +151,7 @@ const toIoTHubs = (iotHubs = []) =>
 
 // Map to rateLimits in simulation request model
 const toRateLimits = (iotHubSku = 'S2', iotHubUnits = 1) => {
-  var rateLimits = {};
+  let rateLimits = {};
 
   switch(iotHubSku) {
     case 'S1':
