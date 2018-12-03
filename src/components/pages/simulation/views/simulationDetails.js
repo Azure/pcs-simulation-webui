@@ -177,6 +177,20 @@ class SimulationDetails extends Component {
     );
   }
 
+  deleteSimulation = (event) => {
+    event.preventDefault();
+    const { simulation } = this.state;
+    this.subscriptions.push(
+      SimulationService.deleteSimulation(simulation.id)
+        .subscribe(
+          () => {
+            this.props.history.push(`/simulations`);
+          },
+          simulationPollingError => this.setState({ simulationPollingError })
+        )
+      );
+  }
+
   getHubLink = () => {
     return this.state.preprovisionedIoTHubInUse && (
       <ComponentArray>
@@ -187,26 +201,6 @@ class SimulationDetails extends Component {
   }
 
   refreshPage = () => window.location.reload(true);
-
-  getBtnFromSimulationStatus(disabled) {
-    const { t } = this.props;
-
-    const stopBtnProps = {
-      type: 'button',
-      onClick: this.stopSimulation,
-      disabled: !this.state.isActive
-    };
-
-    const startBtnProps = {
-      type: 'button',
-      onClick: this.startButtonClicked,
-      disabled: disabled || this.state.devicesDeletionInProgress || this.state.disableStart
-    };
-
-    return this.state.enabled
-      ? <Btn {...stopBtnProps } svg={svgs.stopSimulation}>{ t('simulation.stop') }</Btn>
-      : <Btn {...startBtnProps}>{ t('simulation.start') }</Btn>;
-  }
 
   getSimulationStats () {
     const { t } = this.props;
@@ -380,7 +374,11 @@ class SimulationDetails extends Component {
       <ComponentArray>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
         <ContextMenu>
-          { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
+          {pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{t('simulation.refresh')}</Btn>}
+          {
+            id &&
+            <Btn disabled={this.state.enabled || this.state.isActive} type="button" onClick={this.deleteSimulation} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
+          }
           {
             id &&
               <Btn disabled={!this.state.enabled || !this.state.isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>

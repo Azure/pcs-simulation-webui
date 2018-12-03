@@ -75,14 +75,20 @@ export class SimulationService {
   /** Disable a simulation */
   static stopSimulation(simulation) {
     return SimulationService.getSimulation(simulation.id)
-      .flatMap(({ eTag }) => {
-        return HttpClient.patch(
+      .flatMap (({ eTag }) => {
+        return HttpClient.patch (
             `${ENDPOINT}simulations/${simulation.id}`,
-            toSimulationPatchModel({ ...simulation, eTag }, false)
+            toSimulationPatchModel ({ ...simulation, eTag }, false)
           )
-          .map(toSimulationModel)
-          .catch(resolveConflict);
-      })
+          .map (toSimulationModel)
+          .catch (resolveConflict);
+      });
+  }
+
+  /** Disable a simulation */
+  static deleteSimulation(id) {
+    return HttpClient.delete(`${ENDPOINT}simulations/${id}`)
+      .catch(resolveConflict);
   }
 }
 
