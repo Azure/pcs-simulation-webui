@@ -138,7 +138,7 @@ export class DeviceJobTags extends LinkedComponent {
       });
 
       const { devices } = this.props;
-      const { commonTags, deletedTags } = this.state;
+      const { commonTags } = this.state;
       const updatedTags = commonTags.filter(({ value }) => value !== tagJobConstants.multipleValues);
       const request = toSubmitTagsJobRequestModel(devices, update(this.state, { updatedTags: { $set: updatedTags } }));
 
@@ -147,7 +147,6 @@ export class DeviceJobTags extends LinkedComponent {
         .subscribe(
           ({ jobId }) => {
             this.setState({ jobId, successCount: devices.length, isPending: false, changesApplied: true });
-            this.props.updateTags({ deviceIds: devices.map(({ id }) => id), updatedTags, deletedTags });
           },
           error => {
             this.setState({ error, isPending: false, changesApplied: true });
@@ -178,6 +177,8 @@ export class DeviceJobTags extends LinkedComponent {
         deletedTags: { $push: [this.tagsLink.value[index].name] }
       }));
     };
+
+  setFormChangesFlag = () => this.setState({ changesApplied: false });
 
   render() {
     const {
@@ -232,7 +233,12 @@ export class DeviceJobTags extends LinkedComponent {
           <FormGroup>
             <FormLabel>{t('devices.flyouts.jobs.jobName')}</FormLabel>
             <div className="help-message">{t('devices.flyouts.jobs.jobNameHelpMessage')}</div>
-            <FormControl className="long" link={this.jobNameLink} type="text" placeholder={t('devices.flyouts.jobs.jobNameHint')} />
+            <FormControl
+              className="long"
+              link={this.jobNameLink}
+              type="text"
+              onChange={this.setFormChangesFlag}
+              placeholder={t('devices.flyouts.jobs.jobNameHint')} />
           </FormGroup>
 
           <Grid className="data-grid">
@@ -263,12 +269,30 @@ export class DeviceJobTags extends LinkedComponent {
                 tagLinks.map(({ name, value, type, edited, error }, idx) => [
                   <Row key={idx} className={error ? 'error-data-row' : ''}>
                     <Cell className="col-3">
-                      <FormControl className="small" type="text" link={name} />
+                      <FormControl
+                        className="small"
+                        type="text"
+                        link={name}
+                        onChange={this.setFormChangesFlag}
+                        readOnly />
                     </Cell>
                     <Cell className="col-3">
-                      <FormControl className="small" type="text" link={value} errorState={!!error} /></Cell>
+                      <FormControl
+                        className="small"
+                        type="text"
+                        link={value}
+                        onChange={this.setFormChangesFlag}
+                        errorState={!!error} />
+                    </Cell>
                     <Cell className="col-3">
-                      <FormControl className="small" type="select" link={type} options={typeOptions} clearable={false} searchable={true} />
+                      <FormControl
+                        className="small"
+                        type="select"
+                        link={type}
+                        options={typeOptions}
+                        clearable={false}
+                        onChange={this.setFormChangesFlag}
+                        searchable={true} />
                     </Cell>
                     {/* Temporay hide this control
                     <Cell className="col-1">
@@ -302,13 +326,12 @@ export class DeviceJobTags extends LinkedComponent {
               <Btn svg={svgs.cancelX} onClick={onClose}>{t('devices.flyouts.jobs.cancel')}</Btn>
             </BtnToolbar>
           }
-          {/*
+          {
             !!changesApplied &&
             <BtnToolbar>
-              <Link to={`/maintenance/job/${this.state.jobId}`} className="btn btn-primary">{t('devices.flyouts.jobs.viewStatus')}</Link>
               <Btn svg={svgs.cancelX} onClick={onClose}>{t('devices.flyouts.jobs.close')}</Btn>
             </BtnToolbar>
-          */}
+          }
         </FormSection>
       </form>
     )

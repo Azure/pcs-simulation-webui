@@ -153,7 +153,7 @@ export class DeviceJobProperties extends LinkedComponent {
             commonProperties: {
               $push: [{
                 name,
-                value: '',//valueData.display,
+                value: name === propertyJobConstants.firmware ? ' ': '',//valueData.display,
                 type: valueData.type,
                 readOnly: name === propertyJobConstants.firmware || valueData.anyOutOfSync
               }]
@@ -176,7 +176,7 @@ export class DeviceJobProperties extends LinkedComponent {
       this.setState({ isPending: true });
 
       const { devices } = this.props;
-      const { commonProperties, deletedProperties } = this.state;
+      const { commonProperties } = this.state;
       const updatedProperties = commonProperties.filter(({ value, readOnly }) => value !== propertyJobConstants.multipleValues && !readOnly);
       const request = toSubmitPropertiesJobRequestModel(devices, update(this.state, { updatedProperties: { $set: updatedProperties } }));
 
@@ -185,7 +185,6 @@ export class DeviceJobProperties extends LinkedComponent {
         .subscribe(
           ({ jobId }) => {
             this.setState({ jobId, successCount: devices.length, isPending: false, changesApplied: true });
-            this.props.updateProperties({ deviceIds: devices.map(({ id }) => id), updatedProperties, deletedProperties });
           },
           error => {
             this.setState({ error, isPending: false, changesApplied: true });
@@ -317,13 +316,12 @@ export class DeviceJobProperties extends LinkedComponent {
               <Btn svg={svgs.cancelX} onClick={onClose}>{t('devices.flyouts.jobs.cancel')}</Btn>
             </BtnToolbar>
           }
-          {/*
+          {
             !!changesApplied &&
             <BtnToolbar>
-              <Link to={`/maintenance/job/${this.state.jobId}`} className="btn btn-primary">{t('devices.flyouts.jobs.viewStatus')}</Link>
               <Btn svg={svgs.cancelX} onClick={onClose}>{t('devices.flyouts.jobs.close')}</Btn>
             </BtnToolbar>
-          */}
+          }
         </FormSection>
       </form>
     )
