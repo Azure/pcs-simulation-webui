@@ -8,3 +8,4 @@ export * from './logEventRequestModel';
 export * from './deviceModelsModel';
 export * from './deviceModelScriptModels';
 export * from './iothubMetricsModel';
+export * from './iotHubManagerModels';
