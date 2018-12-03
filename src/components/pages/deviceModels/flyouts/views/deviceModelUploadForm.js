@@ -37,6 +37,7 @@ class DeviceModelUploadForm extends Component {
     };
 
     this.fileInputRef = React.createRef();
+    this.singleFileInputRef = React.createRef();
     this.subscriptions = [];
   }
 
@@ -285,6 +286,10 @@ class DeviceModelUploadForm extends Component {
     this.fileInputRef.current.click();
   }
 
+  onClickSingleFileInputRef = () => {
+    this.singleFileInputRef.current.click();
+  }
+
   render() {
     const { t, uploadDeviceModelsError } = this.props;
     const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error, missingScripts, validationResults } = this.state;
@@ -349,9 +354,10 @@ class DeviceModelUploadForm extends Component {
                               id={fileName}
                               name="uploader"
                               accept=".json, .js"
+                              ref={this.singleFileInputRef}
                               onChange={this.uploadSingleFile}
                             />
-                            <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
+                            <label htmlFor="fileUpload" onClick={this.onClickSingleFileInputRef}>{t('deviceModels.flyouts.upload.browse')}</label>
                         </div>
                       </div>
                     </div>
@@ -403,9 +409,10 @@ class DeviceModelUploadForm extends Component {
                               id={name}
                               name="uploader"
                               accept=".json, .js"
+                              ref={this.singleFileInputRef}
                               onChange={this.uploadSingleFile}
                             />
-                            <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
+                            <label htmlFor="fileUpload" onClick={this.onClickSingleFileInputRef}>{t('deviceModels.flyouts.upload.browse')}</label>
                           </div>
                         ))
                       }
