@@ -20,17 +20,20 @@
         @include square-px-rem(16px);
         @include rem-fallback(margin-left, 10px);
 
-        &:hover {
-          cursor: pointer;
-        }
+        &:hover { cursor: pointer; }
 
-        svg {
-          @include square-px-rem(16px);
-        }
+        svg { @include square-px-rem(16px); }
       }
     }
   }
 
+  .no-match {
+    display: flex;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+    @include rem-font-size(24px);
+  }
 
   @include themify($themes) {
     color: themed('colorHighest');
@@ -40,8 +43,10 @@
       fill: themed('colorHighest');
 
       &:hover {
-        fill: themed('colorAlarm'); 
+        fill: themed('colorAlarm');
       }
     }
+
+    .no-match { color: themed('colorLightestFirst'); }
   }
 }

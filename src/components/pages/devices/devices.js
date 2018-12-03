@@ -33,11 +33,11 @@ const getDeviceList = (simulations = [], deviceModelEntities = {}, filters = {})
         let deviceIdList = [];
         const deviceModel = deviceModelEntities[id] || {};
         const { properties = {}, cloudToDeviceMethods = {} } = deviceModel;
-        for (let i = 0; i < count; i++) {
+        for (let i = 1; i <= count; i++) {
           deviceIdList.push({
             id: `${simId}.${id}.${i}`,
             enabled: true,
-            tags: { isSimulated: 'Y' },
+            tags: { IsSimulated: 'Y' },
             properties,
             cloudToDeviceMethods
           })
@@ -84,7 +84,10 @@ export class Devices extends Component {
       };
       this.deviceGridApi.setDatasource(dataSource);
     }
-    updateData(data);
+    this.setState(
+      { noMatch: data.length === 0 },
+      () => updateData(data)
+    );
   }
 
   setFilters = filters => this.setState({ filters }, () => this.applyFilters());
@@ -195,7 +198,11 @@ export class Devices extends Component {
           })
         }
         </div>
-        <DevicesGrid {...gridProps} />
+        {
+          this.state.noMatch
+            ? <div className="no-match">{ t('devices.noMatch') }</div>
+            : <DevicesGrid {...gridProps} />
+        }
         {
           filterFlyoutOpen &&
           <Filter {...filterFlyoutProps} />
