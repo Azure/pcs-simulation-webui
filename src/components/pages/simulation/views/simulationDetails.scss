@@ -233,7 +233,7 @@ $svgSize: 16px;
   @include rem-fallback(height, 40px);
 
   .iothub-metrics-link {
-    display: flex;
+    display: none;
 
     a {
       background-color: transparent;

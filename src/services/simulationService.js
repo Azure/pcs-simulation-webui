@@ -74,12 +74,15 @@ export class SimulationService {
 
   /** Disable a simulation */
   static stopSimulation(simulation) {
-    return HttpClient.patch(
-        `${ENDPOINT}simulations/${simulation.id}`,
-        toSimulationPatchModel(simulation, false)
-      )
-      .map(toSimulationModel)
-      .catch(resolveConflict);
+    return SimulationService.getSimulation(simulation.id)
+      .flatMap(({ eTag }) => {
+        return HttpClient.patch(
+            `${ENDPOINT}simulations/${simulation.id}`,
+            toSimulationPatchModel({ ...simulation, eTag }, false)
+          )
+          .map(toSimulationModel)
+          .catch(resolveConflict);
+      })
   }
 
   /** Patch a simulation */

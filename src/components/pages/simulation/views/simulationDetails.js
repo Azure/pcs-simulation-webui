@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Subject } from 'rxjs';
 import moment from 'moment';
 import { Route, NavLink, Redirect, withRouter, Link } from "react-router-dom";
+import { debounce } from 'lodash';
 
 import Config from 'app.config';
 import { svgs, humanizeDuration, ComponentArray, isDef } from 'utilities';
@@ -46,6 +47,7 @@ class SimulationDetails extends Component {
     this.telemetryRefresh$ = new Subject();
     this.newSimulationEmitter = new Subject();
     this.subscriptions = [];
+    this.startButtonClicked = debounce(this.startSimulation, 500);
   }
 
   componentDidMount() {
@@ -194,13 +196,14 @@ class SimulationDetails extends Component {
 
     const stopBtnProps = {
       type: 'button',
-      onClick: this.stopSimulation
+      onClick: this.stopSimulation,
+      disabled: !this.state.isActive
     };
 
     const startBtnProps = {
       type: 'button',
-      onClick: this.startSimulation,
-      disabled: disabled || this.state.devicesDeletionInProgress
+      onClick: this.startButtonClicked,
+      disabled: disabled || this.state.devicesDeletionInProgress || this.state.disableStart
     };
 
     return this.state.enabled
@@ -399,7 +402,14 @@ class SimulationDetails extends Component {
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
         <ContextMenu>
           { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
-          { id && this.getBtnFromSimulationStatus(isThereARunningSimulation) }
+          {
+            id &&
+              <Btn disabled={!this.state.enabled || !this.state.isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
+          }
+          {
+            id &&
+              <Btn disabled={isThereARunningSimulation || this.state.devicesDeletionInProgress || this.state.enabled} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
+          }
           <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
             { t('simulation.newSim') }
           </Btn>

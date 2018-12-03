@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
+import Config from 'app.config';
 import { stringToBoolean } from 'utilities';
 
 // Contains methods for converting service response
@@ -86,7 +87,8 @@ export const toSimulationRequestModel = (request = {}) => ({
   Description: request.description,
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHubs: toIoTHubs(request.iotHubs),
-  DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired
+  DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired,
+  RateLimits: toRateLimits(request.iotHubSku, request.iotHubUnits)
 });
 
 // Request models
@@ -153,3 +155,31 @@ const toIoTHubs = (iotHubs = []) =>
   iotHubs.map(({ connectionString }) => {
     return { ConnectionString: connectionString };
   });
+
+// Map to rateLimits in simulation request model
+const toRateLimits = (iotHubSku = 'S2', iotHubUnits = 1) => {
+  let rateLimits = {};
+
+  switch(iotHubSku) {
+    case 'S1':
+      rateLimits = Config.iotHubRateLimits.s1;
+      break;
+    case 'S2':
+      rateLimits = Config.iotHubRateLimits.s2;
+      break;
+    case 'S3':
+      rateLimits = Config.iotHubRateLimits.s3;
+      break;
+    default:
+      rateLimits = Config.iotHubRateLimits.s2;
+      break;
+  }
+
+  return {
+    RegistryOperationsPerMinute: rateLimits.RegistryOperationsPerMinute * iotHubUnits,
+    TwinReadsPerSecond: rateLimits.TwinReadsPerSecond * iotHubUnits,
+    TwinWritesPerSecond: rateLimits.TwinWritesPerSecond * iotHubUnits,
+    ConnectionsPerSecond: rateLimits.ConnectionsPerSecond * iotHubUnits,
+    DeviceMessagesPerSecond: rateLimits.DeviceMessagesPerSecond * iotHubUnits
+  };
+};
