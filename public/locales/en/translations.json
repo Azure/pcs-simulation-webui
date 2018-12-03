@@ -23,6 +23,7 @@
   },
   "devices": {
     "filters": "Filter results:",
+    "noMatch": "There are no active devices matching your filter criteria.",
     "grid": {
       "id": "id",
       "enabled": "enabled",
