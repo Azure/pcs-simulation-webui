@@ -479,8 +479,10 @@ class SimulationForm extends LinkedComponent {
                 type="text"
                 link={this.iotHubUnits}
                 max={10} />
-              <FormLabel className="warning-label">{t('simulation.form.targetHub.sku.warningLabel')}</FormLabel>
-              <FormLabel className="warning-desc">{t('simulation.form.targetHub.sku.warningMessage', { messageThrottlingLimit })}</FormLabel>
+              <div className="warning-box">
+                <FormLabel className="warning-label">{t('simulation.form.targetHub.sku.warningLabel')}</FormLabel>
+                <FormLabel className="warning-desc">{t('simulation.form.targetHub.sku.warningMessage', { messageThrottlingLimit })}</FormLabel>
+              </div>
             </FormGroup>
            </div>
 
