@@ -5,9 +5,10 @@ import { NavLink } from 'react-router-dom';
 import moment from 'moment';
 import Config from 'app.config';
 
+import Svgs from 'svgs';
 import { Btn, PageContent, ContextMenu, SectionHeader } from 'components/shared';
 import { NewSimulation } from '../flyouts';
-import { svgs, humanizeDuration } from 'utilities';
+import { humanizeDuration } from 'utilities';
 import SimulationTile from './simulationTile';
 import { SimulationsGrid } from './simulationsGrid';
 
@@ -105,7 +106,7 @@ export class SimulationDashboard extends Component {
 
     return [
       <ContextMenu key="context-menu">
-        <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive}>
+        <Btn className="new-simulation-btn" svg={Svgs.Plus} onClick={this.openNewSimulationFlyout} disabled={isActive}>
           { t('simulation.newSim') }
         </Btn>
       </ContextMenu>,

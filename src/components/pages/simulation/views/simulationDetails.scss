@@ -110,7 +110,7 @@ $svgSize: 16px;
         align-items: center;
         @include rem-fallback(padding, 24px);
 
-        .missing-chart-svg svg {
+        .missing-chart-svg {
           @include square-px-rem(64px);
           @include rem-fallback(margin-bottom, 8px);
         }
@@ -140,7 +140,7 @@ $svgSize: 16px;
         .status-value { color: themed('colorHighest'); }
 
         .missing-chart-svg,
-        .running-icon svg { fill: themed('colorActive'); }
+        .running-icon { fill: themed('colorActive'); }
       }
     }
   }
@@ -232,7 +232,7 @@ $svgSize: 16px;
       text-decoration: none;
     }
 
-    .link-svg svg {
+    .link-svg {
       @include square-px-rem(16px);
       @include rem-fallback(margin-right, 8px);
     }
@@ -244,6 +244,6 @@ $svgSize: 16px;
     .simulation-name,
     a { color: themed('colorHighest'); }
 
-    .link-svg svg { fill: themed('colorLightestFirst'); }
+    .link-svg { fill: themed('colorLightestFirst'); }
   }
 }

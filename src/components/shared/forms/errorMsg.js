@@ -3,8 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Svg } from 'components/shared/svg/svg';
-import { joinClasses, svgs } from 'utilities';
+import Svgs from 'svgs';
+import { joinClasses } from 'utilities';
 
 import './styles/errorMsg.scss';
 
@@ -12,7 +12,7 @@ export const ErrorMsg = (props) => {
   const { children, className } = props;
   return (
     <div className={joinClasses('error-message', className)}>
-      <Svg path={svgs.error} className="error-icon" />
+      <Svgs.ErrorAsterisk className="error-icon" />
       { children }
     </div>
   );

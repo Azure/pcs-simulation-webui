@@ -5,8 +5,8 @@ import { Subject } from 'rxjs';
 import moment from 'moment';
 
 import Config from 'app.config';
-import { SectionHeader, Svg, ErrorMsg, Indicator } from 'components/shared';
-import { svgs } from 'utilities';
+import { SectionHeader, ErrorMsg, Indicator } from 'components/shared';
+import Svgs from 'svgs';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 
@@ -154,7 +154,7 @@ class SimulationTile extends Component {
       : enabled
           ? isRunning
               ? <>
-                  <Svg path={svgs.running} className="running-icon" />
+                  <Svgs.Running className="running-icon" />
                   { t('simulation.status.running') }
                 </>
               : isActive

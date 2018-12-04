@@ -6,9 +6,10 @@ import moment from 'moment';
 import { Route, NavLink, Redirect, withRouter, Link } from "react-router-dom";
 import { debounce } from 'lodash';
 
+import Svgs from 'svgs';
 import Config from 'app.config';
-import { svgs, humanizeDuration, isDef } from 'utilities';
-import { Btn, ContextMenu, Svg, ErrorMsg, Indicator } from 'components/shared';
+import { humanizeDuration, isDef } from 'utilities';
+import { Btn, ContextMenu, ErrorMsg, Indicator } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 import { NewSimulation } from '../flyouts';
@@ -180,7 +181,7 @@ class SimulationDetails extends Component {
   getHubLink = () => {
     return this.state.preprovisionedIoTHubInUse && (
       <>
-        <Svg path={svgs.linkTo} className="link-svg" />
+        <Svgs.LinkTo className="link-svg" />
         <a href={this.state.hubUrl} target="_blank" rel="noopener noreferrer">{ this.props.t('simulation.vieIotHubMetrics') }</a>
       </>
     )
@@ -204,7 +205,7 @@ class SimulationDetails extends Component {
     };
 
     return this.state.enabled
-      ? <Btn {...stopBtnProps } svg={svgs.stopSimulation}>{ t('simulation.stop') }</Btn>
+      ? <Btn {...stopBtnProps } svg={Svgs.StopSimulation}>{ t('simulation.stop') }</Btn>
       : <Btn {...startBtnProps}>{ t('simulation.start') }</Btn>;
   }
 
@@ -294,7 +295,7 @@ class SimulationDetails extends Component {
       : enabled
           ? isRunning
               ? <>
-                  <Svg path={svgs.running} className="running-icon" />
+                  <Svgs.Running className="running-icon" />
                   { t('simulation.status.running') }
                 </>
               : isActive
@@ -314,7 +315,7 @@ class SimulationDetails extends Component {
   getMetricsPlaceHolder = (message) => (
     <div className="missing-chart-container">
         <div className="missing-chart-content">
-          <Svg path={svgs.missingChart} className="missing-chart-svg" />
+          <Svgs.MissingChart className="missing-chart-svg" />
           <div className="metrics-unavaiable-container">
             { message }
             <Link
@@ -380,16 +381,16 @@ class SimulationDetails extends Component {
       <>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
         <ContextMenu>
-          { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
+          { pollingError && <Btn svg={Svgs.Refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
           {
             id &&
-              <Btn disabled={!this.state.enabled || !this.state.isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
+              <Btn disabled={!this.state.enabled || !this.state.isActive} type="button" onClick={this.stopSimulation} svg={Svgs.StopSimulation}>{t('simulation.stop')}</Btn>
           }
           {
             id &&
               <Btn disabled={isThereARunningSimulation || this.state.devicesDeletionInProgress || this.state.enabled} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
           }
-          <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
+          <Btn className="new-simulation-btn" svg={Svgs.Plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
             { t('simulation.newSim') }
           </Btn>
         </ContextMenu>

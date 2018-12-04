@@ -31,6 +31,10 @@ $companySvgSize: 23px;
     &.hamburger { @include rem-fallback(margin-bottom, 24px); }
 
     .nav-item-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
       @include square-px-rem($navItemHeight);
 
       svg { @include square-px-rem($svgSize); }

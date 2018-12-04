@@ -4,8 +4,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
+import Svgs from 'svgs';
 import Config from 'app.config';
-import { svgs, LinkedComponent, Validator, int } from 'utilities';
+import { LinkedComponent, Validator, int } from 'utilities';
 import {
   Btn,
   BtnToolbar,
@@ -18,7 +19,6 @@ import {
   Radio,
   SectionDesc,
   SectionHeader,
-  Svg,
   Tooltip
 } from 'components/shared';
 
@@ -417,7 +417,7 @@ class SimulationForm extends LinkedComponent {
                   </FormGroup>
                   <Btn
                     className="delete-device-model-btn"
-                    svg={svgs.trash}
+                    svg={Svgs.Trash}
                     onClick={this.deleteDeviceModel(idx)} />
                 </div>
               );
@@ -427,7 +427,7 @@ class SimulationForm extends LinkedComponent {
         {
           deviceModels.length < 10 &&
             <Btn
-              svg={svgs.plus}
+              svg={Svgs.Plus}
               onClick={this.addDeviceModel}>
               { t('simulation.form.deviceModels.addDeviceModelBtn') }
             </Btn>
@@ -497,7 +497,7 @@ class SimulationForm extends LinkedComponent {
             <span className="checkmark"></span>
           </div>
           <Tooltip message={t('simulation.form.tooltip.bulkDeletion')} position={'top'}>
-            <Svg path={svgs.infoBubble} className="tooltip-trigger-icon" />
+            <Svgs.InfoBubble className="tooltip-trigger-icon" />
           </Tooltip>
         </FormSection>
 
@@ -527,7 +527,7 @@ class SimulationForm extends LinkedComponent {
           }
           <BtnToolbar>
             <Btn
-              svg={svgs.startSimulation}
+              svg={Svgs.StartSimulation}
               type="submit"
               className="apply-btn"
               disabled={!this.formIsValid() || deviceModelsHaveError || autoscaleAcknowledgedRequired || formSubmitted}>

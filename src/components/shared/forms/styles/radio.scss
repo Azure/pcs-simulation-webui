@@ -16,31 +16,24 @@
 
     .radio-icon {
       cursor: pointer;
+      overflow: visible; // Visible to avoid clipping the edges of the circle
       @include square-px-rem(16px);
-
-      svg {
-        overflow: visible; // Visible to avoid clipping the edges of the circle
-        @include square-px-rem(16px);
-        // Add 1px of padding to make sure the circle isn't clipped
-        @include rem-fallback(padding, 1px);
-      }
+      // Add 1px of padding to make sure the circle isn't clipped
+      @include rem-fallback(padding, 1px);
 
       &.disabled { cursor: auto; }
     }
 
     @include themify($themes) {
       .radio-icon {
-        // Apply special styles to the radio button svg
-        svg {
-          .outer-border {
-            stroke: themed('colorMidThird');
-            fill: none;
-          }
-
-          .inner-circle { fill: none; }
+        .outer-border {
+          stroke: themed('colorMidThird');
+          fill: none;
         }
 
-        &.disabled svg {
+        .inner-circle { fill: none; }
+
+        &.disabled {
           .inner-circle,
           .outer-border {
             stroke: themed('colorMidThird');
@@ -50,11 +43,11 @@
       }
 
       // Show the center circle when checked
-      > input[type=radio]:checked + .radio-icon svg .inner-circle
+      > input[type=radio]:checked + .radio-icon .inner-circle
       { fill: themed('colorHighest'); }
 
       // Highlight the radio circle border on hover when not checked
-      > input[type=radio]:not(:checked) + .radio-icon:hover svg .outer-border
+      > input[type=radio]:not(:checked) + .radio-icon:hover .outer-border
       { stroke: themed('colorLightestFirst'); }
 
     }

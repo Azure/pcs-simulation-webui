@@ -14,12 +14,12 @@ $errorIconSize: 10px;
     @include square-px-rem($errorIconSize);
     @include rem-fallback(margin-right, 10px);
 
-    svg { @include square-px-rem($errorIconSize); }
+    @include square-px-rem($errorIconSize);
   }
 
   @include themify($themes) {
     color: themed('colorAlarm');
 
-    .error-icon svg { fill: themed('colorAlarm'); }
+    .error-icon { fill: themed('colorAlarm'); }
   }
 }

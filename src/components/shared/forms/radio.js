@@ -3,9 +3,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Svg } from 'components/shared/svg/svg';
+import Svgs from 'svgs';
 import { FormLabel } from './formLabel';
-import { svgs, joinClasses } from 'utilities';
+import { joinClasses } from 'utilities';
 
 import './styles/radio.scss';
 
@@ -51,8 +51,7 @@ export class Radio extends Component {
             disabled={disabled}
             id={id || this.formGroupId}
             ref="radioInputElement" />
-          <Svg
-            path={svgs.radioSelected}
+          <Svgs.RadioSelected
             className={joinClasses('radio-icon', disabled ? 'disabled' : '')}
             onClick={() => this.refs.radioInputElement.click()} />
         </div>
