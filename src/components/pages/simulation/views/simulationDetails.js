@@ -67,7 +67,7 @@ class SimulationDetails extends Component {
       .subscribe(
         response => {
           const devicesDeletionInProgress = !response.enabled
-            && response.devicesDeletionRequired
+            && (response.devicesDeletionRequired || response.deleteDevicesOnce)
             && !response.devicesDeletionCompleted;
 
           this.setState({
@@ -84,7 +84,10 @@ class SimulationDetails extends Component {
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
             preprovisionedIoTHubInUse: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
             simulationPollingError: '',
-            devicesDeletionInProgress
+            devicesDeletionInProgress,
+            devicesDeletionRequired: response.devicesDeletionRequired,
+            deleteDevicesWhenSimulationEnds: response.deleteDevicesWhenSimulationEnds,
+            devicesDeletionCompleted: response.devicesDeletionCompleted
           },
           () => {
             if (response.isActive || this.state.devicesDeletionInProgress) {
@@ -284,6 +287,24 @@ class SimulationDetails extends Component {
 
   openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
 
+  deleteDevicesInThisSimulation = () => {
+    SimulationService.patchSimulation(this.state.simulation)
+      .subscribe(
+        response => {
+          const devicesDeletionInProgress = !response.enabled
+            && (response.devicesDeletionRequired || response.deleteDevicesOnce)
+            && !response.devicesDeletionCompleted;
+          this.setState({ devicesDeletionInProgress, devicesDeletionCompleted: response.devicesDeletionCompleted },
+            () => {
+              if (devicesDeletionInProgress) {
+                this.simulationRefresh$.next(`r`);
+              }
+            }
+          );
+        }
+      );
+  }
+
   getSimulationState = (endDateTime, t) => {
     const { simulationPollingError, enabled, isRunning, isActive, devicesDeletionInProgress } = this.state;
     return simulationPollingError
@@ -336,7 +357,7 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, enabled, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
@@ -426,6 +447,12 @@ class SimulationDetails extends Component {
                     <div className="left-time-container">{ t('simulation.status.created', { startDateTime }) }</div>
                     <div className="right-time-container">{ this.getSimulationState(endDateTime, t) }</div>
                   </div>
+                  {
+                    !devicesDeletionCompleted && !enabled && stopTime != null &&
+                    <div className="info-section">
+                      <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
+                    </div>
+                  }
                 </div>
               }
               <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
