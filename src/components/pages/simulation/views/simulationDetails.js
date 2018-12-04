@@ -12,6 +12,7 @@ import { Btn, ContextMenu, Svg, ErrorMsg, Indicator } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 import { NewSimulation } from '../flyouts';
+import { DeleteModal } from '../deleteModal/deleteModal';
 
 import './simulationDetails.css';
 
@@ -25,6 +26,7 @@ const {
 } = Config;
 
 const newSimulationFlyout = 'new-simulation';
+const deleteSimulationModal = 'delete-simulation'
 
 class SimulationDetails extends Component {
 
@@ -278,6 +280,8 @@ class SimulationDetails extends Component {
 
   openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
 
+  openDeleteSimulationModal = () => this.setState({ flyoutOpen: deleteSimulationModal })
+
   getSimulationState = (endDateTime, t) => {
     const { simulationPollingError, enabled, isRunning, isActive, devicesDeletionInProgress } = this.state;
     return simulationPollingError
@@ -335,6 +339,7 @@ class SimulationDetails extends Component {
 
     const {
       id,
+      name,
       deviceModels = [],
       startTime,
       endTime,
@@ -350,8 +355,13 @@ class SimulationDetails extends Component {
           ? moment(endTime).format(dateTimeFormat)
           :  '-';
 
-    const iotHub = iotHubs[0] || {};
-    const iotHubString = (iotHub.connectionString || t('simulation.form.targetHub.preProvisionedLbl'));
+    var iotHub = iotHubs[0] || {};
+    let iotHubConnectionString = '';
+    if (iotHub.connectionString !== undefined) {
+      var parts = iotHub.connectionString.split('.');
+      iotHubConnectionString = parts[0].split('=')[1];
+    }
+    const iotHubString = (iotHubConnectionString || t('simulation.form.targetHub.preProvisionedLbl'));
 
     const [ deviceModel = {} ] = deviceModels;
     const defaultModelRoute = deviceModel.id || '';
@@ -362,6 +372,7 @@ class SimulationDetails extends Component {
     const pathname = `/simulations/${match.params.id}`;
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
+    const deleteSimulationModalOpen = this.state.flyoutOpen === deleteSimulationModal;
 
     // Remove isThereARunningSimulation when simulation service support running multiple simulations
     const isThereARunningSimulation = simulationList.some(({ isActive }) => isActive);
@@ -377,7 +388,7 @@ class SimulationDetails extends Component {
           {pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{t('simulation.refresh')}</Btn>}
           {
             id &&
-            <Btn disabled={this.state.enabled || this.state.isActive} type="button" onClick={this.deleteSimulation} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
+            <Btn disabled={this.state.enabled || this.state.isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
           }
           {
             id &&
@@ -476,6 +487,16 @@ class SimulationDetails extends Component {
         {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
+        }
+        {
+          deleteSimulationModalOpen &&
+          <DeleteModal
+            key="delete-device-model-modal"
+            onClose={this.closeFlyout}
+            onDelete={this.deleteSimulation}
+            simulationName={name}
+            formMode={'delete'}
+            t={t} />
         }
       </ComponentArray>
     );

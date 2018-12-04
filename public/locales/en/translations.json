@@ -116,6 +116,18 @@
       "endTime": "Sim End Date",
       "duration": "Sim Duraton"
     },
+    "modals": {
+      "cancel": "Cancel",
+      "delete": {
+        "title": "Delete",
+        "header": "Delete a simulation",
+        "description": "Are you sure you want to delete '{{simulationName}}'?",
+        "cancel": "Cancel",
+        "apply": "Delete",
+        "applySuccess": "Simulation deleted successfully!",
+        "close": "Close"
+      }
+    },
     "status": {
       "activeDevicesCount": "Active devices",
       "averageMessagesPerSec": "Average messages per second",
@@ -171,10 +183,10 @@
       "delete": {
         "title": "Delete",
         "header": "Delete a device model",
-        "description": "Are you sure you want to delete {{deviceModelId}}?",
+        "description": "Are you sure you want to delete '{{deviceModelName}}'?",
         "cancel": "Cancel",
         "apply": "Delete",
-        "applySuccess": "device model deleted successfully!",
+        "applySuccess": "Device model deleted successfully!",
         "close": "Close"
       },
       "clone": {
