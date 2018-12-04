@@ -13,10 +13,11 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
+    "node-sass": "^4.10.0",
     "normalizr": "3.2.4",
-    "react": "16.5.2",
+    "react": "16.6.0",
     "react-cookie": "^3.0.4",
-    "react-dom": "16.5.2",
+    "react-dom": "16.6.0",
     "react-dom-factories": "1.0.2",
     "react-i18next": "7.3.1",
     "react-redux": "5.0.6",
@@ -36,16 +37,19 @@
     "mocha-steps": "1.1.0",
     "node-fetch": "1.7.1",
     "node-sass-chokidar": "^1.3.3",
-    "npm-run-all": "^4.0.2",
-    "react-scripts": "^1.1.5"
+    "npm-run-all": "4.1.5",
+    "react-scripts": "2.1.0"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
