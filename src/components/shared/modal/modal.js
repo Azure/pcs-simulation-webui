@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import './modal.css';
+import './modal.scss';
 
 export class Modal extends Component {
 

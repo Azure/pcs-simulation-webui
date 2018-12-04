@@ -10,7 +10,7 @@ import ProfileImagePath from 'assets/images/profile.png';
 import { WelcomeModal } from '../welcomeModal/welcomeModal';
 import { Breadcrumbs } from './breadcrumbs';
 
-import './header.css';
+import './header.scss';
 
 const docsDropdown = 'docsDropdown';
 const profileDropdown = 'profileDropdown';

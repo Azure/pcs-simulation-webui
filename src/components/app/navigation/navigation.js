@@ -7,7 +7,7 @@ import { Svg } from 'components/shared';
 
 import { svgs } from 'utilities';
 
-import './navigation.css';
+import './navigation.scss';
 
 /** The navigation tab configurations */
 const navLinks = [

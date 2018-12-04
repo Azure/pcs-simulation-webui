@@ -2,10 +2,10 @@
 
 import React from 'react';
 
-import './pageNotFound.css';
+import './pageNotFound.scss';
 
 export const PageNotFound = () => (
-  <div class="page-not-found-container">
+  <div className="page-not-found-container">
     404 - Page not found
     <br />
     <br />

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import './welcomeTile.css';
+import './welcomeTile.scss';
 
 export const WelcomeTile = ({ onClick, imgPath, title, description, btnName, link }) => (
   <div className="welcome-tile-container">
