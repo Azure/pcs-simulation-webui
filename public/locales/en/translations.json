@@ -61,6 +61,7 @@
         "runIndefinitelyBtn": "Run indefinitely"
       },
       "deleteDevicesWhenSimulationEnds": "Delete all devices when the simulation is complete",
+      "deleteAllDevices": "Delete all devices",
       "errorMsg": {
         "duplicateModelsNotAllowed": "A device model may be used only once",
         "nameCantBeEmpty": "Simulation name is required",

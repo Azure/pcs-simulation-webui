@@ -11,7 +11,6 @@ $svgSize: 16px;
 
   .simulation-stats-container {
     display: flex;
-    @include rem-fallback(height, 500px);
 
     .stack-container {
       @include rem-fallback(width, 580px);
@@ -30,6 +29,11 @@ $svgSize: 16px;
             overflow: hidden;
             text-overflow: ellipsis;
             @include rem-fallback(max-width, 350px);
+          }
+
+          .delete-devices-section {
+            @include rem-fallback(margin-top, 20px);
+            @include rem-fallback(height, 32px);
           }
         }
 
@@ -129,6 +133,13 @@ $svgSize: 16px;
 
         .info-container { border-bottom: 1px solid themed('colorMidSecond'); }
 
+        .info-section  .delete-devices-section {
+          background: themed('colorGrayLight');
+
+          &:hover {
+            background: themed('colorGrayDark');
+          }
+        }
         .status-description { color: themed('colorLightestFirst'); }
 
         .info-label,
