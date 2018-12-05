@@ -258,7 +258,7 @@ class SimulationDetails extends Component {
 
     return (
       <ComponentArray>
-        <div className="stats-header">Statistics</div>
+        <div className="stats-header">{t('simulation.status.statistics')}</div>
         <div className="stats-container">
           <div className="active-devices-container">
             <div className="active-devices">{activeDevicesCount}</div>
@@ -287,7 +287,7 @@ class SimulationDetails extends Component {
     SimulationService.patchSimulation(this.state.simulation)
       .subscribe(
         response => {
-          const devicesDeletionInProgress = !response.enabled
+          const devicesDeletionInProgress = !response.isActive
             && (response.devicesDeletionRequired || response.deleteDevicesOnce)
             && !response.devicesDeletionCompleted;
 
@@ -367,7 +367,8 @@ class SimulationDetails extends Component {
       endTime,
       stopTime,
       isActive,
-      iotHubs = []
+      iotHubs = [],
+      rateLimits = {}
     } = simulation;
 
     const startDateTime = moment(startTime).format(dateTimeFormat);
@@ -384,6 +385,7 @@ class SimulationDetails extends Component {
       iotHubConnectionString = parts[0].split('=')[1];
     }
     const iotHubString = (iotHubConnectionString || t('simulation.form.targetHub.preProvisionedLbl'));
+    const messagesPerSecond = rateLimits.deviceMessagesPerSecond;
 
     const [ deviceModel = {} ] = deviceModels;
     const defaultModelRoute = deviceModel.id || '';
@@ -410,15 +412,15 @@ class SimulationDetails extends Component {
           {pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{t('simulation.refresh')}</Btn>}
           {
             id &&
-            <Btn disabled={this.state.enabled || this.state.isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
+            <Btn disabled={isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
           }
           {
             id &&
-              <Btn disabled={!this.state.enabled || !this.state.isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
+              <Btn disabled={!isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
           }
           {
             id &&
-              <Btn disabled={isThereARunningSimulation || this.state.devicesDeletionInProgress || this.state.enabled} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
+              <Btn disabled={isThereARunningSimulation || this.state.devicesDeletionInProgress || this.state.isActive} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
           }
           <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
             { t('simulation.newSim') }
@@ -450,6 +452,10 @@ class SimulationDetails extends Component {
                     <div className="info-content">{ iotHubString }</div>
                   </div>
                   <div className="info-section">
+                    <div className="info-label">{ t('simulation.form.targetHub.messageRateLimits') }</div>
+                    <div className="info-content">{t('simulation.form.targetHub.messagePerSecFormat', { messagesPerSecond }) }</div>
+                  </div>
+                  <div className="info-section">
                     <div className="info-label">{ t('simulation.form.duration.header') }</div>
                     <div className="info-content">{ duration }</div>
                   </div>
@@ -458,7 +464,7 @@ class SimulationDetails extends Component {
                     <div className="right-time-container">{ this.getSimulationState(endDateTime, t) }</div>
                   </div>
                   {
-                    !devicesDeletionCompleted && !enabled && stopTime != null &&
+                    !devicesDeletionCompleted && !isActive && stopTime != null &&
                     <div className="info-section">
                       <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
                     </div>

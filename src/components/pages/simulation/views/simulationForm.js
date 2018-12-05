@@ -188,13 +188,13 @@ class SimulationForm extends LinkedComponent {
   getMessageThrottlingLimit = hubSku => {
     switch (hubSku) {
       case 'S1':
-        return Config.iotHubRateLimits.s1.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s1.deviceMessagesPerSecond;
       case 'S2':
-        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s2.deviceMessagesPerSecond;
       case 'S3':
-        return Config.iotHubRateLimits.s3.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s3.deviceMessagesPerSecond;
       default:
-        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s2.deviceMessagesPerSecond;
     }
   }
 
@@ -234,9 +234,11 @@ class SimulationForm extends LinkedComponent {
       name,
       description,
       enabled: true,
-      iotHubs: [{ connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString }],
-      iotHubSku,
-      iotHubUnits,
+      iotHubs: [{
+        connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString,
+        iotHubSku,
+        iotHubUnits
+      }],
       deviceModels,
       ...simulationDuration,
       devicesDeletionRequired

@@ -15,7 +15,8 @@ export const DeleteModal = ({ t, onClose, simulationName, onDelete }) => (
         <Btn svg={svgs.x} className="modal-icon" onClick={onClose} />
       </div>
       <div className="delete-modal-content">
-        {t('simulation.modals.delete.description', { simulationName })}
+        <div>{t('simulation.modals.delete.description')} </div>
+        <div>'{simulationName}' ?</div>
       </div>
       <BtnToolbar>
         <Btn svg={svgs.trash} onClick={onDelete}>

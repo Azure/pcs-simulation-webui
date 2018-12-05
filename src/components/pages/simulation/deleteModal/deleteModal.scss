@@ -21,8 +21,6 @@
     .modal-icon { @include rem-fallback(padding, 0px); }
   }
 
-  .delete-modal-content { display: flex; }
-
   .btn-toolbar { justify-content: flex-end; }
 
   @include themify($themes) {

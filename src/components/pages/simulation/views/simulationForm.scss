@@ -119,8 +119,13 @@
 .hub-units-box { @include rem-fallback(margin-left, 18px); }
 
 .learn-more {
-    color: $colorBlueLink;
     @include rem-fallback(margin-left, 8px);
+
+    @include themify($themes) {
+      color: $colorBlueLink;
+
+      &:visited { color: $colorLinkVisited; }
+  }
 }
 
 .form-actions-container {

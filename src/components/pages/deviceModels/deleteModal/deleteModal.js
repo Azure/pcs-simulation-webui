@@ -15,7 +15,8 @@ export const DeleteModal = ({ t, onClose, deviceModelName, onDelete }) => (
         <Btn svg={svgs.x} className="modal-icon" onClick={onClose} />
       </div>
       <div className="delete-modal-content">
-        {t('deviceModels.flyouts.delete.description', { deviceModelName })}
+        <div>{t('deviceModels.flyouts.delete.description')} </div>
+        <div>'{deviceModelName}' ?</div>
       </div>
       <BtnToolbar>
         <Btn svg={svgs.trash} onClick={onDelete}>
