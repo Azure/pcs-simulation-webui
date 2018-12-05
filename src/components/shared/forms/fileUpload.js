@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
+
 import React, { Component } from 'react';
 
 import './styles/fileUpload.css';
