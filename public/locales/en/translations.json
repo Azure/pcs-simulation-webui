@@ -84,7 +84,7 @@
       "autoScaleAcknowledgement": "I understand simulating {{ totalDevicesCount }} devices requires {{ additionVMsCount }} additional VMs to be deployed in my Azure subscription. These VMs will be automatically removed once all simulations are stopped.",
       "targetHub": {
         "description": "Add the connection string for your IoT Hub",
-        "header": "Target IoT Hub Name",
+        "header": "Target IoT Hub name",
         "usePreProvisionedBtn": "Use pre-provisioned IoT Hub",
         "preProvisionedLbl": "Pre-provisioned",
         "messageRateLimits": "Message rate limits",

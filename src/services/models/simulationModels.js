@@ -91,18 +91,23 @@ export const toSimulationRequestModel = (request = {}) => ({
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHubs: toIoTHubs(request.iotHubs),
   DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired,
+  DevicesDeletionComplete: false,
   RateLimits: toRateLimits(request.iotHubs[0].iotHubSku, request.iotHubs[0].iotHubUnits)
 });
 
 // Request models
-export const toSimulationCloneModel = (request = {}) => ({
-  Enabled: true,
+export const toSimulationUpdateModel = (request = {}) => ({
+  ETag: request.eTag,
+  Enabled: request.enabled,
   StartTime: request.startTime,
   EndTime: request.endTime,
+  Id: request.id,
   Name: request.name,
   Description: request.description,
   DeviceModels: toCloneDeviceModels(request.deviceModels),
-  IoTHubs: toIoTHubs(request.iotHubs)
+  IoTHubs: toIoTHubs(request.iotHubs),
+  DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired,
+  RateLimits: toRateLimits(request.iotHubs[0].iotHubSku, request.iotHubs[0].iotHubUnits)
 });
 
 // Request models

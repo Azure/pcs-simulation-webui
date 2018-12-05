@@ -172,7 +172,7 @@ class SimulationDetails extends Component {
       enabled: true
     }
 
-    this.subscriptions.push(SimulationService.toggleSimulation(requestModel)
+    this.subscriptions.push(SimulationService.startSimulation(requestModel)
       .subscribe(
         ({ id }) => {
           this.props.history.push(`/simulations/${id}`);
@@ -356,7 +356,7 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, enabled, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
