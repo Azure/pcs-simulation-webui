@@ -125,6 +125,7 @@
       color: $colorBlueLink;
 
       &:visited { color: $colorLinkVisited; }
+      &:hover { color: $colorLinkHover; }
   }
 }
 
