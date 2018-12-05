@@ -3,11 +3,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Svgs from 'svgs';
+import { Svg } from 'components/shared/svg/svg';
 import { FormLabel } from './formLabel';
 import { FormGroup } from './formGroup';
 import { FormControl } from './formControl';
-import { joinClasses, isFunc, int } from 'utilities';
+import { svgs, joinClasses, isFunc, int } from 'utilities';
 
 import './styles/duration.scss';
 
@@ -99,9 +99,7 @@ export class Duration extends Component {
             name="hours"
             value={this.format(hours)} />
         </FormGroup>
-        <div className="duration-colon-icon">
-          <Svgs.Colon />
-        </div>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
         <FormGroup>
           <FormLabel>MM</FormLabel>
           <FormControl
@@ -109,9 +107,7 @@ export class Duration extends Component {
             name="minutes"
             value={this.format(minutes)} />
         </FormGroup>
-        <div className="duration-colon-icon">
-          <Svgs.Colon />
-        </div>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
         <FormGroup>
           <FormLabel>SS</FormLabel>
           <FormControl
@@ -127,18 +123,14 @@ export class Duration extends Component {
             name="hours"
             value={this.format(hours)} />
         </FormGroup>
-        <div className="duration-colon-icon">
-          <Svgs.Colon />
-        </div>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
         <FormGroup>
           <FormControl
             {...genericProps}
             name="minutes"
             value={this.format(minutes)} />
         </FormGroup>
-        <div className="duration-colon-icon">
-          <Svgs.Colon />
-        </div>
+        <Svg path={svgs.colon} className="duration-colon-icon" />
         <FormGroup>
           <FormControl
             {...genericProps}

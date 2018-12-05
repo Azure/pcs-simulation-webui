@@ -3,11 +3,11 @@
 import React from 'react';
 import { Route, Switch, NavLink } from 'react-router-dom';
 
-import Svgs from 'svgs';
-import { isDef } from 'utilities';
+import { Svg } from 'components/shared';
+import { svgs, isDef } from 'utilities';
 
 const Crumb = ({ children }) => <div className="crumb">{ children }</div>
-const Chevron = () => <Svgs.ChevronRight className="chevron-icon" />;
+const Chevron = () => <Svg path={svgs.chevronRight} className="chevron-icon" />;
 
 const CrumbFromConfig = ({ t, crumb, match, isLast }) => {
 

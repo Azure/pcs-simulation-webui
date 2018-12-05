@@ -22,7 +22,7 @@
       display: flex;
       align-items: center;
 
-      .rocket-icon {
+      .rocket-icon svg {
         @include rem-fallback(margin-right, 20px);
         @include square-px-rem(32px);
       }
@@ -118,7 +118,8 @@
       fill: themed('colorHighest');
 
       &:hover {
-        fill: themed('colorLightestFirst');
+        background-color: transparent;
+        svg { fill: themed('colorLightestFirst'); }
       }
     }
 

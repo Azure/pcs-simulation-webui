@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import { isEqual, isEmpty } from 'lodash';
 import { Observable } from 'rxjs';
 import { DeviceModelScriptsService } from 'services';
-import Svgs from 'svgs';
+import { svgs } from 'utilities';
+import { Svg } from 'components/shared';
 import {
   Btn,
   BtnToolbar,
@@ -371,7 +372,7 @@ class DeviceModelUploadForm extends Component {
               <FormLabel>{t('deviceModels.flyouts.upload.uploadedFiles')}</FormLabel>
               <div className="upload-results-container">
                 <div className="file-name">{jsonFile.name}</div>
-                <Svgs.Success className="success-result" />
+                <Svg path={svgs.success} className="success-result" />
               </div>
               {this.state.scripts
                 .sort((a, b) => a.name.localeCompare(b.name))
@@ -391,9 +392,9 @@ class DeviceModelUploadForm extends Component {
                     <div
                       className={`${(validationResults[name] && validationResults[name].isValid) ? 'success-result' : 'failed-result'}`}>
                       {validationResults[name] && validationResults[name].isValid === true ? (
-                        <Svgs.Success className="success-result" />
+                        <Svg path={svgs.success} className="success-result" />
                       ) : validationResults[name] && validationResults[name].isValid === false ? (
-                        <Svgs.Failure className="failed-result" />
+                        <Svg path={svgs.failure} className="failed-result" />
                       ) : (
                         <Indicator size="mini" />
                       )}
@@ -431,7 +432,7 @@ class DeviceModelUploadForm extends Component {
             <Btn disabled={!this.formIsValid() || changesApplied} type="submit">
               {t('deviceModels.flyouts.save')}
             </Btn>
-            <Btn svg={Svgs.cancelX} onClick={this.clearAll}>
+            <Btn svg={svgs.cancelX} onClick={this.clearAll}>
               {t('deviceModels.flyouts.clearAll')}
             </Btn>
           </BtnToolbar>

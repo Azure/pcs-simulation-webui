@@ -3,8 +3,8 @@
 import React from'react';
 
 import { withAccordion } from './accordionProvider';
-import Svgs from 'svgs';
-import { joinClasses } from 'utilities';
+import { Svg } from 'components/shared/svg/svg';
+import { svgs, joinClasses } from 'utilities';
 
 export const FlyoutSectionHeader = withAccordion(
   ({ accordionIsCollapsable, className, children, toggleAccordion, accordionIsOpen }) => {
@@ -15,7 +15,7 @@ export const FlyoutSectionHeader = withAccordion(
             { children }
             {
               accordionIsCollapsable &&
-              <Svgs.Chevron className={joinClasses('collapse-section-icon', accordionIsOpen ? 'expanded' : 'collapsed')} />
+              <Svg path={svgs.chevron} className={joinClasses('collapse-section-icon', accordionIsOpen ? 'expanded' : 'collapsed')} />
             }
           </button>
         : <div {...sectionProps}>

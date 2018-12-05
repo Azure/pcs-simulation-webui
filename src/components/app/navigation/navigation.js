@@ -3,25 +3,34 @@
 import React, { Component } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import Svgs from 'svgs';
+import { Svg } from 'components/shared';
+
+import { svgs } from 'utilities';
 
 import './navigation.scss';
 
 /** The navigation tab configurations */
 const navLinks = [
-  { key: 0, to: '/simulations', svg: Svgs.Simulation, labelId: 'tabs.simulation' },
-  { key: 1, to: '/devicemodels', svg: Svgs.TabDevices, labelId: 'tabs.deviceModels' }
+  { key: 0, to: '/simulations', svg: svgs.simulationLogo, labelId: 'tabs.simulation' },
+  { key: 1, to: '/devicemodels', svg: svgs.tabDeviceModels, labelId: 'tabs.deviceModels' }
 ];
 
 /** A window size less than this will automatically collapse the left nav */
 const minExpandedNavWindowWidth = 800;
 
+/**
+ * A presentational component for nav item svgs
+ *
+ * @param {ReactSVGProps} props see https://www.npmjs.com/package/react-svg
+ */
+const NavIcon = (props) => (
+  <Svg {...props} className="nav-item-icon" />
+);
+
 /** A presentational component navigation tab links */
-const TabLink = ({svg: Svg , ...props}) => (
+const TabLink = (props) => (
   <NavLink to={props.to} className="nav-item" activeClassName="active">
-    <div className="nav-item-icon">
-      <Svg />
-    </div>
+    <NavIcon path={props.svg} />
     <div className="nav-item-text">{props.t(props.labelId)}</div>
   </NavLink>
 );
@@ -62,9 +71,7 @@ class Navigation extends Component {
     return (
       <nav className={`app-nav ${isExpanded && 'expanded'}`}>
         <button className="nav-item hamburger" onClick={this.toggleExpanded}>
-          <div className="nav-item-icon">
-            <Svgs.Hamburger />
-          </div>
+          <NavIcon path={svgs.hamburger} />
         </button>
         { navLinks.map(navProps => <TransTabLink {...navProps} />) }
       </nav>

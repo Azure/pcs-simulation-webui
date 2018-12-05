@@ -37,7 +37,7 @@
 
       &:hover {
         background-color: themed('colorLowestSecond');
-        fill: themed('colorHighest');
+        svg { fill: themed('colorHighest'); }
       }
     }
   }
