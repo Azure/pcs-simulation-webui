@@ -5,7 +5,7 @@ import { isEqual, isEmpty } from 'lodash';
 import { Observable } from 'rxjs';
 import { DeviceModelScriptsService } from 'services';
 import { svgs } from 'utilities';
-import { Svg } from 'components/shared';
+import { Svg, FileUpload } from 'components/shared';
 import {
   Btn,
   BtnToolbar,
@@ -347,18 +347,7 @@ class DeviceModelUploadForm extends Component {
                         </div>
                       </div>
                       <div className="validation-message">
-                        <div className="file-uploader-container">
-                            <input
-                              className="file-uploader"
-                              type="file"
-                              id={fileName}
-                              name="uploader"
-                              accept=".json, .js"
-                              ref={this.singleFileInputRef}
-                              onChange={this.uploadSingleFile}
-                            />
-                            <label htmlFor="fileUpload" onClick={this.onClickSingleFileInputRef}>{t('deviceModels.flyouts.upload.browse')}</label>
-                        </div>
+                        <FileUpload id={fileName} value={t('deviceModels.flyouts.upload.browse')} onChange={this.uploadSingleFile} />
                       </div>
                     </div>
                   ))
@@ -402,18 +391,7 @@ class DeviceModelUploadForm extends Component {
                     <div>
                       {
                         validationResults[name] && (validationResults[name].messages || []).map((error, idx) => (
-                          <div key={name} className="file-uploader-container">
-                            <input
-                              className="file-uploader"
-                              type="file"
-                              id={name}
-                              name="uploader"
-                              accept=".json, .js"
-                              ref={this.singleFileInputRef}
-                              onChange={this.uploadSingleFile}
-                            />
-                            <label htmlFor="fileUpload" onClick={this.onClickSingleFileInputRef}>{t('deviceModels.flyouts.upload.browse')}</label>
-                          </div>
+                          <FileUpload id={name} onChange={this.uploadSingleFile} value={t('deviceModels.flyouts.upload.browse')} />
                         ))
                       }
                     </div>
