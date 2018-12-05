@@ -357,7 +357,7 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, devicesDeletionCompleted, enabled, devicesDeletionInProgress } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, enabled, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
