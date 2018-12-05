@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import Svgs from 'svgs';
 
@@ -26,7 +26,7 @@ const TabLink = ({svg: Svg , ...props}) => (
   </NavLink>
 );
 
-const TransTabLink = translate()(TabLink);
+const TransTabLink = withNamespaces()(TabLink);
 
 /** The navigation component for the left navigation */
 class Navigation extends Component {
