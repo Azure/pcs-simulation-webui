@@ -378,12 +378,13 @@ class SimulationDetails extends Component {
           ? moment(endTime).format(dateTimeFormat)
           :  '-';
 
-    var iotHub = iotHubs[0] || {};
+    const iotHub = iotHubs[0] || {};
     let iotHubConnectionString = '';
     if (iotHub.connectionString !== undefined) {
       var parts = iotHub.connectionString.split('.');
       iotHubConnectionString = parts[0].split('=')[1];
     }
+
     const iotHubString = (iotHubConnectionString || t('simulation.form.targetHub.preProvisionedLbl'));
     const messagesPerSecond = rateLimits.deviceMessagesPerSecond;
 
