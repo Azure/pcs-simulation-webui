@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/variables';
-@import 'styles/themes';
-@import 'styles/mixins';
+@import '~styles/variables';
+@import '~styles/themes';
+@import '~styles/mixins';
 
 $navItemHeight: 48px;
 $svgSize: 16px;
@@ -97,7 +97,10 @@ $svgSize: 16px;
       }
     }
 
-    .telemetry-chart-container { @include rem-fallback(height, 500px); }
+    .telemetry-chart-container {
+      @include rem-fallback(height, 500px);
+      .splitByLabel h5 { max-width: 135px; }
+    }
 
     .missing-chart-container {
       display: flex;

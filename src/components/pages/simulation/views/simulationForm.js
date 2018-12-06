@@ -24,7 +24,7 @@ import {
 
 import { SimulationService } from 'services';
 
-import './simulationForm.css';
+import './simulationForm.scss';
 
 const newDeviceModel = () => ({
   name: '',

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import './settings.css';
+import './settings.scss';
 
 /** The settings component */
 class Settings extends Component {

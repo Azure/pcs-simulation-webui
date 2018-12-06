@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Simulation } from './simulation';
 import { epics as appEpics } from 'store/reducers/appReducer';
 import {
@@ -30,4 +30,4 @@ const mapDispatchToProps = dispatch => ({
   refresh: () => dispatch(appEpics.actions.initializeApp())
 });
 
-export const SimulationContainer = translate()(connect(mapStateToProps, mapDispatchToProps)(Simulation));
+export const SimulationContainer = withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(Simulation));

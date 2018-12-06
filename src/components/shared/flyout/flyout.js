@@ -4,7 +4,7 @@ import React from 'react';
 
 import { joinClasses } from 'utilities';
 
-import './flyout.css';
+import './flyout.scss';
 
 export const Flyout = ({ className, children }) => (
   <div className={joinClasses('flyout-container', className)}>

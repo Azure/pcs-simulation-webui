@@ -5,8 +5,6 @@ import { Simulation } from './simulation';
 import { shallow } from 'enzyme';
 import { I18n } from 'react-i18next';
 
-import "mocha-steps";
-
 import 'polyfills';
 
 describe('Simulation Component', () => {

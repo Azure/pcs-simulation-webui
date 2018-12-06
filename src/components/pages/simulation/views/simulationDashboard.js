@@ -11,7 +11,7 @@ import { svgs, humanizeDuration } from 'utilities';
 import SimulationTile from './simulationTile';
 import { SimulationsGrid } from './simulationsGrid';
 
-import './simulationDashboard.css';
+import './simulationDashboard.scss';
 
 const closedFlyoutState = {
   flyoutOpen: false,

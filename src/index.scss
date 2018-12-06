@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/normalize';
-@import 'styles/font-face-imports';
+@import '~styles/normalize';
+@import '~styles/font-face-imports';
 
 html {
   width: 100%;
@@ -17,7 +17,7 @@ html {
     #root { height: 100%; }
 
     button,
-    input, 
+    input,
     textarea { outline: none; }
   }
 
