@@ -104,7 +104,6 @@ export class Filter extends Component {
                 {t('devices.flyouts.jobs.apply')}
               </Btn>
               <Btn svg={svgs.cancelX} onClick={onClose}>{t('devices.flyouts.jobs.cancel')}</Btn>
-
             </BtnToolbar>
           </form>
         </Flyout.Content>

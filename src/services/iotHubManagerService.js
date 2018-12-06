@@ -10,7 +10,6 @@ const ENDPOINT = Config.iotHubManagerApiUrl;
 export class IoTHubManagerService {
   /** Submits a job */
   static submitJob(body) {
-    console.log('submitJob', body)
     return HttpClient.post(`${ENDPOINT}jobs`, body)
       .map(toJobStatusModel);
   }
