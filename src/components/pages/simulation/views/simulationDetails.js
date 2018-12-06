@@ -7,13 +7,13 @@ import { Route, NavLink, Redirect, withRouter, Link } from "react-router-dom";
 import { debounce } from 'lodash';
 
 import Config from 'app.config';
-import { svgs, humanizeDuration, ComponentArray, isDef } from 'utilities';
+import { svgs, humanizeDuration, isDef } from 'utilities';
 import { Btn, ContextMenu, Svg, ErrorMsg, Indicator } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 import { NewSimulation } from '../flyouts';
 
-import './simulationDetails.css';
+import './simulationDetails.scss';
 
 const maxDate = '9999-12-31T23:59:59+00:00';
 
@@ -67,7 +67,7 @@ class SimulationDetails extends Component {
       .subscribe(
         response => {
           const devicesDeletionInProgress = !response.enabled
-            && response.devicesDeletionRequired
+            && (response.devicesDeletionRequired || response.deleteDevicesOnce)
             && !response.devicesDeletionCompleted;
 
           this.setState({
@@ -84,7 +84,10 @@ class SimulationDetails extends Component {
             hubUrl: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubMetricsUrl || '',
             preprovisionedIoTHubInUse: ((response.iotHubs || [])[0] || {}).preprovisionedIoTHubInUse,
             simulationPollingError: '',
-            devicesDeletionInProgress
+            devicesDeletionInProgress,
+            devicesDeletionRequired: response.devicesDeletionRequired,
+            deleteDevicesWhenSimulationEnds: response.deleteDevicesWhenSimulationEnds,
+            devicesDeletionCompleted: response.devicesDeletionCompleted
           },
           () => {
             if (response.isActive || this.state.devicesDeletionInProgress) {
@@ -179,10 +182,10 @@ class SimulationDetails extends Component {
 
   getHubLink = () => {
     return this.state.preprovisionedIoTHubInUse && (
-      <ComponentArray>
+      <>
         <Svg path={svgs.linkTo} className="link-svg" />
-        <a href={this.state.hubUrl} target="_blank">{ this.props.t('simulation.vieIotHubMetrics') }</a>
-      </ComponentArray>
+        <a href={this.state.hubUrl} target="_blank" rel="noopener noreferrer">{ this.props.t('simulation.vieIotHubMetrics') }</a>
+      </>
     )
   }
 
@@ -258,7 +261,7 @@ class SimulationDetails extends Component {
     ];
 
     return (
-      <ComponentArray>
+      <>
         <div className="stats-header">Statistics</div>
         <div className="stats-container">
           <div className="active-devices-container">
@@ -276,13 +279,31 @@ class SimulationDetails extends Component {
           }
           </div>
         </div>
-      </ComponentArray>
+      </>
     );
   }
 
   closeFlyout = () => this.setState({ flyoutOpen: false });
 
   openNewSimulationFlyout = () => this.setState({ flyoutOpen: newSimulationFlyout })
+
+  deleteDevicesInThisSimulation = () => {
+    SimulationService.patchSimulation(this.state.simulation)
+      .subscribe(
+        response => {
+          const devicesDeletionInProgress = !response.enabled
+            && (response.devicesDeletionRequired || response.deleteDevicesOnce)
+            && !response.devicesDeletionCompleted;
+          this.setState({ devicesDeletionInProgress, devicesDeletionCompleted: response.devicesDeletionCompleted },
+            () => {
+              if (devicesDeletionInProgress) {
+                this.simulationRefresh$.next(`r`);
+              }
+            }
+          );
+        }
+      );
+  }
 
   getSimulationState = (endDateTime, t) => {
     const { simulationPollingError, enabled, isRunning, isActive, devicesDeletionInProgress } = this.state;
@@ -293,21 +314,21 @@ class SimulationDetails extends Component {
         </div>
       : enabled
           ? isRunning
-              ? <ComponentArray>
+              ? <>
                   <Svg path={svgs.running} className="running-icon" />
                   { t('simulation.status.running') }
-                </ComponentArray>
+                </>
               : isActive
-                  ? <ComponentArray>
+                  ? <>
                       <Indicator size='small' className="setting-up-icon" />
                       { t('simulation.status.settingUp') }
-                    </ComponentArray>
+                    </>
                   : t('simulation.status.ended', { endDateTime })
           : devicesDeletionInProgress
-              ? <ComponentArray>
+              ? <>
                   <Indicator size='small' className="setting-up-icon" />
                   { t('simulation.status.cleaningUp') }
-                </ComponentArray>
+                </>
               : t('simulation.status.ended', { endDateTime })
   }
 
@@ -336,7 +357,7 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, enabled, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
@@ -377,7 +398,7 @@ class SimulationDetails extends Component {
       .includes('does not have authorization to perform action');
 
     return (
-      <ComponentArray>
+      <>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
         <ContextMenu>
           { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
@@ -397,10 +418,10 @@ class SimulationDetails extends Component {
         <div className="simulation-details-header">
           {
             id
-            ? <ComponentArray>
+            ? <>
                 <div className="simulation-name">{ simulation.name }</div>
                 <div className="iothub-metrics-link">{ this.getHubLink() }</div>
-              </ComponentArray>
+              </>
             : <Indicator pattern="bar" />
           }
         </div>
@@ -426,6 +447,12 @@ class SimulationDetails extends Component {
                     <div className="left-time-container">{ t('simulation.status.created', { startDateTime }) }</div>
                     <div className="right-time-container">{ this.getSimulationState(endDateTime, t) }</div>
                   </div>
+                  {
+                    !devicesDeletionCompleted && !enabled && stopTime != null &&
+                    <div className="info-section">
+                      <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
+                    </div>
+                  }
                 </div>
               }
               <div className="simulation-statistics">{ id && this.getSimulationStats() }</div>
@@ -479,7 +506,7 @@ class SimulationDetails extends Component {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
         }
-      </ComponentArray>
+      </>
     );
   }
 }

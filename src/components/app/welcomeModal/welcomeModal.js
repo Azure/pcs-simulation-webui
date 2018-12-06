@@ -6,7 +6,7 @@ import { svgs } from 'utilities';
 import { Btn, Modal, Svg } from 'components/shared';
 import { WelcomeTile } from './welcomeTile';
 
-import './welcomeModal.css';
+import './welcomeModal.scss';
 
 export class WelcomeModal extends Component {
   constructor(props) {

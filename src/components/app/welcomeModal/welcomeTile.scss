@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/themes';
-@import 'styles/mixins';
+@import '~styles/themes';
+@import '~styles/mixins';
 
 .welcome-tile-container {
   display: flex;
@@ -14,7 +14,7 @@
   .welcome-tile-img-container {
     display: flex;
     justify-content: center;
-    @include rem-fallback(padding, 10px 20px 20px 20px);
+    @include rem-fallback(padding, 10px, 20px, 20px, 20px);
   }
 
   .welcome-tile-title {
