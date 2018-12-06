@@ -16,7 +16,10 @@ $btnIconSize: 14px;
   @include rem-fallback(padding, 0px, $btnHeight);
 
   .btn-icon {
-    @include square-px-rem($btnIconSize);
+    @include rem-fallback(height, $btnHeight);
+    @include rem-fallback(width, $btnIconSize);
+
+    svg { @include square-px-rem($btnIconSize); }
 
     + .btn-text {
       @include rem-fallback(padding-left, 5px);
@@ -31,15 +34,14 @@ $btnIconSize: 14px;
 
   @include themify($themes) {
     color: themed('colorHighest');
-    background: transparent;
 
-    .btn-icon { fill: themed('colorHighest'); }
+    .btn-icon svg { fill: themed('colorHighest'); }
 
     &:hover {
       color: themed('colorLowestSecond');
       background-color: themed('colorLightestFirst');
 
-      .btn-icon { fill: themed('colorLowestSecond'); }
+      .btn-icon svg { fill: themed('colorLowestSecond'); }
     }
 
     &:disabled {
@@ -47,7 +49,7 @@ $btnIconSize: 14px;
       color: themed('colorMidFirst');
       cursor: auto;
 
-      .btn-icon { fill: themed('colorMidFirst'); }
+      .btn-icon svg { fill: themed('colorMidFirst'); }
     }
 
   }

@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 
-import Svgs from 'svgs';
-import { Btn, Modal } from 'components/shared';
+import { svgs } from 'utilities';
+import { Btn, Modal, Svg } from 'components/shared';
 import { WelcomeTile } from './welcomeTile';
 
 import './welcomeModal.scss';
@@ -31,7 +31,7 @@ export class WelcomeModal extends Component {
       ? {
           title: t('getStarted.sampleSimulation.title'),
           description: t('getStarted.sampleSimulation.description'),
-          imgPath: Svgs.SampleSimulation,
+          imgPath: svgs.sampleSimulation,
           link: {
             pathname: '/simulations/1',
             state: {}
@@ -42,7 +42,7 @@ export class WelcomeModal extends Component {
       : {
           title: t('getStarted.sampleDevices.title'),
           description: t('getStarted.sampleDevices.description'),
-          imgPath: Svgs.SampleSimulation,
+          imgPath: svgs.sampleSimulation,
           link: {
             pathname: '/simulations/',
             state: { flyoutOpen: 'new-simulation' }
@@ -56,10 +56,10 @@ export class WelcomeModal extends Component {
         <div className="welcome-modal-container">
           <div className="welcome-modal-header">
             <div className="title-container">
-              <Svgs.Rocket className="rocket-icon" />
+              <Svg path={svgs.rocket} className="rocket-icon" />
               { t('getStarted.title') }
             </div>
-            <Btn svg={Svgs.X} className="modal-icon" onClick={onClose} />
+            <Btn svg={svgs.x} className="modal-icon" onClick={onClose} />
           </div>
           <div className="welcome-modal-description">
             { t('getStarted.description') }
@@ -71,7 +71,7 @@ export class WelcomeModal extends Component {
                 {
                   title: t('getStarted.customDevices.title'),
                   description: t('getStarted.customDevices.description'),
-                  imgPath: Svgs.CustomDeviceModel,
+                  imgPath: svgs.customDeviceModel,
                   link: {
                     pathname: '/deviceModels',
                     state: {
@@ -85,7 +85,7 @@ export class WelcomeModal extends Component {
                 {
                   title: t('getStarted.advancedDevices.title'),
                   description: t('getStarted.advancedDevices.description'),
-                  imgPath: Svgs.AdvancedDeviceModel,
+                  imgPath: svgs.advancedDeviceModel,
                   link: {
                     pathname: '/deviceModels',
                     state: {

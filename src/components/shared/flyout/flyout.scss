@@ -40,7 +40,7 @@ $flyoutPadding: 20px;
       @include rem-fallback(min-width, 0px);
 
       &:hover { background-color: transparent; }
-      .btn-icon { @include square-px-rem($closeBtnSize);  }
+      .btn-icon svg { @include square-px-rem($closeBtnSize);  }
     }
   }
 
@@ -59,7 +59,7 @@ $flyoutPadding: 20px;
 
     .flyout-header { border-bottom: 1px solid $borderColor; }
 
-    .flyout-close-btn .btn-icon { stroke: themed('colorFlyoutText'); }
+    .flyout-close-btn .btn-icon svg { stroke: themed('colorFlyoutText'); }
   }
 }
 

@@ -60,7 +60,7 @@
     }
   }
 
-  .tooltip-trigger-icon { @include square-px-rem(12px); }
+  .tooltip-trigger-icon svg { @include square-px-rem(12px); }
 
   @include themify($themes) {
     color:  themed('colorGray');
@@ -80,7 +80,7 @@
 
       &:hover {
         background-color: transparent;
-        fill: themed('colorLightestFirst');
+        svg { fill: themed('colorLightestFirst'); }
       }
     }
   }

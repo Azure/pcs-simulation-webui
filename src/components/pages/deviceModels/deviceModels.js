@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { DeviceModelsGrid } from './deviceModelsGrid';
 import { Btn, PageContent, ContextMenu } from 'components/shared';
 import { NewDeviceModel } from './flyouts';
-import Svgs from 'svgs';
+import { svgs } from 'utilities';
 import { deviceModelFormModes } from './flyouts/views/deviceModelForm'
 
 import './deviceModels.scss';
@@ -88,7 +88,7 @@ export class DeviceModels extends Component {
     return [
       <ContextMenu key="context-menu">
         { this.state.contextBtns }
-        <Btn svg={Svgs.Plus} onClick={this.openNewDeviceModelFlyout}>{t('deviceModels.title')}</Btn>
+        <Btn svg={svgs.plus} onClick={this.openNewDeviceModelFlyout}>{t('deviceModels.title')}</Btn>
       </ContextMenu>,
       <PageContent className="devicemodels-container" key="page-content">
         <DeviceModelsGrid {...gridProps} />
