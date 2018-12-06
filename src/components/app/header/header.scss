@@ -44,6 +44,10 @@ $imgSize: 30px;
 
     .item-icon {
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
 
       @include square-px-rem($headerHeight);
 

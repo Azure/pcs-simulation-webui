@@ -60,7 +60,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
     .right-time-container {
       display: flex;
 
-      .running-icon svg {
+      .running-icon {
         -webkit-animation: clockwiseSpin 10s infinite linear;
         animation: clockwiseSpin 10s infinite linear;
 
@@ -155,7 +155,7 @@ $threeColWidth: calc((100% - #{$padding} * 3) / 3);
 
     .section-header { border-color: themed('colorLightestFirst'); }
 
-    .running-icon svg { fill: themed('colorActive'); }
+    .running-icon { fill: themed('colorActive'); }
 
     .setting-up-icon .inner { background-color: themed('colorActive'); }
   }

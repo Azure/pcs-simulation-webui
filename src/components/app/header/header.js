@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { SettingsContainer } from './settingsContainer';
-import { Svg } from 'components/shared';
-import { svgs, isDef } from 'utilities';
+import Svgs from 'svgs';
+import { isDef } from 'utilities';
 import ProfileImagePath from 'assets/images/profile.png';
 import { WelcomeModal } from '../welcomeModal/welcomeModal';
 import { Breadcrumbs } from './breadcrumbs';
@@ -98,7 +98,9 @@ class Header extends Component {
         <div className="items-container">
           <div className="menu-container">
             <button className="menu-trigger" onClick={this.toggleDropdown(docsDropdown)}>
-              <Svg path={svgs.questionMark} className="item-icon" />
+              <div className="item-icon">
+                <Svgs.QuestionMark />
+              </div>
             </button>
             {
               this.state.openDropdown === docsDropdown &&

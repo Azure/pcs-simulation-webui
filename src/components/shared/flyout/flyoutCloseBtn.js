@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Btn } from 'components/shared';
-import { svgs } from 'utilities';
+import Svgs from 'svgs';
 
 export const FlyoutCloseBtn = (props) => (
-  <Btn {...props} svg={svgs.cancelX} className="flyout-close-btn" />
+  <Btn {...props} svg={Svgs.CancelX} className="flyout-close-btn" />
 );

@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 import isEqual from 'lodash/isEqual';
 import { Btn, PcsGrid } from 'components/shared';
 import Config from 'app.config';
+import Svgs from 'svgs';
 import { checkboxParams, deviceModelsColumnDefs, defaultDeviceModelGridProps } from './deviceModelsGridConfig';
-import { isFunc, svgs, translateColumnDefs } from 'utilities';
+import { isFunc, translateColumnDefs } from 'utilities';
 import { EditDeviceModel, CloneDeviceModel } from '../flyouts';
 import { deviceModelFormModes } from '../flyouts/views/deviceModelForm'
 import { DeleteModal } from '../deleteModal/deleteModal';
@@ -39,9 +40,9 @@ export class DeviceModelsGrid extends Component {
 
     // TODO: This is a temporary example implementation. Remove with a better version
     this.contextBtns = [
-      <Btn key="delete" svg={svgs.trash} onClick={this.openFlyout(DELETE_FLYOUT)}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
-      <Btn key="edit" svg={svgs.edit} onClick={this.openFlyout(EDIT_FLYOUT)}>{props.t('deviceModels.flyouts.edit.name')}</Btn>,
-      <Btn key="clone" svg={svgs.copy} onClick={this.openFlyout(CLONE_FLYOUT)}>{props.t('deviceModels.flyouts.clone.name')}</Btn>
+      <Btn key="delete" svg={Svgs.Trash} onClick={this.openFlyout(DELETE_FLYOUT)}>{props.t('deviceModels.flyouts.delete.apply')}</Btn>,
+      <Btn key="edit" svg={Svgs.Edit} onClick={this.openFlyout(EDIT_FLYOUT)}>{props.t('deviceModels.flyouts.edit.name')}</Btn>,
+      <Btn key="clone" svg={Svgs.Copy} onClick={this.openFlyout(CLONE_FLYOUT)}>{props.t('deviceModels.flyouts.clone.name')}</Btn>
     ];
   }
 

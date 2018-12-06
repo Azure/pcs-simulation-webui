@@ -21,11 +21,13 @@
 
   .duration-colon-icon {
     align-self: flex-end;
+    display: flex;
+    justify-content: center;
     @include rem-fallback(height, 24px);
     @include rem-fallback(width, 10px);
 
     svg {
-      @include rem-fallback(height, 16px);
+      @include rem-fallback(height, 20px);
       @include rem-fallback(width, 2px);
     }
   }

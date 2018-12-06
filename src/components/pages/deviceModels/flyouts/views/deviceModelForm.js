@@ -2,7 +2,8 @@
 
 import React from 'react';
 import moment from 'moment';
-import { svgs, LinkedComponent, Validator } from 'utilities';
+import Svgs from 'svgs';
+import { LinkedComponent, Validator } from 'utilities';
 import Config from 'app.config';
 import {
   Btn,
@@ -321,7 +322,7 @@ class DeviceModelForm extends LinkedComponent {
                   { toSensorInput(minValue, t('deviceModels.flyouts.sensors.minPlaceHolder'), edited && !!minValue.error, this.setFormChangesFlag) }
                   { toSensorInput(maxValue, t('deviceModels.flyouts.sensors.maxPlaceHolder'), edited && !!maxValue.error, this.setFormChangesFlag) }
                   { toSensorInput(unit, t('deviceModels.flyouts.sensors.unitPlaceHolder'), edited && !!unit.error, this.setFormChangesFlag) }
-                  <Btn className="delete-sensor-btn" svg={svgs.trash} onClick={this.deleteSensor(idx)} />
+                  <Btn className="delete-sensor-btn" svg={Svgs.Trash} onClick={this.deleteSensor(idx)} />
                 </div>
                 { error && <ErrorMsg>{ error }</ErrorMsg>}
               </div>
@@ -330,7 +331,7 @@ class DeviceModelForm extends LinkedComponent {
           </div>
           {
             sensors.length < 10 &&
-              <Btn svg={svgs.plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
+              <Btn svg={Svgs.Plus} onClick={this.addSensor}>{t('deviceModels.flyouts.new.addDataPoint')}</Btn>
           }
         </FormSection>
         {
@@ -355,7 +356,7 @@ class DeviceModelForm extends LinkedComponent {
               type="submit">
               {t('deviceModels.flyouts.save')}
             </Btn>
-            <Btn svg={svgs.cancelX} onClick={this.clearAll}>{t('deviceModels.flyouts.clearAll')}</Btn>
+            <Btn svg={Svgs.CancelX} onClick={this.clearAll}>{t('deviceModels.flyouts.clearAll')}</Btn>
           </BtnToolbar>
         </FormActions>
       </form>
