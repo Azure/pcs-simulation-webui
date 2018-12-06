@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import SimulationDetails from './views/simulationDetails';
 import { SimulationDashboard } from './views/simulationDashboard';
 
-import './simulation.css';
+import './simulation.scss';
 
 export class Simulation extends Component {
 

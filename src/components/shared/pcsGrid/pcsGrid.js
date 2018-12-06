@@ -9,7 +9,7 @@ import { Indicator } from '../indicator/indicator';
 
 import '../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import '../../../../node_modules/ag-grid/dist/styles/ag-theme-dark.css';
-import './pcsGrid.css';
+import './pcsGrid.scss';
 
 const ROW_HEIGHT = 48;
 

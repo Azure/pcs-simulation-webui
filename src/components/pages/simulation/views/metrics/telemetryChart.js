@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 import moment from 'moment-timezone';
 import 'tsiclient';
 
-import './telemetryChart.css';
+import './telemetryChart.scss';
 
 // Extend the immutability helper to include object autovivification
 update.extend('$auto', (val, obj) => update(obj || {}, val));

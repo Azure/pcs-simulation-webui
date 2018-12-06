@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import './tooltip.css';
+import './tooltip.scss';
 
 export class Tooltip extends Component {
   constructor(props) {

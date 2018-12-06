@@ -7,7 +7,7 @@ import { NewDeviceModel } from './flyouts';
 import { svgs } from 'utilities';
 import { deviceModelFormModes } from './flyouts/views/deviceModelForm'
 
-import './deviceModels.css';
+import './deviceModels.scss';
 
 const closedFlyoutState = {
   flyoutOpen: false,
