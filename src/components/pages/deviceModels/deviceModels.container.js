@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import {
   epics,
   redux,
@@ -29,4 +29,4 @@ const mapDispatchToProps = dispatch => ({
   clearUploadDeviceModelError: () => dispatch(redux.actions.clearUploadDeviceModelError())
 });
 
-export const DeviceModelsContainer = translate()(connect(mapStateToProps, mapDispatchToProps)(DeviceModels));
+export const DeviceModelsContainer = withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(DeviceModels));

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/themes';
-@import 'styles/mixins';
+@import '~styles/themes';
+@import '~styles/mixins';
 
 .wait-indicator {
   position: relative;
@@ -242,7 +242,7 @@
       width: 100%;
       text-align: left;
       opacity: 0;
-      transform: translateX(calc(0 '-' 3px));
+      transform: translateX(calc(0 - 3px));
       transform-origin: 0 0;
       -webkit-transform-origin: 0 0;
       animation-iteration-count: infinite;

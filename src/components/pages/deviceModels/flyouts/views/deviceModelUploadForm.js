@@ -18,7 +18,7 @@ import {
   Indicator
 } from 'components/shared';
 
-import './deviceModelForm.css';
+import './deviceModelForm.scss';
 
 const initialFormState = {
   deviceModel: undefined,

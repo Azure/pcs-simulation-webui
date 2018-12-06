@@ -6,11 +6,11 @@ import moment from 'moment';
 
 import Config from 'app.config';
 import { SectionHeader, Svg, ErrorMsg, Indicator } from 'components/shared';
-import { svgs, ComponentArray } from 'utilities';
+import { svgs } from 'utilities';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 
-import './simulationTile.css';
+import './simulationTile.scss';
 
 const {
   simulationStatusPollingInterval,
@@ -153,15 +153,15 @@ class SimulationTile extends Component {
         </div>
       : enabled
           ? isRunning
-              ? <ComponentArray>
+              ? <>
                   <Svg path={svgs.running} className="running-icon" />
                   { t('simulation.status.running') }
-                </ComponentArray>
+                </>
               : isActive
-                  ? <ComponentArray>
+                  ? <>
                       <Indicator size='small' className="setting-up-icon" />
                       { t('simulation.status.settingUp') }
-                    </ComponentArray>
+                    </>
                   : t('simulation.status.ended', { endDateTime })
           : t('simulation.status.ended', { endDateTime })
   }

@@ -23,7 +23,7 @@ import {
 } from '../../../simulation/views/sensors.utils';
 import stockModelSensors from './stockModelSensors';
 
-import './deviceModelForm.css'
+import './deviceModelForm.scss'
 
 export const deviceModelFormModes = {
   FORM_MODE_EDIT:   'edit',
