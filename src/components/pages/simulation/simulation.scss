@@ -48,7 +48,11 @@
 
     .device-model-header { color: themed('colorLightestFirst'); }
 
-    .btn[disabled]:hover { color: themed('colorMidFirst'); }
+    .btn[disabled]:hover { 
+      color: themed('colorMidFirst');
+
+      .btn-icon svg { fill: themed('colorMidFirst'); }
+    }
 
     .apply-btn {
       // The start simulation svg uses stroke rather than fill
