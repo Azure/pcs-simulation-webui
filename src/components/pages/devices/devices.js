@@ -7,7 +7,7 @@ import { SimulationService } from 'services';
 import { Filter } from './flyouts';
 import { svgs } from 'utilities';
 
-import './devices.css';
+import './devices.scss';
 
 const closedFlyoutState = {
   flyoutOpen: false,

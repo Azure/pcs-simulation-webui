@@ -12,7 +12,7 @@ import {
   FormLabel
 } from 'components/shared';
 
-import './filters.css';
+import './filters.scss';
 
 const initialState = {
   simulation: null,
