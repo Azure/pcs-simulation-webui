@@ -8,6 +8,7 @@ export class FileUpload extends Component {
 
   constructor(props) {
     super(props);
+
     this.id = props.id;
     this.value = props.value;
     this.singleFileRef = React.createRef();

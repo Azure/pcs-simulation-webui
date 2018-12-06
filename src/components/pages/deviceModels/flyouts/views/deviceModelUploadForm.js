@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { isEqual, isEmpty } from 'lodash';
 import { Observable } from 'rxjs';
 import { DeviceModelScriptsService } from 'services';
@@ -299,6 +300,12 @@ class DeviceModelUploadForm extends Component {
           <FormLabel>{t('deviceModels.flyouts.upload.deviceModelInfoText')}</FormLabel>
           <div className="device-model-info-text">
             <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesInfoText')}</FormLabel>
+            <Link
+              className="learn-more"
+              target="_blank"
+              to={t('deviceModels.flyouts.upload.deviceModelsGitHubUrl')}>
+              {t('deviceModels.flyouts.upload.learnMore')}
+            </Link>
           </div>
         </FormSection>
         <FormSection>
