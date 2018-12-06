@@ -9,8 +9,6 @@ export class FileUpload extends Component {
   constructor(props) {
     super(props);
 
-    this.id = props.id;
-    this.value = props.value;
     this.singleFileRef = React.createRef();
   }
 
@@ -27,13 +25,13 @@ export class FileUpload extends Component {
       <input
         className="file-uploader"
         type="file"
-        id={this.id}
+        id={this.props.id}
         name="uploader"
         ref={this.singleFileRef}
         onChange={this.onchange}
         accept=".json, .js"
       />
-      <label htmlFor="fileUpload" onClick={this.singleFileRefClicked}>{this.value}</label>
+      <label htmlFor="fileUpload" onClick={this.singleFileRefClicked}>{this.props.value}</label>
     </div>
   }
 }
