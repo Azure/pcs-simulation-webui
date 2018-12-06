@@ -18,12 +18,5 @@
       opacity: 0;
       z-index: -1;
     }
-
-    .browse-button {
-      border: none;
-      @include rem-fallback(width, 100px);
-      @include rem-fallback(height, 32px);
-      @include rem-font-size(12px);
-    }
   }
 }
