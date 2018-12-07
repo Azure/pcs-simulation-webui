@@ -303,7 +303,7 @@ class DeviceModelUploadForm extends Component {
             <Link
               className="learn-more"
               target="_blank"
-              to={t('deviceModels.flyouts.upload.deviceModelsGitHubUrl')}>
+              to='//github.com/Azure/device-simulation-dotnet/wiki/Device-Models'>
               {t('deviceModels.flyouts.upload.learnMore')}
             </Link>
           </div>

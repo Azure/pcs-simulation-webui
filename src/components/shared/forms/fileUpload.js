@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import './styles/fileUpload.css';
+import './styles/fileUpload.scss';
 
 export class FileUpload extends Component {
 
