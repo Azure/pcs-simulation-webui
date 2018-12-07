@@ -21,7 +21,11 @@ export class FileUpload extends Component {
   }
 
   render() {
-    return <div className="file-uploader-container">
+    return (
+       <div className="file-uploader-container">
+           ...
+       </div>
+     );
       <input
         className="file-uploader"
         type="file"
