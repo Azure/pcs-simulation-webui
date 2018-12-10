@@ -224,6 +224,7 @@
         "invalidJSONFileErrorMessage": "Invalid JSON File: {{error}}",
         "deviceModelInfoText": "Each simulated device is derived from a specific device model. Device models define the device\n's capabilities and behavior including what messages to send, which methods are supported, etc.",
         "deviceModelFilesInfoText": "Device models consist of one JSON configuration file, one JavaScript file defining the simulation behavior, and optionally one JavaScript file for each cloud to device method supported by the device. Advanced device models give you full control over these files. ",
+        "learnMore": "Learn More",
         "files": "Upload device model files",
         "uploadedFiles": "Uploaded files:",
         "missingFiles": "Missing File(s)",
