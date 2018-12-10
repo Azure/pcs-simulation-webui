@@ -344,7 +344,7 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>{ t('simulation.description') }</SectionHeader>
           <FormGroup className="simulation-description-box">
-            <FormControl className="long" type="textarea" rows='4' placeholder={ t('simulation.descPlaceholderText') } link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
+            <FormControl className="long" type="textarea" rows="4" placeholder={ t('simulation.descPlaceholderText') } link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
         </FormSection>
 
@@ -457,7 +457,7 @@ class SimulationForm extends LinkedComponent {
             <Link
               className="learn-more"
               target="_blank"
-              to='//docs.microsoft.com/azure/iot-hub/iot-hub-devguide-quotas-throttling'>
+              to="//docs.microsoft.com/azure/iot-hub/iot-hub-devguide-quotas-throttling">
               { t('simulation.form.targetHub.sku.learnMore') }
             </Link>
           </SectionDesc>
@@ -517,7 +517,7 @@ class SimulationForm extends LinkedComponent {
                 <Link
                   className="learn-more"
                   target="_blank"
-                  to='//azure.microsoft.com/en-us/pricing/calculator/'>
+                  to="//azure.microsoft.com/en-us/pricing/calculator/">
                   { t('simulation.form.learnMore') }
                 </Link>
                 <input

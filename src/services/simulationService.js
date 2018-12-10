@@ -83,8 +83,8 @@ export class SimulationService {
             `${ENDPOINT}simulations/${simulation.id}`,
             toSimulationPatchModel({ ...simulation, eTag }, false)
           )
-          .map (toSimulationModel)
-          .catch (resolveConflict);
+          .map(toSimulationModel)
+          .catch(resolveConflict);
       });
   }
 

@@ -26,7 +26,7 @@ const {
 } = Config;
 
 const newSimulationFlyout = 'new-simulation';
-const deleteSimulationModal = 'delete-simulation'
+const deleteSimulationModal = 'delete-simulation';
 
 class SimulationDetails extends Component {
 
@@ -174,9 +174,7 @@ class SimulationDetails extends Component {
 
     this.subscriptions.push(SimulationService.startSimulation(requestModel)
       .subscribe(
-        ({ id }) => {
-          this.props.history.push(`/simulations/${id}`);
-        },
+        ({ id }) => this.props.history.push(`/simulations/${id}`),
         simulationPollingError => this.setState({ simulationPollingError })
       )
     );
