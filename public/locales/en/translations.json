@@ -27,6 +27,7 @@
     "simSetup": "Simulation setup",
     "start": "Start simulation",
     "stop": "Stop simulation",
+    "deleteSim": "Delete simulation",
     "startNew": "Start new simulation",
     "name": "Name",
     "newSim": "New simulation",
@@ -83,9 +84,11 @@
       "autoScaleAcknowledgement": "I understand simulating {{ totalDevicesCount }} devices requires {{ additionVMsCount }} additional VMs to be deployed in my Azure subscription. These VMs will be automatically removed once all simulations are stopped.",
       "targetHub": {
         "description": "Add the connection string for your IoT Hub",
-        "header": "Target IoT Hub",
+        "header": "Target IoT Hub name",
         "usePreProvisionedBtn": "Use pre-provisioned IoT Hub",
         "preProvisionedLbl": "Pre-provisioned",
+        "messageRateLimits": "Message rate limits",
+        "messagePerSecFormat":  "{{ messagesPerSecond }} messages/sec", 
         "sku": {
           "description": "Specify the IoT Hub throttling limits to use for this simulation.",
           "s1": "S1 Standard",
@@ -116,6 +119,19 @@
       "endTime": "Sim End Date",
       "duration": "Sim Duraton"
     },
+    "modals": {
+      "cancel": "Cancel",
+      "delete": {
+        "title": "Delete",
+        "header": "Delete a simulation",
+        "description": "Are you sure you want to delete",
+        "nameConfirmation": "'{{simulationName}}' ?",
+        "cancel": "Cancel",
+        "apply": "Delete",
+        "applySuccess": "Simulation deleted successfully!",
+        "close": "Close"
+      }
+    },
     "status": {
       "activeDevicesCount": "Active devices",
       "averageMessagesPerSec": "Average messages per second",
@@ -128,15 +144,16 @@
       "failedMessagesCount": "Failed messages",
       "header": "Simulation Status",
       "messagesPerSec": "Messages per second",
+      "metircsNotAvailable": "Hub metrics not available for simulations with non-default hub",
       "running": "Running",
-      "settingUp" : "Setting up",
+      "settingUp": "Setting up",
       "simulationRunning": "Your simulation is running. Please allow a few minutes before you see data flowing to your IoT Hub.",
       "simulationStopped": "Your simulation has stopped running.",
+      "statistics":  "Statistics",
       "stopped": "Stopped",
       "totalDevicesCount": "Total devices",
       "totalMessagesCount": "Total messages",
-      "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}",
-      "metircsNotAvailable": "Hub metrics not available for simulations with non-default hub"
+      "totalMessagesSentLabel": "Total messages sent {{totalMessagesCount}}"
     }
   },
   "deviceModels": {
@@ -171,10 +188,11 @@
       "delete": {
         "title": "Delete",
         "header": "Delete a device model",
-        "description": "Are you sure you want to delete {{deviceModelId}}?",
+        "description": "Are you sure you want to delete",
+        "nameConfirmation": "'{{deviceModelName}}' ?",
         "cancel": "Cancel",
         "apply": "Delete",
-        "applySuccess": "device model deleted successfully!",
+        "applySuccess": "Device model deleted successfully!",
         "close": "Close"
       },
       "clone": {

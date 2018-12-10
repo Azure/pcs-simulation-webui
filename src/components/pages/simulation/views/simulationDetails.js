@@ -12,6 +12,7 @@ import { Btn, ContextMenu, Svg, ErrorMsg, Indicator } from 'components/shared';
 import { SimulationService, MetricsService, retryHandler } from 'services';
 import { TelemetryChart, chartColorObjects } from './metrics';
 import { NewSimulation } from '../flyouts';
+import { DeleteModal } from '../deleteModal/deleteModal';
 
 import './simulationDetails.scss';
 
@@ -25,6 +26,7 @@ const {
 } = Config;
 
 const newSimulationFlyout = 'new-simulation';
+const deleteSimulationModal = 'delete-simulation';
 
 class SimulationDetails extends Component {
 
@@ -170,14 +172,26 @@ class SimulationDetails extends Component {
       enabled: true
     }
 
-    this.subscriptions.push(SimulationService.toggleSimulation(requestModel)
+    this.subscriptions.push(SimulationService.startSimulation(requestModel)
       .subscribe(
-        ({ id }) => {
-          this.props.history.push(`/simulations/${id}`);
-        },
+        ({ id }) => this.props.history.push(`/simulations/${id}`),
         simulationPollingError => this.setState({ simulationPollingError })
       )
     );
+  }
+
+  deleteSimulation = (event) => {
+    event.preventDefault();
+    const { simulation } = this.state;
+    this.subscriptions.push(
+      SimulationService.deleteSimulation(simulation.id)
+        .subscribe(
+          () => {
+            this.props.history.push(`/simulations`);
+          },
+          simulationPollingError => this.setState({ simulationPollingError })
+        )
+      );
   }
 
   getHubLink = () => {
@@ -190,26 +204,6 @@ class SimulationDetails extends Component {
   }
 
   refreshPage = () => window.location.reload(true);
-
-  getBtnFromSimulationStatus(disabled) {
-    const { t } = this.props;
-
-    const stopBtnProps = {
-      type: 'button',
-      onClick: this.stopSimulation,
-      disabled: !this.state.isActive
-    };
-
-    const startBtnProps = {
-      type: 'button',
-      onClick: this.startButtonClicked,
-      disabled: disabled || this.state.devicesDeletionInProgress || this.state.disableStart
-    };
-
-    return this.state.enabled
-      ? <Btn {...stopBtnProps } svg={svgs.stopSimulation}>{ t('simulation.stop') }</Btn>
-      : <Btn {...startBtnProps}>{ t('simulation.start') }</Btn>;
-  }
 
   getSimulationStats () {
     const { t } = this.props;
@@ -291,9 +285,10 @@ class SimulationDetails extends Component {
     SimulationService.patchSimulation(this.state.simulation)
       .subscribe(
         response => {
-          const devicesDeletionInProgress = !response.enabled
+          const devicesDeletionInProgress = !response.isActive
             && (response.devicesDeletionRequired || response.deleteDevicesOnce)
             && !response.devicesDeletionCompleted;
+
           this.setState({ devicesDeletionInProgress, devicesDeletionCompleted: response.devicesDeletionCompleted },
             () => {
               if (devicesDeletionInProgress) {
@@ -304,6 +299,8 @@ class SimulationDetails extends Component {
         }
       );
   }
+
+  openDeleteSimulationModal = () => this.setState({ flyoutOpen: deleteSimulationModal })
 
   getSimulationState = (endDateTime, t) => {
     const { simulationPollingError, enabled, isRunning, isActive, devicesDeletionInProgress } = this.state;
@@ -357,17 +354,19 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, enabled, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
       id,
+      name,
       deviceModels = [],
       startTime,
       endTime,
       stopTime,
       isActive,
-      iotHubs = []
+      iotHubs = [],
+      rateLimits = {}
     } = simulation;
 
     const startDateTime = moment(startTime).format(dateTimeFormat);
@@ -378,7 +377,14 @@ class SimulationDetails extends Component {
           :  '-';
 
     const iotHub = iotHubs[0] || {};
-    const iotHubString = (iotHub.connectionString || t('simulation.form.targetHub.preProvisionedLbl'));
+    let iotHubConnectionString = '';
+    if (iotHub.connectionString !== undefined) {
+      const parts = iotHub.connectionString.split('.');
+      iotHubConnectionString = parts[0].split('=')[1];
+    }
+
+    const iotHubString = (iotHubConnectionString || t('simulation.form.targetHub.preProvisionedLbl'));
+    const messagesPerSecond = rateLimits.deviceMessagesPerSecond;
 
     const [ deviceModel = {} ] = deviceModels;
     const defaultModelRoute = deviceModel.id || '';
@@ -389,6 +395,7 @@ class SimulationDetails extends Component {
     const pathname = `/simulations/${match.params.id}`;
 
     const newSimulationFlyoutOpen = this.state.flyoutOpen === newSimulationFlyout;
+    const deleteSimulationModalOpen = this.state.flyoutOpen === deleteSimulationModal;
 
     // Remove isThereARunningSimulation when simulation service support running multiple simulations
     const isThereARunningSimulation = simulationList.some(({ isActive }) => isActive);
@@ -401,14 +408,18 @@ class SimulationDetails extends Component {
       <>
         <Route exact path={`${pathname}`} render={() => <Redirect to={`${pathname}/${defaultModelRoute}`} push={true} />} />
         <ContextMenu>
-          { pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{ t('simulation.refresh') }</Btn> }
+          {pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{t('simulation.refresh')}</Btn>}
           {
             id &&
-              <Btn disabled={!this.state.enabled || !this.state.isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
+            <Btn disabled={isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
           }
           {
             id &&
-              <Btn disabled={isThereARunningSimulation || this.state.devicesDeletionInProgress || this.state.enabled} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
+              <Btn disabled={!isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
+          }
+          {
+            id &&
+              <Btn disabled={isThereARunningSimulation || this.state.devicesDeletionInProgress || this.state.isActive} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
           }
           <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
             { t('simulation.newSim') }
@@ -440,6 +451,10 @@ class SimulationDetails extends Component {
                     <div className="info-content">{ iotHubString }</div>
                   </div>
                   <div className="info-section">
+                    <div className="info-label">{ t('simulation.form.targetHub.messageRateLimits') }</div>
+                    <div className="info-content">{t('simulation.form.targetHub.messagePerSecFormat', { messagesPerSecond }) }</div>
+                  </div>
+                  <div className="info-section">
                     <div className="info-label">{ t('simulation.form.duration.header') }</div>
                     <div className="info-content">{ duration }</div>
                   </div>
@@ -448,7 +463,7 @@ class SimulationDetails extends Component {
                     <div className="right-time-container">{ this.getSimulationState(endDateTime, t) }</div>
                   </div>
                   {
-                    !devicesDeletionCompleted && !enabled && stopTime != null &&
+                    !devicesDeletionCompleted && !isActive && stopTime != null &&
                     <div className="info-section">
                       <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
                     </div>
@@ -505,6 +520,16 @@ class SimulationDetails extends Component {
         {
           newSimulationFlyoutOpen &&
           <NewSimulation onClose={this.closeFlyout} {...this.props} />
+        }
+        {
+          deleteSimulationModalOpen &&
+          <DeleteModal
+            key="delete-device-model-modal"
+            onClose={this.closeFlyout}
+            onDelete={this.deleteSimulation}
+            simulationName={name}
+            formMode={'delete'}
+            t={t} />
         }
       </>
     );
