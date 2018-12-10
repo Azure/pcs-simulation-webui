@@ -16,7 +16,7 @@ export const DeleteModal = ({ t, onClose, simulationName, onDelete }) => (
       </div>
       <div className="delete-modal-content">
         <div>{ t('simulation.modals.delete.description') } </div>
-        <div>'{simulationName}' ?</div>
+        <div>{ t('simulation.modals.delete.nameConfirmation', { simulationName }) }</div>
       </div>
       <BtnToolbar>
         <Btn svg={svgs.trash} onClick={onDelete}>

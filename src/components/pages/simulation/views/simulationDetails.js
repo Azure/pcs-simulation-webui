@@ -381,7 +381,7 @@ class SimulationDetails extends Component {
     const iotHub = iotHubs[0] || {};
     let iotHubConnectionString = '';
     if (iotHub.connectionString !== undefined) {
-      var parts = iotHub.connectionString.split('.');
+      const parts = iotHub.connectionString.split('.');
       iotHubConnectionString = parts[0].split('=')[1];
     }
 

@@ -62,25 +62,26 @@ export class SimulationService {
       .catch(resolveConflict);
   }
 
-    /** Start/Restart a simulation */
+  /** Start/Restart a simulation */
   static startSimulation(simulation) {
     return SimulationService.getSimulation(simulation.id)
-      .flatMap (({ eTag }) => {
-        return HttpClient.put (
+      .flatMap(({ eTag }) => {
+        return HttpClient.put(
             `${ENDPOINT}simulations/${simulation.id}`,
             toSimulationUpdateModel({ ...simulation, ETag: eTag })
           )
-          .map (toSimulationModel)
-          .catch (resolveConflict);
+          .map(toSimulationModel)
+          .catch(resolveConflict);
       });
   }
+
   /** Disable a simulation */
   static stopSimulation(simulation) {
     return SimulationService.getSimulation(simulation.id)
-      .flatMap (({ eTag }) => {
-        return HttpClient.patch (
+      .flatMap(({ eTag }) => {
+        return HttpClient.patch(
             `${ENDPOINT}simulations/${simulation.id}`,
-            toSimulationPatchModel ({ ...simulation, eTag }, false)
+            toSimulationPatchModel({ ...simulation, eTag }, false)
           )
           .map (toSimulationModel)
           .catch (resolveConflict);
