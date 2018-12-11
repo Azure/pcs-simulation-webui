@@ -411,7 +411,7 @@ class SimulationDetails extends Component {
           {pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{t('simulation.refresh')}</Btn>}
           {
             id &&
-            <Btn disabled={isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
+              <Btn disabled={isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
           }
           {
             id &&
@@ -419,7 +419,7 @@ class SimulationDetails extends Component {
           }
           {
             id &&
-            <Btn disabled={isThereARunningSimulation || devicesDeletionInProgress || enabled} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
+              <Btn disabled={isThereARunningSimulation || devicesDeletionInProgress || enabled} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
           }
           <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
             { t('simulation.newSim') }
@@ -464,9 +464,9 @@ class SimulationDetails extends Component {
                   </div>
                   {
                     !devicesDeletionCompleted && !enabled && stopTime != null &&
-                      <div className="info-section">
-                        <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
-                      </div>
+                    <div className="info-section">
+                      <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
+                    </div>
                   }
                 </div>
               }
