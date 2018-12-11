@@ -226,6 +226,8 @@ class SimulationForm extends LinkedComponent {
       devicesDeletionRequired
     };
 
+    console.log('modelUpdates', modelUpdates);
+    /*
     this.setState(
       { formSubmitted: true },
       () => this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
@@ -238,12 +240,19 @@ class SimulationForm extends LinkedComponent {
         )
       )
     );
+    */
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
 
   deleteDeviceModel = (index) =>
     () => this.deviceModelsLink.set(this.deviceModelsLink.value.filter((_, idx) => index !== idx));
+
+  uploadFile = e => {
+    if (e.target.files && e.target.files.length === 1) {
+      console.log('e.target.files', e.target.files);
+    }
+  }
 
   render () {
     const { t } = this.props;
@@ -266,14 +275,10 @@ class SimulationForm extends LinkedComponent {
       );
 
       // TODO: remove when service support duplicate device models
-      const selectedDeviceModels = {};
-      for (let i=0; i < deviceModels.length; i++) {
-        const name = deviceModels[i].name;
-        if (!selectedDeviceModels[name]) {
-          selectedDeviceModels[name] = 0;
-        }
-        selectedDeviceModels[name]++;
-      }
+      const selectedDeviceModels = deviceModels.reduce(
+        (acc, { name }) => ({ ...acc, [name]: (acc[name] || 0) + 1 }),
+        {}
+      );
 
       const name = deviceModelLink.forkTo('name')
         .check(x => selectedDeviceModels[x] < 2, t('simulation.form.errorMsg.duplicateModelsNotAllowed'))
@@ -314,7 +319,7 @@ class SimulationForm extends LinkedComponent {
       : false;
 
     return (
-      <form onSubmit={this.apply}>
+      <form onSubmit={this.apply} className="sim-form-container">
         <FormSection>
           <SectionHeader>{t('simulation.name')}</SectionHeader>
           <FormGroup className="simulation-name-box">
@@ -332,46 +337,50 @@ class SimulationForm extends LinkedComponent {
         <FormSection>
           <SectionHeader>{t('simulation.form.duration.header')}</SectionHeader>
           <SectionDesc>{t('simulation.form.duration.description')}</SectionDesc>
-          <Radio link={this.simulationType} value="deviceModel">Device Model</Radio>
-          <Radio link={this.simulationType} value="fileReplay">Replay from file</Radio>
-          {
-            this.simulationType.value === 'fileReplay' &&
-              <FormGroup>
-                <FormLabel>Select replay file</FormLabel>
-                <div className="file-uploader-container">
-                  <input
-                    className="file-uploader"
-                    type="file"
-                    id="uploader"
-                    name="uploader"
-                    accept=".json, .js"
-                    multiple
-                    onChange={this.uploadFiles}
-                  />
-                  <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+          <div className="inline-form-group">
+            <Radio link={this.simulationType} value="deviceModel">Device Model</Radio>
+            <Radio link={this.simulationType} value="fileReplay">Replay from file</Radio>
+          </div>
+          <div className="sub-form-group">
+            {
+              this.simulationType.value === 'fileReplay' &&
+                <div className="inline-form-group">
+                  <FormLabel>Select replay file</FormLabel>
+                  <div className="file-uploader-container">
+                    <input
+                      className="file-uploader"
+                      type="file"
+                      id="uploader"
+                      name="uploader"
+                      accept=".json, .js"
+                      onChange={this.uploadFile}
+                    />
+                    <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+                  </div>
                 </div>
-              </FormGroup>
-          }
-          {
-            this.simulationType.value === 'fileReplay' &&
-              <FormGroup>
-                <FormLabel>Number of devices</FormLabel>
-                <FormControl className="short" type="text" link={this.numDevices} />
-              </FormGroup>
-          }
-          {
-            this.simulationType.value === 'fileReplay' &&
-              <Radio link={this.durationRadio} value="endOfFile">
-                Stop at end of file
-              </Radio>
-          }
-          <Radio link={this.durationRadio} value="endIn">
-            <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
-            <FormControl type="duration" link={this.duration} />
-          </Radio>
-          <Radio link={this.durationRadio} value="indefinite">
-            {t('simulation.form.duration.runIndefinitelyBtn')}
-          </Radio>
+            }
+            {
+              this.simulationType.value === 'fileReplay' &&
+                <div className="inline-form-group">
+                  <FormLabel>Number of devices</FormLabel>
+                  <FormControl className="short" type="text" link={this.numDevices} />
+                </div>
+            }
+            <SectionDesc>Set how long the simulation will run.</SectionDesc>
+            {
+              this.simulationType.value === 'fileReplay' &&
+                <Radio link={this.durationRadio} value="endOfFile">
+                  Stop at end of file
+                </Radio>
+            }
+            <Radio link={this.durationRadio} value="endIn">
+              <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
+              <FormControl type="duration" link={this.duration} />
+            </Radio>
+            <Radio link={this.durationRadio} value="indefinite">
+              {t('simulation.form.duration.runIndefinitelyBtn')}
+            </Radio>
+          </div>
         </FormSection>
 
         {
@@ -457,15 +466,15 @@ class SimulationForm extends LinkedComponent {
           <SectionDesc>{t('simulation.form.targetHub.description')}</SectionDesc>
           {
             this.state.preprovisionedIoTHub
-            ? <div>
-              <Radio link={this.targetHub} value="preProvisioned">
-                {t('simulation.form.targetHub.usePreProvisionedBtn')}
-              </Radio>
-              <Radio link={this.targetHub} value="customString">
-                {connectStringInput}
-              </Radio>
-            </div>
-            : connectStringInput
+              ? <div>
+                <Radio link={this.targetHub} value="preProvisioned">
+                  {t('simulation.form.targetHub.usePreProvisionedBtn')}
+                </Radio>
+                <Radio link={this.targetHub} value="customString">
+                  {connectStringInput}
+                </Radio>
+              </div>
+              : connectStringInput
           }
         </FormSection>
 
