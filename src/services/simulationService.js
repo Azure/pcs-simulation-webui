@@ -64,10 +64,15 @@ export class SimulationService {
 
   /** Start/Restart a simulation */
   static startSimulation(simulation) {
-    return HttpClient.patch(`${ENDPOINT}simulations/${simulation.id}`, { ETag: simulation.eTag, Enabled: true })
-      .map(toSimulationModel)
-      .catch(resolveConflict);
-
+    return SimulationService.getSimulation(simulation.id)
+      .flatMap(({ eTag }) => {
+        return HttpClient.put(
+            `${ENDPOINT}simulations/${simulation.id}`,
+            toSimulationUpdateModel({ ...simulation, ETag: eTag })
+          )
+          .map(toSimulationModel)
+          .catch(resolveConflict);
+      });
   }
 
   /** Disable a simulation */
