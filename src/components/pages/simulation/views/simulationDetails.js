@@ -354,7 +354,7 @@ class SimulationDetails extends Component {
       simulationList
     } = this.props;
 
-    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
+    const { simulation, metrics, hubMetricsPollingError, simulationPollingError, preprovisionedIoTHubInUse, enabled, devicesDeletionInProgress, devicesDeletionCompleted } = this.state;
     const pollingError = hubMetricsPollingError || simulationPollingError;
 
     const {
@@ -411,15 +411,15 @@ class SimulationDetails extends Component {
           {pollingError && <Btn svg={svgs.refresh} onClick={this.refreshPage}>{t('simulation.refresh')}</Btn>}
           {
             id &&
-            <Btn disabled={isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
+              <Btn disabled={isActive} type="button" onClick={this.openDeleteSimulationModal} svg={svgs.trash}>{t('simulation.deleteSim')}</Btn>
           }
           {
             id &&
-              <Btn disabled={!isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
+              <Btn disabled={!enabled || !isActive} type="button" onClick={this.stopSimulation} svg={svgs.stopSimulation}>{t('simulation.stop')}</Btn>
           }
           {
             id &&
-              <Btn disabled={isThereARunningSimulation || this.state.devicesDeletionInProgress || this.state.isActive} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
+              <Btn disabled={isThereARunningSimulation || devicesDeletionInProgress || enabled} type="button" onClick={this.startButtonClicked}>{t('simulation.start')}</Btn>
           }
           <Btn className="new-simulation-btn" svg={svgs.plus} onClick={this.openNewSimulationFlyout} disabled={isActive || isThereARunningSimulation}>
             { t('simulation.newSim') }
@@ -463,7 +463,7 @@ class SimulationDetails extends Component {
                     <div className="right-time-container">{ this.getSimulationState(endDateTime, t) }</div>
                   </div>
                   {
-                    !devicesDeletionCompleted && !isActive && stopTime != null &&
+                    !devicesDeletionCompleted && !enabled && stopTime != null &&
                     <div className="info-section">
                       <Btn className="delete-devices-section" disabled={devicesDeletionInProgress} onClick={this.deleteDevicesInThisSimulation}>{t('simulation.form.deleteAllDevices')}</Btn>
                     </div>
