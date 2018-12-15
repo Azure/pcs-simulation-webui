@@ -102,7 +102,7 @@ export const epics = createEpicScenario({
       epic: ({ payload }, store) => {
       const { enabled, id: Id, name: Name, deviceModels: DeviceModels, statistics, startTime } = payload;
       const event = enabled
-        ? diagnosticsEvent('StartSimulation', {
+        ? diagnosticsEvent('RestartSimulation', {
             Id,
             Name,
             DeviceModels,

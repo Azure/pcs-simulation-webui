@@ -17,3 +17,4 @@ export * from './sectionHeader';
 export * from './summaryBody';
 export * from './summaryCount';
 export * from './summarySection';
+export * from './fileUpload';

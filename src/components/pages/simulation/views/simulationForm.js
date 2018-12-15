@@ -188,13 +188,13 @@ class SimulationForm extends LinkedComponent {
   getMessageThrottlingLimit = hubSku => {
     switch (hubSku) {
       case 'S1':
-        return Config.iotHubRateLimits.s1.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s1.deviceMessagesPerSecond;
       case 'S2':
-        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s2.deviceMessagesPerSecond;
       case 'S3':
-        return Config.iotHubRateLimits.s3.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s3.deviceMessagesPerSecond;
       default:
-        return Config.iotHubRateLimits.s2.DeviceMessagesPerSecond;
+        return Config.iotHubRateLimits.s2.deviceMessagesPerSecond;
     }
   }
 
@@ -234,9 +234,11 @@ class SimulationForm extends LinkedComponent {
       name,
       description,
       enabled: true,
-      iotHubs: [{ connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString }],
-      iotHubSku,
-      iotHubUnits,
+      iotHubs: [{
+        connectionString: preProvisionedRadio === 'preProvisioned' ? '' : iotHubString,
+        iotHubSku,
+        iotHubUnits
+      }],
       deviceModels,
       ...simulationDuration,
       devicesDeletionRequired
@@ -333,28 +335,28 @@ class SimulationForm extends LinkedComponent {
     return (
       <form onSubmit={this.apply}>
         <FormSection>
-          <SectionHeader>{t('simulation.name')}</SectionHeader>
+          <SectionHeader>{ t('simulation.name') }</SectionHeader>
           <FormGroup className="simulation-name-box">
-            <FormControl className="long" type="text" placeholder={t('simulation.namePlaceholderText')} link={this.name} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
+            <FormControl className="long" type="text" placeholder={ t('simulation.namePlaceholderText') } link={this.name} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
         </FormSection>
 
         <FormSection>
-          <SectionHeader>{t('simulation.description')}</SectionHeader>
+          <SectionHeader>{ t('simulation.description') }</SectionHeader>
           <FormGroup className="simulation-description-box">
-            <FormControl className="long" type="textarea" rows='4' placeholder={t('simulation.descPlaceholderText')} link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
+            <FormControl className="long" type="textarea" rows="4" placeholder={ t('simulation.descPlaceholderText') } link={this.description} onBlur={this.inputOnBlur} onFocus={this.inputOnFocus} />
           </FormGroup>
         </FormSection>
 
         <FormSection>
-          <SectionHeader>{t('simulation.form.duration.header')}</SectionHeader>
-          <SectionDesc>{t('simulation.form.duration.description')}</SectionDesc>
+          <SectionHeader>{ t('simulation.form.duration.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.duration.description') }</SectionDesc>
           <Radio link={this.durationRadio} value="endIn">
-            <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
+            <FormLabel>{ t('simulation.form.duration.endsInBtn') }</FormLabel>
             <FormControl type="duration" link={this.duration} />
           </Radio>
           <Radio link={this.durationRadio} value="indefinite">
-            {t('simulation.form.duration.runIndefinitelyBtn')}
+            { t('simulation.form.duration.runIndefinitelyBtn') }
           </Radio>
         </FormSection>
 
@@ -435,13 +437,13 @@ class SimulationForm extends LinkedComponent {
         </FormSection>
 
         <FormSection>
-          <SectionHeader>{t('simulation.form.targetHub.header')}</SectionHeader>
-          <SectionDesc>{t('simulation.form.targetHub.description')}</SectionDesc>
+          <SectionHeader>{ t('simulation.form.targetHub.header') }</SectionHeader>
+          <SectionDesc>{ t('simulation.form.targetHub.description') }</SectionDesc>
           {
             this.state.preprovisionedIoTHub
             ? <div>
               <Radio link={this.targetHub} value="preProvisioned">
-                {t('simulation.form.targetHub.usePreProvisionedBtn')}
+                { t('simulation.form.targetHub.usePreProvisionedBtn') }
               </Radio>
               <Radio link={this.targetHub} value="customString">
                 {connectStringInput}
@@ -451,36 +453,38 @@ class SimulationForm extends LinkedComponent {
           }
 
           <SectionDesc className="hub-sku-desc">
-            {t('simulation.form.targetHub.sku.description')}
+            { t('simulation.form.targetHub.sku.description') }
             <Link
               className="learn-more"
               target="_blank"
-              to='https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-quotas-throttling'>
-              {t('simulation.form.targetHub.sku.learnMore')}
+              to="//docs.microsoft.com/azure/iot-hub/iot-hub-devguide-quotas-throttling">
+              { t('simulation.form.targetHub.sku.learnMore') }
             </Link>
           </SectionDesc>
 
           <div>
             <div className="hub-sku-radios">
               <Radio link={this.iotHubSku} value="S1">
-                {t('simulation.form.targetHub.sku.s1')}
+                { t('simulation.form.targetHub.sku.s1') }
               </Radio>
               <Radio link={this.iotHubSku} value="S2">
-                {t('simulation.form.targetHub.sku.s2')}
+                { t('simulation.form.targetHub.sku.s2') }
               </Radio>
               <Radio link={this.iotHubSku} value="S3">
-                {t('simulation.form.targetHub.sku.s3')}
+                { t('simulation.form.targetHub.sku.s3') }
               </Radio>
             </div>
-            <FormLabel className="hub-units-desc">{t('simulation.form.targetHub.sku.unitsLabel')}</FormLabel>
+            <FormLabel className="hub-units-desc">{ t('simulation.form.targetHub.sku.unitsLabel') }</FormLabel>
             <FormGroup className="hub-units-box">
               <FormControl
                 className="short"
                 type="text"
                 link={this.iotHubUnits}
                 max={10} />
-              <FormLabel className="warning-label">{t('simulation.form.targetHub.sku.warningLabel')}</FormLabel>
-              <FormLabel className="warning-desc">{t('simulation.form.targetHub.sku.warningMessage', { messageThrottlingLimit })}</FormLabel>
+              <div className="warning-box">
+                <FormLabel className="warning-label">{ t('simulation.form.targetHub.sku.warningLabel') }</FormLabel>
+                <FormLabel className="warning-desc">{ t('simulation.form.targetHub.sku.warningMessage', { messageThrottlingLimit })}</FormLabel>
+              </div>
             </FormGroup>
            </div>
 
@@ -496,7 +500,7 @@ class SimulationForm extends LinkedComponent {
               checked={devicesDeletionRequired} />
             <span className="checkmark"></span>
           </div>
-          <Tooltip message={t('simulation.form.tooltip.bulkDeletion')} position={'top'}>
+          <Tooltip message={ t('simulation.form.tooltip.bulkDeletion') } position={'top'}>
             <Svg path={svgs.infoBubble} className="tooltip-trigger-icon" />
           </Tooltip>
         </FormSection>
@@ -513,8 +517,8 @@ class SimulationForm extends LinkedComponent {
                 <Link
                   className="learn-more"
                   target="_blank"
-                  to='https://azure.microsoft.com/en-us/pricing/calculator/'>
-                  {t('simulation.form.learnMore')}
+                  to="//azure.microsoft.com/en-us/pricing/calculator/">
+                  { t('simulation.form.learnMore') }
                 </Link>
                 <input
                   type="checkbox"
