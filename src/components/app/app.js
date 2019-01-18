@@ -16,7 +16,7 @@ import  {
   PageNotFound
 } from 'components/pages';
 
-import './app.css';
+import './app.scss';
 
 const crumbsConfig = [
   {

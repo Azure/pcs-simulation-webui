@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
+import Config from 'app.config';
 import { stringToBoolean } from 'utilities';
 
 // Contains methods for converting service response
@@ -51,13 +52,17 @@ export const toSimulationModel = (response = {}) => ({
       }))
       .reduce((acc, obj) => [...acc, ...obj], [])
   })),
-  iotHubs: (response.IoTHubs || []).map(({ ConnectionString, PreprovisionedIoTHub, PreprovisionedIoTHubInUse, PreprovisionedIoTHubMetricsUrl }) => ({
+  iotHubs: (response.IoTHubs || []).map(({ ConnectionString, PreprovisionedIoTHub, PreprovisionedIoTHubInUse, PreprovisionedIoTHubMetricsUrl, Sku }) => ({
     connectionString: ConnectionString === 'default' ? '' : ConnectionString,
     preprovisionedIoTHub: PreprovisionedIoTHub,
     preprovisionedIoTHubInUse: ConnectionString === 'default',
     preprovisionedIoTHubMetricsUrl: PreprovisionedIoTHubMetricsUrl
   })),
+  rateLimits: {
+    deviceMessagesPerSecond: (response.RateLimits || {}).DeviceMessagesPerSecond
+  },
   devicesDeletionRequired: response.DeleteDevicesWhenSimulationEnds,
+  deleteDevicesOnce: response.DeleteDevicesOnce,
   devicesDeletionCompleted: response.DevicesDeletionComplete
 });
 
@@ -85,18 +90,24 @@ export const toSimulationRequestModel = (request = {}) => ({
   Description: request.description,
   DeviceModels: toDeviceModels(request.deviceModels),
   IoTHubs: toIoTHubs(request.iotHubs),
-  DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired
+  DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired,
+  DevicesDeletionComplete: false,
+  RateLimits: toRateLimits(request.iotHubs[0].iotHubSku, request.iotHubs[0].iotHubUnits)
 });
 
 // Request models
-export const toSimulationCloneModel = (request = {}) => ({
-  Enabled: true,
+export const toSimulationUpdateModel = (request = {}) => ({
+  ETag: request.eTag,
+  Enabled: request.enabled,
   StartTime: request.startTime,
   EndTime: request.endTime,
+  Id: request.id,
   Name: request.name,
   Description: request.description,
   DeviceModels: toCloneDeviceModels(request.deviceModels),
-  IoTHubs: toIoTHubs(request.iotHubs)
+  IoTHubs: toIoTHubs(request.iotHubs),
+  DeleteDevicesWhenSimulationEnds: request.devicesDeletionRequired,
+  RateLimits: toRateLimits(request.iotHubs[0].iotHubSku, request.iotHubs[0].iotHubUnits)
 });
 
 // Request models
@@ -104,6 +115,12 @@ export const toSimulationPatchModel = (request = {}, enabled) => ({
   ETag: request.eTag,
   Id: request.id,
   Enabled: enabled
+});
+
+export const deviceDeletionPatchModel = (request = {}, deleteDevices) => ({
+  ETag: request.eTag,
+  Id: request.id,
+  DeleteDevicesOnce: true
 });
 
 // Map to deviceModels in simulation request model
@@ -146,3 +163,31 @@ const toIoTHubs = (iotHubs = []) =>
   iotHubs.map(({ connectionString }) => {
     return { ConnectionString: connectionString };
   });
+
+// Map to rateLimits in simulation request model
+const toRateLimits = (iotHubSku = 'S2', iotHubUnits = 1) => {
+  let rateLimits = {};
+
+  switch(iotHubSku) {
+    case 'S1':
+      rateLimits = Config.iotHubRateLimits.s1;
+      break;
+    case 'S2':
+      rateLimits = Config.iotHubRateLimits.s2;
+      break;
+    case 'S3':
+      rateLimits = Config.iotHubRateLimits.s3;
+      break;
+    default:
+      rateLimits = Config.iotHubRateLimits.s2;
+      break;
+  }
+
+  return {
+    RegistryOperationsPerMinute: rateLimits.registryOperationsPerMinute * iotHubUnits,
+    TwinReadsPerSecond: rateLimits.twinReadsPerSecond * iotHubUnits,
+    TwinWritesPerSecond: rateLimits.twinWritesPerSecond * iotHubUnits,
+    ConnectionsPerSecond: rateLimits.connectionsPerSecond * iotHubUnits,
+    DeviceMessagesPerSecond: rateLimits.deviceMessagesPerSecond * iotHubUnits
+  };
+};

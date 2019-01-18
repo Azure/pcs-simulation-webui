@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/variables';
-@import 'styles/themes';
-@import 'styles/mixins';
+@import '~styles/variables';
+@import '~styles/themes';
+@import '~styles/mixins';
 
 $navItemHeight: 48px;
 $svgSize: 16px;
@@ -11,7 +11,6 @@ $svgSize: 16px;
 
   .simulation-stats-container {
     display: flex;
-    @include rem-fallback(height, 500px);
 
     .stack-container {
       @include rem-fallback(width, 580px);
@@ -30,6 +29,11 @@ $svgSize: 16px;
             overflow: hidden;
             text-overflow: ellipsis;
             @include rem-fallback(max-width, 350px);
+          }
+
+          .delete-devices-section {
+            @include rem-fallback(margin-top, 20px);
+            @include rem-fallback(height, 32px);
           }
         }
 
@@ -93,7 +97,10 @@ $svgSize: 16px;
       }
     }
 
-    .telemetry-chart-container { @include rem-fallback(height, 500px); }
+    .telemetry-chart-container {
+      @include rem-fallback(height, 500px);
+      .splitByLabel h5 { max-width: 135px; }
+    }
 
     .missing-chart-container {
       display: flex;
@@ -129,6 +136,13 @@ $svgSize: 16px;
 
         .info-container { border-bottom: 1px solid themed('colorMidSecond'); }
 
+        .info-section  .delete-devices-section {
+          background: themed('colorGrayLight');
+
+          &:hover {
+            background: themed('colorGrayDark');
+          }
+        }
         .status-description { color: themed('colorLightestFirst'); }
 
         .info-label,
@@ -222,7 +236,7 @@ $svgSize: 16px;
   @include rem-fallback(height, 40px);
 
   .iothub-metrics-link {
-    display: flex;
+    display: none;
 
     a {
       background-color: transparent;

@@ -95,7 +95,7 @@ export class DeviceModelsGrid extends Component {
             key="delete-device-model-modal"
             onClose={this.closeFlyout}
             onDelete={this.onDeleteDeviceModel}
-            deviceModelId={this.state.hardSelectedDeviceModelId}
+            deviceModelName={this.state.hardSelectedDeviceModelName}
             formMode={deviceModelFormModes.FORM_MODE_DELETE}
             t={t} />
         );
@@ -145,9 +145,10 @@ export class DeviceModelsGrid extends Component {
    * @param {Array} selectedDeviceModels A list of currently selected devices
    */
   onHardSelectChange = (selectedDeviceModels) => {
-    const [{ id, type } = {}] = selectedDeviceModels;
+    const [{ id, name, type } = {}] = selectedDeviceModels;
     const { onContextMenuChange, onHardSelectChange } = this.props;
     this.setState({ hardSelectedDeviceModelId: id });
+    this.setState({ hardSelectedDeviceModelName: name });
     if (isFunc(onContextMenuChange)) {
       onContextMenuChange(selectedDeviceModels.length > 0
         ? type === Config.deviceModelTypes.stockModel

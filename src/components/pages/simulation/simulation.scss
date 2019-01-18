@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/variables';
-@import 'styles/themes';
-@import 'styles/mixins';
+@import '~styles/variables';
+@import '~styles/themes';
+@import '~styles/mixins';
 
 .simulation-container {
   .flyout-container { width: 80%; }
@@ -48,7 +48,11 @@
 
     .device-model-header { color: themed('colorLightestFirst'); }
 
-    .new-simulation-btn[disabled]:hover { color: themed('colorMidFirst'); }
+    .btn[disabled]:hover { 
+      color: themed('colorMidFirst');
+
+      .btn-icon svg { fill: themed('colorMidFirst'); }
+    }
 
     .apply-btn {
       // The start simulation svg uses stroke rather than fill

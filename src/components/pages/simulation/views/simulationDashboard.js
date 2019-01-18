@@ -11,7 +11,7 @@ import { svgs, humanizeDuration } from 'utilities';
 import SimulationTile from './simulationTile';
 import { SimulationsGrid } from './simulationsGrid';
 
-import './simulationDashboard.css';
+import './simulationDashboard.scss';
 
 const closedFlyoutState = {
   flyoutOpen: false,
@@ -33,7 +33,7 @@ export class SimulationDashboard extends Component {
     };
   }
 
-  componentDidMount() {console.log('this.props', this.props)
+  componentDidMount() {
     const { state = {} } = this.props.location;
     this.setState({ ...state });
     this.props.fetchSimulationList();

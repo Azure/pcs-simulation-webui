@@ -23,7 +23,30 @@ const Config = {
     customModel: 'Custom',
     stockModel: 'Stock'
   },
-  dateTimeFormat: 'DD/MM/YY hh:mm:ss A'
+  dateTimeFormat: 'DD/MM/YY hh:mm:ss A',
+  iotHubRateLimits: {
+    s1: {
+      registryOperationsPerMinute: 100,
+      twinReadsPerSecond: 10,
+      twinWritesPerSecond: 10,
+      connectionsPerSecond: 100,
+      deviceMessagesPerSecond: 100
+    },
+    s2: {
+      registryOperationsPerMinute: 100,
+      twinReadsPerSecond: 10,
+      twinWritesPerSecond: 10,
+      connectionsPerSecond: 120,
+      deviceMessagesPerSecond: 120
+    },
+    s3: {
+      registryOperationsPerMinute: 5000,
+      twinReadsPerSecond: 50,
+      twinWritesPerSecond: 50,
+      connectionsPerSecond: 6000,
+      deviceMessagesPerSecond: 6000
+    }
+  }
 };
 
 export default Config;

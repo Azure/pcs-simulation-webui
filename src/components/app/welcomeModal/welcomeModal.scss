@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/themes';
-@import 'styles/mixins';
+@import '~styles/themes';
+@import '~styles/mixins';
 
 .welcome-modal-container {
   display: flex;
@@ -32,7 +32,7 @@
   }
 
   .welcome-modal-description {
-    text-align: start;
+    text-align: left;
     @include rem-fallback(padding, 20px, 0px);
     @include rem-fallback(line-height, 21px);
     @include rem-font-size(18px);

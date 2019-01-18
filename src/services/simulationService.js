@@ -2,7 +2,7 @@
 
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
-import { toSimulationStatusModel, toSimulationModel, toSimulationListModel, toDeviceModel, toSimulationRequestModel, toSimulationCloneModel, toSimulationPatchModel } from './models';
+import { toSimulationStatusModel, toSimulationModel, toSimulationListModel, toDeviceModel, toSimulationRequestModel, toSimulationPatchModel, deviceDeletionPatchModel } from './models';
 import { Observable } from 'rxjs/Observable';
 
 const ENDPOINT = Config.simulationApiUrl;
@@ -62,21 +62,37 @@ export class SimulationService {
       .catch(resolveConflict);
   }
 
-  /** Clones an existing simulation */
-  static cloneSimulation(model) {
-    return HttpClient.post(
-        `${ENDPOINT}simulations`,
-        toSimulationCloneModel(model)
-      )
+  /** Start/Restart a simulation */
+  static startSimulation(simulation) {
+    return HttpClient.patch(`${ENDPOINT}simulations/${simulation.id}`, { ETag: simulation.eTag, Enabled: true })
       .map(toSimulationModel)
       .catch(resolveConflict);
   }
 
   /** Disable a simulation */
   static stopSimulation(simulation) {
+    return SimulationService.getSimulation(simulation.id)
+      .flatMap(({ eTag }) => {
+        return HttpClient.patch(
+            `${ENDPOINT}simulations/${simulation.id}`,
+            toSimulationPatchModel({ ...simulation, eTag }, false)
+          )
+          .map(toSimulationModel)
+          .catch(resolveConflict);
+      });
+  }
+
+  /** Disable a simulation */
+  static deleteSimulation(id) {
+    return HttpClient.delete(`${ENDPOINT}simulations/${id}`)
+      .catch(resolveConflict);
+  }
+
+  /** Patch a simulation */
+  static patchSimulation(simulation) {
     return HttpClient.patch(
-        `${ENDPOINT}simulations/${simulation.id}`,
-        toSimulationPatchModel(simulation, false)
+      `${ENDPOINT}simulations/${simulation.id}`,
+      deviceDeletionPatchModel(simulation, true)
       )
       .map(toSimulationModel)
       .catch(resolveConflict);

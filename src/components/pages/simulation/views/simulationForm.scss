@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-@import 'styles/variables';
-@import 'styles/themes';
-@import 'styles/mixins';
+@import '~styles/variables';
+@import '~styles/themes';
+@import '~styles/mixins';
 
 .sim-form-container {
 
@@ -137,5 +137,59 @@
         svg { fill: themed('colorLightestFirst'); }
       }
     }
+  }
+}
+
+.bulk-deletion-container { @include rem-fallback(padding-top, 0px); }
+
+.hub-units-box .warning-box {
+  display: flex;
+  @include rem-fallback(margin-top, 8px);
+
+  .warning-desc { @include rem-fallback(margin-left, 6px); }
+
+  .warning-label { font-weight: bold; }
+
+  @include themify($themes) {
+    .hub-units-desc { color: themed('colorHighest'); }
+
+    .warning-label,
+    .warning-desc{ color: themed('colorWarning'); }
+  }
+}
+
+.hub-units-desc { @include rem-font-size(14px); }
+
+.hub-sku-desc,
+.hub-units-box { @include rem-fallback(margin-top, 12px); }
+
+.hub-sku-radios {
+  display: flex;
+  @include rem-fallback(padding-bottom, 12px);
+  .radio-container { margin-top: 0;}
+}
+
+.hub-units-desc,
+.hub-units-box { @include rem-fallback(margin-left, 18px); }
+
+.learn-more {
+    @include rem-fallback(margin-left, 8px);
+
+    @include themify($themes) {
+      color: $colorBlueLink;
+
+      &:visited { color: $colorLinkVisited; }
+      &:hover { color: $colorLinkHover; }
+  }
+}
+
+.form-actions-container {
+  @include rem-fallback(margin-top, 48px);
+  @include rem-fallback(padding-top, 48px);
+  @include rem-fallback(padding-left, 0px);
+
+  .autoscale-ackownledge-container {
+    @include rem-fallback(margin-bottom, 40px);
+    @include rem-fallback(width, 700px);
   }
 }

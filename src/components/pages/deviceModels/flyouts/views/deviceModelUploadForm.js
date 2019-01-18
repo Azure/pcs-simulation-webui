@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { isEqual, isEmpty } from 'lodash';
 import { Observable } from 'rxjs';
 import { DeviceModelScriptsService } from 'services';
 import { svgs } from 'utilities';
-import { Svg } from 'components/shared';
+import { Svg, FileUpload } from 'components/shared';
 import {
   Btn,
   BtnToolbar,
@@ -17,7 +18,7 @@ import {
   Indicator
 } from 'components/shared';
 
-import './deviceModelForm.css';
+import './deviceModelForm.scss';
 
 const initialFormState = {
   deviceModel: undefined,
@@ -36,6 +37,8 @@ class DeviceModelUploadForm extends Component {
       formVersion: 0
     };
 
+    this.fileInputRef = React.createRef();
+    this.singleFileInputRef = React.createRef();
     this.subscriptions = [];
   }
 
@@ -280,6 +283,14 @@ class DeviceModelUploadForm extends Component {
     this.props.clearUploadDeviceModelError();
   };
 
+  fileUploadRef = () => {
+    this.fileInputRef.current.click();
+  }
+
+  onClickSingleFileInputRef = () => {
+    this.singleFileInputRef.current.click();
+  }
+
   render() {
     const { t, uploadDeviceModelsError } = this.props;
     const { deviceModel, scripts, jsonFile, changesApplied, formVersion, error, missingScripts, validationResults } = this.state;
@@ -287,8 +298,15 @@ class DeviceModelUploadForm extends Component {
       <form key={`device-model-form-${formVersion}`} onSubmit={this.apply} className="device-model-form-container">
         <FormSection>
           <FormLabel>{t('deviceModels.flyouts.upload.deviceModelInfoText')}</FormLabel>
-          <br /><br />
-          <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesInfoText')}</FormLabel>
+          <div className="device-model-info-text">
+            <FormLabel>{t('deviceModels.flyouts.upload.deviceModelFilesInfoText')}</FormLabel>
+            <Link
+              className="learn-more"
+              target="_blank"
+              to='//github.com/Azure/device-simulation-dotnet/wiki/Device-Models'>
+              {t('deviceModels.flyouts.upload.learnMore')}
+            </Link>
+          </div>
         </FormSection>
         <FormSection>
           <FormLabel>{t('deviceModels.flyouts.upload.files')}</FormLabel>
@@ -300,9 +318,10 @@ class DeviceModelUploadForm extends Component {
               name="uploader"
               accept=".json, .js"
               multiple
+              ref={this.fileInputRef}
               onChange={this.uploadFiles}
             />
-            <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
+            <Btn className="browse-button" htmlFor="fileUpload" onClick={this.fileUploadRef}>{t('deviceModels.flyouts.upload.browse')}</Btn>
           </div>
         </FormSection>
         <FormSection>
@@ -335,17 +354,7 @@ class DeviceModelUploadForm extends Component {
                         </div>
                       </div>
                       <div className="validation-message">
-                        <div className="file-uploader-container">
-                            <input
-                              className="file-uploader"
-                              type="file"
-                              id={fileName}
-                              name="uploader"
-                              accept=".json, .js"
-                              onChange={this.uploadSingleFile}
-                            />
-                            <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
-                        </div>
+                        <FileUpload id={fileName} value={t('deviceModels.flyouts.upload.browse')} onChange={this.uploadSingleFile} />
                       </div>
                     </div>
                   ))
@@ -389,17 +398,7 @@ class DeviceModelUploadForm extends Component {
                     <div>
                       {
                         validationResults[name] && (validationResults[name].messages || []).map((error, idx) => (
-                          <div key={name} className="file-uploader-container">
-                            <input
-                              className="file-uploader"
-                              type="file"
-                              id={name}
-                              name="uploader"
-                              accept=".json, .js"
-                              onChange={this.uploadSingleFile}
-                            />
-                            <label htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</label>
-                          </div>
+                          <FileUpload id={name} onChange={this.uploadSingleFile} value={t('deviceModels.flyouts.upload.browse')} />
                         ))
                       }
                     </div>

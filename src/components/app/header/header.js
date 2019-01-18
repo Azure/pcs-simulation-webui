@@ -10,7 +10,7 @@ import ProfileImagePath from 'assets/images/profile.png';
 import { WelcomeModal } from '../welcomeModal/welcomeModal';
 import { Breadcrumbs } from './breadcrumbs';
 
-import './header.css';
+import './header.scss';
 
 const docsDropdown = 'docsDropdown';
 const profileDropdown = 'profileDropdown';
@@ -38,7 +38,7 @@ const docLinks = [
   },
   {
     translationId: 'header.sendSuggestion',
-    url: 'https://feedback.azure.com/forums/321918-azure-iot '
+    url: 'https://feedback.azure.com/forums/916438-azure-iot-solution-accelerators'
   }
 ];
 
