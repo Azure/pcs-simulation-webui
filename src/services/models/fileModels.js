@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 
-// Map to simulation scripts
-export const toDeviceModelScripts = ({ Items = [] }) => Items.map(toDeviceModelScript);
+// Map to file
+export const toFiles = ({ Items = [] }) => Items.map(toFile);
 
-// Map to simulation script in device model
-export const toDeviceModelScript = (response = {}) => ({
+// Map to file in model
+export const toFile = (response = {}) => ({
   id: response.Id,
   name: response.Name,
   eTag: response.ETag,
@@ -13,11 +13,11 @@ export const toDeviceModelScript = (response = {}) => ({
   content: response.Content,
 });
 
-//  Map to simulation script request model
-export const toDeviceModelScriptRequestModel = (file) => {
+//  Map to file request model
+export const toFileRequestModel = (file) => {
   const data = new FormData();
   data.append('file', file);
-  
+
   return data;
 }
 

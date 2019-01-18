@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 import React from 'react';
+import { Observable } from 'rxjs';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -22,9 +23,7 @@ import {
   Tooltip
 } from 'components/shared';
 
-/*
-import { SimulationService } from 'services';
-*/
+import { SimulationService, ReplayFileService } from 'services';
 
 import './simulationForm.scss';
 
@@ -65,7 +64,9 @@ class SimulationForm extends LinkedComponent {
       formSubmitted: false,
       // Replay vars
       simulationType: 'deviceModel',
-      numDevices: ''
+      numDevices: '',
+      replayFileId: '',
+      replayFileIndefinitely: false
     };
 
     this.subscriptions = [];
@@ -117,12 +118,24 @@ class SimulationForm extends LinkedComponent {
   }
 
   formIsValid() {
-    return [
-      this.name,
-      this.description,
-      this.targetHub,
-      this.durationRadio
-    ].every(link => !link.error);
+    if (this.simulationType.value === "fileReplay")
+    {
+      console.log('replay sim')
+      return [
+        this.name,
+        this.description,
+        this.targetHub,
+      ].every(link => !link.error)
+    }
+    else
+    {
+      return [
+        this.name,
+        this.description,
+        this.targetHub,
+        this.durationRadio
+      ].every(link => !link.error);
+    }
   }
 
   componentDidMount() {
@@ -234,7 +247,9 @@ class SimulationForm extends LinkedComponent {
       iotHubSku,
       iotHubUnits,
       preProvisionedRadio,
-      devicesDeletionRequired
+      devicesDeletionRequired,
+      replayFileId,
+      replayFileIndefinitely
     } = this.state;
 
     const simulationDuration = {
@@ -253,11 +268,13 @@ class SimulationForm extends LinkedComponent {
       }],
       deviceModels,
       ...simulationDuration,
-      devicesDeletionRequired
+      devicesDeletionRequired,
+      replayFileId,
+      replayFileIndefinitely
     };
 
     console.log('modelUpdates', modelUpdates);
-    /*
+
     this.setState(
       { formSubmitted: true },
       () => this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
@@ -270,7 +287,6 @@ class SimulationForm extends LinkedComponent {
         )
       )
     );
-    */
   };
 
   addDeviceModel = () => this.deviceModelsLink.set([ ...this.deviceModelsLink.value, newDeviceModel() ]);
@@ -279,9 +295,11 @@ class SimulationForm extends LinkedComponent {
     () => this.deviceModelsLink.set(this.deviceModelsLink.value.filter((_, idx) => index !== idx));
 
   uploadFile = e => {
-    if (e.target.files && e.target.files.length === 1) {
-      console.log('e.target.files', e.target.files);
-    }
+    console.log('duration', this.durationRadio.value);
+    Observable.from(ReplayFileService.uploadReplayFile(e.target.files[0])).subscribe(
+      response => this.setState({ replayFileId: response.replayFileId }),
+      error => this.setState({ error: error.message })
+   );
   }
 
   render () {
@@ -383,7 +401,7 @@ class SimulationForm extends LinkedComponent {
                       type="file"
                       id="uploader"
                       name="uploader"
-                      accept=".json, .js"
+                      accept=".csv"
                       onChange={this.uploadFile}
                     />
                     <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
@@ -400,17 +418,22 @@ class SimulationForm extends LinkedComponent {
             <SectionDesc>Set how long the simulation will run.</SectionDesc>
             {
               this.simulationType.value === 'fileReplay' &&
-                <Radio link={this.durationRadio} value="endOfFile">
+                <Radio link={this.durationRadio} value="endOfFile" checked={this.state.replayFileIndefinitely === true}>
                   Stop at end of file
                 </Radio>
             }
-            <Radio link={this.durationRadio} value="endIn">
-              <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
-              <FormControl type="duration" link={this.duration} />
-            </Radio>
-            <Radio link={this.durationRadio} value="indefinite">
-              {t('simulation.form.duration.runIndefinitelyBtn')}
-            </Radio>
+            {
+            this.simulationType.value === 'deviceModel' &&
+            <div>
+              <Radio link={this.durationRadio} value="endIn">
+                <FormLabel>{t('simulation.form.duration.endsInBtn')}</FormLabel>
+                <FormControl type="duration" link={this.duration} />
+              </Radio>
+              <Radio link={this.durationRadio} value="indefinite">
+                {t('simulation.form.duration.runIndefinitelyBtn')}
+              </Radio>
+            </div>
+            }
           </div>
         </FormSection>
 
