@@ -66,7 +66,7 @@ class SimulationForm extends LinkedComponent {
       simulationType: 'deviceModel',
       numDevices: '',
       replayFileId: '',
-      replayFileIndefinitely: false
+      replayFileRunIndefinitely: false
     };
 
     this.subscriptions = [];
@@ -115,16 +115,19 @@ class SimulationForm extends LinkedComponent {
 
     this.numDevices = this.linkTo('numDevices')
       .check(Validator.notEmpty, () => 'Number of devices is required');
+
+    this.replayFileRunIndefinitely = this.linkTo('durationRadio')
+      .check(value => value === 'endOfFile');
   }
 
   formIsValid() {
     if (this.simulationType.value === "fileReplay")
     {
-      console.log('replay sim')
       return [
         this.name,
         this.description,
         this.targetHub,
+        this.replayFileRunIndefinitely
       ].every(link => !link.error)
     }
     else
@@ -249,13 +252,17 @@ class SimulationForm extends LinkedComponent {
       preProvisionedRadio,
       devicesDeletionRequired,
       replayFileId,
-      replayFileIndefinitely
+      replayFileRunIndefinitely
     } = this.state;
 
     const simulationDuration = {
       startTime: 'NOW',
       endTime: (durationRadio === 'endIn') ? this.convertDurationToISO(duration) : ''
     };
+
+    const replayIndefinitely={
+      replayFileRunIndefinitely: durationRadio === 'endOfFile'
+    }
 
     const modelUpdates = {
       name,
@@ -270,7 +277,7 @@ class SimulationForm extends LinkedComponent {
       ...simulationDuration,
       devicesDeletionRequired,
       replayFileId,
-      replayFileIndefinitely
+      ...replayIndefinitely
     };
 
     console.log('modelUpdates', modelUpdates);
@@ -295,9 +302,8 @@ class SimulationForm extends LinkedComponent {
     () => this.deviceModelsLink.set(this.deviceModelsLink.value.filter((_, idx) => index !== idx));
 
   uploadFile = e => {
-    console.log('duration', this.durationRadio.value);
     Observable.from(ReplayFileService.uploadReplayFile(e.target.files[0])).subscribe(
-      response => this.setState({ replayFileId: response.replayFileId }),
+      response => this.setState({ replayFileId: response.id }),
       error => this.setState({ error: error.message })
    );
   }
@@ -418,7 +424,7 @@ class SimulationForm extends LinkedComponent {
             <SectionDesc>Set how long the simulation will run.</SectionDesc>
             {
               this.simulationType.value === 'fileReplay' &&
-                <Radio link={this.durationRadio} value="endOfFile" checked={this.state.replayFileIndefinitely === true}>
+                <Radio link={this.durationRadio} value="endOfFile">
                   Stop at end of file
                 </Radio>
             }
