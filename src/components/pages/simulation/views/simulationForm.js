@@ -127,7 +127,6 @@ class SimulationForm extends LinkedComponent {
         this.name,
         this.description,
         this.targetHub,
-        this.replayFileRunIndefinitely
       ].every(link => !link.error)
     }
     else
@@ -252,7 +251,6 @@ class SimulationForm extends LinkedComponent {
       preProvisionedRadio,
       devicesDeletionRequired,
       replayFileId,
-      replayFileRunIndefinitely
     } = this.state;
 
     const simulationDuration = {
@@ -357,13 +355,18 @@ class SimulationForm extends LinkedComponent {
 
     const editedDeviceModel = deviceModelLinks.filter(({ edited }) => edited);
     const someDeviceModelLinksHasErrors = editedDeviceModel.some(({ error }) => !!error);
-    const deviceModelsHaveError = (deviceModelLinks.length === 0 || someDeviceModelLinksHasErrors);
-    const deviceModelHeaders = [
+    const deviceModelsHaveError = this.simulationType.value === 'deviceModel' && (deviceModelLinks.length === 0 || someDeviceModelLinksHasErrors);
+    const deviceModelHeaders =  this.simulationType.value === 'deviceModel' ?
+    [
       t('simulation.form.deviceModels.name'),
       t('simulation.form.deviceModels.count'),
       t('simulation.form.deviceModels.throughput'),
       t('simulation.form.deviceModels.duration')
-    ];
+    ] :
+    [
+      t('simulation.form.deviceModels.name')
+    ]
+    ;
 
     const totalDevicesCount = deviceModels.reduce((sum, { count = 0 }) => sum + count, 0);
     const messageThrottlingLimit = this.getMessageThrottlingLimit(this.state.iotHubSku) * this.state.iotHubUnits;
@@ -412,13 +415,6 @@ class SimulationForm extends LinkedComponent {
                     />
                     <button className="browse-button" htmlFor="fileUpload">{t('deviceModels.flyouts.upload.browse')}</button>
                   </div>
-                </div>
-            }
-            {
-              this.simulationType.value === 'fileReplay' &&
-                <div className="inline-form-group">
-                  <FormLabel>Number of devices</FormLabel>
-                  <FormControl className="short" type="text" link={this.numDevices} />
                 </div>
             }
             <SectionDesc>Set how long the simulation will run.</SectionDesc>
@@ -486,20 +482,26 @@ class SimulationForm extends LinkedComponent {
                         link={count}
                         max={maxDevicesPerSimulation} />
                     </FormGroup>
-                    <FormGroup className="device-model-box">
-                      <FormControl
-                        className="short"
-                        type="text"
-                        readOnly
-                        value={throughput} />
-                    </FormGroup>
-                    <FormGroup className="duration-box">
-                      <FormControl
-                        type="duration"
-                        name="frequency"
-                        link={interval}
-                        showHeaders={false} />
-                    </FormGroup>
+                    {
+                      this.simulationType.value === 'deviceModel' &&
+                      <FormGroup className="device-model-box">
+                        <FormControl
+                          className="short"
+                          type="text"
+                          readOnly
+                          value={throughput} />
+                      </FormGroup>
+                    }
+                    {
+                      this.simulationType.value === 'deviceModel' &&
+                      <FormGroup className="duration-box">
+                        <FormControl
+                          type="duration"
+                          name="frequency"
+                          link={interval}
+                          showHeaders={false} />
+                      </FormGroup>
+                    }
                     <Btn
                       className="delete-device-model-btn"
                       svg={svgs.trash}
@@ -519,6 +521,7 @@ class SimulationForm extends LinkedComponent {
               }
 
               return (
+                this.simulationType.value === 'deviceModel' &&
                 <div className="device-model-row" key={idx}>
                   <FormGroup className="device-model-box">
                     <FormControl
@@ -562,7 +565,9 @@ class SimulationForm extends LinkedComponent {
         }
         </div>
         {
-          deviceModels.length < 10 &&
+          ((this.simulationType.value === 'deviceModel' && deviceModels.length < 10) ||
+            (this.simulationType.value === 'fileReplay' && deviceModels.length < 1 ))
+          &&
             <Btn
               svg={svgs.plus}
               onClick={this.addDeviceModel}>
