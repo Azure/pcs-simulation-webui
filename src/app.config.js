@@ -2,7 +2,7 @@
 
 const Config = {
   // APIs
-  simulationApiUrl: 'http://localhost:9003/v1/',
+  simulationApiUrl: '/devicesimulation-svc/v1/',
   diagnosticsApiUrl: '/diagnostics-svc/v1/',
   configApiUrl: '/config-svc/v1/',
 
