@@ -278,8 +278,6 @@ class SimulationForm extends LinkedComponent {
       ...replayIndefinitely
     };
 
-    console.log('modelUpdates', modelUpdates);
-
     this.setState(
       { formSubmitted: true },
       () => this.subscriptions.push(SimulationService.createSimulation(modelUpdates)
