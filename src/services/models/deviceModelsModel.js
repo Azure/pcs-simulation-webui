@@ -51,8 +51,8 @@ const toCustomSensorModel = (sensors = []) => {
     .forEach(({ name, behavior, minValue, maxValue, unit }) => {
       const _name = name.toLowerCase();
       const _unit = unit.toLowerCase();
-      const nameString = `'${_name}':$\{${_name}}`;
-      const unitString = `'${_name}_unit':'${_unit}'`;
+      const nameString = `"${_name}":$\{${_name}}`;
+      const unitString = `"${_name}_unit":"${_unit}"`;
       const path = behavior.value;
       messages = [...messages, nameString, unitString];
       Fields = { ...Fields, [_name]: 'double', [`${_name}_unit`]: 'text' };
