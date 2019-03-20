@@ -8,6 +8,5 @@ export * from './simulationService';
 export * from './diagnosticsService';
 export * from './configService';
 export * from './deviceModelsService';
-export * from './replayFileService';
 export * from './deviceModelScriptService';
 export * from './metricsService';

@@ -3,9 +3,9 @@
 import Config from 'app.config';
 import { HttpClient } from './httpClient';
 import {
-  toFiles,
-  toFile,
-  toFileRequestModel,
+  toDeviceModelScripts,
+  toDeviceModelScript,
+  toDeviceModelScriptRequestModel,
   toValidationModel
 } from './models';
 
@@ -24,25 +24,25 @@ export class DeviceModelScriptsService {
   /** Returns a list of device model scripts */
   static getDeviceModelScripts() {
     return HttpClient.get(ENDPOINT)
-      .map(toFiles);
+      .map(toDeviceModelScripts);
   }
 
   /** Returns a device model script by id */
   static getDeviceModelScriptById(id) {
     return HttpClient.get(`${ENDPOINT}/${id}`)
-      .map(toFile);
+      .map(toDeviceModelScript);
   }
 
   /** Creates a device model script */
   static uploadsDeviceModelScript(script) {
-    return HttpClient.post(ENDPOINT, toFileRequestModel(script), uploadOptions)
-      .map(toFile);
+    return HttpClient.post(ENDPOINT, toDeviceModelScriptRequestModel(script), uploadOptions)
+      .map(toDeviceModelScript);
   }
 
   /** Updates a device model script */
   static updateSingleDeviceModelScript(script) {
-    return HttpClient.put(`${ENDPOINT}/${script.id}`, toFileRequestModel(script), uploadOptions)
-      .map(toFile);
+    return HttpClient.put(`${ENDPOINT}/${script.id}`, toDeviceModelScriptRequestModel(script), uploadOptions)
+      .map(toDeviceModelScript);
   }
 
   /** Deletes a device model script by id */
@@ -52,7 +52,7 @@ export class DeviceModelScriptsService {
 
   /** Validate a device model script */
   static validateDeviceModelScript(script) {
-    return HttpClient.post(`${ENDPOINT}!validate`, toFileRequestModel(script), uploadOptions)
+    return HttpClient.post(`${ENDPOINT}!validate`, toDeviceModelScriptRequestModel(script), uploadOptions)
       .map(toValidationModel);
   }
 }
