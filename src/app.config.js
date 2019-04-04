@@ -5,6 +5,7 @@ const Config = {
   simulationApiUrl: '/devicesimulation-svc/v1/',
   diagnosticsApiUrl: '/diagnostics-svc/v1/',
   configApiUrl: '/config-svc/v1/',
+  iotHubManagerApiUrl: '/iothubmanager-svc/v1/',
 
   // Constants
   formFieldMaxLength: 25,

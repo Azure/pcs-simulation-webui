@@ -11,3 +11,4 @@ export * from './contextMenu/contextMenu';
 export * from './flyout';
 export * from './modal/modal';
 export * from './tooltip/tooltip';
+export * from './propertyGrid'

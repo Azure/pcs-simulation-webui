@@ -28,7 +28,11 @@
       }
     }
 
-    .modal-icon { @include rem-fallback(padding, 0px); }
+    .modal-icon {
+      @include rem-fallback(padding, 0px);
+      
+      svg { @include square-px-rem(24px); }
+    }
   }
 
   .welcome-modal-description {

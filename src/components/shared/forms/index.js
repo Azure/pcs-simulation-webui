@@ -14,4 +14,7 @@ export * from './formSection';
 export * from './radio';
 export * from './sectionDesc';
 export * from './sectionHeader';
+export * from './summaryBody';
+export * from './summaryCount';
+export * from './summarySection';
 export * from './fileUpload';

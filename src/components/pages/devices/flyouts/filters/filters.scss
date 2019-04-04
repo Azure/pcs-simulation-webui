@@ -1,0 +1,23 @@
+// Copyright (c) Microsoft. All rights reserved.
+
+@import 'src/styles/mixins';
+@import 'src/styles/themes';
+
+.filter-form-container {
+  @include rem-fallback(padding, 16px 0);
+
+  .clear-btn {
+    text-decoration: underline;
+
+    &:hover { cursor: pointer; }
+  }
+
+  .btn-toolbar {
+    @include rem-fallback(margin-top, 30px);
+    @include rem-fallback(padding-top, 24px);
+  }
+
+  @include themify($themes) {
+    .clear-btn { color: themed('colorActive'); }
+  }
+}

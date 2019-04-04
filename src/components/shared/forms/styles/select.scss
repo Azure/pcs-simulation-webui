@@ -197,6 +197,7 @@ $select-padding-horizontal: 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-right: auto;
   }
 
   // fake-hide the input when the control is pseudo-focused
@@ -231,6 +232,7 @@ $select-padding-horizontal: 8px;
     text-align: center;
     vertical-align: middle;
     @include rem-fallback(width, $select-clear-width);
+    @include rem-fallback(margin-top, -1px);
 
     &:hover { color: $select-clear-hover-color; }
   }
@@ -264,6 +266,7 @@ $select-padding-horizontal: 8px;
     text-align: center;
     vertical-align: middle;
     @include rem-fallback(width, $select-arrow-width * 5);
+    @include themify($themes) { border-left: 1px solid themed('colorMidThird'); }
   }
 
   .Select-arrow {

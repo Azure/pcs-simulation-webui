@@ -10,6 +10,9 @@ export const isObject = value => typeof value === 'object';
 /** Converts a value to an integer */
 export const int = (num) => parseInt(num, 10);
 
+/** Converts a value to a float */
+export const float = (num) => parseFloat(num, 10);
+
 /** Merges css classnames into a single string */
 export const joinClasses = (...classNames) => classNames.filter(name => !!name).join(' ').trim();
 
