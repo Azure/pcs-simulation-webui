@@ -2,6 +2,10 @@
 [![Issues][issues-badge]][issues-url]
 [![Gitter][gitter-badge]][gitter-url]
 
+Repository Archived |
+--------------------|
+| This repository has been archived. For Device Simulation issues and maintenance, please see [Azure IoT PCS Device Simulation](https://www.github.com/Azure/azure-iot-pcs-device-simulation) |
+
 Azure IoT Device Simulation Web UI
 ==================================
 ## Core technologies overview
